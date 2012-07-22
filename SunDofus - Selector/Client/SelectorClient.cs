@@ -11,6 +11,7 @@ namespace selector.Client
         public string m_Key = "";
         public SelectorParser m_Parser;
         public State m_State;
+        public Database.Data.Account m_Account;
 
         public SelectorClient(SilverSocket Socket) : base(Socket)
         {
@@ -31,6 +32,31 @@ namespace selector.Client
         public void PacketReceived(string Data)
         {
             m_Parser.Parse(Data);
+        }
+
+        public void SendInformations()
+        {
+            Send("Ad" + m_Account.Pseudo);
+            Send("Ac" + m_Account.Communauty);
+            SendHosts();
+            Send("AlK" + m_Account.Level);
+        }
+
+        public void SendHosts()
+        {
+            string Packet = "AH";
+            foreach (Database.Data.Server m_Server in Database.Data.Server.ListOfServers)
+            {
+                Packet += m_Server.ToString();
+            }
+            if (Packet != "AH")
+            {
+                Send(Packet.Substring(0, Packet.Length -1));
+            }
+            else
+            {
+                Send("AH");
+            }
         }
 
         public enum State

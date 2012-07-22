@@ -15,6 +15,7 @@ namespace selector
 
             Config.ConfigurationManager.LoadConfiguration();
             Database.SQLManager.Initialise();
+            Database.Data.Server.LoadServer();
 
             m_Auth = new Network.AuthentificationServer();
             m_Auth.Start();

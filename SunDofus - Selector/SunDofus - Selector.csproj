@@ -54,6 +54,8 @@
     <Compile Include="Client\SelectorClient.cs" />
     <Compile Include="Client\SelectorParser.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
+    <Compile Include="Database\Data\Account.cs" />
+    <Compile Include="Database\Data\Server.cs" />
     <Compile Include="Database\SQLManager.cs" />
     <Compile Include="Network\AbstractServer.cs" />
     <Compile Include="Network\AuthentificationServer.cs" />

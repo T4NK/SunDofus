@@ -31,7 +31,7 @@ namespace selector.Client
                     break;
 
                 case SelectorClient.State.OnList:
-
+                    Server(Data);
                     break;
             }
         }
@@ -45,15 +45,56 @@ namespace selector.Client
             else
             {
                 Client.Send("AlEv" + Config.ConfigurationManager.GetString("Auth_Version"));
+                Client.m_State = SelectorClient.State.None;
             }
         }
 
         public void Account(string Packet)
         {
+            if (!Packet.Contains("#1")) return;
             string[] Infos = Packet.Split('#');
-            string Username = Infos[0];
+            string Username = Infos[0].Replace(Config.ConfigurationManager.GetString("Auth_Version"), "");
             string Password = Infos[1];
 
+            Database.Data.Account AccountRequested = new Database.Data.Account(Username);
+            if (Password == Utils.Basic.Encrypt(AccountRequested.Password, Client.m_Key))
+            {
+                Client.m_Account = AccountRequested;
+                Utils.Logger.Infos("Client '" + AccountRequested.Pseudo + "' authentified !");
+                Client.m_State = SelectorClient.State.OnList;
+                Client.SendInformations();
+            }
+            else
+            {
+                Client.Send("AlEx");
+                Client.m_State = SelectorClient.State.None;
+            }
+        }
+
+        public void Server(string Packet)
+        {
+            if (Packet.StartsWith("Ax"))
+            {
+                long MemberTime = 60 * 60 * 24 * 365;
+                string Pack = "AxK" + (MemberTime * 1000);
+
+                foreach (Database.Data.Server m_Server in Database.Data.Server.ListOfServers)
+                {
+                    if (Client.m_Account.Characters.ContainsKey(m_Server.ID))
+                    {
+                        Pack += "|" + m_Server.ID + "," + Client.m_Account.Characters[m_Server.ID].Count;
+                    }
+                    else
+                    {
+                        Pack += "|" + m_Server.ID + ",0";
+                    }
+                }
+                Client.Send(Pack);
+            }
+            else if (Packet.StartsWith("AX"))
+            {
+
+            }
         }
     }
 }
