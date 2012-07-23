@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SunDofus")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Np-Develop")]
+[assembly: AssemblyCompany("Nicolas Petit")]
 [assembly: AssemblyProduct("Emulateur DOFUS")]
-[assembly: AssemblyCopyright("Copyright Np-Develop ©  2012")]
+[assembly: AssemblyCopyright("Copyright Nicolas Petit ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

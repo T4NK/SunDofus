@@ -25,7 +25,7 @@ namespace selector.Client
 
         public void Disconnected()
         {
-            Utils.Logger.Infos("New losted connection !");
+            Utils.Logger.Infos("New closted connection !");
             Program.m_Auth.m_Clients.Remove(this);
         }
 

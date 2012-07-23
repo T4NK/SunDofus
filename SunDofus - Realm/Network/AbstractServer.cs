@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 
-namespace selector.Network
+namespace realm.Network
 {
     class AbstractServer
     {
@@ -48,6 +48,6 @@ namespace selector.Network
         public void OnListenFailed(Exception e)
         {
             RaiseListenFailedEvent(e);
-        }        
+        }
     }
 }

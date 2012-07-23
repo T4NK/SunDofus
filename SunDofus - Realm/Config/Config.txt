@@ -1,0 +1,8 @@
+﻿Server_ID = 6
+Server_Ip = 127.0.0.1
+Server_Port = 5555
+
+Selector_Ip = 127.0.0.1
+Selector_Port = 488
+
+Debug = true

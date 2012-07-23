@@ -10,7 +10,7 @@ namespace selector.Client
     {
         public State m_State;
         public RealmParser m_Parser;
-        public Database.Data.Server m_Server;
+        public Database.Data.Server m_Server = null;
 
         public RealmClient(SilverSocket Socket)
             : base(Socket)
@@ -29,7 +29,8 @@ namespace selector.Client
         public void Disconnected()
         {
             ChangeState(State.Disconnected);
-            Utils.Logger.Infos("New losed server connection ('" + m_Server.ID + "') !");
+            if (m_Server == null) Utils.Logger.Infos("New closed server connection !");
+            else Utils.Logger.Infos("New closed server connection ('" + m_Server.ID + "') !");
             Program.m_Realm.m_Clients.Remove(this);
         }
 
@@ -37,6 +38,7 @@ namespace selector.Client
         {
             this.m_State = NewState;
 
+            if (m_Server == null) return;
             switch (this.m_State)
             { 
                 case State.Auth:

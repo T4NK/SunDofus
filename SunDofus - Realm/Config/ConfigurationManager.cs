@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace selector.Config
+namespace realm.Config
 {
     class ConfigurationManager
     {
@@ -15,7 +15,7 @@ namespace selector.Config
         {
             try
             {
-                StreamReader Reader = new StreamReader("Config/Selector.txt");
+                StreamReader Reader = new StreamReader("Config/Config.txt");
                 while (!Reader.EndOfStream)
                 {
                     string Line = Reader.ReadLine();
@@ -27,6 +27,7 @@ namespace selector.Config
                 Utils.Logger.Status("Configuration loaded ! '" + Values.Count + "' paramaters loaded !");
 
                 Debug = GetBool("Debug");
+                Program.m_ServerID = GetInt("Server_ID");
 
             }
             catch (Exception e)

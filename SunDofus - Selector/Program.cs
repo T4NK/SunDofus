@@ -12,7 +12,7 @@ namespace selector
 
         static void Main(string[] args)
         {
-            Console.Title = "SunDofus - RealmSelector | Np-Develop [c]  2012";
+            Console.Title = "SunDofus - RealmSelector | Nicolas Petit [c]  2012";
 
             Config.ConfigurationManager.LoadConfiguration();
             Database.SQLManager.Initialise();

@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>selector</RootNamespace>
-    <AssemblyName>RealmSelector</AssemblyName>
+    <AssemblyName>Selector</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -69,7 +69,7 @@
     <Compile Include="Utils\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\Config.txt">
+    <Content Include="Config\Selector.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="sun.ico" />
