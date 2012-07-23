@@ -3,8 +3,11 @@ Sql_User = root
 Sql_Pass = 
 Sql_Db = sundofus
 
-Ip_Auth = 127.0.0.1
-Port_Auth = 486
+Auth_Ip = 127.0.0.1
+Auth_Port = 486
 Auth_Version = 1.29.1
+
+Realm_Ip = 127.0.0.1
+Realm_Port = 488
 
 Debug = true

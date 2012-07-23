@@ -8,6 +8,7 @@ namespace selector
     class Program
     {
         public static Network.AuthentificationServer m_Auth;
+        public static Network.RealmServer m_Realm;
 
         static void Main(string[] args)
         {
@@ -19,6 +20,9 @@ namespace selector
 
             m_Auth = new Network.AuthentificationServer();
             m_Auth.Start();
+
+            m_Realm = new Network.RealmServer();
+            m_Realm.Start();
 
             Console.ReadLine();
         }

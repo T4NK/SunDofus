@@ -11,7 +11,7 @@ namespace selector.Network
         public List<Client.SelectorClient> m_Clients;
 
         public AuthentificationServer()
-            : base(Config.ConfigurationManager.GetString("Ip_Auth"), Config.ConfigurationManager.GetInt("Port_Auth"))
+            : base(Config.ConfigurationManager.GetString("Auth_Ip"), Config.ConfigurationManager.GetInt("Auth_Port"))
         {
             m_Clients = new List<Client.SelectorClient>();
             this.RaiseAcceptEvent += new AcceptEvent(this.AcceptClientServer);
@@ -34,6 +34,14 @@ namespace selector.Network
         public void OnListenFailedServer(Exception e)
         {
             Utils.Logger.Error(e);
+        }
+
+        public void RefreshAllHosts()
+        {
+            foreach (Client.SelectorClient Client in m_Clients)
+            {
+                Client.SendHosts();
+            }
         }
     }
 }
