@@ -67,5 +67,10 @@ namespace selector.Client
             OnList,
             None,
         }
+
+        public void SendNewTicket(string m_Key, RealmClient m_Client)
+        {
+            Send("AYK" + m_Client.m_Server.Ip + ":" + m_Client.m_Server.Port + ";" + m_Key);
+        }
     }
 }

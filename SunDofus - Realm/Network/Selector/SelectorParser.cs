@@ -27,7 +27,16 @@ namespace realm.Network
                 case "Connected!":
                     Utils.Logger.Status("Server authentified !");
                     break;
+
+                case"ANT":
+                    ParseNewTicket(Data);
+                    break;
             }
+        }
+
+        public void ParseNewTicket(string Data)
+        {
+            SelectorKeys.m_Keys.Add(new SelectorKeys(Data));            
         }
     }
 }

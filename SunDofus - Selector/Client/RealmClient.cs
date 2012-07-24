@@ -68,5 +68,21 @@ namespace selector.Client
             Disconnected,
             Maintenance,
         }
+
+        public void SendNewTicket(string m_Key, SelectorClient m_Client)
+        {
+            StringBuilder Builder = new StringBuilder();
+            Builder.Append("ANT|");
+            Builder.Append(m_Key + "|");
+            Builder.Append(m_Client.m_Account.Id + "|");
+            Builder.Append(m_Client.m_Account.Pseudo + "|");
+            Builder.Append(m_Client.m_Account.Question + "|");
+            Builder.Append(m_Client.m_Account.Answer + "|");
+            Builder.Append(m_Client.m_Account.Level + "|");
+            Builder.Append(m_Client.m_Account.BaseChar);
+            Send(Builder.ToString());
+
+            m_Server.Clients.Add(m_Client.m_Account.Pseudo);
+        }
     }
 }

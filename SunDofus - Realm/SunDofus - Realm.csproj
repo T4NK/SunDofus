@@ -51,12 +51,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\RealmClient.cs" />
+    <Compile Include="Client\RealmInfos.cs" />
+    <Compile Include="Client\RealmParser.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Network\AbstractServer.cs" />
     <Compile Include="Network\AuthentificationServer.cs" />
     <Compile Include="Network\CommandServer.cs" />
-    <Compile Include="Network\SelectorLink.cs" />
-    <Compile Include="Network\SelectorParser.cs" />
+    <Compile Include="Network\Selector\SelectorKeys.cs" />
+    <Compile Include="Network\Selector\SelectorLink.cs" />
+    <Compile Include="Network\Selector\SelectorParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Logger.cs" />
