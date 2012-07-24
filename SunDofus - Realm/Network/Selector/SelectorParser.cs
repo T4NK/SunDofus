@@ -26,6 +26,7 @@ namespace realm.Network
 
                 case "Connected!":
                     Utils.Logger.Status("Server authentified !");
+                    SendAllClient();
                     break;
 
                 case"ANT":
@@ -37,6 +38,17 @@ namespace realm.Network
         public void ParseNewTicket(string Data)
         {
             SelectorKeys.m_Keys.Add(new SelectorKeys(Data));            
+        }
+
+        public void SendAllClient()
+        {
+            foreach (Client.RealmClient m_Client in Program.m_AuthServer.m_Clients)
+            {
+                if (m_Client.m_State == realm.Client.RealmClient.State.Character | m_Client.m_State == realm.Client.RealmClient.State.InGame)
+                {
+                    Client.Send("NC|" + m_Client.m_Infos.Pseudo);
+                }
+            }
         }
     }
 }

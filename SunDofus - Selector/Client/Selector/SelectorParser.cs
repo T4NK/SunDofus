@@ -105,6 +105,24 @@ namespace selector.Client
                     }
                 }
             }
+            else if (Packet.StartsWith("AF"))
+            {
+                string PacketPseudo = "AF";
+
+                foreach (Client.RealmClient m_Server in Program.m_Realm.m_Clients)
+                {
+                    if(m_Server.m_Server.Clients.Contains(Packet.Replace("AF", "")))
+                    {
+                        PacketPseudo += m_Server.m_Server.ID + ";";
+                    }
+                }
+
+                if (PacketPseudo == "AF")
+                    Client.Send("AF");
+                else
+                    Client.Send(PacketPseudo.Substring(0, PacketPseudo.Length - 1));
+                
+            }
         }
     }
 }

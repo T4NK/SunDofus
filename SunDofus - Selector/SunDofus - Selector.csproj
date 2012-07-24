@@ -51,11 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\AbstractClient.cs" />
-    <Compile Include="Client\RealmClient.cs" />
-    <Compile Include="Client\RealmParser.cs" />
-    <Compile Include="Client\SelectorClient.cs" />
-    <Compile Include="Client\SelectorParser.cs" />
-    <Compile Include="Client\SelectorQueue.cs" />
+    <Compile Include="Client\Realm\RealmClient.cs" />
+    <Compile Include="Client\Realm\RealmParser.cs" />
+    <Compile Include="Client\Selector\SelectorClient.cs" />
+    <Compile Include="Client\Selector\SelectorParser.cs" />
+    <Compile Include="Client\Selector\SelectorQueue.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Database\Data\Account.cs" />
     <Compile Include="Database\Data\Server.cs" />

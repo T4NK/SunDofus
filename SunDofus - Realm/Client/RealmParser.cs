@@ -41,6 +41,8 @@ namespace realm.Client
                 {
                     Client.m_Infos = Key.m_Infos;
                     Client.m_State = RealmClient.State.Character;
+
+                    Program.m_RealmLink.Send("NC|" + Client.m_Infos.Pseudo);
                     Client.Send("ATK0");
                 }
             }

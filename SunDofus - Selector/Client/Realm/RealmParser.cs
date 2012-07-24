@@ -23,6 +23,10 @@ namespace selector.Client
                 case "Auth":
                     Authentification(int.Parse(Packet[1]), Packet[2], int.Parse(Packet[3]));
                     break;
+                    
+                case "NC":
+                    Client.m_Server.Clients.Add(Packet[1]);
+                    break;
             }
         }
 
