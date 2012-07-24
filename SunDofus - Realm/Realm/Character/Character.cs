@@ -1,0 +1,38 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using realm.Utils;
+
+namespace realm.Realm.Character
+{
+    class Character
+    {
+        public int ID = -1;
+        public string Name = "";
+        public int Color, Color2, Color3 = -1;
+        public int Class = -1;
+        public int Sex = -1;
+        public int Skin = -1;
+        public int Size = -1;
+        public int Level = -1;
+        public bool NewCharacter = false;
+
+        public string PatternList()
+        {
+            StringBuilder Builder = new StringBuilder();
+
+            Builder.Append(ID + ";");
+            Builder.Append(Name + ";");
+            Builder.Append(Level + ";"); // Level
+            Builder.Append(Skin + ";");
+            Builder.Append(Basic.DeciToHex(Color) + ";");
+            Builder.Append(Basic.DeciToHex(Color2) + ";");
+            Builder.Append(Basic.DeciToHex(Color3) + ";");
+            Builder.Append(",,,,,;"); // Items
+            Builder.Append("0;" + Program.m_ServerID + ";;;");
+
+            return Builder.ToString();
+        }
+    }
+}

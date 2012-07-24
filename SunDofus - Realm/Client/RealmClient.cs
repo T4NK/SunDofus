@@ -12,6 +12,7 @@ namespace realm.Client
         public State m_State;
         RealmParser m_Parser;
         public RealmInfos m_Infos;
+        public List<Realm.Character.Character> m_Characters;
 
         public RealmClient(SilverSocket Socket)
         {
@@ -19,6 +20,7 @@ namespace realm.Client
             m_Socket.OnDataArrivalEvent += new SilverEvents.DataArrival(this.ReceivedPackets);
             m_Socket.OnSocketClosedEvent += new SilverEvents.SocketClosed(this.Disconnected);
             m_State = State.Ticket;
+            m_Characters = new List<Realm.Character.Character>();
             m_Parser = new RealmParser(this);
             Send("HG");
         }
@@ -45,6 +47,18 @@ namespace realm.Client
             Utils.Logger.Packets("[Sended]! " + Message);
             byte[] P = Encoding.ASCII.GetBytes(Message + "\x00");
             m_Socket.Send(P);
+        }
+
+        public void ParseCharacters()
+        {
+            foreach (string Name in m_Infos.CharactersNames)
+            {
+                Realm.Character.Character m_C = Realm.Character.CharactersManager.GetCharacter(Name);
+                if (m_C != null)
+                {
+                    m_Characters.Add(m_C);
+                }
+            }
         }
 
         public enum State

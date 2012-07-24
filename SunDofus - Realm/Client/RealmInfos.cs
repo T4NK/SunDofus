@@ -30,13 +30,27 @@ namespace realm.Client
         public void ParseCharacters()
         {
             if (Characters == "") return;
-            string[] AllData = Characters.Split('|');
+            string[] AllData = Characters.Split(':');
             foreach (string Data in AllData)
             {
                 string[] CharData = Data.Split(',');
                 if (!CharactersNames.Contains(CharData[0]) && Program.m_ServerID == int.Parse(CharData[1]))
                     CharactersNames.Add(CharData[0]);
             }
+        }
+
+        public string AddNewCharacterToAccount(string Name)
+        {
+            if (Characters == "")
+            {
+                Characters = Name + "," + Program.m_ServerID;
+            }
+            else
+            {
+                Characters = Characters + ":" + Name + "," + Program.m_ServerID;
+            }
+            CharactersNames.Add(Name);
+            return Characters;
         }
     }
 }

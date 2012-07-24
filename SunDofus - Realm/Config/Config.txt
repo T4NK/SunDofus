@@ -6,3 +6,8 @@ Selector_Ip = 127.0.0.1
 Selector_Port = 488
 
 Debug = true
+
+Sql_Ip = 127.0.0.1
+Sql_User = root
+Sql_Pass = 
+Sql_Db = sundofus

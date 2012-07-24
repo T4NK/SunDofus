@@ -61,7 +61,7 @@ namespace selector.Database.Data
         public void ParseCharacter()
         {
             Dictionary<int, List<string>> Dico = new Dictionary<int, List<string>>();
-            string[] AllData = BaseChar.Split('|');
+            string[] AllData = BaseChar.Split(':');
             foreach (string Data in AllData)
             {
                 string[] CharData = Data.Split(',');

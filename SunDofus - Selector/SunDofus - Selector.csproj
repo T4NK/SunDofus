@@ -53,6 +53,7 @@
     <Compile Include="Client\AbstractClient.cs" />
     <Compile Include="Client\Realm\RealmClient.cs" />
     <Compile Include="Client\Realm\RealmParser.cs" />
+    <Compile Include="Client\Realm\RealmSqlAction.cs" />
     <Compile Include="Client\Selector\SelectorClient.cs" />
     <Compile Include="Client\Selector\SelectorParser.cs" />
     <Compile Include="Client\Selector\SelectorQueue.cs" />
