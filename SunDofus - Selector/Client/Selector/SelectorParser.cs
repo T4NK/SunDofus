@@ -27,7 +27,7 @@ namespace selector.Client
                     break;
 
                 case SelectorClient.State.Queue:
-
+                    //Juste une grosse flemme(FR)
                     break;
 
                 case SelectorClient.State.OnList:
