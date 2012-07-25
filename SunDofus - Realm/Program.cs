@@ -19,11 +19,11 @@ namespace realm
             Database.SQLManager.Initialise();
             Database.Data.CharacterSql.LoadCharacters();
 
-            m_RealmLink = new Network.SelectorLink();
-            m_RealmLink.Start();
-
             m_AuthServer = new Network.AuthentificationServer();
             m_AuthServer.Start();
+
+            m_RealmLink = new Network.SelectorLink();
+            m_RealmLink.Start();
 
             Console.ReadLine();
         }

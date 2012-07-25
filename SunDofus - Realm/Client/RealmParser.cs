@@ -27,6 +27,10 @@ namespace realm.Client
                     ParseCharacter(Data);
                     break;
 
+                case RealmClient.State.Create:
+                    ParseCreate(Data);
+                    break;
+
                 case RealmClient.State.InGame:
                     ParseInGame(Data);
                     break;
@@ -75,7 +79,7 @@ namespace realm.Client
                         break;
 
                     case "S":
-                        //SELECT
+                        SelectCharacter(Data.Substring(2));
                         break;
 
                     case "V":
@@ -167,9 +171,82 @@ namespace realm.Client
             SendCharacterList();
         }
 
-        public void ParseInGame(string Data)
-        { 
+        public void SelectCharacter(string Packet)
+        {
+            Character m_C = CharactersManager.GetCharacter(int.Parse(Packet));
+            if (Client.m_Characters.Contains(m_C))
+            {
+                Client.m_Player = m_C;
+                Client.m_Player.State = new CharacterState(Client.m_Player);
+                Client.m_Player.Client = Client;
+                Client.m_State = RealmClient.State.Create;
 
+                Client.Send("ASK" + Client.m_Player.PatterSelect());
+            }
+            else
+                Client.Send("ASE");
+        }
+
+        public void ParseCreate(string Packet)
+        {
+            switch (Packet.Substring(0, 1))
+            {
+                case "B":
+
+                    switch (Packet.Substring(1, 1))
+                    {
+                        case "D":
+                            Client.Send("BD" + (DateTime.Now.Year - 1370).ToString() + "|" + (DateTime.Now.Month - 1) + "|" + (DateTime.Now.Day));
+                            break;
+                    }
+
+                    break;
+
+                case "G":
+
+                    switch (Packet.Substring(1, 1))
+                    {
+                        case "C":
+                            CreateGame();
+                            break;
+                    }
+
+                    break;
+            }
+        }
+
+        public void CreateGame()
+        {
+            Client.Send("eL-1|"); // Emote
+            Client.Send("GCK|1|" + Client.m_Player.Name);
+            Client.Send("AR6bk");
+
+            if (Client.m_Player.State.Created == false)
+            {
+                Client.m_Player.State.Created = true;
+                Client.Send("cC+*#$p%i:?!");
+                Client.Send("SLo+");
+                Client.Send("BT" + Utils.Basic.GetActuelTime());
+            }
+            else
+            {
+
+            }
+
+            Client.m_State = RealmClient.State.InGame;
+        }
+
+        public void ParseInGame(string Data)
+        {
+            switch (Data.Substring(0, 1))
+            {
+                case "c":
+                    if (Data.Contains("+"))
+                        Client.m_Player.ChangeChannel(Data.Replace("cC+", ""), true);
+                    else
+                        Client.m_Player.ChangeChannel(Data.Replace("cC-", ""), false);
+                    break;
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ namespace realm.Client
         RealmParser m_Parser;
         public RealmInfos m_Infos;
         public List<Realm.Character.Character> m_Characters;
+        public Realm.Character.Character m_Player;
 
         public RealmClient(SilverSocket Socket)
         {
@@ -65,6 +66,7 @@ namespace realm.Client
         { 
             Ticket,
             Character,
+            Create,
             InGame,
         }
     }
