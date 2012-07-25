@@ -52,5 +52,23 @@ namespace realm.Client
             CharactersNames.Add(Name);
             return Characters;
         }
+
+        public string RemoveCharacterToAccount(string Name)
+        {
+            if (Characters == (Name + "," + Program.m_ServerID))
+            {
+                Characters = Characters.Replace(Name + "," + Program.m_ServerID, "");
+            }
+            else if (Characters.StartsWith(Name + "," + Program.m_ServerID + ":"))
+            {
+                Characters = Characters.Replace(Name + "," + Program.m_ServerID + ":", "");
+            }
+            else
+            {
+                Characters = Characters.Replace(":" + Name + "," + Program.m_ServerID, "");
+            }
+            CharactersNames.Remove(Name);
+            return Characters;
+        }
     }
 }

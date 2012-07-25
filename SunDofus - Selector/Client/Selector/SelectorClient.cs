@@ -40,6 +40,7 @@ namespace selector.Client
             Send("Ac" + m_Account.Communauty);
             SendHosts();
             Send("AlK" + m_Account.Level);
+            Send("AQ" + m_Account.Question);
         }
 
         public void SendHosts()

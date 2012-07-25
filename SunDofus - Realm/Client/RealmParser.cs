@@ -103,48 +103,68 @@ namespace realm.Client
 
         public void CreateCharacter(string Packet)
         {
-            string Data = Packet.Substring(2);
-            string[] CharData = Data.Split('|');
-
-            if (CharData[0] != "" | CharactersManager.ExistsName(CharData[0]))
+            try
             {
-                Character m_Character = new Character();
-                m_Character.ID = 1;
-                m_Character.Name = CharData[0];
-                m_Character.Level = 1;
-                m_Character.Class = int.Parse(CharData[1]);
-                m_Character.Sex = int.Parse(CharData[2]);
-                m_Character.Skin = int.Parse(m_Character.Class + "" + m_Character.Sex);
-                m_Character.Size = 100;
-                m_Character.Color = int.Parse(CharData[3]);
-                m_Character.Color2 = int.Parse(CharData[4]);
-                m_Character.Color3 = int.Parse(CharData[5]);
-                m_Character.NewCharacter = true;
+                string Data = Packet.Substring(2);
+                string[] CharData = Data.Split('|');
 
-                if (m_Character.Class < 1 | m_Character.Class > 12 | m_Character.Sex < 0 | m_Character.Sex > 1)
+                if (CharData[0] != "" | CharactersManager.ExistsName(CharData[0]))
+                {
+                    Character m_Character = new Character();
+                    m_Character.ID = Database.Data.CharacterSql.GetNewID();
+                    m_Character.Name = CharData[0];
+                    m_Character.Level = 21;
+                    m_Character.Class = int.Parse(CharData[1]);
+                    m_Character.Sex = int.Parse(CharData[2]);
+                    m_Character.Skin = int.Parse(m_Character.Class + "" + m_Character.Sex);
+                    m_Character.Size = 100;
+                    m_Character.Color = int.Parse(CharData[3]);
+                    m_Character.Color2 = int.Parse(CharData[4]);
+                    m_Character.Color3 = int.Parse(CharData[5]);
+                    m_Character.NewCharacter = true;
+
+                    if (m_Character.Class < 1 | m_Character.Class > 12 | m_Character.Sex < 0 | m_Character.Sex > 1)
+                    {
+                        Client.Send("AAE");
+                        return;
+                    }
+
+                    CharactersManager.ListOfCharacters.Add(m_Character);
+                    Client.m_Characters.Add(m_Character);
+
+                    Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.Name));
+                    Database.Data.CharacterSql.CreateCharacter(m_Character);
+
+                    Client.Send("AAK");
+                    SendCharacterList();
+                }
+                else
                 {
                     Client.Send("AAE");
-                    return;
                 }
-
-                CharactersManager.ListOfCharacters.Add(m_Character);
-                Client.m_Characters.Add(m_Character);
-
-                Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.Name));
-                Database.Data.CharacterSql.CreateCharacter(m_Character);
-
-                Client.Send("AAK");
-                SendCharacterList();
             }
-            else
+            catch(Exception e)
             {
-                Client.Send("AAE");
+                Utils.Logger.Error(e);
             }
         }
 
         public void DeleteCharacter(string Packet)
         {
+            Character m_C = CharactersManager.GetCharacter(int.Parse(Packet.Substring(2).Split('|')[0]));
+            if (Packet.Substring(2).Split('|')[1] != Client.m_Infos.Answer && m_C.Level > 19)
+            {
+                Client.Send("ADE");
+                return;
+            }
 
+            CharactersManager.ListOfCharacters.Remove(m_C);
+            Client.m_Characters.Remove(m_C);
+
+            Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.Name));
+            Database.Data.CharacterSql.DeleteCharacter(m_C.Name);
+
+            SendCharacterList();
         }
 
         public void ParseInGame(string Data)

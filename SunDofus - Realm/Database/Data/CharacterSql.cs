@@ -54,11 +54,52 @@ namespace realm.Database.Data
             P.Add(new MySqlParameter("@color3", m_C.Color3));
 
             SQLCommand.ExecuteNonQuery();
+
+            m_C.NewCharacter = false;
         }
 
         public static void SaveCharacter(Realm.Character.Character m_C)
         {
 
+        }
+
+        public static void DeleteCharacter(string Name)
+        {
+            string SQLText = "DELETE FROM characters WHERE name=@CharName";
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            SQLCommand.Parameters.Add(new MySqlParameter("@CharName", Name));
+
+            SQLCommand.ExecuteNonQuery();
+        }
+
+        public static int LastID = -1;
+
+        public static int GetNewID()
+        {
+            if (LastID == -1)
+            {
+                string SQLText = "SELECT id FROM characters ORDER BY id DESC LIMIT 0,1";
+                MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+
+                MySqlDataReader SQLResult = SQLCommand.ExecuteReader();
+
+                LastID = 0;
+
+                if (SQLResult.Read())
+                {
+                    LastID = SQLResult.GetInt32("id");
+                }
+
+                SQLResult.Close();
+
+                LastID += 1;
+                return LastID;
+            }
+            else
+            {
+                LastID += 1;
+                return LastID;
+            }
         }
     }
 }

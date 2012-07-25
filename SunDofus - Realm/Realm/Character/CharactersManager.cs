@@ -26,5 +26,14 @@ namespace realm.Realm.Character
             }
             return null;
         }
+
+        public static Character GetCharacter(int ID)
+        {
+            foreach (Character m_C in ListOfCharacters)
+            {
+                if (m_C.ID == ID) return m_C;
+            }
+            return null;
+        }
     }
 }
