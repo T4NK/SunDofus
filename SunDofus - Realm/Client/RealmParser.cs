@@ -22,16 +22,18 @@ namespace realm.Client
 
         void RegisterPackets()
         {
-            m_Packets["AT"] = ParseTicket;
             m_Packets["AA"] = CreateCharacter;
             m_Packets["AD"] = DeleteCharacter;
             m_Packets["AL"] = SendCharacterList;
             m_Packets["AP"] = SendRandomName;
             m_Packets["AS"] = SelectCharacter;
+            m_Packets["AT"] = ParseTicket;
             m_Packets["AV"] = AV_Packet;
             m_Packets["BD"] = SendDate;
+            m_Packets["BM"] = ParseChatMessage;
             m_Packets["cC"] = ChangeChannel;
             m_Packets["GC"] = CreateGame;
+            m_Packets["GI"] = GameInformations;
         }
 
         public void Parse(string Data)
@@ -45,7 +47,11 @@ namespace realm.Client
 
             string Header = Data.Substring(0, 2);
 
-            if (!m_Packets.ContainsKey(Header)) return;
+            if (!m_Packets.ContainsKey(Header))
+            {
+                Client.Send("BN");
+                return;
+            }
 
             m_Packets[Header](Data.Substring(2));
         }
@@ -105,15 +111,14 @@ namespace realm.Client
         {
             try
             {
-                string Data = Packet.Substring(2);
-                string[] CharData = Data.Split('|');
+                string[] CharData = Packet.Split('|');
 
-                if (CharData[0] != "" | CharactersManager.ExistsName(CharData[0]))
+                if (CharData[0] != "" | CharactersManager.ExistsName(CharData[0]) == false)
                 {
                     Character m_Character = new Character();
                     m_Character.ID = Database.Data.CharacterSql.GetNewID();
                     m_Character.Name = CharData[0];
-                    m_Character.Level = 21;
+                    m_Character.Level = 1;
                     m_Character.Class = int.Parse(CharData[1]);
                     m_Character.Sex = int.Parse(CharData[2]);
                     m_Character.Skin = int.Parse(m_Character.Class + "" + m_Character.Sex);
@@ -121,6 +126,11 @@ namespace realm.Client
                     m_Character.Color = int.Parse(CharData[3]);
                     m_Character.Color2 = int.Parse(CharData[4]);
                     m_Character.Color3 = int.Parse(CharData[5]);
+
+                    m_Character.MapID = 10111;
+                    m_Character.MapCell = 255;
+                    m_Character.Dir = 3;
+
                     m_Character.NewCharacter = true;
 
                     if (m_Character.Class < 1 | m_Character.Class > 12 | m_Character.Sex < 0 | m_Character.Sex > 1)
@@ -151,8 +161,9 @@ namespace realm.Client
 
         public void DeleteCharacter(string Packet)
         {
-            Character m_C = CharactersManager.ListOfCharacters.First(x => x.ID == int.Parse(Packet.Substring(2).Split('|')[0]));
-            if (Packet.Substring(2).Split('|')[1] != Client.m_Infos.Answer && m_C.Level > 19)
+            int ID = int.Parse(Packet.Split('|')[0]);
+            Character m_C = CharactersManager.ListOfCharacters.First(x => x.ID == ID);
+            if (Packet.Split('|')[1] != Client.m_Infos.Answer && m_C.Level > 19)
             {
                 Client.Send("ADE");
                 return;
@@ -176,7 +187,7 @@ namespace realm.Client
                 Client.m_Player.State = new CharacterState(Client.m_Player);
                 Client.m_Player.Client = Client;
 
-                Client.Send("ASK" + Client.m_Player.PatterSelect());
+                Client.Send("ASK" + Client.m_Player.PatternSelect());
             }
             else
                 Client.Send("ASE");
@@ -208,6 +219,8 @@ namespace realm.Client
             {
 
             }
+
+            Client.m_Player.LoadMap();
         }
 
         public void ChangeChannel(string Chanel)
@@ -232,6 +245,27 @@ namespace realm.Client
                 Client.m_Player.Channel = Client.m_Player.Channel.Replace(Chanel, "");
                 Client.Send("cC-" + Chanel);
             }
+        }
+
+        public void ParseChatMessage(string Data)
+        {
+            string[] SplitData = Data.Split('|');
+            string Channel = SplitData[0];
+            string Message = SplitData[1];
+
+            switch (Channel)
+            {
+                case "*":
+
+                    break;
+            }
+        }
+
+        public void GameInformations(string Data)
+        {
+            Client.m_Player.GetMap().AddPlayer(Client.m_Player);
+            Client.Send("GDK");
+            Client.Send("fC0"); //Fight
         }
 
         #endregion

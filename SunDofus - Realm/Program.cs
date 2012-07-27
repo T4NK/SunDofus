@@ -17,6 +17,8 @@ namespace realm
             Config.ConfigurationManager.IniConfig();
             Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Nicolas Petit [c]  2012";
             Database.SQLManager.Initialise();
+
+            Database.Data.MapSql.LoadMaps();
             Database.Data.CharacterSql.LoadCharacters();
 
             m_AuthServer = new Network.AuthenticationServer();

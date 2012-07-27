@@ -56,6 +56,7 @@
     <Compile Include="Client\RealmParser.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Database\Data\CharacterSql.cs" />
+    <Compile Include="Database\Data\MapSql.cs" />
     <Compile Include="Database\SQLManager.cs" />
     <Compile Include="Network\AuthenticationServer.cs" />
     <Compile Include="Network\CommandServer.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Realm\Character\Character.cs" />
     <Compile Include="Realm\Character\CharactersManager.cs" />
     <Compile Include="Realm\Character\CharacterState.cs" />
+    <Compile Include="Realm\Map\Map.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\Config.txt">

@@ -96,15 +96,14 @@ namespace selector.Client
             {
                 int ID = int.Parse(Packet.Replace("AX", ""));
 
-                foreach (RealmClient m_Server in Program.m_Realm.m_Clients)
-                {
-                    if (m_Server.m_Server.ID == ID)
-                    {
-                        string m_Key = SunDofus.Basic.RandomString(16);
-                        m_Server.SendNewTicket(m_Key, Client);
-                        Client.SendNewTicket(m_Key, m_Server);
-                    }
-                }
+                RealmClient m_Server = Program.m_Realm.m_Clients.First(x => x.m_Server.ID == ID);
+
+                if (m_Server == null) return;
+
+                string m_Key = SunDofus.Basic.RandomString(16);
+                m_Server.SendNewTicket(m_Key, Client);
+                Client.SendNewTicket(m_Key, m_Server);
+                
             }
             else if (Packet.StartsWith("AF"))
             {
