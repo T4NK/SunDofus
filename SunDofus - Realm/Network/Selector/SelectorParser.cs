@@ -44,7 +44,7 @@ namespace realm.Network
         {
             foreach (Client.RealmClient m_Client in Program.m_AuthServer.m_Clients)
             {
-                if (m_Client.m_State == realm.Client.RealmClient.State.Character | m_Client.m_State == realm.Client.RealmClient.State.InGame)
+                if (m_Client.isAuth == true)
                 {
                     Client.Send("NC|" + m_Client.m_Infos.Pseudo);
                 }

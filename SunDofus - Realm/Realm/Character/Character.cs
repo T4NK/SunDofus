@@ -56,24 +56,5 @@ namespace realm.Realm.Character
 
             return Builder.ToString();
         }
-
-        public void ChangeChannel(string Chanel, bool Add)
-        {
-            if (Add == true)
-            {
-                if (Channel.Contains(Chanel))
-                {
-                    Client.Send("cC" + Channel);
-                    return;
-                }
-                Channel = Channel + "" + Chanel;
-                Client.Send("cC+" + Chanel);
-            }
-            else
-            {
-                Channel = Channel.Replace(Chanel, "");
-                Client.Send("cC-" + Chanel);
-            }
-        }
     }
 }

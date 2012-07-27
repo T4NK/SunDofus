@@ -8,17 +8,16 @@ namespace realm.Client
 {
     class RealmClient : SunDofus.AbstractClient
     {
-        public State m_State;
         RealmParser m_Parser;
         public RealmInfos m_Infos;
         public List<Realm.Character.Character> m_Characters;
         public Realm.Character.Character m_Player;
+        public bool isAuth = false;
 
         public RealmClient(SilverSocket Socket) :  base(Socket)
         {
             this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
             this.RaiseDataArrivalEvent += new DataArrivalEvent(this.ReceivedPackets);
-            m_State = State.Ticket;
             m_Characters = new List<Realm.Character.Character>();
             m_Parser = new RealmParser(this);
             Send("HG");
@@ -32,6 +31,7 @@ namespace realm.Client
         public void Disconnected()
         {
             SunDofus.Logger.Infos("New closed connection !");
+            if (isAuth == true) Program.m_RealmLink.Send("DC|" + m_Infos.Pseudo);
             Program.m_AuthServer.m_Clients.Remove(this);
         }
 
@@ -45,14 +45,6 @@ namespace realm.Client
                     m_Characters.Add(m_C);
                 }
             }
-        }
-
-        public enum State
-        { 
-            Ticket,
-            Character,
-            Create,
-            InGame,
         }
     }
 }

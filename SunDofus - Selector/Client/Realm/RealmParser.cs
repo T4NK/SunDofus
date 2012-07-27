@@ -28,6 +28,10 @@ namespace selector.Client
                     Client.m_Server.Clients.Add(Packet[1]);
                     break;
 
+                case "DC":
+                    Client.m_Server.Clients.Remove(Packet[1]);
+                    break;
+
                 case "NCHAR":
                     RealmSqlAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2]);
                     break;

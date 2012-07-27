@@ -10,32 +10,47 @@ namespace realm.Client
     {
         public RealmClient Client;
 
+        delegate void Packets(string s);
+        Dictionary<string, Packets> m_Packets;
+
         public RealmParser(RealmClient m_C)
         {
             Client = m_C;
+            m_Packets = new Dictionary<string, Packets>();
+            RegisterPackets();
+        }
+
+        void RegisterPackets()
+        {
+            m_Packets["AT"] = ParseTicket;
+            m_Packets["AA"] = CreateCharacter;
+            m_Packets["AD"] = DeleteCharacter;
+            m_Packets["AL"] = SendCharacterList;
+            m_Packets["AP"] = SendRandomName;
+            m_Packets["AS"] = SelectCharacter;
+            m_Packets["AV"] = AV_Packet;
+            m_Packets["BD"] = SendDate;
+            m_Packets["cC"] = ChangeChannel;
+            m_Packets["GC"] = CreateGame;
         }
 
         public void Parse(string Data)
         {
-            switch (Client.m_State)
-            { 
-                case RealmClient.State.Ticket:
-                    ParseTicket(Data);
-                    break;
+            if (Data == "ping")
+                Client.Send("pong");
+            else if (Data == "qping")
+                Client.Send("qpong");
 
-                case RealmClient.State.Character:
-                    ParseCharacter(Data);
-                    break;
+            if (Data.Length < 2) return;
 
-                case RealmClient.State.Create:
-                    ParseCreate(Data);
-                    break;
+            string Header = Data.Substring(0, 2);
 
-                case RealmClient.State.InGame:
-                    ParseInGame(Data);
-                    break;
-            }
+            if (!m_Packets.ContainsKey(Header)) return;
+
+            m_Packets[Header](Data.Substring(2));
         }
+
+        #region Ticket
 
         public void ParseTicket(string Data)
         {
@@ -48,7 +63,7 @@ namespace realm.Client
                     Client.m_Infos.ParseCharacters();
                     Client.ParseCharacters();
 
-                    Client.m_State = RealmClient.State.Character;
+                    Client.isAuth = true;
 
                     Program.m_RealmLink.Send("NC|" + Client.m_Infos.Pseudo);
                     Client.Send("ATK0");
@@ -56,40 +71,21 @@ namespace realm.Client
             }
         }
 
-        public void ParseCharacter(string Data)
+        #endregion
+        
+        #region Character
+
+        public void SendRandomName(string test)
         {
-            if (Data.Substring(0, 1) == "A")
-            {
-                switch (Data.Substring(1, 1))
-                {
-                    case "A":
-                        CreateCharacter(Data);
-                        break;
-
-                    case "D":
-                        DeleteCharacter(Data);
-                        break;
-
-                    case "L":
-                        SendCharacterList();
-                        break;
-
-                    case "P":
-                        Client.Send("APK" + SunDofus.Basic.RandomName());
-                        break;
-
-                    case "S":
-                        SelectCharacter(Data.Substring(2));
-                        break;
-
-                    case "V":
-                        Client.Send("AV0");
-                        break;
-                }
-            }
+            Client.Send("APK" + SunDofus.Basic.RandomName());
         }
 
-        public void SendCharacterList()
+        public void AV_Packet(string t)
+        {
+            Client.Send("AV0");
+        }
+
+        public void SendCharacterList(string test)
         {
             long MemberTime = 60 * 60 * 24 * 365;
             string Pack = "ALK" + (MemberTime * 1000) + "|" + Client.m_Infos.CharactersNames.Count;
@@ -101,7 +97,7 @@ namespace realm.Client
                     Pack += "|" + m_C.PatternList();
                 }
             }
-            
+
             Client.Send(Pack);
         }
 
@@ -140,14 +136,14 @@ namespace realm.Client
                     Database.Data.CharacterSql.CreateCharacter(m_Character);
 
                     Client.Send("AAK");
-                    SendCharacterList();
+                    SendCharacterList("");
                 }
                 else
                 {
                     Client.Send("AAE");
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 SunDofus.Logger.Error(e);
             }
@@ -168,7 +164,7 @@ namespace realm.Client
             Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.Name));
             Database.Data.CharacterSql.DeleteCharacter(m_C.Name);
 
-            SendCharacterList();
+            SendCharacterList("");
         }
 
         public void SelectCharacter(string Packet)
@@ -179,7 +175,6 @@ namespace realm.Client
                 Client.m_Player = m_C;
                 Client.m_Player.State = new CharacterState(Client.m_Player);
                 Client.m_Player.Client = Client;
-                Client.m_State = RealmClient.State.Create;
 
                 Client.Send("ASK" + Client.m_Player.PatterSelect());
             }
@@ -187,35 +182,16 @@ namespace realm.Client
                 Client.Send("ASE");
         }
 
-        public void ParseCreate(string Packet)
+        #endregion
+
+        #region Realm
+
+        void SendDate(string t)
         {
-            switch (Packet.Substring(0, 1))
-            {
-                case "B":
-
-                    switch (Packet.Substring(1, 1))
-                    {
-                        case "D":
-                            Client.Send("BD" + (DateTime.Now.Year - 1370).ToString() + "|" + (DateTime.Now.Month - 1) + "|" + (DateTime.Now.Day));
-                            break;
-                    }
-
-                    break;
-
-                case "G":
-
-                    switch (Packet.Substring(1, 1))
-                    {
-                        case "C":
-                            CreateGame();
-                            break;
-                    }
-
-                    break;
-            }
+            Client.Send("BD" + SunDofus.Basic.GetDofusDate());
         }
 
-        public void CreateGame()
+        public void CreateGame(string t)
         {
             Client.Send("eL-1|"); // Emote
             Client.Send("GCK|1|" + Client.m_Player.Name);
@@ -232,21 +208,32 @@ namespace realm.Client
             {
 
             }
-
-            Client.m_State = RealmClient.State.InGame;
         }
 
-        public void ParseInGame(string Data)
+        public void ChangeChannel(string Chanel)
         {
-            switch (Data.Substring(0, 1))
+            bool Add = false;
+            if (Chanel.Contains("+")) Add = true;
+            else if (Chanel.Contains("-")) Add = false;
+            else return;
+
+            if (Add == true)
             {
-                case "c":
-                    if (Data.Contains("+"))
-                        Client.m_Player.ChangeChannel(Data.Replace("cC+", ""), true);
-                    else
-                        Client.m_Player.ChangeChannel(Data.Replace("cC-", ""), false);
-                    break;
+                if (Client.m_Player.Channel.Contains(Chanel))
+                {
+                    Client.Send("cC" + Client.m_Player.Channel);
+                    return;
+                }
+                Client.m_Player.Channel = Client.m_Player.Channel + "" + Chanel;
+                Client.Send("cC+" + Chanel);
+            }
+            else
+            {
+                Client.m_Player.Channel = Client.m_Player.Channel.Replace(Chanel, "");
+                Client.Send("cC-" + Chanel);
             }
         }
+
+        #endregion
     }
 }
