@@ -70,6 +70,7 @@
     <Compile Include="Realm\Character\CharacterState.cs" />
     <Compile Include="Realm\Map\Cells.cs" />
     <Compile Include="Realm\Map\Map.cs" />
+    <Compile Include="Realm\Map\Pathfinding.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\Config.txt">

@@ -33,9 +33,10 @@ namespace realm.Client
             m_Packets["BD"] = SendDate;
             m_Packets["BM"] = ParseChatMessage;
             m_Packets["cC"] = ChangeChannel;
-            //m_Packets["GA"] = GameAction;
+            m_Packets["GA"] = GameAction;
             m_Packets["GC"] = CreateGame;
             m_Packets["GI"] = GameInformations;
+            m_Packets["GK"] = EndAction;
         }
 
         public void Parse(string Data)
@@ -299,10 +300,43 @@ namespace realm.Client
 
         public void GameMove(string Data)
         {
-            string Pack = Data.Replace("001", "");
-            if (!Cells.isValidCell(Client.m_Player, Pack) == true) return;
+            string Pack = Data.Substring(3);
+            if (!Cells.isValidCell(Client.m_Player, Pack) == true)
+            {
+                Client.Send("GA;0");
+            }
 
+            Pathfinding Path = new Pathfinding(Pack, Client.m_Player.GetMap(), Client.m_Player.MapCell, Client.m_Player.Dir);
+            string NewPath = Path.RemakePath();
+            NewPath = Path.GetStartPath + NewPath;
 
+            Client.m_Player.Dir = Path.NewDirection;
+            Client.m_Player.State.MoveCell = Path.Destination;
+            Client.m_Player.State.OnMove = true;
+
+            Client.m_Player.GetMap().Send("GA0;1;" + Client.m_Player.ID + ";" + NewPath);
+        }
+
+        public void EndAction(string Data)
+        {
+            switch(Data.Substring(0,1))
+            {
+                case "K":
+                    if (Client.m_Player.State.OnMove == true)
+                    {
+                        Client.m_Player.State.OnMove = false;
+                        Client.m_Player.MapCell = Client.m_Player.State.MoveCell;
+                        Client.m_Player.State.MoveCell = -1;
+                        Client.Send("BN");
+                    }
+                    break;
+
+                case "E":
+                    int NewCell = int.Parse(Data.Split('|')[1]);
+                    Client.m_Player.State.OnMove = false;
+                    Client.m_Player.MapCell = NewCell;
+                    break;
+            }
         }
 
         #endregion

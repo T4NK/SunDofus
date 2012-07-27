@@ -28,6 +28,11 @@ namespace realm.Database.Data
                 c.Color = SQLResult.GetInt32("color");
                 c.Color2 = SQLResult.GetInt32("color2");
                 c.Color3 = SQLResult.GetInt32("color3");
+
+                c.MapCell = SQLResult.GetInt32("mapcell");
+                c.MapID = SQLResult.GetInt32("mapid");
+                c.Dir = 3;
+
                 c.NewCharacter = false;
 
                 Realm.Character.CharactersManager.ListOfCharacters.Add(c);
@@ -40,7 +45,7 @@ namespace realm.Database.Data
 
         public static void CreateCharacter(Realm.Character.Character m_C)
         {
-            string SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3)";
+            string SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapcell, @mapid)";
             MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
 
             MySqlParameterCollection P = SQLCommand.Parameters;
@@ -52,6 +57,8 @@ namespace realm.Database.Data
             P.Add(new MySqlParameter("@color", m_C.Color));
             P.Add(new MySqlParameter("@color2", m_C.Color2));
             P.Add(new MySqlParameter("@color3", m_C.Color3));
+            P.Add(new MySqlParameter("@mapcell", m_C.MapCell));
+            P.Add(new MySqlParameter("@mapid", m_C.MapID));
 
             SQLCommand.ExecuteNonQuery();
 

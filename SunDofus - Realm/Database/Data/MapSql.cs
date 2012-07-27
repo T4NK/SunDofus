@@ -39,7 +39,7 @@ namespace realm.Database.Data
 
             SQLReader.Close();
 
-            SunDofus.Logger.Status("'" + ListOfMaps.Count + "' maps loaded from the database !");
+            SunDofus.Logger.Status("Loaded '" + ListOfMaps.Count + "' maps from the database !");
         }
     }
 }

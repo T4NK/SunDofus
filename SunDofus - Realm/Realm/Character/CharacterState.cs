@@ -16,5 +16,8 @@ namespace realm.Realm.Character
         }
 
         public bool Created = false;
+
+        public bool OnMove = false;
+        public int MoveCell = -1;
     }
 }
