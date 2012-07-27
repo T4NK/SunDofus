@@ -13,6 +13,7 @@ namespace realm.Network
         Timer m_Timer;
         bool m_RunningTimer = false;
         SelectorParser m_Parser;
+        bool isConnected = false;
 
         public SelectorLink()
         {
@@ -24,7 +25,7 @@ namespace realm.Network
             m_Socket.OnSocketClosedEvent += new SilverEvents.SocketClosed(this.Disconnected);
 
             m_Timer = new Timer();
-            m_Timer.Interval = 10000;
+            m_Timer.Interval = 5000;
             m_Timer.Enabled = true;
 
             m_Timer.Elapsed += new ElapsedEventHandler(this.ElapsedVoid);
@@ -39,7 +40,14 @@ namespace realm.Network
 
         public void ElapsedVoid(object sender, EventArgs e)
         {
-            Start();
+            if (isConnected == false)
+                Start();
+            else
+            {
+                Send("Auth|" + Program.m_ServerID + "|" + Config.ConfigurationManager.GetString("Server_Ip") + "|" + Config.ConfigurationManager.GetString("Server_Port"));
+                m_RunningTimer = false;
+                m_Timer.Stop();
+            }            
         }
 
         public void FailedToConnect(Exception e)
@@ -53,11 +61,8 @@ namespace realm.Network
 
         public void Connected()
         {
-            m_Timer.Stop();
-            m_RunningTimer = false;
+            isConnected = true;
             SunDofus.Logger.Status("Connected with the selector <" + Config.ConfigurationManager.GetString("Selector_Ip") + "," + Config.ConfigurationManager.GetInt("Selector_Port") + "> !");
-
-            Send("Auth|" + Program.m_ServerID + "|" + Config.ConfigurationManager.GetString("Server_Ip") + "|" + Config.ConfigurationManager.GetString("Server_Port"));
         }
 
         public void DataArrival(byte[] data)
@@ -66,7 +71,7 @@ namespace realm.Network
             foreach (string Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
             {
                 if (Packet == "") continue;
-                SunDofus.Logger.Packets("[Received]! " + Packet);
+                SunDofus.Logger.Packets("[Receive]! " + Packet);
                 m_Parser.Parse(Packet);
             }
         }
@@ -80,7 +85,7 @@ namespace realm.Network
 
         public void Send(string Message)
         {
-            SunDofus.Logger.Packets("[Sended]! " + Message);
+            SunDofus.Logger.Packets("[Sent]! " + Message);
             byte[] P = Encoding.ASCII.GetBytes(Message + "\x00");
             m_Socket.Send(P);
         }
