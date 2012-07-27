@@ -68,6 +68,7 @@
     <Compile Include="Realm\Character\Character.cs" />
     <Compile Include="Realm\Character\CharactersManager.cs" />
     <Compile Include="Realm\Character\CharacterState.cs" />
+    <Compile Include="Realm\Map\Cells.cs" />
     <Compile Include="Realm\Map\Map.cs" />
   </ItemGroup>
   <ItemGroup>

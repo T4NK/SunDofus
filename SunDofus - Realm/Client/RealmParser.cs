@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using realm.Realm.Character;
+using realm.Realm.Map;
 
 namespace realm.Client
 {
@@ -32,6 +33,7 @@ namespace realm.Client
             m_Packets["BD"] = SendDate;
             m_Packets["BM"] = ParseChatMessage;
             m_Packets["cC"] = ChangeChannel;
+            //m_Packets["GA"] = GameAction;
             m_Packets["GC"] = CreateGame;
             m_Packets["GI"] = GameInformations;
         }
@@ -187,6 +189,8 @@ namespace realm.Client
                 Client.m_Player.State = new CharacterState(Client.m_Player);
                 Client.m_Player.Client = Client;
 
+                Client.m_Player.isConnected = true;
+
                 Client.Send("ASK" + Client.m_Player.PatternSelect());
             }
             else
@@ -256,8 +260,22 @@ namespace realm.Client
             switch (Channel)
             {
                 case "*":
-
+                    Client.m_Player.GetMap().Send("cMK|" + Client.m_Player.ID + "|" + Client.m_Player.Name + "|" + Message);
                     break;
+            }
+
+            if (Channel.Length > 1 && Channel != "*")
+            {
+                Character m_C = CharactersManager.ListOfCharacters.First(x => x.Name == Channel);
+                if (m_C.isConnected == true)
+                {
+                    m_C.Client.Send("cMKF|" + Client.m_Player.ID + "|" + Client.m_Player.Name + "|" + Message);
+                    Client.Send("cMKT|" + Client.m_Player.ID + "|" + m_C.Name + "|" + Message);
+                }
+                else
+                {
+                    Client.Send("cMEf" + Channel);
+                }
             }
         }
 
@@ -266,6 +284,25 @@ namespace realm.Client
             Client.m_Player.GetMap().AddPlayer(Client.m_Player);
             Client.Send("GDK");
             Client.Send("fC0"); //Fight
+        }
+
+        public void GameAction(string Data)
+        {
+            int Pack = int.Parse(Data.Substring(0, 3));
+            switch (Pack)
+            {
+                case 1:
+                    GameMove(Data);
+                    break;
+            }
+        }
+
+        public void GameMove(string Data)
+        {
+            string Pack = Data.Replace("001", "");
+            if (!Cells.isValidCell(Client.m_Player, Pack) == true) return;
+
+
         }
 
         #endregion

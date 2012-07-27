@@ -10,12 +10,14 @@ namespace realm.Realm.Character
     {
         public string Name = "";
         public int ID, Color, Color2, Color3, Class, Sex, Skin, Size, Level, MapID, MapCell, Dir = -1;
-        public bool NewCharacter = false;
+        public bool NewCharacter, isConnected = false;
 
         public Client.RealmClient Client;
         public CharacterState State;
 
         public string Channel = "*#$p%i:?!";
+
+        #region Pattern
 
         public string PatternList()
         {
@@ -51,26 +53,6 @@ namespace realm.Realm.Character
             return Builder.ToString();
         }
 
-        public void LoadMap()
-        {
-            Map.Map m_M = Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
-            if (m_M == null) return;
-
-            if (m_M.key == "")
-            {
-                Client.Send("GDM|" + m_M.id + "|" + m_M.date);
-            }
-            else
-            {
-                Client.Send("GDM|" + m_M.id + "|" + m_M.date + "|" + m_M.key);
-            }
-        }
-
-        public Map.Map GetMap()
-        {
-            return Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
-        }
-
         public string PatternDisplayChar()
         {
             StringBuilder Builder = new StringBuilder();
@@ -93,6 +75,28 @@ namespace realm.Realm.Character
             Builder.Append(";"); // Mount
 
             return Builder.ToString();
+        }
+
+        #endregion
+
+        public void LoadMap()
+        {
+            Map.Map m_M = Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
+            if (m_M == null) return;
+
+            if (m_M.key == "")
+            {
+                Client.Send("GDM|" + m_M.id + "|" + m_M.date);
+            }
+            else
+            {
+                Client.Send("GDM|" + m_M.id + "|" + m_M.date + "|" + m_M.key);
+            }
+        }
+
+        public Map.Map GetMap()
+        {
+            return Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
         }
     }
 }

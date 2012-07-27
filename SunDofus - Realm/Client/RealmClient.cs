@@ -11,7 +11,7 @@ namespace realm.Client
         RealmParser m_Parser;
         public RealmInfos m_Infos;
         public List<Realm.Character.Character> m_Characters;
-        public Realm.Character.Character m_Player;
+        public Realm.Character.Character m_Player = null;
         public bool isAuth = false;
 
         public RealmClient(SilverSocket Socket) :  base(Socket)
@@ -31,7 +31,11 @@ namespace realm.Client
         public void Disconnected()
         {
             SunDofus.Logger.Infos("New closed connection !");
-            if (isAuth == true) Program.m_RealmLink.Send("DC|" + m_Infos.Pseudo);
+            if (isAuth == true)
+            {
+                Program.m_RealmLink.Send("DC|" + m_Infos.Pseudo);
+                if (m_Player != null) m_Player.isConnected = false;
+            }
             Program.m_AuthServer.m_Clients.Remove(this);
         }
 
