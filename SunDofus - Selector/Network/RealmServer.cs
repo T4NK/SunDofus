@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace selector.Network
 {
-    class RealmServer : AbstractServer
+    class RealmServer : SunDofus.AbstractServer
     {
         public List<Client.RealmClient> m_Clients;
 
@@ -22,18 +22,18 @@ namespace selector.Network
         public void AcceptRealmClient(SilverSocket Socket)
         {
             if (Socket == null) return;
-            Utils.Logger.Infos("New inputed server connection !");
+            SunDofus.Logger.Infos("New inputed server connection !");
             m_Clients.Add(new Client.RealmClient(Socket));
         }
 
         public void OnListenRealm(int m_Port)
         {
-            Utils.Logger.Status("RealmServer started on the port '" + m_Port + "' !");
+            SunDofus.Logger.Status("RealmServer started on the port '" + m_Port + "' !");
         }
 
         public void OnListenFailedRealm(Exception e)
         {
-            Utils.Logger.Error(e);
+            SunDofus.Logger.Error(e);
         }
     }
 }

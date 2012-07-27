@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace selector.Utils
+namespace SunDofus
 {
-    class Basic
+    public class Basic
     {
         public static Random Randomizer = new Random();
         private static char[] HASH = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -44,6 +44,56 @@ namespace selector.Utils
 
             }
             return _Crypted;
+        }
+
+        public static Random _Rando = new Random();
+
+        public static string Vowels = "aeiouy";
+        public static string Consonants = "bcdfghjklmnpqrstvwxz";
+
+        public static int Rand(int Min, int Max)
+        {
+            return _Rando.Next(Min, Max + 1);
+        }
+
+        public static string GetVowels()
+        {
+            return Vowels.Substring((Rand(0, Vowels.Length - 1)), 1);
+        }
+
+        public static string GetConsonants()
+        {
+            return Consonants.Substring((Rand(0, Consonants.Length - 1)), 1);
+        }
+
+        public static string RandomName()
+        {
+            string Name = "";
+            Name += GetConsonants();
+            Name += GetVowels();
+            Name += GetVowels();
+            Name += GetConsonants();
+            Name += GetConsonants();
+            Name += GetVowels();
+
+            if (Rand(0, 1) == 0)
+            {
+                Name += GetConsonants();
+                Name += GetVowels();
+            }
+
+            return Name;
+        }
+
+        public static string DeciToHex(int Deci)
+        {
+            if (Deci == -1) return "-1";
+            else return Deci.ToString("x");
+        }
+
+        public static string GetActuelTime()
+        {
+            return (DateTime.Now.Hour * 3600000) + (DateTime.Now.Minute * 60000) + (DateTime.Now.Second * 1000) + DateTime.Now.Millisecond.ToString();
         }
     }
 }

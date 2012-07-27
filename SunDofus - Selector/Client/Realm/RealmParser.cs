@@ -42,7 +42,7 @@ namespace selector.Client
                 {
                     Client.m_Server = m_Server;
                     Client.Send("Connected!");
-                    Utils.Logger.Status("Server '" + ServerId + "' authentified !");
+                    SunDofus.Logger.Status("Server '" + ServerId + "' authentified !");
                     Client.ChangeState(RealmClient.State.Connected);
                     return;
                 }

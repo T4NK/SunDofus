@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 
-namespace selector.Client
+namespace SunDofus
 {
-    class AbstractClient
+    public class AbstractClient
     {
         public SilverSocket m_Socket;
 
@@ -29,7 +29,7 @@ namespace selector.Client
             foreach (string Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
             {
                 if (Packet == "") continue;
-                Utils.Logger.Packets("[Received]! " + Packet);
+                Logger.Packets("[Receive]! " + Packet);
                 RaiseDataArrivalEvent(Packet);
             }
         }
@@ -41,7 +41,7 @@ namespace selector.Client
 
         public void Send(string Message)
         {
-            Utils.Logger.Packets("[Sended]! " + Message);
+            Logger.Packets("[Sent]! " + Message);
             byte[] P = Encoding.ASCII.GetBytes(Message + "\x00");
             m_Socket.Send(P);
         }

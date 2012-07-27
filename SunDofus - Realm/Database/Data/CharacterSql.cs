@@ -35,7 +35,7 @@ namespace realm.Database.Data
 
             SQLResult.Close();
 
-            Utils.Logger.Status("Loaded '" + Realm.Character.CharactersManager.ListOfCharacters.Count + "' characters from the database !");
+            SunDofus.Logger.Status("Loaded '" + Realm.Character.CharactersManager.ListOfCharacters.Count + "' characters from the database !");
         }
 
         public static void CreateCharacter(Realm.Character.Character m_C)
@@ -92,13 +92,11 @@ namespace realm.Database.Data
 
                 SQLResult.Close();
 
-                LastID += 1;
-                return LastID;
+                return ++LastID;
             }
             else
             {
-                LastID += 1;
-                return LastID;
+                return ++LastID;
             }
         }
     }

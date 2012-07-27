@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 
-namespace realm.Network
+namespace SunDofus
 {
-    class AbstractServer
+    public class AbstractServer
     {
         SilverServer m_Server;
         int m_Port;

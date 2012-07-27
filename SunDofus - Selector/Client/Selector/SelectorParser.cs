@@ -57,10 +57,11 @@ namespace selector.Client
             string Password = Infos[1];
 
             Database.Data.Account AccountRequested = new Database.Data.Account(Username);
-            if (Password == Utils.Basic.Encrypt(AccountRequested.Password, Client.m_Key))
+
+            if (Password == SunDofus.Basic.Encrypt(AccountRequested.Password, Client.m_Key))
             {
                 Client.m_Account = AccountRequested;
-                Utils.Logger.Infos("Client '" + AccountRequested.Pseudo + "' authentified !");
+                SunDofus.Logger.Infos("Client '" + AccountRequested.Pseudo + "' authentified !");
                 Client.m_State = SelectorClient.State.OnList;
                 Client.SendInformations();
             }
@@ -99,7 +100,7 @@ namespace selector.Client
                 {
                     if (m_Server.m_Server.ID == ID)
                     {
-                        string m_Key = Utils.Basic.RandomString(16);
+                        string m_Key = SunDofus.Basic.RandomString(16);
                         m_Server.SendNewTicket(m_Key, Client);
                         Client.SendNewTicket(m_Key, m_Server);
                     }

@@ -75,7 +75,7 @@ namespace realm.Client
                         break;
 
                     case "P":
-                        Client.Send("APK" + Utils.Basic.RandomName());
+                        Client.Send("APK" + SunDofus.Basic.RandomName());
                         break;
 
                     case "S":
@@ -149,13 +149,13 @@ namespace realm.Client
             }
             catch(Exception e)
             {
-                Utils.Logger.Error(e);
+                SunDofus.Logger.Error(e);
             }
         }
 
         public void DeleteCharacter(string Packet)
         {
-            Character m_C = CharactersManager.GetCharacter(int.Parse(Packet.Substring(2).Split('|')[0]));
+            Character m_C = CharactersManager.ListOfCharacters.First(x => x.ID == int.Parse(Packet.Substring(2).Split('|')[0]));
             if (Packet.Substring(2).Split('|')[1] != Client.m_Infos.Answer && m_C.Level > 19)
             {
                 Client.Send("ADE");
@@ -173,7 +173,7 @@ namespace realm.Client
 
         public void SelectCharacter(string Packet)
         {
-            Character m_C = CharactersManager.GetCharacter(int.Parse(Packet));
+            Character m_C = CharactersManager.ListOfCharacters.First(x => x.ID == int.Parse(Packet));
             if (Client.m_Characters.Contains(m_C))
             {
                 Client.m_Player = m_C;
@@ -226,7 +226,7 @@ namespace realm.Client
                 Client.m_Player.State.Created = true;
                 Client.Send("cC+*#$p%i:?!");
                 Client.Send("SLo+");
-                Client.Send("BT" + Utils.Basic.GetActuelTime());
+                Client.Send("BT" + SunDofus.Basic.GetActuelTime());
             }
             else
             {

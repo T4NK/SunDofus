@@ -41,7 +41,7 @@ namespace selector.Database.Data
             }
             catch (Exception e)
             {
-                Utils.Logger.Error(e);
+                SunDofus.Logger.Error(e);
             }
         }
 

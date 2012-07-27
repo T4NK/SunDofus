@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Utils
+namespace SunDofus
 {
-    class Logger
+    public class Logger
     {
         public static void Write() { Console.WriteLine(); }
         public static void Write(string M) { Console.WriteLine(M); }
@@ -45,11 +45,8 @@ namespace realm.Utils
 
         public static void Packets(string P)
         {
-            if (Config.ConfigurationManager.Debug == true)
-            {
-                Write("Packets >> ", ConsoleColor.Magenta, false);
-                Write(P);
-            }
+            Write("Packets >> ", ConsoleColor.Magenta, false);
+            Write(P);
         }
 
         public static void Error(string E) { Write("Error >> " + E, ConsoleColor.Yellow); }

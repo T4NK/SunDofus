@@ -6,55 +6,40 @@ using SilverSock;
 
 namespace realm.Client
 {
-    class RealmClient
+    class RealmClient : SunDofus.AbstractClient
     {
-        SilverSocket m_Socket;
         public State m_State;
         RealmParser m_Parser;
         public RealmInfos m_Infos;
         public List<Realm.Character.Character> m_Characters;
         public Realm.Character.Character m_Player;
 
-        public RealmClient(SilverSocket Socket)
+        public RealmClient(SilverSocket Socket) :  base(Socket)
         {
-            m_Socket = Socket;
-            m_Socket.OnDataArrivalEvent += new SilverEvents.DataArrival(this.ReceivedPackets);
-            m_Socket.OnSocketClosedEvent += new SilverEvents.SocketClosed(this.Disconnected);
+            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
+            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.ReceivedPackets);
             m_State = State.Ticket;
             m_Characters = new List<Realm.Character.Character>();
             m_Parser = new RealmParser(this);
             Send("HG");
         }
 
-        public void ReceivedPackets(byte[] data)
+        public void ReceivedPackets(string Data)
         {
-            string NotParsed = Encoding.ASCII.GetString(data);
-            foreach (string Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
-            {
-                if (Packet == "") continue;
-                Utils.Logger.Packets("[Received]! " + Packet);
-                m_Parser.Parse(Packet);
-            }
+            m_Parser.Parse(Data);
         }
 
         public void Disconnected()
         {
-            Utils.Logger.Infos("New closed connection !");
+            SunDofus.Logger.Infos("New closed connection !");
             Program.m_AuthServer.m_Clients.Remove(this);
-        }
-
-        public void Send(string Message)
-        {
-            Utils.Logger.Packets("[Sended]! " + Message);
-            byte[] P = Encoding.ASCII.GetBytes(Message + "\x00");
-            m_Socket.Send(P);
         }
 
         public void ParseCharacters()
         {
             foreach (string Name in m_Infos.CharactersNames)
             {
-                Realm.Character.Character m_C = Realm.Character.CharactersManager.GetCharacter(Name);
+                Realm.Character.Character m_C = Realm.Character.CharactersManager.ListOfCharacters.First(x => x.Name == Name);
                 if (m_C != null)
                 {
                     m_Characters.Add(m_C);

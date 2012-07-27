@@ -10,16 +10,16 @@ namespace realm
         public static int m_ServerID = -1;
 
         public static Network.SelectorLink m_RealmLink;
-        public static Network.AuthentificationServer m_AuthServer;
+        public static Network.AuthenticationServer m_AuthServer;
 
         static void Main(string[] args)
         {
-            Config.ConfigurationManager.LoadConfiguration();
+            Config.ConfigurationManager.IniConfig();
             Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Nicolas Petit [c]  2012";
             Database.SQLManager.Initialise();
             Database.Data.CharacterSql.LoadCharacters();
 
-            m_AuthServer = new Network.AuthentificationServer();
+            m_AuthServer = new Network.AuthenticationServer();
             m_AuthServer.Start();
 
             m_RealmLink = new Network.SelectorLink();

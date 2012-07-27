@@ -2,23 +2,57 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus - Realm", "SunDofus - Realm\SunDofus - Realm.csproj", "{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D4D38385-8752-40E3-A782-892227F5E7AC} = {D4D38385-8752-40E3-A782-892227F5E7AC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus - Selector", "SunDofus - Selector\SunDofus - Selector.csproj", "{C1DBF4D7-B4F3-4941-969C-3078F936954C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D4D38385-8752-40E3-A782-892227F5E7AC} = {D4D38385-8752-40E3-A782-892227F5E7AC}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus", "SunDofus\SunDofus.csproj", "{D4D38385-8752-40E3-A782-892227F5E7AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Debug|x86.ActiveCfg = Debug|x86
 		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Debug|x86.Build.0 = Debug|x86
+		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Release|Any CPU.ActiveCfg = Release|x86
+		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Release|Mixed Platforms.Build.0 = Release|x86
 		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Release|x86.ActiveCfg = Release|x86
 		{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}.Release|x86.Build.0 = Release|x86
+		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Debug|x86.ActiveCfg = Debug|x86
 		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Debug|x86.Build.0 = Debug|x86
+		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Release|Any CPU.ActiveCfg = Release|x86
+		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Release|Mixed Platforms.Build.0 = Release|x86
 		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Release|x86.ActiveCfg = Release|x86
 		{C1DBF4D7-B4F3-4941-969C-3078F936954C}.Release|x86.Build.0 = Release|x86
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D4D38385-8752-40E3-A782-892227F5E7AC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

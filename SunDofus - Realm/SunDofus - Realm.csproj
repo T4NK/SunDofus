@@ -57,8 +57,7 @@
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Database\Data\CharacterSql.cs" />
     <Compile Include="Database\SQLManager.cs" />
-    <Compile Include="Network\AbstractServer.cs" />
-    <Compile Include="Network\AuthentificationServer.cs" />
+    <Compile Include="Network\AuthenticationServer.cs" />
     <Compile Include="Network\CommandServer.cs" />
     <Compile Include="Network\Selector\SelectorKeys.cs" />
     <Compile Include="Network\Selector\SelectorLink.cs" />
@@ -68,8 +67,6 @@
     <Compile Include="Realm\Character\Character.cs" />
     <Compile Include="Realm\Character\CharactersManager.cs" />
     <Compile Include="Realm\Character\CharacterState.cs" />
-    <Compile Include="Utils\Basic.cs" />
-    <Compile Include="Utils\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\Config.txt">
@@ -77,7 +74,12 @@
     </Content>
     <Content Include="sun.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SunDofus\SunDofus.csproj">
+      <Project>{D4D38385-8752-40E3-A782-892227F5E7AC}</Project>
+      <Name>SunDofus</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

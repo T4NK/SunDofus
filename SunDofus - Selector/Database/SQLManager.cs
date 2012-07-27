@@ -20,11 +20,11 @@ namespace selector.Database
                     + Config.ConfigurationManager.GetString("Sql_Pass") + "';database=" + Config.ConfigurationManager.GetString("Sql_Db") + ";";
                 m_Connection.Open();
                 isRunning = true;
-                Utils.Logger.Status("Connected to MySQL Server !");
+                SunDofus.Logger.Status("Connected to MySQL Server !");
             }
             catch (Exception e)
             {
-                Utils.Logger.Error(e);
+                SunDofus.Logger.Error(e);
                 if (isRunning == true) m_Connection.Close();
                 isRunning = false;
             }

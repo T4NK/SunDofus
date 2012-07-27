@@ -41,11 +41,11 @@ namespace selector.Database.Data
 
                 SQLReader.Close();
 
-                Utils.Logger.Status("'" + ListOfServers.Count + "' servers loaded !");
+                SunDofus.Logger.Status("'" + ListOfServers.Count + "' servers loaded !");
             }
             catch (Exception e)
             {
-                Utils.Logger.Error(e);
+                SunDofus.Logger.Error(e);
             }
         }
     }

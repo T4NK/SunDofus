@@ -55,7 +55,7 @@ namespace realm.Network
         {
             m_Timer.Stop();
             m_RunningTimer = false;
-            Utils.Logger.Status("Connected with the selector <" + Config.ConfigurationManager.GetString("Selector_Ip") + "," + Config.ConfigurationManager.GetInt("Selector_Port") + "> !");
+            SunDofus.Logger.Status("Connected with the selector <" + Config.ConfigurationManager.GetString("Selector_Ip") + "," + Config.ConfigurationManager.GetInt("Selector_Port") + "> !");
 
             Send("Auth|" + Program.m_ServerID + "|" + Config.ConfigurationManager.GetString("Server_Ip") + "|" + Config.ConfigurationManager.GetString("Server_Port"));
         }
@@ -66,7 +66,7 @@ namespace realm.Network
             foreach (string Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
             {
                 if (Packet == "") continue;
-                Utils.Logger.Packets("[Received]! " + Packet);
+                SunDofus.Logger.Packets("[Received]! " + Packet);
                 m_Parser.Parse(Packet);
             }
         }
@@ -75,12 +75,12 @@ namespace realm.Network
         {
             m_Timer.Start();
             m_RunningTimer = true;
-            Utils.Logger.Infos("Connection with the selector closed !");
+            SunDofus.Logger.Infos("Connection with the selector closed !");
         }
 
         public void Send(string Message)
         {
-            Utils.Logger.Packets("[Sended]! " + Message);
+            SunDofus.Logger.Packets("[Sended]! " + Message);
             byte[] P = Encoding.ASCII.GetBytes(Message + "\x00");
             m_Socket.Send(P);
         }

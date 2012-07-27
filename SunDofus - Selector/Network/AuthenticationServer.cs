@@ -6,11 +6,11 @@ using SilverSock;
 
 namespace selector.Network
 {
-    class AuthentificationServer : AbstractServer
+    class AuthenticationServer : SunDofus.AbstractServer
     {
         public List<Client.SelectorClient> m_Clients;
 
-        public AuthentificationServer()
+        public AuthenticationServer()
             : base(Config.ConfigurationManager.GetString("Auth_Ip"), Config.ConfigurationManager.GetInt("Auth_Port"))
         {
             m_Clients = new List<Client.SelectorClient>();
@@ -22,18 +22,18 @@ namespace selector.Network
         public void AcceptClientServer(SilverSocket Socket)
         {
             if (Socket == null) return;
-            Utils.Logger.Infos("New inputed connection !");
+            SunDofus.Logger.Infos("New inputted connection !");
             m_Clients.Add(new Client.SelectorClient(Socket));
         }
 
         public void OnListenServer(int m_Port)
         {
-            Utils.Logger.Status("AuthentificationServer started on the port '" + m_Port + "' !");
+            SunDofus.Logger.Status("AuthenticationServer started on the port '" + m_Port + "' !");
         }
 
         public void OnListenFailedServer(Exception e)
         {
-            Utils.Logger.Error(e);
+            SunDofus.Logger.Error(e);
         }
 
         public void RefreshAllHosts()

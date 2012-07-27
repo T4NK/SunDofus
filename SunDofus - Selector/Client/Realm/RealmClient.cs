@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace selector.Client
 {
-    class RealmClient : AbstractClient
+    class RealmClient : SunDofus.AbstractClient
     {
         public State m_State;
         public RealmParser m_Parser;
@@ -29,8 +29,8 @@ namespace selector.Client
         public void Disconnected()
         {
             ChangeState(State.Disconnected);
-            if (m_Server == null) Utils.Logger.Infos("New closed server connection !");
-            else Utils.Logger.Infos("New closed server connection ('" + m_Server.ID + "') !");
+            if (m_Server == null) SunDofus.Logger.Infos("New closed server connection !");
+            else SunDofus.Logger.Infos("New closed server connection ('" + m_Server.ID + "') !");
             Program.m_Realm.m_Clients.Remove(this);
         }
 

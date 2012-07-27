@@ -25,7 +25,7 @@ namespace realm.Network
                     break;
 
                 case "Connected!":
-                    Utils.Logger.Status("Server authentified !");
+                    SunDofus.Logger.Status("Server authentified !");
                     SendAllClient();
                     break;
 

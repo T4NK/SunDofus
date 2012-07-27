@@ -2,20 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{C1DBF4D7-B4F3-4941-969C-3078F936954C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{D4D38385-8752-40E3-A782-892227F5E7AC}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>selector</RootNamespace>
-    <AssemblyName>Selector</AssemblyName>
+    <RootNamespace>SunDofus</RootNamespace>
+    <AssemblyName>SunDofus</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,12 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>sun.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
-    <Reference Include="SilverSock">
+    <Reference Include="SilverSock, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SharkEmu2\Debug\SilverSock.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -50,32 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\Realm\RealmClient.cs" />
-    <Compile Include="Client\Realm\RealmParser.cs" />
-    <Compile Include="Client\Realm\RealmSqlAction.cs" />
-    <Compile Include="Client\Selector\SelectorClient.cs" />
-    <Compile Include="Client\Selector\SelectorParser.cs" />
-    <Compile Include="Client\Selector\SelectorQueue.cs" />
-    <Compile Include="Config\ConfigurationManager.cs" />
-    <Compile Include="Database\Data\Account.cs" />
-    <Compile Include="Database\Data\Server.cs" />
-    <Compile Include="Database\SQLManager.cs" />
-    <Compile Include="Network\AuthenticationServer.cs" />
-    <Compile Include="Network\RealmServer.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="AbstractClient.cs" />
+    <Compile Include="AbstractServer.cs" />
+    <Compile Include="Basic.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Config\Selector.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="sun.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SunDofus\SunDofus.csproj">
-      <Project>{D4D38385-8752-40E3-A782-892227F5E7AC}</Project>
-      <Name>SunDofus</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

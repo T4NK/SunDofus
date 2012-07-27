@@ -3,52 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using SunDofus;
 
 namespace realm.Config
 {
     class ConfigurationManager
     {
-        public static Dictionary<string, string> Values = new Dictionary<string, string>();
-        public static bool Debug = false;
+        static Configuration Config;
+        public static bool Debug;
 
-        public static void LoadConfiguration()
+        public static void IniConfig()
         {
-            try
-            {
-                StreamReader Reader = new StreamReader("Config/Config.txt");
-                while (!Reader.EndOfStream)
-                {
-                    string Line = Reader.ReadLine();
-                    if (!Line.Contains("=")) continue;
-                    Line = Line.Replace(" ", "");
-                    string[] Infos = Line.Split('=');
-                    Values.Add(Infos[0], Infos[1]);
-                }
-                Utils.Logger.Status("Configuration loaded ! '" + Values.Count + "' paramaters loaded !");
-
-                Debug = GetBool("Debug");
-                Program.m_ServerID = GetInt("Server_ID");
-
-            }
-            catch (Exception e)
-            {
-                Utils.Logger.Error(e);
-            }
+            Config = new Configuration("Config/Config.txt");
+            Debug = Config.GetBool("Debug");
+            Program.m_ServerID = Config.GetInt("Server_ID");
         }
 
         public static string GetString(string M)
         {
-            return Values[M];
+            return Config.GetString(M);
         }
 
         public static int GetInt(string I)
         {
-            return int.Parse(Values[I]);
+            return Config.GetInt(I);
         }
 
         public static bool GetBool(string B)
         {
-            return bool.Parse(Values[B]);
+            return Config.GetBool(B);
         }
     }
 }

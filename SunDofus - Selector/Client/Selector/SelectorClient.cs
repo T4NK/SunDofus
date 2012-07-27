@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace selector.Client
 {
-    class SelectorClient : AbstractClient
+    class SelectorClient : SunDofus.AbstractClient
     {
         public string m_Key = "";
         public SelectorParser m_Parser;
@@ -17,7 +17,7 @@ namespace selector.Client
         {
             this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
             this.RaiseDataArrivalEvent += new DataArrivalEvent(this.PacketReceived);
-            m_Key = Utils.Basic.RandomString(32);
+            m_Key = SunDofus.Basic.RandomString(32);
             m_State = State.Version;
             m_Parser = new SelectorParser(this);
             Send("HC" + m_Key);
@@ -25,7 +25,7 @@ namespace selector.Client
 
         public void Disconnected()
         {
-            Utils.Logger.Infos("New closted connection !");
+            SunDofus.Logger.Infos("New closed connection !");
             Program.m_Auth.m_Clients.Remove(this);
         }
 
