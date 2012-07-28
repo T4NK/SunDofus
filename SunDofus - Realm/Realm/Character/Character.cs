@@ -202,40 +202,40 @@ namespace realm.Realm.Character
         {
             StringBuilder Builder = new StringBuilder();
 
-            Builder.Append(Exp + ",");
+            Builder.Append(Exp ).Append( ",");
             Builder.Append("0,1500|"); // Last MaxExpLevel , This MaxExpLevel
-            Builder.Append(Kamas + "|");
-            Builder.Append(CharactPoint + "|");
-            Builder.Append(SpellPoint + "|");
+            Builder.Append(Kamas ).Append( "|");
+            Builder.Append(CharactPoint ).Append( "|");
+            Builder.Append(SpellPoint ).Append( "|");
             Builder.Append("0~2,0,0,0,0,0|"); // Alignement
-            Builder.Append(Life + ",");
-            Builder.Append(MaximumLife + "|");
-            Builder.Append(Energy + ",10000|");
-            Builder.Append(m_Stats.Initiative.Total() + "|");
-            Builder.Append(m_Stats.Prospection.Total() + "|");
+            Builder.Append(Life ).Append( ",");
+            Builder.Append(MaximumLife ).Append( "|");
+            Builder.Append(Energy ).Append( ",10000|");
+            Builder.Append(m_Stats.Initiative.Total() ).Append( "|");
+            Builder.Append(m_Stats.Prospection.Total() ).Append( "|");
 
-            Builder.Append(m_Stats.PA.ToString() + "|");
-            Builder.Append(m_Stats.PM.ToString() + "|");
-            Builder.Append(m_Stats.Force.ToString() + "|");
-            Builder.Append(m_Stats.Vitalite.ToString() + "|");
-            Builder.Append(m_Stats.Sagesse.ToString() + "|");
-            Builder.Append(m_Stats.Chance.ToString() + "|");
-            Builder.Append(m_Stats.Agilite.ToString() + "|");
-            Builder.Append(m_Stats.Intelligence.ToString() + "|");
-            Builder.Append(m_Stats.PO.ToString() + "|");
-            Builder.Append(m_Stats.MaxMonsters.ToString() + "|");
-            Builder.Append(m_Stats.BonusDamage.ToString() + "|");
-            Builder.Append(m_Stats.BonusDamagePhysic.ToString() + "|");
-            Builder.Append(m_Stats.BonusDamageMagic.ToString() + "|");
-            Builder.Append(m_Stats.BonusDamagePercent.ToString() + "|");
-            Builder.Append(m_Stats.BonusHeal.ToString() + "|");
-            Builder.Append(m_Stats.BonusDamageTrap.ToString() + "|");
-            Builder.Append(m_Stats.BonusDamageTrapPercent.ToString() + "|");
-            Builder.Append(m_Stats.ReturnDamage.ToString() + "|");
-            Builder.Append(m_Stats.BonusCritical.ToString() + "|");
-            Builder.Append(m_Stats.BonusFail.ToString() + "|");
-            Builder.Append(m_Stats.DodgePA.ToString() + "|");
-            Builder.Append(m_Stats.DodgePM.ToString() + "|");
+            Builder.Append(m_Stats.PA.ToString() ).Append( "|");
+            Builder.Append(m_Stats.PM.ToString() ).Append( "|");
+            Builder.Append(m_Stats.Force.ToString() ).Append( "|");
+            Builder.Append(m_Stats.Vitalite.ToString() ).Append( "|");
+            Builder.Append(m_Stats.Sagesse.ToString() ).Append( "|");
+            Builder.Append(m_Stats.Chance.ToString() ).Append( "|");
+            Builder.Append(m_Stats.Agilite.ToString() ).Append( "|");
+            Builder.Append(m_Stats.Intelligence.ToString() ).Append( "|");
+            Builder.Append(m_Stats.PO.ToString() ).Append( "|");
+            Builder.Append(m_Stats.MaxMonsters.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusDamage.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusDamagePhysic.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusDamageMagic.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusDamagePercent.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusHeal.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusDamageTrap.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusDamageTrapPercent.ToString() ).Append( "|");
+            Builder.Append(m_Stats.ReturnDamage.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusCritical.ToString() ).Append( "|");
+            Builder.Append(m_Stats.BonusFail.ToString() ).Append( "|");
+            Builder.Append(m_Stats.DodgePA.ToString() ).Append( "|");
+            Builder.Append(m_Stats.DodgePM.ToString() ).Append( "|");
             Builder.Append("0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1"); // Resist
             
             return Builder.ToString();

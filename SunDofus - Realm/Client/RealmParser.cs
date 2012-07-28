@@ -323,7 +323,7 @@ namespace realm.Client
                         Client.m_Player.State.MoveCell = -1;
                         Client.Send("BN");
 
-                        if (Client.m_Player.GetMap().ContainsTrigger(Client.m_Player.MapCell))
+                        if (Client.m_Player.GetMap().m_Triggers.Count(x => x.CellID == Client.m_Player.MapCell) > 0)
                         {
                             Trigger m_T = Client.m_Player.GetMap().m_Triggers.First(x => x.CellID == Client.m_Player.MapCell);
                             Client.m_Player.TeleportNewMap(m_T.NewMapID, m_T.NewCellID);
