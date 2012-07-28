@@ -79,6 +79,8 @@ namespace realm.Realm.Character
 
         #endregion
 
+        #region Map
+
         public void LoadMap()
         {
             Map.Map m_M = Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
@@ -94,9 +96,24 @@ namespace realm.Realm.Character
             }
         }
 
+        public void TeleportNewMap(int m_MID, int m_C)
+        {
+            Client.Send("GA;2;" + ID + ";");
+
+            GetMap().DelPlayer(this);
+            Map.Map m_M = Database.Data.MapSql.ListOfMaps.First(x => x.id == m_MID);
+
+            MapID = m_M.id;
+            MapCell = m_C;
+
+            LoadMap();
+        }
+
         public Map.Map GetMap()
         {
             return Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
         }
+
+        #endregion
     }
 }

@@ -8,6 +8,7 @@ namespace realm.Realm.Map
     class Map
     {
         public List<Character.Character> m_Characters;
+        public List<Trigger> m_Triggers;
 
         public int id, date, width, height, capabilities, numgroup, groupmaxsize = -1;
         public string MapData, key, cells, monsters, mappos = "";
@@ -15,6 +16,7 @@ namespace realm.Realm.Map
         public Map()
         {
             m_Characters = new List<Character.Character>();
+            m_Triggers = new List<Trigger>();
         }
 
         public void Send(string Message)
@@ -48,6 +50,15 @@ namespace realm.Realm.Map
             }
 
             return Packet;
+        }
+
+        public bool ContainsTrigger(int Cell)
+        {
+            foreach (Trigger m_T in m_Triggers)
+            {
+                if (m_T.CellID == Cell) return true;
+            }
+            return false;
         }
     }
 }

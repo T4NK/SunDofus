@@ -57,6 +57,7 @@
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Database\Data\CharacterSql.cs" />
     <Compile Include="Database\Data\MapSql.cs" />
+    <Compile Include="Database\Data\TriggerSql.cs" />
     <Compile Include="Database\SQLManager.cs" />
     <Compile Include="Network\AuthenticationServer.cs" />
     <Compile Include="Network\CommandServer.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Realm\Map\Cells.cs" />
     <Compile Include="Realm\Map\Map.cs" />
     <Compile Include="Realm\Map\Pathfinding.cs" />
+    <Compile Include="Realm\Map\Trigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\Config.txt">

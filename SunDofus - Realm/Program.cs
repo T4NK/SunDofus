@@ -19,6 +19,8 @@ namespace realm
             Database.SQLManager.Initialise();
 
             Database.Data.MapSql.LoadMaps();
+            Database.Data.TriggerSql.LoadTriggers();
+
             Database.Data.CharacterSql.LoadCharacters();
 
             m_AuthServer = new Network.AuthenticationServer();
