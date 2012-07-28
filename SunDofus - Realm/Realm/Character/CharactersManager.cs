@@ -13,7 +13,7 @@ namespace realm.Realm.Character
         {
             foreach (Character m_C in ListOfCharacters)
             {
-                if (m_C.Name == Name) return true;
+                if (m_C.m_Name == Name) return true;
             }
             return false;
         }

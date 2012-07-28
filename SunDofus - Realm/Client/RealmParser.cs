@@ -120,7 +120,7 @@ namespace realm.Client
                 {
                     Character m_Character = new Character();
                     m_Character.ID = Database.Data.CharacterSql.GetNewID();
-                    m_Character.Name = CharData[0];
+                    m_Character.m_Name = CharData[0];
                     m_Character.Level = 1;
                     m_Character.Class = int.Parse(CharData[1]);
                     m_Character.Sex = int.Parse(CharData[2]);
@@ -145,7 +145,7 @@ namespace realm.Client
                     CharactersManager.ListOfCharacters.Add(m_Character);
                     Client.m_Characters.Add(m_Character);
 
-                    Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.Name));
+                    Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
                     Database.Data.CharacterSql.CreateCharacter(m_Character);
 
                     Client.Send("AAK");
@@ -175,8 +175,8 @@ namespace realm.Client
             CharactersManager.ListOfCharacters.Remove(m_C);
             Client.m_Characters.Remove(m_C);
 
-            Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.Name));
-            Database.Data.CharacterSql.DeleteCharacter(m_C.Name);
+            Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.m_Name));
+            Database.Data.CharacterSql.DeleteCharacter(m_C.m_Name);
 
             SendCharacterList("");
         }
@@ -209,21 +209,15 @@ namespace realm.Client
 
         public void CreateGame(string t)
         {
-            Client.Send("eL-1|"); // Emote
-            Client.Send("GCK|1|" + Client.m_Player.Name);
+            Client.Send("GCK|1|" + Client.m_Player.m_Name);
             Client.Send("AR6bk");
 
-            if (Client.m_Player.State.Created == false)
-            {
-                Client.m_Player.State.Created = true;
-                Client.Send("cC+*#$p%i:?!");
-                Client.Send("SLo+");
-                Client.Send("BT" + SunDofus.Basic.GetActuelTime());
-            }
-            else
-            {
+            Client.Send("cC+*#$p%i:?!");
+            Client.Send("SLo+");
+            Client.Send("BT" + SunDofus.Basic.GetActuelTime());
 
-            }
+            Client.m_Player.SendCharStats();
+            Client.m_Player.SendPods();
 
             Client.m_Player.LoadMap();
         }
@@ -261,17 +255,17 @@ namespace realm.Client
             switch (Channel)
             {
                 case "*":
-                    Client.m_Player.GetMap().Send("cMK|" + Client.m_Player.ID + "|" + Client.m_Player.Name + "|" + Message);
+                    Client.m_Player.GetMap().Send("cMK|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
                     break;
             }
 
             if (Channel.Length > 1 && Channel != "*")
             {
-                Character m_C = CharactersManager.ListOfCharacters.First(x => x.Name == Channel);
+                Character m_C = CharactersManager.ListOfCharacters.First(x => x.m_Name == Channel);
                 if (m_C.isConnected == true)
                 {
-                    m_C.Client.Send("cMKF|" + Client.m_Player.ID + "|" + Client.m_Player.Name + "|" + Message);
-                    Client.Send("cMKT|" + Client.m_Player.ID + "|" + m_C.Name + "|" + Message);
+                    m_C.Client.Send("cMKF|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
+                    Client.Send("cMKT|" + Client.m_Player.ID + "|" + m_C.m_Name + "|" + Message);
                 }
                 else
                 {

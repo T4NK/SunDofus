@@ -19,7 +19,7 @@ namespace realm.Database.Data
             {
                 Realm.Character.Character c = new Realm.Character.Character();
                 c.ID = SQLResult.GetInt16("id");
-                c.Name = SQLResult.GetString("name");
+                c.m_Name = SQLResult.GetString("name");
                 c.Level = SQLResult.GetInt16("level");
                 c.Class = SQLResult.GetInt16("class");
                 c.Sex = SQLResult.GetInt16("sex");
@@ -50,7 +50,7 @@ namespace realm.Database.Data
 
             MySqlParameterCollection P = SQLCommand.Parameters;
             P.Add(new MySqlParameter("@id", m_C.ID));
-            P.Add(new MySqlParameter("@name", m_C.Name));
+            P.Add(new MySqlParameter("@name", m_C.m_Name));
             P.Add(new MySqlParameter("@level", m_C.Level));
             P.Add(new MySqlParameter("@class", m_C.Class));
             P.Add(new MySqlParameter("@sex", m_C.Sex));

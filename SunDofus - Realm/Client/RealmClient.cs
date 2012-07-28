@@ -47,7 +47,7 @@ namespace realm.Client
         {
             foreach (string Name in m_Infos.CharactersNames)
             {
-                Realm.Character.Character m_C = Realm.Character.CharactersManager.ListOfCharacters.First(x => x.Name == Name);
+                Realm.Character.Character m_C = Realm.Character.CharactersManager.ListOfCharacters.First(x => x.m_Name == Name);
                 if (m_C != null)
                 {
                     m_Characters.Add(m_C);
