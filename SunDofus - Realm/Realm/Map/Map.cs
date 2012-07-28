@@ -32,6 +32,12 @@ namespace realm.Realm.Map
             m_C.Client.Send("GM" + CharactersPattern());
         }
 
+        public void DelPlayer(Character.Character m_C)
+        {
+            Send("GM|-" + m_C.ID);
+            m_Characters.Remove(m_C);
+        }
+
         public string CharactersPattern()
         {
             string Packet = "|+";

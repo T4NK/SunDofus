@@ -1,0 +1,8 @@
+C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Selector\bin\Debug\RealmSelector.exe
+C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Selector\bin\Debug\RealmSelector.pdb
+C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\user\Desktop\Développement\SunDofus\Debug application\Config\Selector.txt
+C:\Users\user\Desktop\Développement\SunDofus\Debug application\Selector.exe
+C:\Users\user\Desktop\Développement\SunDofus\Debug application\Selector.pdb
+C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\Selector.exe
+C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\Selector.pdb

@@ -34,7 +34,11 @@ namespace realm.Client
             if (isAuth == true)
             {
                 Program.m_RealmLink.Send("DC|" + m_Infos.Pseudo);
-                if (m_Player != null) m_Player.isConnected = false;
+                if (m_Player != null)
+                {
+                    m_Player.GetMap().DelPlayer(m_Player);
+                    m_Player.isConnected = false;
+                }
             }
             Program.m_AuthServer.m_Clients.Remove(this);
         }
