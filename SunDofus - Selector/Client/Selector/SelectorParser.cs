@@ -76,8 +76,7 @@ namespace selector.Client
         {
             if (Packet.StartsWith("Ax"))
             {
-                long MemberTime = 60 * 60 * 24 * 365;
-                string Pack = "AxK" + (MemberTime * 1000);
+                string Pack = "AxK" + Client.m_Account.SubscriptionTime();
 
                 foreach (Database.Data.Server m_Server in Database.Data.Server.ListOfServers)
                 {

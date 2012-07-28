@@ -25,6 +25,7 @@ namespace realm.Network
             m_Infos.Answer = Data[5];
             m_Infos.Level = int.Parse(Data[6]);
             m_Infos.Characters = Data[7];
+            m_Infos.Subscription = long.Parse(Data[8]);
         }
     }
 }

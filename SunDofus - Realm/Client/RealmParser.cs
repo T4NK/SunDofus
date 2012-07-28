@@ -96,8 +96,7 @@ namespace realm.Client
 
         public void SendCharacterList(string test)
         {
-            long MemberTime = 60 * 60 * 24 * 365;
-            string Pack = "ALK" + (MemberTime * 1000) + "|" + Client.m_Infos.CharactersNames.Count;
+            string Pack = "ALK" + Client.m_Infos.Subscription +"|" + Client.m_Infos.CharactersNames.Count;
 
             if (Client.m_Infos.CharactersNames.Count != 0)
             {
@@ -166,7 +165,7 @@ namespace realm.Client
         {
             int ID = int.Parse(Packet.Split('|')[0]);
             Character m_C = CharactersManager.CharactersList.First(x => x.ID == ID);
-            if (Packet.Split('|')[1] != Client.m_Infos.Answer && m_C.Level > 19)
+            if (Packet.Split('|')[1] != Client.m_Infos.Answer && m_C.Level >= 20)
             {
                 Client.Send("ADE");
                 return;

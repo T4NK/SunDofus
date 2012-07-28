@@ -73,13 +73,14 @@ namespace selector.Client
         {
             StringBuilder Builder = new StringBuilder();
             Builder.Append("ANT|");
-            Builder.Append(m_Key + "|");
-            Builder.Append(m_Client.m_Account.Id + "|");
-            Builder.Append(m_Client.m_Account.Pseudo + "|");
-            Builder.Append(m_Client.m_Account.Question + "|");
-            Builder.Append(m_Client.m_Account.Answer + "|");
-            Builder.Append(m_Client.m_Account.Level + "|");
-            Builder.Append(m_Client.m_Account.BaseChar);
+            Builder.Append(m_Key).Append( "|");
+            Builder.Append(m_Client.m_Account.Id).Append( "|");
+            Builder.Append(m_Client.m_Account.Pseudo).Append( "|");
+            Builder.Append(m_Client.m_Account.Question).Append( "|");
+            Builder.Append(m_Client.m_Account.Answer).Append( "|");
+            Builder.Append(m_Client.m_Account.Level).Append( "|");
+            Builder.Append(m_Client.m_Account.BaseChar).Append("|");
+            Builder.Append(m_Client.m_Account.SubscriptionTime());
             Send(Builder.ToString());
 
             m_Server.Clients.Add(m_Client.m_Account.Pseudo);

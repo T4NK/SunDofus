@@ -13,6 +13,7 @@ namespace realm.Client
         public int Id;
         public int Level;
         public string Characters;
+        public long Subscription;
 
         public List<string> CharactersNames;
 
@@ -25,6 +26,7 @@ namespace realm.Client
             Id = -1;
             Level = -1;
             Characters = "";
+            Subscription = 0;
         }
 
         public void ParseCharacters()

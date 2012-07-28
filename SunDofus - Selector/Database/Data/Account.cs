@@ -35,6 +35,7 @@ namespace selector.Database.Data
                     BaseChar = SQLReader.GetString("characters");
                     if (BaseChar != "") ParseCharacter();
                     BaseGifts = SQLReader.GetString("gifts");
+                    SubscriptionDate = SQLReader.GetDateTime("subscription");
                 }
 
                 SQLReader.Close();
@@ -55,6 +56,7 @@ namespace selector.Database.Data
         public string Answer = "";
         public string BaseChar = "";
         public string BaseGifts = "";
+        public DateTime SubscriptionDate = new DateTime();
 
         public Dictionary<int, List<string>> Characters = new Dictionary<int, List<string>>();
 
@@ -70,6 +72,12 @@ namespace selector.Database.Data
             }
 
             Characters = Dico;
+        }
+
+        public string SubscriptionTime()
+        {
+            if (SubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds <= 1) return "0";
+            return SubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds.ToString().Split(',')[0];
         }
     }
 }
