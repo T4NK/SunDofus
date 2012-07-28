@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using realm.Realm.Character;
 using realm.Realm.Map;
+using realm.Realm.Character.Stats;
+using realm.Realm;
+using realm.Realm.World;
 
 namespace realm.Client
 {
@@ -24,6 +27,7 @@ namespace realm.Client
         void RegisterPackets()
         {
             m_Packets["AA"] = CreateCharacter;
+            m_Packets["AB"] = StatsBoosts;
             m_Packets["AD"] = DeleteCharacter;
             m_Packets["AL"] = SendCharacterList;
             m_Packets["AP"] = SendRandomName;
@@ -254,23 +258,20 @@ namespace realm.Client
             switch (Channel)
             {
                 case "*":
-                    Client.m_Player.GetMap().Send("cMK|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
+                    Chat.SendGeneralMessage(Client, Message);
                     break;
             }
 
             if (Channel.Length > 1 && Channel != "*")
             {
-                Character m_C = CharactersManager.CharactersList.First(x => x.m_Name == Channel);
-                if (m_C.isConnected == true)
-                {
-                    m_C.Client.Send("cMKF|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
-                    Client.Send("cMKT|" + Client.m_Player.ID + "|" + m_C.m_Name + "|" + Message);
-                }
-                else
-                {
-                    Client.Send("cMEf" + Channel);
-                }
+                Chat.SendPrivateMessage(Client, Channel, Message);
             }
+        }
+
+        public void ParseConsoleMessage(string Data)
+        {
+            string[] AllData = Data.Split(' ');
+            Client.m_Commander.ParseCommand(AllData[0], AllData[1]);
         }
 
         public void GameInformations(string Data)
@@ -337,6 +338,274 @@ namespace realm.Client
                     break;
             }
         }
+
+        #region StatsBoosts
+
+        public void StatsBoosts(string Data)
+        {
+            int Caract = int.Parse(Data);
+            int Count = 0;
+
+            switch (Caract)
+            {
+                case 11:
+
+                    if (Client.m_Player.CharactPoint < 1) return;
+
+                    if (Client.m_Player.Class == 11)
+                    {
+                        Client.m_Player.m_Stats.Vitalite.Bases += 2;
+                        Client.m_Player.Life += 2;
+                    }
+                    else
+                    {
+                        Client.m_Player.m_Stats.Vitalite.Bases += 1;
+                        Client.m_Player.Life += 1;
+                    }
+
+                    Client.m_Player.CharactPoint -= 1;
+                    Client.m_Player.SendCharStats();
+
+                    break;
+
+                case 12:
+
+                    if (Client.m_Player.CharactPoint < 3) return;
+
+                    Client.m_Player.m_Stats.Sagesse.Bases += 1;
+                    Client.m_Player.CharactPoint -= 3;
+                    Client.m_Player.SendCharStats();
+
+                    break;
+
+                case 10:
+
+                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 7 | Client.m_Player.Class == 2 | Client.m_Player.Class == 5)
+                    {
+                        if (Client.m_Player.m_Stats.Force.Bases < 51) Count = 2;
+                        if (Client.m_Player.m_Stats.Force.Bases > 50) Count = 3;
+                        if (Client.m_Player.m_Stats.Force.Bases > 150) Count = 4;
+                        if (Client.m_Player.m_Stats.Force.Bases > 250) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 3 | Client.m_Player.Class == 9)
+                    {
+                        if (Client.m_Player.m_Stats.Force.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Force.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Force.Bases > 150) Count = 3;
+                        if (Client.m_Player.m_Stats.Force.Bases > 250) Count = 4;
+                        if (Client.m_Player.m_Stats.Force.Bases > 350) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 4 | Client.m_Player.Class == 6 | Client.m_Player.Class == 8 | Client.m_Player.Class == 10)
+                    {
+                        if (Client.m_Player.m_Stats.Force.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Force.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Force.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Force.Bases > 300) Count = 4;
+                        if (Client.m_Player.m_Stats.Force.Bases > 400) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 11)
+                    {
+                        Count = 3;
+                    }
+
+                    else if (Client.m_Player.Class == 12)
+                    {
+                        if (Client.m_Player.m_Stats.Force.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Force.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Force.Bases > 200) Count = 3;
+                    }
+
+                    if (Client.m_Player.CharactPoint >= Count)
+                    {
+                        Client.m_Player.m_Stats.Force.Bases += 1;
+                        Client.m_Player.CharactPoint -= Count;
+                        Client.m_Player.SendCharStats();
+                    }
+                    else
+                        Client.Send("ABE");
+
+                    break;
+
+                case 15:
+
+                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 2 | Client.m_Player.Class == 5 | Client.m_Player.Class == 7 | Client.m_Player.Class == 10)
+                    {
+                        if (Client.m_Player.m_Stats.Intelligence.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 300) Count = 4;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 400) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 3)
+                    {
+                        if (Client.m_Player.m_Stats.Intelligence.Bases < 21) Count = 1;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 20) Count = 2;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 60) Count = 3;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 100) Count = 4;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 140) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 4)
+                    {
+                        if (Client.m_Player.m_Stats.Intelligence.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 150) Count = 3;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 250) Count = 4;
+                    }
+
+                    else if (Client.m_Player.Class == 6 | Client.m_Player.Class == 8)
+                    {
+                        if (Client.m_Player.m_Stats.Intelligence.Bases < 21) Count = 1;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 20) Count = 2;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 40) Count = 3;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 60) Count = 4;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 80) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 9)
+                    {
+                        if (Client.m_Player.m_Stats.Intelligence.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 150) Count = 3;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 250) Count = 4;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 350) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 11)
+                    {
+                        Count = 3;
+                    }
+
+                    else if (Client.m_Player.Class == 12)
+                    {
+                        if (Client.m_Player.m_Stats.Intelligence.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Intelligence.Bases > 200) Count = 3;
+                    }
+
+                    if (Client.m_Player.CharactPoint >= Count)
+                    {
+                        Client.m_Player.m_Stats.Intelligence.Bases += 1;
+                        Client.m_Player.CharactPoint -= Count;
+                    }
+                    else
+                        Client.Send("ABE");
+
+                    break;
+
+                case 13:
+
+                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 4 | Client.m_Player.Class == 5
+                        | Client.m_Player.Class == 6 | Client.m_Player.Class == 7 | Client.m_Player.Class == 8 | Client.m_Player.Class == 9)
+                    {
+                        if (Client.m_Player.m_Stats.Chance.Bases < 21) Count = 1;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 20) Count = 2;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 40) Count = 3;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 60) Count = 4;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 80) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 2 | Client.m_Player.Class == 10)
+                    {
+                        if (Client.m_Player.m_Stats.Chance.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 300) Count = 4;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 400) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 3)
+                    {
+                        if (Client.m_Player.m_Stats.Chance.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 150) Count = 3;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 230) Count = 4;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 330) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 11)
+                    {
+                        Count = 3;
+                    }
+
+                    else if (Client.m_Player.Class == 12)
+                    {
+                        if (Client.m_Player.m_Stats.Chance.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Chance.Bases > 200) Count = 3;
+                    }
+
+                    if (Client.m_Player.CharactPoint >= Count)
+                    {
+                        Client.m_Player.m_Stats.Chance.Bases += 1;
+                        Client.m_Player.CharactPoint -= Count;
+                        Client.m_Player.SendCharStats();
+                    }
+                    else
+                        Client.Send("ABE");
+
+                    break;
+
+                case 14:
+
+                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 2 | Client.m_Player.Class == 3 | Client.m_Player.Class == 5
+                        | Client.m_Player.Class == 7 | Client.m_Player.Class == 8 | Client.m_Player.Class == 10)
+                    {
+                        if (Client.m_Player.m_Stats.Agilite.Bases < 21) Count = 1;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 20) Count = 2;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 40) Count = 3;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 60) Count = 4;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 80) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 4)
+                    {
+                        if (Client.m_Player.m_Stats.Agilite.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 300) Count = 4;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 400) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 6 | Client.m_Player.Class == 9)
+                    {
+                        if (Client.m_Player.m_Stats.Agilite.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 100) Count = 3;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 150) Count = 4;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 200) Count = 5;
+                    }
+
+                    else if (Client.m_Player.Class == 11)
+                    {
+                        Count = 3;
+                    }
+
+                    else if (Client.m_Player.Class == 12)
+                    {
+                        if (Client.m_Player.m_Stats.Agilite.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Agilite.Bases > 200) Count = 3;
+                    }
+
+                    if (Client.m_Player.CharactPoint >= Count)
+                    {
+                        Client.m_Player.m_Stats.Agilite.Bases += 1;
+                        Client.m_Player.CharactPoint -= Count;
+                        Client.m_Player.SendCharStats();
+                    }
+                    else
+                        Client.Send("ABE");
+
+                    break;
+            }
+        }
+
+        #endregion
 
         #endregion
     }

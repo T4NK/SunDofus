@@ -13,12 +13,14 @@ namespace realm.Client
         public List<Realm.Character.Character> m_Characters;
         public Realm.Character.Character m_Player = null;
         public bool isAuth = false;
+        public RealmCommand m_Commander;
 
         public RealmClient(SilverSocket Socket) :  base(Socket)
         {
             this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
             this.RaiseDataArrivalEvent += new DataArrivalEvent(this.ReceivedPackets);
             m_Characters = new List<Realm.Character.Character>();
+            m_Commander = new RealmCommand(this);
             m_Parser = new RealmParser(this);
             Send("HG");
         }
@@ -53,6 +55,11 @@ namespace realm.Client
                     m_Characters.Add(m_C);
                 }
             }
+        }
+
+        public void SendConsoleMessage(string Message, int Color)
+        {
+            Send("BAT" + Color + Message);
         }
     }
 }

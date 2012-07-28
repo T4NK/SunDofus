@@ -184,6 +184,8 @@ namespace realm.Realm.Character
 
         public void UpdateStats()
         {
+            MaximumLife = m_Stats.Vitalite.Total() + 55;
+
             m_Stats.DodgePA.Bases = 0;
             m_Stats.DodgePM.Bases = 0;
             m_Stats.Prospection.Bases = 0;

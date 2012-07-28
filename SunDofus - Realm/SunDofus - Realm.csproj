@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client\RealmClient.cs" />
+    <Compile Include="Client\RealmCommand.cs" />
     <Compile Include="Client\RealmInfos.cs" />
     <Compile Include="Client\RealmParser.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="Realm\Map\Map.cs" />
     <Compile Include="Realm\Map\Pathfinding.cs" />
     <Compile Include="Realm\Map\Trigger.cs" />
+    <Compile Include="Realm\World\Chat.cs" />
+    <Compile Include="Realm\World\Save.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\Config.txt">
