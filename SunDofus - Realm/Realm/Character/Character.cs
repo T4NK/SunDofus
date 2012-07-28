@@ -96,7 +96,7 @@ namespace realm.Realm.Character
 
         public void LoadMap()
         {
-            Map.Map m_M = Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
+            Map.Map m_M = Database.Data.MapSql.MapsList.First(x => x.id == this.MapID);
             if (m_M == null) return;
 
             if (m_M.key == "")
@@ -114,7 +114,7 @@ namespace realm.Realm.Character
             Client.Send("GA;2;" + ID + ";");
 
             GetMap().DelPlayer(this);
-            Map.Map m_M = Database.Data.MapSql.ListOfMaps.First(x => x.id == m_MID);
+            Map.Map m_M = Database.Data.MapSql.MapsList.First(x => x.id == m_MID);
 
             MapID = m_M.id;
             MapCell = m_C;
@@ -124,7 +124,7 @@ namespace realm.Realm.Character
 
         public Map.Map GetMap()
         {
-            return Database.Data.MapSql.ListOfMaps.First(x => x.id == this.MapID);
+            return Database.Data.MapSql.MapsList.First(x => x.id == this.MapID);
         }
 
         #endregion

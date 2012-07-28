@@ -51,14 +51,5 @@ namespace realm.Realm.Map
 
             return Packet;
         }
-
-        public bool ContainsTrigger(int Cell)
-        {
-            foreach (Trigger m_T in m_Triggers)
-            {
-                if (m_T.CellID == Cell) return true;
-            }
-            return false;
-        }
     }
 }

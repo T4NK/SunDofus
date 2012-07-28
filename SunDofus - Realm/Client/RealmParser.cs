@@ -142,7 +142,7 @@ namespace realm.Client
                         return;
                     }
 
-                    CharactersManager.ListOfCharacters.Add(m_Character);
+                    CharactersManager.CharactersList.Add(m_Character);
                     Client.m_Characters.Add(m_Character);
 
                     Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
@@ -165,14 +165,14 @@ namespace realm.Client
         public void DeleteCharacter(string Packet)
         {
             int ID = int.Parse(Packet.Split('|')[0]);
-            Character m_C = CharactersManager.ListOfCharacters.First(x => x.ID == ID);
+            Character m_C = CharactersManager.CharactersList.First(x => x.ID == ID);
             if (Packet.Split('|')[1] != Client.m_Infos.Answer && m_C.Level > 19)
             {
                 Client.Send("ADE");
                 return;
             }
 
-            CharactersManager.ListOfCharacters.Remove(m_C);
+            CharactersManager.CharactersList.Remove(m_C);
             Client.m_Characters.Remove(m_C);
 
             Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.m_Name));
@@ -183,7 +183,7 @@ namespace realm.Client
 
         public void SelectCharacter(string Packet)
         {
-            Character m_C = CharactersManager.ListOfCharacters.First(x => x.ID == int.Parse(Packet));
+            Character m_C = CharactersManager.CharactersList.First(x => x.ID == int.Parse(Packet));
             if (Client.m_Characters.Contains(m_C))
             {
                 Client.m_Player = m_C;
@@ -261,7 +261,7 @@ namespace realm.Client
 
             if (Channel.Length > 1 && Channel != "*")
             {
-                Character m_C = CharactersManager.ListOfCharacters.First(x => x.m_Name == Channel);
+                Character m_C = CharactersManager.CharactersList.First(x => x.m_Name == Channel);
                 if (m_C.isConnected == true)
                 {
                     m_C.Client.Send("cMKF|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
@@ -323,7 +323,7 @@ namespace realm.Client
                         Client.m_Player.State.MoveCell = -1;
                         Client.Send("BN");
 
-                        if (Client.m_Player.GetMap().ContainsTrigger(Client.m_Player.MapCell) == true)
+                        if (Client.m_Player.GetMap().ContainsTrigger(Client.m_Player.MapCell))
                         {
                             Trigger m_T = Client.m_Player.GetMap().m_Triggers.First(x => x.CellID == Client.m_Player.MapCell);
                             Client.m_Player.TeleportNewMap(m_T.NewMapID, m_T.NewCellID);

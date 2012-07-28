@@ -8,7 +8,7 @@ namespace realm.Database.Data
 {
     class MapSql
     {
-        public static List<Realm.Map.Map> ListOfMaps = new List<Realm.Map.Map>();
+        public static List<Realm.Map.Map> MapsList = new List<Realm.Map.Map>();
 
         public static void LoadMaps()
         {
@@ -21,25 +21,25 @@ namespace realm.Database.Data
             {
                 Realm.Map.Map m_M = new Realm.Map.Map();
 
-                m_M.id = SQLReader.GetInt32("id");
+                m_M.id = SQLReader.GetInt16("id");
                 m_M.date = SQLReader.GetInt32("date");
-                m_M.width = SQLReader.GetInt32("width");
-                m_M.height = SQLReader.GetInt32("heigth");
-                m_M.capabilities = SQLReader.GetInt32("capabilities");
-                m_M.numgroup = SQLReader.GetInt32("numgroup");
-                m_M.groupmaxsize = SQLReader.GetInt32("groupmaxsize");
+                m_M.width = SQLReader.GetInt16("width");
+                m_M.height = SQLReader.GetInt16("heigth");
+                m_M.capabilities = SQLReader.GetInt16("capabilities");
+                m_M.numgroup = SQLReader.GetInt16("numgroup");
+                m_M.groupmaxsize = SQLReader.GetInt16("groupmaxsize");
                 m_M.mappos = SQLReader.GetString("mappos");
                 m_M.monsters = SQLReader.GetString("monsters");
                 m_M.cells = SQLReader.GetString("cells");
                 m_M.MapData = SQLReader.GetString("mapData");
                 m_M.key = SQLReader.GetString("key");
 
-                ListOfMaps.Add(m_M);
+                MapsList.Add(m_M);
             }
 
             SQLReader.Close();
 
-            SunDofus.Logger.Status("Loaded '" + ListOfMaps.Count + "' maps from the database !");
+            SunDofus.Logger.Status("Loaded '" + MapsList.Count + "' maps from the database !");
         }
     }
 }

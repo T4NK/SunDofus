@@ -8,7 +8,7 @@ namespace realm.Database.Data
 {
     class TriggerSql
     {
-        public static List<Realm.Map.Trigger> ListOfTriggers = new List<Realm.Map.Trigger>();
+        public static List<Realm.Map.Trigger> TriggersList = new List<Realm.Map.Trigger>();
 
         public static void LoadTriggers()
         {
@@ -21,23 +21,23 @@ namespace realm.Database.Data
             {
                 Realm.Map.Trigger m_T = new Realm.Map.Trigger();
 
-                m_T.MapID = SQLReader.GetInt32("MapID");
-                m_T.CellID = SQLReader.GetInt32("CellID");
+                m_T.MapID = SQLReader.GetInt16("MapID");
+                m_T.CellID = SQLReader.GetInt16("CellID");
                 m_T.NewMapID = int.Parse(SQLReader.GetString("NewMap").Split(',')[0]);
                 m_T.NewCellID = int.Parse(SQLReader.GetString("NewMap").Split(',')[1]);
 
-                ListOfTriggers.Add(m_T);
+                TriggersList.Add(m_T);
                 ParseTrigger(m_T);
             }
 
             SQLReader.Close();
 
-            SunDofus.Logger.Status("Loaded '" + ListOfTriggers.Count + "' triggers from the database !");
+            SunDofus.Logger.Status("Loaded '" + TriggersList.Count + "' triggers from the database !");
         }
 
         public static void ParseTrigger(Realm.Map.Trigger m_T)
         {
-            foreach (Realm.Map.Map m_M in MapSql.ListOfMaps)
+            foreach (Realm.Map.Map m_M in MapSql.MapsList)
             {
                 if (m_M.id == m_T.MapID) m_M.m_Triggers.Add(m_T);
             }

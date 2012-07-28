@@ -29,18 +29,18 @@ namespace realm.Database.Data
                 c.Color2 = SQLResult.GetInt32("color2");
                 c.Color3 = SQLResult.GetInt32("color3");
 
-                c.MapCell = SQLResult.GetInt32("mapcell");
-                c.MapID = SQLResult.GetInt32("mapid");
+                c.MapCell = SQLResult.GetInt16("mapcell");
+                c.MapID = SQLResult.GetInt16("mapid");
                 c.Dir = 3;
 
                 c.NewCharacter = false;
 
-                Realm.Character.CharactersManager.ListOfCharacters.Add(c);
+                Realm.Character.CharactersManager.CharactersList.Add(c);
             }
 
             SQLResult.Close();
 
-            SunDofus.Logger.Status("Loaded '" + Realm.Character.CharactersManager.ListOfCharacters.Count + "' characters from the database !");
+            SunDofus.Logger.Status("Loaded '" + Realm.Character.CharactersManager.CharactersList.Count + "' characters from the database !");
         }
 
         public static void CreateCharacter(Realm.Character.Character m_C)
