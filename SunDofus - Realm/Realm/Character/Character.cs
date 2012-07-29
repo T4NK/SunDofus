@@ -194,7 +194,8 @@ namespace realm.Realm.Character
 
             m_Stats.DodgePA.Bases = (m_Stats.Sagesse.Total() / 4);
             m_Stats.DodgePM.Bases = (m_Stats.Sagesse.Total() / 4);
-            m_Stats.Prospection.Bases = (m_Stats.Chance.Total() / 4);
+            m_Stats.Prospection.Bases = (m_Stats.Chance.Total() / 10) + 100;
+            if (Class == 3) m_Stats.Prospection.Bases += 20;
             m_Stats.Initiative.Bases = (MaximumLife / 4 + m_Stats.Initiative.Total()) * (Life / MaximumLife);
         }
 
@@ -207,7 +208,7 @@ namespace realm.Realm.Character
             StringBuilder Builder = new StringBuilder();
 
             Builder.Append(Exp).Append(",");
-            Builder.Append("0,1500|"); // Last MaxExpLevel , This MaxExpLevel
+            Builder.Append("0,255|"); // Last MaxExpLevel , This MaxExpLevel
             Builder.Append(Kamas).Append("|");
             Builder.Append(CharactPoint).Append("|");
             Builder.Append(SpellPoint).Append("|");
@@ -240,7 +241,7 @@ namespace realm.Realm.Character
             Builder.Append(m_Stats.BonusFail.ToString()).Append("|");
             Builder.Append(m_Stats.DodgePA.ToString()).Append("|");
             Builder.Append(m_Stats.DodgePM.ToString()).Append("|");
-            Builder.Append("0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|1"); // Resist
+            Builder.Append("0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|1"); // Resist
 
             return Builder.ToString();
         }
