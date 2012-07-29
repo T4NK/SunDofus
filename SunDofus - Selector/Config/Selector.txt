@@ -9,5 +9,3 @@ Auth_Version = 1.29.1
 
 Realm_Ip = 127.0.0.1
 Realm_Port = 488
-
-Debug = true

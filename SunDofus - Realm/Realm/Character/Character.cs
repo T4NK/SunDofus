@@ -19,7 +19,7 @@ namespace realm.Realm.Character
         public int Energy = 10000;
 
         public int MaximumLife = 55;
-        public int Life = 55;
+        public int Life = 0;
 
         public int Pods = 0;
 
@@ -144,47 +144,47 @@ namespace realm.Realm.Character
 
         public void ResetBonus()
         {
-            m_Stats.Vitalite.Boosts = 0;
-            m_Stats.Sagesse.Boosts = 0;
-            m_Stats.Force.Boosts = 0;
+            m_Stats.Life.Boosts = 0;
+            m_Stats.Wisdom.Boosts = 0;
+            m_Stats.Strenght.Boosts = 0;
             m_Stats.Intelligence.Boosts = 0;
-            m_Stats.Chance.Boosts = 0;
-            m_Stats.Agilite.Boosts = 0;
+            m_Stats.Luck.Boosts = 0;
+            m_Stats.Agility.Boosts = 0;
         }
 
         public void ResetItemsStats()
         {
-            m_Stats.Vitalite.Items = 0;
-            m_Stats.Sagesse.Items = 0;
-            m_Stats.Force.Items = 0;
+            m_Stats.Life.Items = 0;
+            m_Stats.Wisdom.Items = 0;
+            m_Stats.Strenght.Items = 0;
             m_Stats.Intelligence.Items = 0;
-            m_Stats.Chance.Items = 0;
-            m_Stats.Agilite.Items = 0;
+            m_Stats.Luck.Items = 0;
+            m_Stats.Agility.Items = 0;
         }
 
         public void ResetDons()
         {
-            m_Stats.Vitalite.Dons = 0;
-            m_Stats.Sagesse.Dons = 0;
-            m_Stats.Force.Dons = 0;
+            m_Stats.Life.Dons = 0;
+            m_Stats.Wisdom.Dons = 0;
+            m_Stats.Strenght.Dons = 0;
             m_Stats.Intelligence.Dons = 0;
-            m_Stats.Chance.Dons = 0;
-            m_Stats.Agilite.Dons = 0;
+            m_Stats.Luck.Dons = 0;
+            m_Stats.Agility.Dons = 0;
         }
 
         public void ResetStats()
         {
-            m_Stats.Vitalite.Bases = 0;
-            m_Stats.Sagesse.Bases = 0;
-            m_Stats.Force.Bases = 0;
+            m_Stats.Life.Bases = 0;
+            m_Stats.Wisdom.Bases = 0;
+            m_Stats.Strenght.Bases = 0;
             m_Stats.Intelligence.Bases = 0;
-            m_Stats.Chance.Bases = 0;
-            m_Stats.Agilite.Bases = 0;
+            m_Stats.Luck.Bases = 0;
+            m_Stats.Agility.Bases = 0;
         }
 
         public void UpdateStats()
         {
-            MaximumLife = m_Stats.Vitalite.Total() + 55;
+            MaximumLife = m_Stats.Life.Total() + (Client.m_Player.Level * 5) + 55;
 
             m_Stats.DodgePA.Bases = 0;
             m_Stats.DodgePM.Bases = 0;
@@ -192,11 +192,55 @@ namespace realm.Realm.Character
             m_Stats.Initiative.Bases = 0;
             m_Stats.MaxPods.Bases = 1000;
 
-            m_Stats.DodgePA.Bases = (m_Stats.Sagesse.Total() / 4);
-            m_Stats.DodgePM.Bases = (m_Stats.Sagesse.Total() / 4);
-            m_Stats.Prospection.Bases = (m_Stats.Chance.Total() / 10) + 100;
+            m_Stats.DodgePA.Bases = (m_Stats.Wisdom.Total() / 4);
+            m_Stats.DodgePM.Bases = (m_Stats.Wisdom.Total() / 4);
+            m_Stats.Prospection.Bases = (m_Stats.Luck.Total() / 10) + 100;
             if (Class == 3) m_Stats.Prospection.Bases += 20;
             m_Stats.Initiative.Bases = (MaximumLife / 4 + m_Stats.Initiative.Total()) * (Life / MaximumLife);
+        }
+
+        public void ResetVita(string Data)
+        {
+            if (Data == "full")
+            {
+                Life = MaximumLife;
+                SendCharStats();
+            }
+            else
+            {
+                Life = (MaximumLife / (int.Parse(Data) / 100));
+                SendCharStats();
+            }
+        }
+
+        public string SqlStats()
+        {
+            StringBuilder Builder = new StringBuilder();
+
+            Builder.Append(CharactPoint).Append("|");
+            Builder.Append(SpellPoint).Append("|");
+            Builder.Append(m_Stats.Life.Bases).Append("|");
+            Builder.Append(m_Stats.Wisdom.Bases).Append("|");
+            Builder.Append(m_Stats.Strenght.Bases).Append("|");
+            Builder.Append(m_Stats.Intelligence.Bases).Append("|");
+            Builder.Append(m_Stats.Luck.Bases).Append("|");
+            Builder.Append(m_Stats.Agility.Bases);
+
+            return Builder.ToString();
+        }
+
+        public void ParseStats(string Args)
+        {
+            if (Args == "") return;
+            string[] Data = Args.Split('|');
+            CharactPoint = int.Parse(Data[0]);
+            SpellPoint = int.Parse(Data[1]);
+            m_Stats.Life.Bases = int.Parse(Data[2]);
+            m_Stats.Wisdom.Bases = int.Parse(Data[3]);
+            m_Stats.Strenght.Bases = int.Parse(Data[4]);
+            m_Stats.Intelligence.Bases = int.Parse(Data[5]);
+            m_Stats.Luck.Bases = int.Parse(Data[6]);
+            m_Stats.Agility.Bases = int.Parse(Data[7]);
         }
 
         #endregion
@@ -221,11 +265,11 @@ namespace realm.Realm.Character
 
             Builder.Append(m_Stats.PA.ToString()).Append("|");
             Builder.Append(m_Stats.PM.ToString()).Append("|");
-            Builder.Append(m_Stats.Force.ToString()).Append("|");
-            Builder.Append(m_Stats.Vitalite.ToString()).Append("|");
-            Builder.Append(m_Stats.Sagesse.ToString()).Append("|");
-            Builder.Append(m_Stats.Chance.ToString()).Append("|");
-            Builder.Append(m_Stats.Agilite.ToString()).Append("|");
+            Builder.Append(m_Stats.Strenght.ToString()).Append("|");
+            Builder.Append(m_Stats.Life.ToString()).Append("|");
+            Builder.Append(m_Stats.Wisdom.ToString()).Append("|");
+            Builder.Append(m_Stats.Luck.ToString()).Append("|");
+            Builder.Append(m_Stats.Agility.ToString()).Append("|");
             Builder.Append(m_Stats.Intelligence.ToString()).Append("|");
             Builder.Append(m_Stats.PO.ToString()).Append("|");
             Builder.Append(m_Stats.MaxMonsters.ToString()).Append("|");

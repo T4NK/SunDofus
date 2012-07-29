@@ -7,12 +7,12 @@ namespace realm.Realm.Character.Stats
 {
     class Stats
     {
-        public AbstractStats Vitalite = new AbstractStats();
-        public AbstractStats Sagesse = new AbstractStats();
-        public AbstractStats Force = new AbstractStats();
+        public AbstractStats Life = new AbstractStats();
+        public AbstractStats Wisdom = new AbstractStats();
+        public AbstractStats Strenght = new AbstractStats();
         public AbstractStats Intelligence = new AbstractStats();
-        public AbstractStats Chance = new AbstractStats();
-        public AbstractStats Agilite = new AbstractStats();
+        public AbstractStats Luck = new AbstractStats();
+        public AbstractStats Agility = new AbstractStats();
 
         public AbstractStats PA = new AbstractStats();
         public AbstractStats PM = new AbstractStats();

@@ -10,12 +10,10 @@ namespace selector.Config
     class ConfigurationManager
     {
         static Configuration Config;
-        public static bool Debug;
 
         public static void IniConfig()
         {
             Config = new Configuration("Config/Selector.txt");
-            Debug = Config.GetBool("Debug");
         }
 
         public static string GetString(string M)

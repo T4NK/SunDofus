@@ -21,7 +21,11 @@ namespace realm.Client
                 switch (Command)
                 {
                     case "save":
-                        Realm.World.Save.SaveWorld();
+                        Realm.World.Save.ParseSave(Args);
+                        break;
+
+                    case "vita":
+                        Client.m_Player.ResetVita(Args);
                         break;
                 }
             }

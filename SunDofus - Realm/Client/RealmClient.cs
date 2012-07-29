@@ -61,5 +61,10 @@ namespace realm.Client
         {
             Send("BAT" + Color + Message);
         }
+
+        public void SendMessage(string Message)
+        {
+            Send("cs<font color=\"#FF0000\">" + Message + "</font>");
+        }
     }
 }

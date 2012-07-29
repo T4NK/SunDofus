@@ -10,12 +10,10 @@ namespace realm.Config
     class ConfigurationManager
     {
         static Configuration Config;
-        public static bool Debug;
 
         public static void IniConfig()
         {
             Config = new Configuration("Config/Config.txt");
-            Debug = Config.GetBool("Debug");
             Program.m_ServerID = Config.GetInt("Server_ID");
         }
 

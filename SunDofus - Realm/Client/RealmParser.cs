@@ -34,6 +34,7 @@ namespace realm.Client
             m_Packets["AS"] = SelectCharacter;
             m_Packets["AT"] = ParseTicket;
             m_Packets["AV"] = AV_Packet;
+            m_Packets["BA"] = ParseConsoleMessage;
             m_Packets["BD"] = SendDate;
             m_Packets["BM"] = ParseChatMessage;
             m_Packets["cC"] = ChangeChannel;
@@ -124,7 +125,7 @@ namespace realm.Client
                     Character m_Character = new Character();
                     m_Character.ID = Database.Data.CharacterSql.GetNewID();
                     m_Character.m_Name = CharData[0];
-                    m_Character.Level = 1;
+                    m_Character.Level = Config.ConfigurationManager.GetInt("Start_Level");
                     m_Character.Class = int.Parse(CharData[1]);
                     m_Character.Sex = int.Parse(CharData[2]);
                     m_Character.Skin = int.Parse(m_Character.Class + "" + m_Character.Sex);
@@ -133,9 +134,12 @@ namespace realm.Client
                     m_Character.Color2 = int.Parse(CharData[4]);
                     m_Character.Color3 = int.Parse(CharData[5]);
 
-                    m_Character.MapID = 10111;
-                    m_Character.MapCell = 255;
-                    m_Character.Dir = 3;
+                    m_Character.MapID = Config.ConfigurationManager.GetInt("Start_Map");
+                    m_Character.MapCell = Config.ConfigurationManager.GetInt("Start_Cell");
+                    m_Character.Dir = Config.ConfigurationManager.GetInt("Start_Dir");
+
+                    m_Character.CharactPoint = (m_Character.Level - 1) * 5;
+                    m_Character.SpellPoint = (m_Character.Level - 1);
 
                     m_Character.NewCharacter = true;
 
@@ -145,11 +149,14 @@ namespace realm.Client
                         return;
                     }
 
+                    Database.Data.CharacterSql.CreateCharacter(m_Character);
                     CharactersManager.CharactersList.Add(m_Character);
                     Client.m_Characters.Add(m_Character);
 
+                    m_Character.UpdateStats();
+                    m_Character.Life = m_Character.MaximumLife;
+
                     Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
-                    Database.Data.CharacterSql.CreateCharacter(m_Character);
 
                     Client.Send("AAK");
                     SendCharacterList("");
@@ -218,6 +225,12 @@ namespace realm.Client
             Client.Send("cC+*#$p%i:?!");
             Client.Send("SLo+");
             Client.Send("BT" + SunDofus.Basic.GetActuelTime());
+
+            if (Client.m_Player.Life == 0)
+            {
+                Client.m_Player.UpdateStats();
+                Client.m_Player.Life = Client.m_Player.MaximumLife;
+            }
 
             Client.m_Player.SendCharStats();
             Client.m_Player.SendPods();
@@ -354,12 +367,12 @@ namespace realm.Client
 
                     if (Client.m_Player.Class == 11)
                     {
-                        Client.m_Player.m_Stats.Vitalite.Bases += 2;
+                        Client.m_Player.m_Stats.Life.Bases += 2;
                         Client.m_Player.Life += 2;
                     }
                     else
                     {
-                        Client.m_Player.m_Stats.Vitalite.Bases += 1;
+                        Client.m_Player.m_Stats.Life.Bases += 1;
                         Client.m_Player.Life += 1;
                     }
 
@@ -372,7 +385,7 @@ namespace realm.Client
 
                     if (Client.m_Player.CharactPoint < 3) return;
 
-                    Client.m_Player.m_Stats.Sagesse.Bases += 1;
+                    Client.m_Player.m_Stats.Wisdom.Bases += 1;
                     Client.m_Player.CharactPoint -= 3;
                     Client.m_Player.SendCharStats();
 
@@ -382,28 +395,28 @@ namespace realm.Client
 
                     if (Client.m_Player.Class == 1 | Client.m_Player.Class == 7 | Client.m_Player.Class == 2 | Client.m_Player.Class == 5)
                     {
-                        if (Client.m_Player.m_Stats.Force.Bases < 51) Count = 2;
-                        if (Client.m_Player.m_Stats.Force.Bases > 50) Count = 3;
-                        if (Client.m_Player.m_Stats.Force.Bases > 150) Count = 4;
-                        if (Client.m_Player.m_Stats.Force.Bases > 250) Count = 5;
+                        if (Client.m_Player.m_Stats.Strenght.Bases < 51) Count = 2;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 50) Count = 3;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 150) Count = 4;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 250) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 3 | Client.m_Player.Class == 9)
                     {
-                        if (Client.m_Player.m_Stats.Force.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Force.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Force.Bases > 150) Count = 3;
-                        if (Client.m_Player.m_Stats.Force.Bases > 250) Count = 4;
-                        if (Client.m_Player.m_Stats.Force.Bases > 350) Count = 5;
+                        if (Client.m_Player.m_Stats.Strenght.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 150) Count = 3;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 250) Count = 4;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 350) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 4 | Client.m_Player.Class == 6 | Client.m_Player.Class == 8 | Client.m_Player.Class == 10)
                     {
-                        if (Client.m_Player.m_Stats.Force.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Force.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Force.Bases > 200) Count = 3;
-                        if (Client.m_Player.m_Stats.Force.Bases > 300) Count = 4;
-                        if (Client.m_Player.m_Stats.Force.Bases > 400) Count = 5;
+                        if (Client.m_Player.m_Stats.Strenght.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 300) Count = 4;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 400) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 11)
@@ -413,14 +426,14 @@ namespace realm.Client
 
                     else if (Client.m_Player.Class == 12)
                     {
-                        if (Client.m_Player.m_Stats.Force.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Force.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Force.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Strenght.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Strenght.Bases > 200) Count = 3;
                     }
 
                     if (Client.m_Player.CharactPoint >= Count)
                     {
-                        Client.m_Player.m_Stats.Force.Bases += 1;
+                        Client.m_Player.m_Stats.Strenght.Bases += 1;
                         Client.m_Player.CharactPoint -= Count;
                         Client.m_Player.SendCharStats();
                     }
@@ -491,6 +504,7 @@ namespace realm.Client
                     {
                         Client.m_Player.m_Stats.Intelligence.Bases += 1;
                         Client.m_Player.CharactPoint -= Count;
+                        Client.m_Player.SendCharStats();
                     }
                     else
                         Client.Send("ABE");
@@ -502,29 +516,29 @@ namespace realm.Client
                     if (Client.m_Player.Class == 1 | Client.m_Player.Class == 4 | Client.m_Player.Class == 5
                         | Client.m_Player.Class == 6 | Client.m_Player.Class == 7 | Client.m_Player.Class == 8 | Client.m_Player.Class == 9)
                     {
-                        if (Client.m_Player.m_Stats.Chance.Bases < 21) Count = 1;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 20) Count = 2;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 40) Count = 3;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 60) Count = 4;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 80) Count = 5;
+                        if (Client.m_Player.m_Stats.Luck.Bases < 21) Count = 1;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 20) Count = 2;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 40) Count = 3;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 60) Count = 4;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 80) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 2 | Client.m_Player.Class == 10)
                     {
-                        if (Client.m_Player.m_Stats.Chance.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 200) Count = 3;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 300) Count = 4;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 400) Count = 5;
+                        if (Client.m_Player.m_Stats.Luck.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 300) Count = 4;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 400) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 3)
                     {
-                        if (Client.m_Player.m_Stats.Chance.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 150) Count = 3;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 230) Count = 4;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 330) Count = 5;
+                        if (Client.m_Player.m_Stats.Luck.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 150) Count = 3;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 230) Count = 4;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 330) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 11)
@@ -534,14 +548,14 @@ namespace realm.Client
 
                     else if (Client.m_Player.Class == 12)
                     {
-                        if (Client.m_Player.m_Stats.Chance.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Chance.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Luck.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Luck.Bases > 200) Count = 3;
                     }
 
                     if (Client.m_Player.CharactPoint >= Count)
                     {
-                        Client.m_Player.m_Stats.Chance.Bases += 1;
+                        Client.m_Player.m_Stats.Luck.Bases += 1;
                         Client.m_Player.CharactPoint -= Count;
                         Client.m_Player.SendCharStats();
                     }
@@ -555,29 +569,29 @@ namespace realm.Client
                     if (Client.m_Player.Class == 1 | Client.m_Player.Class == 2 | Client.m_Player.Class == 3 | Client.m_Player.Class == 5
                         | Client.m_Player.Class == 7 | Client.m_Player.Class == 8 | Client.m_Player.Class == 10)
                     {
-                        if (Client.m_Player.m_Stats.Agilite.Bases < 21) Count = 1;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 20) Count = 2;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 40) Count = 3;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 60) Count = 4;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 80) Count = 5;
+                        if (Client.m_Player.m_Stats.Agility.Bases < 21) Count = 1;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 20) Count = 2;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 40) Count = 3;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 60) Count = 4;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 80) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 4)
                     {
-                        if (Client.m_Player.m_Stats.Agilite.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 200) Count = 3;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 300) Count = 4;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 400) Count = 5;
+                        if (Client.m_Player.m_Stats.Agility.Bases < 101) Count = 1;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 100) Count = 2;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 300) Count = 4;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 400) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 6 | Client.m_Player.Class == 9)
                     {
-                        if (Client.m_Player.m_Stats.Agilite.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 100) Count = 3;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 150) Count = 4;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 200) Count = 5;
+                        if (Client.m_Player.m_Stats.Agility.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 100) Count = 3;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 150) Count = 4;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 200) Count = 5;
                     }
 
                     else if (Client.m_Player.Class == 11)
@@ -587,14 +601,14 @@ namespace realm.Client
 
                     else if (Client.m_Player.Class == 12)
                     {
-                        if (Client.m_Player.m_Stats.Agilite.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Agilite.Bases > 200) Count = 3;
+                        if (Client.m_Player.m_Stats.Agility.Bases < 51) Count = 1;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 50) Count = 2;
+                        if (Client.m_Player.m_Stats.Agility.Bases > 200) Count = 3;
                     }
 
                     if (Client.m_Player.CharactPoint >= Count)
                     {
-                        Client.m_Player.m_Stats.Agilite.Bases += 1;
+                        Client.m_Player.m_Stats.Agility.Bases += 1;
                         Client.m_Player.CharactPoint -= Count;
                         Client.m_Player.SendCharStats();
                     }

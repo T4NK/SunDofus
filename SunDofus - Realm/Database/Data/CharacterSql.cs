@@ -29,9 +29,11 @@ namespace realm.Database.Data
                 c.Color2 = SQLResult.GetInt32("color2");
                 c.Color3 = SQLResult.GetInt32("color3");
 
-                c.MapCell = SQLResult.GetInt16("mapcell");
-                c.MapID = SQLResult.GetInt16("mapid");
-                c.Dir = 3;
+                c.MapCell = int.Parse(SQLResult.GetString("mappos").Split(',')[1]);
+                c.MapID = int.Parse(SQLResult.GetString("mappos").Split(',')[0]);
+                c.Dir = int.Parse(SQLResult.GetString("mappos").Split(',')[2]);
+
+                c.ParseStats(SQLResult.GetString("stats"));
 
                 c.NewCharacter = false;
 
@@ -45,7 +47,7 @@ namespace realm.Database.Data
 
         public static void CreateCharacter(Realm.Character.Character m_C)
         {
-            string SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapcell, @mapid)";
+            string SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats)";
             MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
 
             MySqlParameterCollection P = SQLCommand.Parameters;
@@ -57,8 +59,8 @@ namespace realm.Database.Data
             P.Add(new MySqlParameter("@color", m_C.Color));
             P.Add(new MySqlParameter("@color2", m_C.Color2));
             P.Add(new MySqlParameter("@color3", m_C.Color3));
-            P.Add(new MySqlParameter("@mapcell", m_C.MapCell));
-            P.Add(new MySqlParameter("@mapid", m_C.MapID));
+            P.Add(new MySqlParameter("@mapinfos", m_C.MapID + "," + m_C.MapCell + "," + m_C.Dir));
+            P.Add(new MySqlParameter("@stats", m_C.SqlStats()));
 
             SQLCommand.ExecuteNonQuery();
 
@@ -67,7 +69,22 @@ namespace realm.Database.Data
 
         public static void SaveCharacter(Realm.Character.Character m_C)
         {
+            string SQLText = "UPDATE characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex, color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats WHERE id=@id";
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
 
+            MySqlParameterCollection P = SQLCommand.Parameters;
+            P.Add(new MySqlParameter("@id", m_C.ID));
+            P.Add(new MySqlParameter("@name", m_C.m_Name));
+            P.Add(new MySqlParameter("@level", m_C.Level));
+            P.Add(new MySqlParameter("@class", m_C.Class));
+            P.Add(new MySqlParameter("@sex", m_C.Sex));
+            P.Add(new MySqlParameter("@color", m_C.Color));
+            P.Add(new MySqlParameter("@color2", m_C.Color2));
+            P.Add(new MySqlParameter("@color3", m_C.Color3));
+            P.Add(new MySqlParameter("@mapinfos", m_C.MapID + "," + m_C.MapCell + "," + m_C.Dir));
+            P.Add(new MySqlParameter("@stats", m_C.SqlStats()));
+
+            SQLCommand.ExecuteNonQuery();
         }
 
         public static void DeleteCharacter(string Name)
