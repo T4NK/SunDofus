@@ -28,10 +28,13 @@ namespace realm.Realm.World
 
         public static void SaveChar()
         {
+            Program.m_RealmLink.Send("StartM");
             foreach (Character.Character m_C in Character.CharactersManager.CharactersList)
             {
                 Database.Data.CharacterSql.SaveCharacter(m_C);
+                System.Threading.Thread.Sleep(1000);
             }
+            Program.m_RealmLink.Send("StopM");
         }
     }
 }

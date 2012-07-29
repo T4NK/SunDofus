@@ -35,6 +35,16 @@ namespace selector.Client
                 case "NCHAR":
                     RealmSqlAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2]);
                     break;
+
+                case"StartM":
+                    Client.m_Server.Connected = 2;
+                    Program.m_Auth.RefreshAllHosts();
+                    break;
+
+                case "StopM":
+                    Client.m_Server.Connected = 1;
+                    Program.m_Auth.RefreshAllHosts();
+                    break;
             }
         }
 

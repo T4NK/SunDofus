@@ -153,9 +153,6 @@ namespace realm.Client
                     CharactersManager.CharactersList.Add(m_Character);
                     Client.m_Characters.Add(m_Character);
 
-                    m_Character.UpdateStats();
-                    m_Character.Life = m_Character.MaximumLife;
-
                     Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
 
                     Client.Send("AAK");
@@ -336,7 +333,7 @@ namespace realm.Client
                         Client.m_Player.State.MoveCell = -1;
                         Client.Send("BN");
 
-                        if (Client.m_Player.GetMap().m_Triggers.Count(x => x.CellID == Client.m_Player.MapCell) > 0)
+                        if (Client.m_Player.GetMap().m_Triggers.Any(x => x.CellID == Client.m_Player.MapCell))
                         {
                             Trigger m_T = Client.m_Player.GetMap().m_Triggers.First(x => x.CellID == Client.m_Player.MapCell);
                             Client.m_Player.TeleportNewMap(m_T.NewMapID, m_T.NewCellID);
