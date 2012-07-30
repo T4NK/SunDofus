@@ -192,5 +192,50 @@ namespace realm.Realm.Character.Items
             if (ItemsList.Any(x => x.Position == Pos)) return true;
             return false;
         }
+
+        public void ParseItems(string Data)
+        {
+            string[] Spliter = Data.Split(';');
+
+            foreach (string Infos in Spliter)
+            {
+                string[] AllInfos = Infos.Split('~');
+                Items.Item m_I = new Item(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
+
+                m_I.ID = ItemsManager.GetNewID();
+                m_I.Quantity = Convert.ToInt32(AllInfos[1], 16);
+
+                if (AllInfos[2] != "")
+                    m_I.Position = Convert.ToInt32(AllInfos[2], 16);
+                else
+                    m_I.Position = -1;
+
+                if (AllInfos[3] != "")
+                {
+                    string[] EffectsList = AllInfos[3].Split(',');
+
+                    foreach (string Effect in EffectsList)
+                    {
+                        EffectsItem NewEffect = new EffectsItem();
+                        string[] EffectInfos = Effect.Split('#');
+
+                        NewEffect.ID = Convert.ToInt32(EffectInfos[0], 16);
+
+                        if (EffectInfos[1] != "")
+                            NewEffect.Value = Convert.ToInt32(EffectInfos[1], 16);
+
+                        if (EffectInfos[2] != "")
+                            NewEffect.Value2 = Convert.ToInt32(EffectInfos[2], 16);
+
+                        NewEffect.Effect = EffectInfos[4];
+
+                        m_I.EffectsList.Add(NewEffect);
+                    }
+
+                }
+
+                ItemsList.Add(m_I);
+            }
+        }
     }
 }

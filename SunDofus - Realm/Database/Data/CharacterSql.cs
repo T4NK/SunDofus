@@ -35,6 +35,8 @@ namespace realm.Database.Data
 
                 c.ParseStats(SQLResult.GetString("stats"));
 
+                if (SQLResult.GetString("items") != "") c.m_Items.ParseItems(SQLResult.GetString("items"));
+
                 c.NewCharacter = false;
 
                 Realm.Character.CharactersManager.CharactersList.Add(c);
@@ -47,7 +49,7 @@ namespace realm.Database.Data
 
         public static void CreateCharacter(Realm.Character.Character m_C)
         {
-            string SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats)";
+            string SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items)";
             MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
 
             MySqlParameterCollection P = SQLCommand.Parameters;
@@ -61,6 +63,7 @@ namespace realm.Database.Data
             P.Add(new MySqlParameter("@color3", m_C.Color3));
             P.Add(new MySqlParameter("@mapinfos", m_C.MapID + "," + m_C.MapCell + "," + m_C.Dir));
             P.Add(new MySqlParameter("@stats", m_C.SqlStats()));
+            P.Add(new MySqlParameter("@items", ""));
 
             SQLCommand.ExecuteNonQuery();
 
@@ -69,7 +72,8 @@ namespace realm.Database.Data
 
         public static void SaveCharacter(Realm.Character.Character m_C)
         {
-            string SQLText = "UPDATE characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex, color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats WHERE id=@id";
+            string SQLText = "UPDATE characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex," + 
+            " color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats, items=@items WHERE id=@id";
             MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
 
             MySqlParameterCollection P = SQLCommand.Parameters;
@@ -83,6 +87,7 @@ namespace realm.Database.Data
             P.Add(new MySqlParameter("@color3", m_C.Color3));
             P.Add(new MySqlParameter("@mapinfos", m_C.MapID + "," + m_C.MapCell + "," + m_C.Dir));
             P.Add(new MySqlParameter("@stats", m_C.SqlStats()));
+            P.Add(new MySqlParameter("@items", m_C.GetItemsToSave()));
 
             SQLCommand.ExecuteNonQuery();
         }

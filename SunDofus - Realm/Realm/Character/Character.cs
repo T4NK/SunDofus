@@ -65,13 +65,28 @@ namespace realm.Realm.Character
             return m;
         }
 
-        public string GetItemsString()
+        public string GetItems()
         {
             string m = "";
 
             foreach (Items.Item m_I in m_Items.ItemsList)
             {
                 m += m_I.ToString() + ";";
+            }
+
+            if (m != "")
+                return m.Substring(0, m.Length - 1);
+            else
+                return m;
+        }
+
+        public string GetItemsToSave()
+        {
+            string m = "";
+
+            foreach (Items.Item m_I in m_Items.ItemsList)
+            {
+                m += m_I.SaveString() + ";";
             }
 
             if (m != "")
@@ -113,7 +128,7 @@ namespace realm.Realm.Character
             Builder.Append(Basic.DeciToHex(Color)).Append("|");
             Builder.Append(Basic.DeciToHex(Color2)).Append("|");
             Builder.Append(Basic.DeciToHex(Color3)).Append("||");
-            Builder.Append(GetItemsString()).Append("|");
+            Builder.Append(GetItems()).Append("|");
 
             return Builder.ToString();
         }

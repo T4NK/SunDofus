@@ -64,6 +64,12 @@ namespace realm.Realm.Character.Items
             }
         }
 
+        public string SaveString()
+        {
+            return SunDofus.Basic.DeciToHex(BaseItem.ID) + "~" + SunDofus.Basic.DeciToHex(Quantity) + "~"
+                + (Position == -1 ? "" : SunDofus.Basic.DeciToHex(Position)) + "~" + EffectsInfos();
+        }
+
         public override string ToString()
         {
             return SunDofus.Basic.DeciToHex(ID) + "~" + SunDofus.Basic.DeciToHex(BaseItem.ID) + "~" + SunDofus.Basic.DeciToHex(Quantity) + "~" 
