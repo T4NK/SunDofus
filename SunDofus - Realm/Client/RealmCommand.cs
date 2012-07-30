@@ -27,6 +27,10 @@ namespace realm.Client
                     case "vita":
                         Client.m_Player.ResetVita(Args);
                         break;
+
+                    case "item":
+                        Client.m_Player.m_Items.AddItem(int.Parse(Args));
+                        break;
                 }
             }
         }

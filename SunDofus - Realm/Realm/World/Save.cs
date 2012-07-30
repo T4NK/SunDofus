@@ -32,7 +32,7 @@ namespace realm.Realm.World
             foreach (Character.Character m_C in Character.CharactersManager.CharactersList)
             {
                 Database.Data.CharacterSql.SaveCharacter(m_C);
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(100);
             }
             Program.m_RealmLink.Send("StopM");
         }

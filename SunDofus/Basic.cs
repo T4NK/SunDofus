@@ -91,6 +91,12 @@ namespace SunDofus
             else return Deci.ToString("x");
         }
 
+        public static int HexToDeci(string Hex)
+        {
+            if (Hex == "-1" | Hex == "") return -1;
+            return Convert.ToInt32(Hex, 16);
+        }
+
         public static string GetActuelTime()
         {
             return (DateTime.Now.Hour * 3600000) + (DateTime.Now.Minute * 60000) + (DateTime.Now.Second * 1000) + DateTime.Now.Millisecond.ToString();
@@ -99,6 +105,29 @@ namespace SunDofus
         public static string GetDofusDate()
         {
             return "BD" + (DateTime.Now.Year - 1370).ToString() + "|" + (DateTime.Now.Month - 1) + "|" + (DateTime.Now.Day);
+        }
+
+        public static int GetRandomJet(string Jet)
+        {
+            if (Jet.Length > 3)
+            {
+                int Damage = 0;
+                int DS = int.Parse(Jet.Split('d')[0]);
+                int Faces = int.Parse(Jet.Split('d')[1].Split('+')[0]);
+                int Fixe = int.Parse(Jet.Split('d')[1].Split('+')[1]);
+
+                if (DS != 0)
+                {
+                    for (int i = 1; i <= DS; i++)
+                    {
+                        Damage += Rand(1, Faces);
+                    }
+                }
+
+                return (Damage + Fixe);
+            }
+            else
+                return 0;
         }
     }
 }

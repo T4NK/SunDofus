@@ -18,6 +18,7 @@ namespace realm
             Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Nicolas Petit [c]  2012";
             Database.SQLManager.Initialise();
 
+            Database.Data.ItemSql.LoadItems();
             Database.Data.MapSql.LoadMaps();
             Database.Data.TriggerSql.LoadTriggers();
 

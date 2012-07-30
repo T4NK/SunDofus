@@ -24,11 +24,17 @@ namespace realm.Realm.Character
         public int Pods = 0;
 
         public Stats.Stats m_Stats = new Stats.Stats();
+        public Items.InventaryItems m_Items;
 
         public Client.RealmClient Client;
         public CharacterState State;
 
         public string Channel = "*#$p%i:?!";
+
+        public Character()
+        {
+            m_Items = new Items.InventaryItems(this);
+        }
 
         #region Pattern
 
@@ -36,15 +42,15 @@ namespace realm.Realm.Character
         {
             StringBuilder Builder = new StringBuilder();
 
-            Builder.Append(ID + ";");
-            Builder.Append(m_Name + ";");
-            Builder.Append(Level + ";"); // Level
-            Builder.Append(Skin + ";");
-            Builder.Append(Basic.DeciToHex(Color) + ";");
-            Builder.Append(Basic.DeciToHex(Color2) + ";");
-            Builder.Append(Basic.DeciToHex(Color3) + ";");
+            Builder.Append(ID).Append(";");
+            Builder.Append(m_Name).Append(";");
+            Builder.Append(Level).Append(";");
+            Builder.Append(Skin).Append(";");
+            Builder.Append(Basic.DeciToHex(Color)).Append(";");
+            Builder.Append(Basic.DeciToHex(Color2)).Append(";");
+            Builder.Append(Basic.DeciToHex(Color3)).Append(";");
             Builder.Append(",,,,,;"); // Items
-            Builder.Append("0;" + Program.m_ServerID + ";;;");
+            Builder.Append("0;").Append(Program.m_ServerID).Append(";;;");
 
             return Builder.ToString();
         }
@@ -53,15 +59,15 @@ namespace realm.Realm.Character
         {
             StringBuilder Builder = new StringBuilder();
 
-            Builder.Append("|" + ID + "|");
-            Builder.Append(m_Name + "|");
-            Builder.Append(Level + "|"); // Level
-            Builder.Append(Class + "|");
-            Builder.Append(Skin + "|");
-            Builder.Append(Basic.DeciToHex(Color) + "|");
-            Builder.Append(Basic.DeciToHex(Color2) + "|");
-            Builder.Append(Basic.DeciToHex(Color3) + "|");
-            Builder.Append(""); // Items
+            Builder.Append("|").Append(ID).Append("|");
+            Builder.Append(m_Name).Append("|");
+            Builder.Append(Level).Append("|");
+            Builder.Append(Class).Append("|");
+            Builder.Append(Skin).Append("|");
+            Builder.Append(Basic.DeciToHex(Color)).Append("|");
+            Builder.Append(Basic.DeciToHex(Color2)).Append("|");
+            Builder.Append(Basic.DeciToHex(Color3)).Append("||");
+            Builder.Append("|"); // Items
 
             return Builder.ToString();
         }
@@ -185,6 +191,9 @@ namespace realm.Realm.Character
         public void UpdateStats()
         {
             MaximumLife = m_Stats.Life.Total() + (Client.m_Player.Level * 5) + 55;
+
+            m_Stats.PA.Bases = (Level >= 100 ? 7 : 6);
+            m_Stats.PM.Bases = 3;
 
             m_Stats.DodgePA.Bases = 0;
             m_Stats.DodgePM.Bases = 0;

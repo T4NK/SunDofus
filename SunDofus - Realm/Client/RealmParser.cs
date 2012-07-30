@@ -42,6 +42,7 @@ namespace realm.Client
             m_Packets["GC"] = CreateGame;
             m_Packets["GI"] = GameInformations;
             m_Packets["GK"] = EndAction;
+            m_Packets["Od"] = DeleteItem;
         }
 
         public void Parse(string Data)
@@ -348,6 +349,17 @@ namespace realm.Client
                     break;
             }
         }
+
+        #region Items
+
+        public void DeleteItem(string Data)
+        {
+            string[] AllData = Data.Split('|');
+            if (int.Parse(AllData[1]) <= 0) return;
+            Client.m_Player.m_Items.DeleteItem(int.Parse(AllData[0]), int.Parse(AllData[1]));
+        }
+
+        #endregion
 
         #region StatsBoosts
 

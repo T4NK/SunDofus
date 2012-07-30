@@ -57,6 +57,7 @@
     <Compile Include="Client\RealmParser.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Database\Data\CharacterSql.cs" />
+    <Compile Include="Database\Data\ItemSql.cs" />
     <Compile Include="Database\Data\MapSql.cs" />
     <Compile Include="Database\Data\TriggerSql.cs" />
     <Compile Include="Database\SQLManager.cs" />
@@ -70,6 +71,11 @@
     <Compile Include="Realm\Character\Character.cs" />
     <Compile Include="Realm\Character\CharactersManager.cs" />
     <Compile Include="Realm\Character\CharacterState.cs" />
+    <Compile Include="Realm\Character\Items\AbstractItem.cs" />
+    <Compile Include="Realm\Character\Items\EffectsItem.cs" />
+    <Compile Include="Realm\Character\Items\InventaryItems.cs" />
+    <Compile Include="Realm\Character\Items\Item.cs" />
+    <Compile Include="Realm\Character\Items\ItemsManager.cs" />
     <Compile Include="Realm\Character\Stats\AbstractStats.cs" />
     <Compile Include="Realm\Character\Stats\Stats.cs" />
     <Compile Include="Realm\Map\Cells.cs" />
