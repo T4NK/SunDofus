@@ -231,8 +231,9 @@ namespace realm.Client
                 Client.m_Player.Life = Client.m_Player.MaximumLife;
             }
 
-            Client.m_Player.SendCharStats();
+            Client.m_Player.m_Items.RefreshBonus();
             Client.m_Player.SendPods();
+            Client.m_Player.SendCharStats();
 
             Client.m_Player.LoadMap();
         }

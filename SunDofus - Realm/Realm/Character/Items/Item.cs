@@ -11,9 +11,11 @@ namespace realm.Realm.Character.Items
         public int ID, Position = -1;
         public int Quantity = 0;
         public List<EffectsItem> EffectsList;
+        private Character Client;
 
-        public Item(AbstractItem b_I)
+        public Item(AbstractItem b_I, Character Cl)
         {
+            Client = Cl;
             BaseItem = b_I;
             EffectsList = new List<EffectsItem>();
         }
@@ -41,7 +43,7 @@ namespace realm.Realm.Character.Items
                 if (m_J == "") continue;
                 string[] Infos = m_J.Split('#');
 
-                EffectsItem e_I = new EffectsItem();
+                EffectsItem e_I = new EffectsItem(Client);
                 e_I.ID = SunDofus.Basic.HexToDeci(Infos[0]);
                 if (Infos.Length > 1) e_I.Value = SunDofus.Basic.HexToDeci(Infos[1]);
                 if (Infos.Length > 2) e_I.Value2 = SunDofus.Basic.HexToDeci(Infos[2]);

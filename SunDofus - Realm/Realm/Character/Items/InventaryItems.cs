@@ -9,6 +9,7 @@ namespace realm.Realm.Character.Items
     {
         public List<Item> ItemsList;
         public Character Client;
+        public List<ItemsSets> Sets;
 
         public InventaryItems(Character Ch)
         {
@@ -20,7 +21,7 @@ namespace realm.Realm.Character.Items
         {
             if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
             AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
-            Items.Item m_I = new Item(BaseItem);
+            Items.Item m_I = new Item(BaseItem, Client);
             m_I.ParseJet();
             m_I.GeneratItem();
 
@@ -30,8 +31,7 @@ namespace realm.Realm.Character.Items
                 {
                     i2.Quantity += m_I.Quantity;
                     Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
-                    Client.SendCharStats();
-                    Client.SendPods();
+                    RefreshBonus();
                     Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
                     return;
                 }
@@ -41,8 +41,7 @@ namespace realm.Realm.Character.Items
             ItemsList.Add(m_I);
 
             Client.Pods += m_I.BaseItem.Pods;
-            Client.SendCharStats();
-            Client.SendPods();
+            RefreshBonus();
 
             Client.Client.Send("OAKO" + m_I.ToString());
         }
@@ -55,8 +54,7 @@ namespace realm.Realm.Character.Items
                 {
                     i2.Quantity += m_I.Quantity;
                     Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
-                    Client.SendCharStats();
-                    Client.SendPods();
+                    RefreshBonus();
                     Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
                     return;
                 }
@@ -66,8 +64,7 @@ namespace realm.Realm.Character.Items
             ItemsList.Add(m_I);
 
             Client.Pods += m_I.BaseItem.Pods;
-            Client.SendCharStats();
-            Client.SendPods();
+            RefreshBonus();
 
             Client.Client.Send("OAKO" + m_I.ToString());
         }
@@ -79,20 +76,27 @@ namespace realm.Realm.Character.Items
                 Item m_I = ItemsList.First(x => x.ID == ID);
                 if (m_I.Quantity <= Quantity)
                 {
+                    Client.Pods -= (m_I.Quantity * m_I.BaseItem.Pods);
+
                     ItemsList.Remove(m_I);
                     Client.Client.Send("OR" + m_I.ID);
+
+                    RefreshBonus();
                 }
                 else
                 {
+                    Client.Pods -= (Quantity * m_I.BaseItem.Pods);
+
                     m_I.Quantity -= Quantity;
                     Client.Client.Send("OQ" + m_I.ID + "|" + m_I.Quantity);
+
+                    RefreshBonus();
                 }
             }
         }
 
         public void MoveItem(int ID, int Pos, int Quantity)
         {
-            if (!isOccuptedPos(Pos) == false) return;
             if (!ItemsList.Any(x => x.ID == ID)) return;
 
             Item m_I = ItemsList.First(x => x.ID == ID);
@@ -139,8 +143,7 @@ namespace realm.Realm.Character.Items
                     {
                         i2.Quantity += m_I.Quantity;
                         Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
-                        Client.SendCharStats();
-                        Client.SendPods();
+                        RefreshBonus();
                         Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
                         Client.Client.Send("OR" + m_I.ID);
                         ItemsList.Remove(m_I);
@@ -181,10 +184,12 @@ namespace realm.Realm.Character.Items
 
                     Client.Client.Send("OQ" + m_I.ID + "|" + m_I.Quantity);
                 }
-
-                Client.Client.Send("OM" + m_I.ID + "|" + (m_I.Position != -1 ? m_I.Position.ToString() : ""));
-                Client.GetMap().Send("Oa" + Client.ID + "|" + Client.GetItemsPos());
             }
+
+            Client.Client.Send("OM" + m_I.ID + "|" + (m_I.Position != -1 ? m_I.Position.ToString() : ""));
+            Client.GetMap().Send("Oa" + Client.ID + "|" + Client.GetItemsPos());
+
+            RefreshBonus();
         }
 
         public bool isOccuptedPos(int Pos)
@@ -200,7 +205,7 @@ namespace realm.Realm.Character.Items
             foreach (string Infos in Spliter)
             {
                 string[] AllInfos = Infos.Split('~');
-                Items.Item m_I = new Item(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
+                Items.Item m_I = new Item(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)), Client);
 
                 m_I.ID = ItemsManager.GetNewID();
                 m_I.Quantity = Convert.ToInt32(AllInfos[1], 16);
@@ -216,7 +221,7 @@ namespace realm.Realm.Character.Items
 
                     foreach (string Effect in EffectsList)
                     {
-                        EffectsItem NewEffect = new EffectsItem();
+                        EffectsItem NewEffect = new EffectsItem(Client);
                         string[] EffectInfos = Effect.Split('#');
 
                         NewEffect.ID = Convert.ToInt32(EffectInfos[0], 16);
@@ -234,8 +239,31 @@ namespace realm.Realm.Character.Items
 
                 }
 
+                Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+
                 ItemsList.Add(m_I);
             }
+        }
+
+        public void RefreshBonus()
+        {
+            Client.ResetItemsStats();
+            Sets = new List<ItemsSets>();
+
+            foreach (Item m_I in ItemsList)
+            {
+                if (m_I.Position != -1 && m_I.Position < 23)
+                {
+                    foreach (EffectsItem m_E in m_I.EffectsList)
+                    {
+                        m_E.ParseEffect();
+                    }
+                }
+                //PANOPLIE ICI
+            }
+
+            Client.SendPods();
+            Client.SendCharStats();
         }
     }
 }

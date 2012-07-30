@@ -217,6 +217,25 @@ namespace realm.Realm.Character
             m_Stats.Intelligence.Boosts = 0;
             m_Stats.Luck.Boosts = 0;
             m_Stats.Agility.Boosts = 0;
+
+            m_Stats.Initiative.Boosts = 0;
+            m_Stats.Prospection.Boosts = 0;
+            m_Stats.PO.Boosts = 0;
+            m_Stats.PA.Boosts = 0;
+            m_Stats.PM.Boosts = 0;
+            m_Stats.MaxMonsters.Boosts = 0;
+            m_Stats.MaxPods.Boosts = 0;
+
+            m_Stats.BonusDamage.Boosts = 0;
+            m_Stats.ReturnDamage.Boosts = 0;
+            m_Stats.BonusDamagePercent.Boosts = 0;
+            m_Stats.BonusDamagePhysic.Boosts = 0;
+            m_Stats.BonusDamageMagic.Boosts = 0;
+            m_Stats.BonusHeal.Boosts = 0;
+            m_Stats.BonusDamageTrap.Boosts = 0;
+            m_Stats.BonusDamageTrapPercent.Boosts = 0;
+            m_Stats.BonusCritical.Boosts = 0;
+            m_Stats.BonusFail.Boosts = 0;
         }
 
         public void ResetItemsStats()
@@ -227,6 +246,25 @@ namespace realm.Realm.Character
             m_Stats.Intelligence.Items = 0;
             m_Stats.Luck.Items = 0;
             m_Stats.Agility.Items = 0;
+
+            m_Stats.Initiative.Items = 0;
+            m_Stats.Prospection.Items = 0;
+            m_Stats.PO.Items = 0;
+            m_Stats.PA.Items = 0;
+            m_Stats.PM.Items = 0;
+            m_Stats.MaxMonsters.Items = 0;
+            m_Stats.MaxPods.Items = 0;
+
+            m_Stats.BonusDamage.Items = 0;
+            m_Stats.ReturnDamage.Items = 0;
+            m_Stats.BonusDamagePercent.Items = 0;
+            m_Stats.BonusDamagePhysic.Items = 0;
+            m_Stats.BonusDamageMagic.Items = 0;
+            m_Stats.BonusHeal.Items = 0;
+            m_Stats.BonusDamageTrap.Items = 0;
+            m_Stats.BonusDamageTrapPercent.Items = 0;
+            m_Stats.BonusCritical.Items = 0;
+            m_Stats.BonusFail.Items = 0;
         }
 
         public void ResetDons()
@@ -237,6 +275,25 @@ namespace realm.Realm.Character
             m_Stats.Intelligence.Dons = 0;
             m_Stats.Luck.Dons = 0;
             m_Stats.Agility.Dons = 0;
+
+            m_Stats.Initiative.Dons = 0;
+            m_Stats.Prospection.Dons = 0;
+            m_Stats.PO.Dons = 0;
+            m_Stats.PA.Dons = 0;
+            m_Stats.PM.Dons = 0;
+            m_Stats.MaxMonsters.Dons = 0;
+            m_Stats.MaxPods.Dons = 0;
+
+            m_Stats.BonusDamage.Dons = 0;
+            m_Stats.ReturnDamage.Dons = 0;
+            m_Stats.BonusDamagePercent.Dons = 0;
+            m_Stats.BonusDamagePhysic.Dons = 0;
+            m_Stats.BonusDamageMagic.Dons = 0;
+            m_Stats.BonusHeal.Dons = 0;
+            m_Stats.BonusDamageTrap.Dons = 0;
+            m_Stats.BonusDamageTrapPercent.Dons = 0;
+            m_Stats.BonusCritical.Dons = 0;
+            m_Stats.BonusFail.Dons = 0;
         }
 
         public void ResetStats()
@@ -247,11 +304,39 @@ namespace realm.Realm.Character
             m_Stats.Intelligence.Bases = 0;
             m_Stats.Luck.Bases = 0;
             m_Stats.Agility.Bases = 0;
+
+            m_Stats.Initiative.Bases = 0;
+            m_Stats.Prospection.Bases = 0;
+            m_Stats.PO.Bases = 0;
+            m_Stats.PA.Bases = 0;
+            m_Stats.PM.Bases = 0;
+            m_Stats.MaxMonsters.Bases = 0;
+            m_Stats.MaxPods.Bases = 0;
+
+            m_Stats.BonusDamage.Bases = 0;
+            m_Stats.ReturnDamage.Bases = 0;
+            m_Stats.BonusDamagePercent.Bases = 0;
+            m_Stats.BonusDamagePhysic.Bases = 0;
+            m_Stats.BonusDamageMagic.Bases = 0;
+            m_Stats.BonusHeal.Bases = 0;
+            m_Stats.BonusDamageTrap.Bases = 0;
+            m_Stats.BonusDamageTrapPercent.Bases = 0;
+            m_Stats.BonusCritical.Bases = 0;
+            m_Stats.BonusFail.Bases = 0;
         }
 
         public void UpdateStats()
         {
+            int Dif = 0;
+            if (Life < MaximumLife)
+            {
+                Dif = MaximumLife - Life;
+            }
             MaximumLife = m_Stats.Life.Total() + (Client.m_Player.Level * 5) + 55;
+            if (Dif <= 0)
+                Life = MaximumLife;
+            else
+                Life = (MaximumLife - Dif);
 
             m_Stats.PA.Bases = (Level >= 100 ? 7 : 6);
             m_Stats.PM.Bases = 3;

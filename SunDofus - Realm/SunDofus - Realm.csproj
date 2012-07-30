@@ -76,6 +76,7 @@
     <Compile Include="Realm\Character\Items\InventaryItems.cs" />
     <Compile Include="Realm\Character\Items\Item.cs" />
     <Compile Include="Realm\Character\Items\ItemsManager.cs" />
+    <Compile Include="Realm\Character\Items\ItemsSets.cs" />
     <Compile Include="Realm\Character\Stats\AbstractStats.cs" />
     <Compile Include="Realm\Character\Stats\Stats.cs" />
     <Compile Include="Realm\Map\Cells.cs" />
