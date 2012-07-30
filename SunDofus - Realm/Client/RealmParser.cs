@@ -43,6 +43,7 @@ namespace realm.Client
             m_Packets["GI"] = GameInformations;
             m_Packets["GK"] = EndAction;
             m_Packets["Od"] = DeleteItem;
+            m_Packets["OM"] = MoveItem;
         }
 
         public void Parse(string Data)
@@ -357,6 +358,12 @@ namespace realm.Client
             string[] AllData = Data.Split('|');
             if (int.Parse(AllData[1]) <= 0) return;
             Client.m_Player.m_Items.DeleteItem(int.Parse(AllData[0]), int.Parse(AllData[1]));
+        }
+
+        public void MoveItem(string Data)
+        {
+            string[] AllData = Data.Split('|');
+            Client.m_Player.m_Items.MoveItem(int.Parse(AllData[0]), int.Parse(AllData[1]), (AllData.Length >= 3 ? int.Parse(AllData[2]) : 1));
         }
 
         #endregion

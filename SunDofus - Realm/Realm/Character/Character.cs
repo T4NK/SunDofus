@@ -36,6 +36,52 @@ namespace realm.Realm.Character
             m_Items = new Items.InventaryItems(this);
         }
 
+        #region Items
+
+        public string GetItemsPos()
+        {
+            string m = "";
+
+            if (m_Items.ItemsList.Any(x => x.Position == 1))
+                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 1).BaseItem.ID);
+            m += ",";
+
+            if (m_Items.ItemsList.Any(x => x.Position == 6))
+                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 6).BaseItem.ID);
+            m += ",";
+
+            if (m_Items.ItemsList.Any(x => x.Position == 7))
+                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 7).BaseItem.ID);
+            m += ",";
+
+            if (m_Items.ItemsList.Any(x => x.Position == 8))
+                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 8).BaseItem.ID);
+            m += ",";
+
+            if (m_Items.ItemsList.Any(x => x.Position == 15))
+                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 15).BaseItem.ID);
+            m += ",";
+
+            return m;
+        }
+
+        public string GetItemsString()
+        {
+            string m = "";
+
+            foreach (Items.Item m_I in m_Items.ItemsList)
+            {
+                m += m_I.ToString() + ";";
+            }
+
+            if (m != "")
+                return m.Substring(0, m.Length - 1);
+            else
+                return m;
+        }
+
+#endregion
+
         #region Pattern
 
         public string PatternList()
@@ -49,7 +95,7 @@ namespace realm.Realm.Character
             Builder.Append(Basic.DeciToHex(Color)).Append(";");
             Builder.Append(Basic.DeciToHex(Color2)).Append(";");
             Builder.Append(Basic.DeciToHex(Color3)).Append(";");
-            Builder.Append(",,,,,;"); // Items
+            Builder.Append(GetItemsPos()).Append(";");
             Builder.Append("0;").Append(Program.m_ServerID).Append(";;;");
 
             return Builder.ToString();
@@ -67,7 +113,7 @@ namespace realm.Realm.Character
             Builder.Append(Basic.DeciToHex(Color)).Append("|");
             Builder.Append(Basic.DeciToHex(Color2)).Append("|");
             Builder.Append(Basic.DeciToHex(Color3)).Append("||");
-            Builder.Append("|"); // Items
+            Builder.Append(GetItemsString()).Append("|");
 
             return Builder.ToString();
         }
@@ -86,7 +132,7 @@ namespace realm.Realm.Character
             Builder.Append(SunDofus.Basic.DeciToHex(Color) + ";");
             Builder.Append(SunDofus.Basic.DeciToHex(Color2) + ";");
             Builder.Append(SunDofus.Basic.DeciToHex(Color3) + ";");
-            Builder.Append(",,,,,;"); // Items
+            Builder.Append(GetItemsPos()).Append(";"); // Items
             Builder.Append("0;"); //Aura
             Builder.Append(";;");
             Builder.Append(";"); // Guild

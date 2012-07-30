@@ -13,5 +13,12 @@ namespace realm.Realm.Character.Items
         {
             return ++LastID;
         }
+
+        public static bool PositionAvaliable(int ItemType, bool Usable, int Position)
+        {
+
+            return true;
+
+        }
     }
 }
