@@ -103,7 +103,7 @@ namespace realm.Client
 
         public void SendCharacterList(string test)
         {
-            string Pack = "ALK" + Client.m_Infos.Subscription +"|" + Client.m_Infos.CharactersNames.Count;
+            string Pack = "ALK" + (Client.m_Infos.Subscription * 1000) +"|" + Client.m_Infos.CharactersNames.Count;
 
             if (Client.m_Infos.CharactersNames.Count != 0)
             {

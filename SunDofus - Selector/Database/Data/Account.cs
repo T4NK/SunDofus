@@ -27,7 +27,7 @@ namespace selector.Database.Data
                     Id = SQLReader.GetInt16("id");
                     Username = SQLReader.GetString("username");
                     Password = SQLReader.GetString("password");
-                    Level = SQLReader.GetInt16("level");
+                    Level = SQLReader.GetInt16("gmlevel");
                     Communauty = SQLReader.GetInt16("communauty");
                     Pseudo = SQLReader.GetString("pseudo");
                     Question = SQLReader.GetString("question");

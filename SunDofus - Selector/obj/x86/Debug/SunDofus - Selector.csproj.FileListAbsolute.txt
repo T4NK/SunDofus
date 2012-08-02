@@ -6,3 +6,9 @@ C:\Users\user\Desktop\Développement\SunDofus\Debug application\Selector.exe
 C:\Users\user\Desktop\Développement\SunDofus\Debug application\Selector.pdb
 C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\Selector.exe
 C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\Selector.pdb
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Debug application\Config\Selector.txt
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Debug application\Selector.exe
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Debug application\Selector.pdb
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\Selector.exe
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\Selector.pdb

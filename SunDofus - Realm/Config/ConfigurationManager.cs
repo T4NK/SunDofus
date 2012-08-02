@@ -10,11 +10,13 @@ namespace realm.Config
     class ConfigurationManager
     {
         static Configuration Config;
+        public static bool Subscription = false;
 
         public static void IniConfig()
         {
             Config = new Configuration("Config/Config.txt");
             Program.m_ServerID = Config.GetInt("Server_ID");
+            Subscription = Config.GetBool("Subscription");
         }
 
         public static string GetString(string M)

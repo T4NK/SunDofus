@@ -76,7 +76,11 @@ namespace selector.Client
         {
             if (Packet.StartsWith("Ax"))
             {
-                string Pack = "AxK" + Client.m_Account.SubscriptionTime();
+                string Pack = "AxK";
+                if (Config.ConfigurationManager.Subscription == true)
+                    Pack += Client.m_Account.SubscriptionTime();
+                else
+                    Pack += "31536000000";
 
                 foreach (Database.Data.Server m_Server in Database.Data.Server.ListOfServers)
                 {

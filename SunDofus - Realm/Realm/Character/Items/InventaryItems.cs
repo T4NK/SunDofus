@@ -9,19 +9,20 @@ namespace realm.Realm.Character.Items
     {
         public List<Item> ItemsList;
         public Character Client;
-        public List<ItemsSets> Sets;
+        public Dictionary<int,Set> SetsList;
 
         public InventaryItems(Character Ch)
         {
             Client = Ch;
             ItemsList = new List<Item>();
+            SetsList = new Dictionary<int,Set>();
         }
 
         public void AddItem(int ID)
         {
             if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
             AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
-            Items.Item m_I = new Item(BaseItem, Client);
+            Items.Item m_I = new Item(BaseItem);
             m_I.ParseJet();
             m_I.GeneratItem();
 
@@ -205,7 +206,7 @@ namespace realm.Realm.Character.Items
             foreach (string Infos in Spliter)
             {
                 string[] AllInfos = Infos.Split('~');
-                Items.Item m_I = new Item(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)), Client);
+                Items.Item m_I = new Item(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
 
                 m_I.ID = ItemsManager.GetNewID();
                 m_I.Quantity = Convert.ToInt32(AllInfos[1], 16);
@@ -221,7 +222,7 @@ namespace realm.Realm.Character.Items
 
                     foreach (string Effect in EffectsList)
                     {
-                        EffectsItem NewEffect = new EffectsItem(Client);
+                        Effect.EffectsItem NewEffect = new Effect.EffectsItem();
                         string[] EffectInfos = Effect.Split('#');
 
                         NewEffect.ID = Convert.ToInt32(EffectInfos[0], 16);
@@ -248,18 +249,54 @@ namespace realm.Realm.Character.Items
         public void RefreshBonus()
         {
             Client.ResetItemsStats();
-            Sets = new List<ItemsSets>();
+            SetsList.Clear();
 
             foreach (Item m_I in ItemsList)
             {
                 if (m_I.Position != -1 && m_I.Position < 23)
                 {
-                    foreach (EffectsItem m_E in m_I.EffectsList)
+                    foreach (Effect.EffectsItem m_E in m_I.EffectsList)
                     {
-                        m_E.ParseEffect();
+                        m_E.ParseEffect(Client);
                     }
                 }
-                //PANOPLIE ICI
+                if (m_I.BaseItem.Set != -1 && m_I.Position != -1)
+                {
+                    if (SetsList.ContainsKey(m_I.BaseItem.Set))
+                    {
+                        if(! SetsList[m_I.BaseItem.Set].ItemsList.Contains(m_I.BaseItem.ID))
+                        {
+                            SetsList[m_I.BaseItem.Set].ItemsList.Add(m_I.BaseItem.ID);
+                        }
+                    }
+                    else
+                    {
+                        SetsList.Add(m_I.BaseItem.Set, new Set(m_I.BaseItem.Set));
+                        SetsList[m_I.BaseItem.Set].ItemsList.Clear();
+                        SetsList[m_I.BaseItem.Set].ItemsList.Add(m_I.BaseItem.ID);
+                    }
+                }
+            }
+
+            foreach (Set m_S in SetsList.Values)
+            {
+                int NumberItems = m_S.ItemsList.Count;
+                string StrItems = "";
+                string StrEffects = "";
+
+                foreach (int ItemID in m_S.ItemsList)
+                {
+                    StrItems += ItemID + ";";
+                }
+
+                foreach (Effect.EffectsItem m_E in m_S.BonusList[NumberItems])
+                {
+                    StrEffects += m_E.SetString() + ",";
+                    m_E.ParseEffect(Client);
+                }
+
+                Client.Client.Send("OS+" + m_S.ID + "|" + (StrItems == "" ? "" : StrItems.Substring(0, StrItems.Length - 1)) + "|"
+                    + (StrEffects == "" ? "" : StrEffects.Substring(0, StrEffects.Length - 1)));
             }
 
             Client.SendPods();

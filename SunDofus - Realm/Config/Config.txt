@@ -14,3 +14,5 @@ Start_Level = 200
 Start_Map = 10111
 Start_Cell = 255
 Start_Dir = 3
+
+Subscription = false

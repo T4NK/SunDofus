@@ -6,3 +6,9 @@ C:\Users\user\Desktop\Développement\SunDofus\Sources\SunDofus - Realm\obj\x86\D
 C:\Users\user\Desktop\Développement\SunDofus\Debug application\RealmServer.exe
 C:\Users\user\Desktop\Développement\SunDofus\Debug application\RealmServer.pdb
 C:\Users\user\Desktop\Développement\SunDofus\Debug application\Config\Config.txt
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus - Realm\obj\x86\Debug\RealmServer.exe
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus - Realm\obj\x86\Debug\RealmServer.pdb
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus - Realm\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Debug application\Config\Config.txt
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Debug application\RealmServer.exe
+F:\Programmation\Développements\Projet Origine v3\SunDofus\Debug application\RealmServer.pdb

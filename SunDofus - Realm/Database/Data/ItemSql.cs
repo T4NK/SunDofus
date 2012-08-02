@@ -9,6 +9,7 @@ namespace realm.Database.Data
     class ItemSql
     {
         public static List<Realm.Character.Items.AbstractItem> ItemsList = new List<Realm.Character.Items.AbstractItem>();
+        public static List<Realm.Character.Items.AbstractSet> SetsList = new List<Realm.Character.Items.AbstractSet>();
 
         public static void LoadItems()
         {
@@ -34,6 +35,29 @@ namespace realm.Database.Data
             SQLReader.Close();
 
             SunDofus.Logger.Status("Loaded '" + ItemsList.Count + "' items from the database !");
+        }
+
+        public static void LoadItemsSets()
+        {
+            string SQLText = "SELECT * FROM items_sets";
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+
+            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
+
+            while (SQLReader.Read())
+            {
+                Realm.Character.Items.AbstractSet m_S = new Realm.Character.Items.AbstractSet();
+
+                m_S.ID = SQLReader.GetInt16("ID");
+                m_S.ParseBonus(SQLReader.GetString("bonus"));
+                m_S.ParseItems(SQLReader.GetString("items"));
+
+                SetsList.Add(m_S);
+            }
+
+            SQLReader.Close();
+
+            SunDofus.Logger.Status("Loaded '" + SetsList.Count + "' items_sets from the database !");
         }
     }
 }

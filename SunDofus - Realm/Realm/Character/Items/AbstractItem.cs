@@ -8,10 +8,11 @@ namespace realm.Realm.Character.Items
     class AbstractItem
     {
         public int ID, Type, Level, Pods, Price = 0;
+        public int Set = -1;
         public string  Jet = "";
         public bool TwoHands = false;
         public bool Usable = false;
 
-        public List<EffectsItem> EffectsList = new List<EffectsItem>();
+        public List<Effect.EffectsItem> EffectsList = new List<Effect.EffectsItem>();
     }
 }

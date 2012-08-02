@@ -19,6 +19,7 @@ namespace realm
             Database.SQLManager.Initialise();
 
             Database.Data.ItemSql.LoadItems();
+            Database.Data.ItemSql.LoadItemsSets();
             Database.Data.MapSql.LoadMaps();
             Database.Data.TriggerSql.LoadTriggers();
 
