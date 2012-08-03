@@ -287,8 +287,7 @@ namespace realm.Client
 
         public void ParseConsoleMessage(string Data)
         {
-            string[] AllData = Data.Split(' ');
-            Client.m_Commander.ParseCommand(AllData[0], AllData[1]);
+            Client.m_Commander.ParseCommand(Data);
         }
 
         public void GameInformations(string Data)

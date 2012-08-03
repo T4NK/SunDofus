@@ -348,8 +348,11 @@ namespace realm.Realm.Character
             m_Stats.Initiative.Bases = 0;
             m_Stats.MaxPods.Bases = 1000;
 
-            m_Stats.DodgePA.Bases = (m_Stats.Wisdom.Total() / 4);
-            m_Stats.DodgePM.Bases = (m_Stats.Wisdom.Total() / 4);
+            m_Stats.DodgePA.Bases = (m_Stats.Wisdom.Bases / 4);
+            m_Stats.DodgePM.Bases = (m_Stats.Wisdom.Bases / 4);
+            m_Stats.DodgePA.Items = (m_Stats.Wisdom.Items / 4);
+            m_Stats.DodgePM.Items = (m_Stats.Wisdom.Items / 4);
+
             m_Stats.Prospection.Bases = (m_Stats.Luck.Total() / 10) + 100;
             if (Class == 3) m_Stats.Prospection.Bases += 20;
             m_Stats.Initiative.Bases = (MaximumLife / 4 + m_Stats.Initiative.Total()) * (Life / MaximumLife);

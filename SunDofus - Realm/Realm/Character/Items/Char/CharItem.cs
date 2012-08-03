@@ -59,8 +59,24 @@ namespace realm.Realm.Character.Items
 
             foreach (Effect.EffectsItems Effect in EffectsList)
             {
-                Effect.Value = SunDofus.Basic.GetRandomJet(Effect.Effect);
-                Effect.Value2 = -1;
+                NewJetAvaliable(Effect);
+            }
+        }
+
+        public void NewJetAvaliable(Effect.EffectsItems EID)
+        {
+            if (EID.ID == 91 | EID.ID == 92 | EID.ID == 93 | EID.ID == 94 | EID.ID == 95 | EID.ID == 96 | EID.ID == 97 | EID.ID == 98 | EID.ID == 99 | EID.ID == 100 | EID.ID == 101)
+            {
+
+            }
+            else if (EID.ID == 800)
+            {
+
+            }
+            else
+            {
+                EID.Value = SunDofus.Basic.GetRandomJet(EID.Effect);
+                EID.Value2 = -1;
             }
         }
 

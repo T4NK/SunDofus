@@ -14,22 +14,28 @@ namespace realm.Client
             Client = Cli;
         }
 
-        public void ParseCommand(string Command, string Args)
+        public void ParseCommand(string Args)
         {
+            string[] Data = Args.Split(' ');
+
             if (Client.m_Infos.Level > 0)
             {
-                switch (Command)
+                switch (Data[0])
                 {
                     case "save":
-                        Realm.World.Save.ParseSave(Args);
+                        Realm.World.Save.ParseSave(Data[1]);
                         break;
 
                     case "vita":
-                        Client.m_Player.ResetVita(Args);
+                        Client.m_Player.ResetVita(Data[1]);
                         break;
 
                     case "item":
-                        Client.m_Player.m_Inventary.AddItem(int.Parse(Args));
+                        Client.m_Player.m_Inventary.AddItem(int.Parse(Data[1]));
+                        break;
+
+                    case "teleport":
+                        Client.m_Player.TeleportNewMap(int.Parse(Data[1]), int.Parse(Data[2]));
                         break;
                 }
             }
