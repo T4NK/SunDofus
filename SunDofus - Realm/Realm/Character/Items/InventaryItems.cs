@@ -243,6 +243,9 @@ namespace realm.Realm.Character.Items
                         if (EffectInfos[2] != "")
                             NewEffect.Value2 = Convert.ToInt32(EffectInfos[2], 16);
 
+                        if (EffectInfos[3] != "")
+                            NewEffect.Value3 = Convert.ToInt32(EffectInfos[3], 16);
+
                         NewEffect.Effect = EffectInfos[4];
 
                         m_I.EffectsList.Add(NewEffect);

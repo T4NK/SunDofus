@@ -242,18 +242,21 @@ namespace realm.Client
         public void ChangeChannel(string Chanel)
         {
             bool Add = false;
-            if (Chanel.Contains("+")) Add = true;
-            else if (Chanel.Contains("-")) Add = false;
+            if (Chanel.Contains("+"))
+            {
+                Add = true;
+                Chanel = Chanel.Replace("+", "");
+            }
+            else if (Chanel.Contains("-"))
+            {
+                Add = false;
+                Chanel = Chanel.Replace("-", "");
+            }
             else return;
 
             if (Add == true)
             {
-                if (Client.m_Player.Channel.Contains(Chanel))
-                {
-                    Client.Send("cC" + Client.m_Player.Channel);
-                    return;
-                }
-                Client.m_Player.Channel = Client.m_Player.Channel + "" + Chanel;
+                if(!Client.m_Player.Channel.Contains(Chanel)) Client.m_Player.Channel = Client.m_Player.Channel + "" + Chanel;
                 Client.Send("cC+" + Chanel);
             }
             else
