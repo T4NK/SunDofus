@@ -29,7 +29,7 @@ namespace realm.Client
                         break;
 
                     case "item":
-                        Client.m_Player.m_Items.AddItem(int.Parse(Args));
+                        Client.m_Player.m_Inventary.AddItem(int.Parse(Args));
                         break;
                 }
             }

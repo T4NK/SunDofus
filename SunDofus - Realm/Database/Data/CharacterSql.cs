@@ -35,7 +35,7 @@ namespace realm.Database.Data
 
                 c.ParseStats(SQLResult.GetString("stats"));
 
-                if (SQLResult.GetString("items") != "") c.m_Items.ParseItems(SQLResult.GetString("items"));
+                if (SQLResult.GetString("items") != "") c.m_Inventary.ParseItems(SQLResult.GetString("items"));
 
                 c.NewCharacter = false;
 

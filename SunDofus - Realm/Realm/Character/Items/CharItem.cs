@@ -5,24 +5,24 @@ using System.Text;
 
 namespace realm.Realm.Character.Items
 {
-    class Item
+    class CharItem
     {
         public AbstractItem BaseItem;
         public int ID, Position = -1;
         public int Quantity = 0;
-        public List<Effect.EffectsItem> EffectsList;
+        public List<Effect.EffectsItems> EffectsList;
 
-        public Item(AbstractItem b_I)
+        public CharItem(AbstractItem b_I)
         {
             BaseItem = b_I;
-            EffectsList = new List<Effect.EffectsItem>();
+            EffectsList = new List<Effect.EffectsItems>();
         }
 
         public string EffectsInfos()
         {
             string Infos = "";
 
-            foreach (Effect.EffectsItem Effect in EffectsList)
+            foreach (Effect.EffectsItems Effect in EffectsList)
             {
                 Infos += Effect.ToString() + ",";
             }
@@ -41,7 +41,7 @@ namespace realm.Realm.Character.Items
                 if (m_J == "") continue;
                 string[] Infos = m_J.Split('#');
 
-                Effect.EffectsItem e_I = new Effect.EffectsItem();
+                Effect.EffectsItems e_I = new Effect.EffectsItems();
                 e_I.ID = SunDofus.Basic.HexToDeci(Infos[0]);
                 if (Infos.Length > 1) e_I.Value = SunDofus.Basic.HexToDeci(Infos[1]);
                 if (Infos.Length > 2) e_I.Value2 = SunDofus.Basic.HexToDeci(Infos[2]);
@@ -57,7 +57,7 @@ namespace realm.Realm.Character.Items
             this.Quantity = 1;
             this.Position = -1;
 
-            foreach (Effect.EffectsItem Effect in EffectsList)
+            foreach (Effect.EffectsItems Effect in EffectsList)
             {
                 Effect.Value = SunDofus.Basic.GetRandomJet(Effect.Effect);
                 Effect.Value2 = -1;

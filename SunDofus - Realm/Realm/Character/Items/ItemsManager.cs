@@ -20,5 +20,12 @@ namespace realm.Realm.Character.Items
             return true;
 
         }
+
+        public static bool ConditionsAvaliable(AbstractItem m_I, Character m_C)
+        {
+
+            return true;
+
+        }
     }
 }

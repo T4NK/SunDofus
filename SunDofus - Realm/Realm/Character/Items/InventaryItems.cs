@@ -7,26 +7,26 @@ namespace realm.Realm.Character.Items
 {
     class InventaryItems
     {
-        public List<Item> ItemsList;
+        public List<CharItem> ItemsList;
         public Character Client;
-        public Dictionary<int,Set> SetsList;
+        public Dictionary<int,CharSet> SetsList;
 
         public InventaryItems(Character Ch)
         {
             Client = Ch;
-            ItemsList = new List<Item>();
-            SetsList = new Dictionary<int,Set>();
+            ItemsList = new List<CharItem>();
+            SetsList = new Dictionary<int,CharSet>();
         }
 
         public void AddItem(int ID)
         {
             if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
             AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
-            Items.Item m_I = new Item(BaseItem);
+            Items.CharItem m_I = new CharItem(BaseItem);
             m_I.ParseJet();
             m_I.GeneratItem();
 
-            foreach (Item i2 in ItemsList)
+            foreach (CharItem i2 in ItemsList)
             {
                 if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
                 {
@@ -47,9 +47,9 @@ namespace realm.Realm.Character.Items
             Client.Client.Send("OAKO" + m_I.ToString());
         }
 
-        public void AddItem(Item m_I)
+        public void AddItem(CharItem m_I)
         {
-            foreach (Item i2 in ItemsList)
+            foreach (CharItem i2 in ItemsList)
             {
                 if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
                 {
@@ -74,7 +74,7 @@ namespace realm.Realm.Character.Items
         {
             if (ItemsList.Any(x => x.ID == ID))
             {
-                Item m_I = ItemsList.First(x => x.ID == ID);
+                CharItem m_I = ItemsList.First(x => x.ID == ID);
                 if (m_I.Quantity <= Quantity)
                 {
                     Client.Pods -= (m_I.Quantity * m_I.BaseItem.Pods);
@@ -100,12 +100,22 @@ namespace realm.Realm.Character.Items
         {
             if (!ItemsList.Any(x => x.ID == ID)) return;
 
-            Item m_I = ItemsList.First(x => x.ID == ID);
-            if (ItemsManager.PositionAvaliable(m_I.BaseItem.Type, m_I.BaseItem.Usable, Pos) == false) return;
+            CharItem m_I = ItemsList.First(x => x.ID == ID);
+            if (ItemsManager.PositionAvaliable(m_I.BaseItem.Type, m_I.BaseItem.Usable, Pos) == false)
+            {
+                Client.Client.Send("BN");
+                return;
+            }
 
             if (Pos == 1 && m_I.BaseItem.TwoHands == true && isOccuptedPos(15)) // Arme à deux mains avec Bouclier
             {
                 Client.Client.Send("BN");
+                return;
+            }
+
+            if (ItemsManager.ConditionsAvaliable(m_I.BaseItem, Client) == false)
+            {
+                Client.Client.Send("Im119|44");
                 return;
             }
 
@@ -137,7 +147,7 @@ namespace realm.Realm.Character.Items
 
             if (m_I.Position == -1)
             {
-                foreach (Item i2 in ItemsList)
+                foreach (CharItem i2 in ItemsList)
                 {
                     if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position
                         && i2 != m_I)
@@ -161,7 +171,7 @@ namespace realm.Realm.Character.Items
                         m_I.BaseItem.Type == 69 | m_I.BaseItem.Type == 87)
                     {
                         if (Quantity <= 0) return;
-                        Item Copy = m_I;
+                        CharItem Copy = m_I;
                         Copy.Quantity -= Quantity;
 
                         if (m_I.Quantity == Quantity)
@@ -174,7 +184,7 @@ namespace realm.Realm.Character.Items
                     }
                     else
                     {
-                        Item Copy = m_I;
+                        CharItem Copy = m_I;
 
                         Copy.Quantity -= 1;
                         Copy.Position = -1;
@@ -206,7 +216,7 @@ namespace realm.Realm.Character.Items
             foreach (string Infos in Spliter)
             {
                 string[] AllInfos = Infos.Split('~');
-                Items.Item m_I = new Item(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
+                Items.CharItem m_I = new CharItem(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
 
                 m_I.ID = ItemsManager.GetNewID();
                 m_I.Quantity = Convert.ToInt32(AllInfos[1], 16);
@@ -222,7 +232,7 @@ namespace realm.Realm.Character.Items
 
                     foreach (string Effect in EffectsList)
                     {
-                        Effect.EffectsItem NewEffect = new Effect.EffectsItem();
+                        Effect.EffectsItems NewEffect = new Effect.EffectsItems();
                         string[] EffectInfos = Effect.Split('#');
 
                         NewEffect.ID = Convert.ToInt32(EffectInfos[0], 16);
@@ -251,11 +261,11 @@ namespace realm.Realm.Character.Items
             Client.ResetItemsStats();
             SetsList.Clear();
 
-            foreach (Item m_I in ItemsList)
+            foreach (CharItem m_I in ItemsList)
             {
                 if (m_I.Position != -1 && m_I.Position < 23)
                 {
-                    foreach (Effect.EffectsItem m_E in m_I.EffectsList)
+                    foreach (Effect.EffectsItems m_E in m_I.EffectsList)
                     {
                         m_E.ParseEffect(Client);
                     }
@@ -271,14 +281,14 @@ namespace realm.Realm.Character.Items
                     }
                     else
                     {
-                        SetsList.Add(m_I.BaseItem.Set, new Set(m_I.BaseItem.Set));
+                        SetsList.Add(m_I.BaseItem.Set, new CharSet(m_I.BaseItem.Set));
                         SetsList[m_I.BaseItem.Set].ItemsList.Clear();
                         SetsList[m_I.BaseItem.Set].ItemsList.Add(m_I.BaseItem.ID);
                     }
                 }
             }
 
-            foreach (Set m_S in SetsList.Values)
+            foreach (CharSet m_S in SetsList.Values)
             {
                 int NumberItems = m_S.ItemsList.Count;
                 string StrItems = "";
@@ -289,7 +299,7 @@ namespace realm.Realm.Character.Items
                     StrItems += ItemID + ";";
                 }
 
-                foreach (Effect.EffectsItem m_E in m_S.BonusList[NumberItems])
+                foreach (Effect.EffectsItems m_E in m_S.BonusList[NumberItems])
                 {
                     StrEffects += m_E.SetString() + ",";
                     m_E.ParseEffect(Client);
@@ -301,6 +311,53 @@ namespace realm.Realm.Character.Items
 
             Client.SendPods();
             Client.SendCharStats();
+        }
+
+        public void UseItem(string Data)
+        {
+            if (Client.State.OnMove == true)
+            {
+                Client.Client.Send("BN");
+                return;
+            }
+            string[] AllData = Data.Split('|');
+
+            int ItemID = int.Parse(AllData[0]);
+            int CharID = Client.ID;
+            int CellID = Client.MapCell;
+
+            if (AllData.Length > 2)
+            {
+                CharID = int.Parse(AllData[1]);
+                CellID = int.Parse(AllData[2]);
+            }
+
+            if (!ItemsList.Any(x => x.ID == ItemID))
+            {
+                Client.Client.Send("OUE");
+                return;
+            }
+
+            CharItem Item = ItemsList.First(x => x.ID == ItemID);
+
+            if (Item.BaseItem.Usable == false)
+            {
+                Client.Client.Send("BN");
+                return;
+            }
+
+            CharUsableItem m_I = Database.Data.ItemSql.UsablesList.First(x => x.BaseItemID == Item.BaseItem.ID);
+            Character m_C = CharactersManager.CharactersList.First(x => x.ID == CharID);
+
+            if (!m_I.ConditionsAvaliable(m_C))
+            {
+                Client.Client.Send("Im119|44");
+                return;
+            }
+
+            m_I.ParseEffect(m_C);
+
+            DeleteItem(Item.ID, 1);
         }
     }
 }

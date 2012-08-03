@@ -23,8 +23,8 @@ namespace realm.Realm.Character
 
         public int Pods = 0;
 
-        public Stats.Stats m_Stats = new Stats.Stats();
-        public Items.InventaryItems m_Items;
+        public Stats.Stats m_Stats;
+        public Items.InventaryItems m_Inventary;
 
         public Client.RealmClient Client;
         public CharacterState State;
@@ -33,7 +33,8 @@ namespace realm.Realm.Character
 
         public Character()
         {
-            m_Items = new Items.InventaryItems(this);
+            m_Stats = new Stats.Stats();
+            m_Inventary = new Items.InventaryItems(this);
         }
 
         #region Items
@@ -42,24 +43,24 @@ namespace realm.Realm.Character
         {
             string m = "";
 
-            if (m_Items.ItemsList.Any(x => x.Position == 1))
-                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 1).BaseItem.ID);
+            if (m_Inventary.ItemsList.Any(x => x.Position == 1))
+                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 1).BaseItem.ID);
             m += ",";
 
-            if (m_Items.ItemsList.Any(x => x.Position == 6))
-                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 6).BaseItem.ID);
+            if (m_Inventary.ItemsList.Any(x => x.Position == 6))
+                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 6).BaseItem.ID);
             m += ",";
 
-            if (m_Items.ItemsList.Any(x => x.Position == 7))
-                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 7).BaseItem.ID);
+            if (m_Inventary.ItemsList.Any(x => x.Position == 7))
+                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 7).BaseItem.ID);
             m += ",";
 
-            if (m_Items.ItemsList.Any(x => x.Position == 8))
-                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 8).BaseItem.ID);
+            if (m_Inventary.ItemsList.Any(x => x.Position == 8))
+                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 8).BaseItem.ID);
             m += ",";
 
-            if (m_Items.ItemsList.Any(x => x.Position == 15))
-                m += SunDofus.Basic.DeciToHex(m_Items.ItemsList.First(x => x.Position == 15).BaseItem.ID);
+            if (m_Inventary.ItemsList.Any(x => x.Position == 15))
+                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 15).BaseItem.ID);
             m += ",";
 
             return m;
@@ -69,7 +70,7 @@ namespace realm.Realm.Character
         {
             string m = "";
 
-            foreach (Items.Item m_I in m_Items.ItemsList)
+            foreach (Items.CharItem m_I in m_Inventary.ItemsList)
             {
                 m += m_I.ToString() + ";";
             }
@@ -84,7 +85,7 @@ namespace realm.Realm.Character
         {
             string m = "";
 
-            foreach (Items.Item m_I in m_Items.ItemsList)
+            foreach (Items.CharItem m_I in m_Inventary.ItemsList)
             {
                 m += m_I.SaveString() + ";";
             }

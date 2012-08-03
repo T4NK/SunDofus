@@ -5,7 +5,7 @@ using System.Text;
 
 namespace realm.Realm.Effect
 {
-    class EffectsItem
+    class EffectsItems
     {
         public int ID, Value, Value2, Value3 = 0;
         public string Effect = "0d0+0";

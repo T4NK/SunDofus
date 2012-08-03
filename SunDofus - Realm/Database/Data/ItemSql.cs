@@ -10,6 +10,7 @@ namespace realm.Database.Data
     {
         public static List<Realm.Character.Items.AbstractItem> ItemsList = new List<Realm.Character.Items.AbstractItem>();
         public static List<Realm.Character.Items.AbstractSet> SetsList = new List<Realm.Character.Items.AbstractSet>();
+        public static List<Realm.Character.Items.CharUsableItem> UsablesList = new List<Realm.Character.Items.CharUsableItem>();
 
         public static void LoadItems()
         {
@@ -28,6 +29,7 @@ namespace realm.Database.Data
                 m_I.Type = SQLReader.GetInt16("Type");
                 m_I.Level = SQLReader.GetInt16("Level");
                 m_I.Jet = SQLReader.GetString("Stats");
+                m_I.Conditions = SQLReader.GetString("Conditions");
 
                 ItemsList.Add(m_I);
             }
@@ -58,6 +60,30 @@ namespace realm.Database.Data
             SQLReader.Close();
 
             SunDofus.Logger.Status("Loaded '" + SetsList.Count + "' items_sets from the database !");
+        }
+
+        public static void LoadUsablesItems()
+        {
+            string SQLText = "SELECT * FROM items_usables";
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+
+            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
+
+            while (SQLReader.Read())
+            {
+                Realm.Character.Items.CharUsableItem m_U = new Realm.Character.Items.CharUsableItem();
+
+                m_U.BaseItemID = SQLReader.GetInt16("ID");
+                m_U.Args = SQLReader.GetString("Args");
+
+                m_U.AttributeItem();
+
+                UsablesList.Add(m_U);
+            }
+
+            SQLReader.Close();
+
+            SunDofus.Logger.Status("Loaded '" + UsablesList.Count + "' items_usables from the database !");
         }
     }
 }

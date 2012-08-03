@@ -11,8 +11,9 @@ namespace realm.Realm.Character.Items
         public int Set = -1;
         public string  Jet = "";
         public bool TwoHands = false;
+        public string Conditions = "";
         public bool Usable = false;
 
-        public List<Effect.EffectsItem> EffectsList = new List<Effect.EffectsItem>();
+        public List<Effect.EffectsItems> EffectsList = new List<Effect.EffectsItems>();
     }
 }

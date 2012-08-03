@@ -9,7 +9,7 @@ namespace realm.Realm.Character.Items
     {
         public List<int> ItemsList = new List<int>();
         public int ID = -1;
-        public Dictionary<int, List<Effect.EffectsItem>> BonusList = new Dictionary<int, List<Effect.EffectsItem>>();
+        public Dictionary<int, List<Effect.EffectsItems>> BonusList = new Dictionary<int, List<Effect.EffectsItems>>();
 
         public void ParseItems(string Data)
         {
@@ -33,11 +33,11 @@ namespace realm.Realm.Character.Items
             foreach (string Infos in Data.Split(';'))
             {
                 if (Infos == "") continue;
-                BonusList.Add(++Nb, new List<Effect.EffectsItem>());
+                BonusList.Add(++Nb, new List<Effect.EffectsItems>());
                 foreach (string AllData in Infos.Split(','))
                 {
                     if (AllData == "") continue;
-                    Effect.EffectsItem m_B = new Effect.EffectsItem();
+                    Effect.EffectsItems m_B = new Effect.EffectsItems();
                     m_B.ID = int.Parse(AllData.Split(':')[0]);
                     m_B.Value = int.Parse(AllData.Split(':')[1]);
                     BonusList[Nb].Add(m_B);

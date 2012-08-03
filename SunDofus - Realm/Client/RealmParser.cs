@@ -44,6 +44,7 @@ namespace realm.Client
             m_Packets["GK"] = EndAction;
             m_Packets["Od"] = DeleteItem;
             m_Packets["OM"] = MoveItem;
+            m_Packets["OU"] = UseItem;
         }
 
         public void Parse(string Data)
@@ -231,7 +232,7 @@ namespace realm.Client
                 Client.m_Player.Life = Client.m_Player.MaximumLife;
             }
 
-            Client.m_Player.m_Items.RefreshBonus();
+            Client.m_Player.m_Inventary.RefreshBonus();
             Client.m_Player.SendPods();
             Client.m_Player.SendCharStats();
 
@@ -358,13 +359,18 @@ namespace realm.Client
         {
             string[] AllData = Data.Split('|');
             if (int.Parse(AllData[1]) <= 0) return;
-            Client.m_Player.m_Items.DeleteItem(int.Parse(AllData[0]), int.Parse(AllData[1]));
+            Client.m_Player.m_Inventary.DeleteItem(int.Parse(AllData[0]), int.Parse(AllData[1]));
         }
 
         public void MoveItem(string Data)
         {
             string[] AllData = Data.Split('|');
-            Client.m_Player.m_Items.MoveItem(int.Parse(AllData[0]), int.Parse(AllData[1]), (AllData.Length >= 3 ? int.Parse(AllData[2]) : 1));
+            Client.m_Player.m_Inventary.MoveItem(int.Parse(AllData[0]), int.Parse(AllData[1]), (AllData.Length >= 3 ? int.Parse(AllData[2]) : 1));
+        }
+
+        public void UseItem(string Data)
+        {
+            Client.m_Player.m_Inventary.UseItem(Data);
         }
 
         #endregion
