@@ -237,6 +237,31 @@ namespace realm.Realm.Character
             m_Stats.BonusDamageTrapPercent.Boosts = 0;
             m_Stats.BonusCritical.Boosts = 0;
             m_Stats.BonusFail.Boosts = 0;
+
+            m_Stats.ArmorNeutral.Boosts = 0;
+            m_Stats.ArmorPercentNeutral.Boosts = 0;
+            m_Stats.ArmorPvpNeutral.Boosts = 0;
+            m_Stats.ArmorPvpPercentNeutral.Boosts = 0;
+
+            m_Stats.ArmorIntelligence.Boosts = 0;
+            m_Stats.ArmorPercentIntelligence.Boosts = 0;
+            m_Stats.ArmorPvpIntelligence.Boosts = 0;
+            m_Stats.ArmorPvpPercentIntelligence.Boosts = 0;
+
+            m_Stats.ArmorStrenght.Boosts = 0;
+            m_Stats.ArmorPercentStrenght.Boosts = 0;
+            m_Stats.ArmorPvpStrenght.Boosts = 0;
+            m_Stats.ArmorPvpPercentStrenght.Boosts = 0;
+
+            m_Stats.ArmorLuck.Boosts = 0;
+            m_Stats.ArmorPercentLuck.Boosts = 0;
+            m_Stats.ArmorPvpLuck.Boosts = 0;
+            m_Stats.ArmorPvpPercentLuck.Boosts = 0;
+
+            m_Stats.ArmorAgility.Boosts = 0;
+            m_Stats.ArmorPercentAgility.Boosts = 0;
+            m_Stats.ArmorPvpAgility.Boosts = 0;
+            m_Stats.ArmorPvpPercentAgility.Boosts = 0;
         }
 
         public void ResetItemsStats()
@@ -323,6 +348,31 @@ namespace realm.Realm.Character
             m_Stats.BonusDamageTrapPercent.Dons = 0;
             m_Stats.BonusCritical.Dons = 0;
             m_Stats.BonusFail.Dons = 0;
+
+            m_Stats.ArmorNeutral.Dons = 0;
+            m_Stats.ArmorPercentNeutral.Dons = 0;
+            m_Stats.ArmorPvpNeutral.Dons = 0;
+            m_Stats.ArmorPvpPercentNeutral.Dons = 0;
+
+            m_Stats.ArmorIntelligence.Dons = 0;
+            m_Stats.ArmorPercentIntelligence.Dons = 0;
+            m_Stats.ArmorPvpIntelligence.Dons = 0;
+            m_Stats.ArmorPvpPercentIntelligence.Dons = 0;
+
+            m_Stats.ArmorStrenght.Dons = 0;
+            m_Stats.ArmorPercentStrenght.Dons = 0;
+            m_Stats.ArmorPvpStrenght.Dons = 0;
+            m_Stats.ArmorPvpPercentStrenght.Dons = 0;
+
+            m_Stats.ArmorLuck.Dons = 0;
+            m_Stats.ArmorPercentLuck.Dons = 0;
+            m_Stats.ArmorPvpLuck.Dons = 0;
+            m_Stats.ArmorPvpPercentLuck.Dons = 0;
+
+            m_Stats.ArmorAgility.Dons = 0;
+            m_Stats.ArmorPercentAgility.Dons = 0;
+            m_Stats.ArmorPvpAgility.Dons = 0;
+            m_Stats.ArmorPvpPercentAgility.Dons = 0;
         }
 
         public void ResetStats()
@@ -352,6 +402,31 @@ namespace realm.Realm.Character
             m_Stats.BonusDamageTrapPercent.Bases = 0;
             m_Stats.BonusCritical.Bases = 0;
             m_Stats.BonusFail.Bases = 0;
+
+            m_Stats.ArmorNeutral.Bases = 0;
+            m_Stats.ArmorPercentNeutral.Bases = 0;
+            m_Stats.ArmorPvpNeutral.Bases = 0;
+            m_Stats.ArmorPvpPercentNeutral.Bases = 0;
+
+            m_Stats.ArmorIntelligence.Bases = 0;
+            m_Stats.ArmorPercentIntelligence.Bases = 0;
+            m_Stats.ArmorPvpIntelligence.Bases = 0;
+            m_Stats.ArmorPvpPercentIntelligence.Bases = 0;
+
+            m_Stats.ArmorStrenght.Bases = 0;
+            m_Stats.ArmorPercentStrenght.Bases = 0;
+            m_Stats.ArmorPvpStrenght.Bases = 0;
+            m_Stats.ArmorPvpPercentStrenght.Bases = 0;
+
+            m_Stats.ArmorLuck.Bases = 0;
+            m_Stats.ArmorPercentLuck.Bases = 0;
+            m_Stats.ArmorPvpLuck.Bases = 0;
+            m_Stats.ArmorPvpPercentLuck.Bases = 0;
+
+            m_Stats.ArmorAgility.Bases = 0;
+            m_Stats.ArmorPercentAgility.Bases = 0;
+            m_Stats.ArmorPvpAgility.Bases = 0;
+            m_Stats.ArmorPvpPercentAgility.Bases = 0;
         }
 
         public void AddLife(int NewLife)
