@@ -38,5 +38,30 @@ namespace realm.Realm.Character.Stats
         public AbstractStats Prospection = new AbstractStats();
         public AbstractStats DodgePA = new AbstractStats();
         public AbstractStats DodgePM = new AbstractStats();
+
+        public AbstractStats ArmorNeutral = new AbstractStats();
+        public AbstractStats ArmorPercentNeutral = new AbstractStats();
+        public AbstractStats ArmorPvpNeutral = new AbstractStats();
+        public AbstractStats ArmorPvpPercentNeutral = new AbstractStats();
+
+        public AbstractStats ArmorStrenght = new AbstractStats();
+        public AbstractStats ArmorPercentStrenght = new AbstractStats();
+        public AbstractStats ArmorPvpStrenght = new AbstractStats();
+        public AbstractStats ArmorPvpPercentStrenght = new AbstractStats();
+
+        public AbstractStats ArmorLuck = new AbstractStats();
+        public AbstractStats ArmorPercentLuck = new AbstractStats();
+        public AbstractStats ArmorPvpLuck = new AbstractStats();
+        public AbstractStats ArmorPvpPercentLuck = new AbstractStats();
+
+        public AbstractStats ArmorAgility = new AbstractStats();
+        public AbstractStats ArmorPercentAgility = new AbstractStats();
+        public AbstractStats ArmorPvpAgility = new AbstractStats();
+        public AbstractStats ArmorPvpPercentAgility = new AbstractStats();
+
+        public AbstractStats ArmorIntelligence = new AbstractStats();
+        public AbstractStats ArmorPercentIntelligence = new AbstractStats();
+        public AbstractStats ArmorPvpIntelligence = new AbstractStats();
+        public AbstractStats ArmorPvpPercentIntelligence = new AbstractStats();
     }
 }

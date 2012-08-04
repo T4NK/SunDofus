@@ -462,7 +462,33 @@ namespace realm.Realm.Character
             Builder.Append(m_Stats.BonusFail.ToString()).Append("|");
             Builder.Append(m_Stats.DodgePA.ToString()).Append("|");
             Builder.Append(m_Stats.DodgePM.ToString()).Append("|");
-            Builder.Append("0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|0,0,0,0|1"); // Resist
+
+            Builder.Append(m_Stats.ArmorNeutral.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPercentNeutral.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpNeutral.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpPercentNeutral.ToString()).Append("|");
+
+            Builder.Append(m_Stats.ArmorStrenght.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPercentStrenght.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpStrenght.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpPercentNeutral.ToString()).Append("|");
+
+            Builder.Append(m_Stats.ArmorLuck.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPercentLuck.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpLuck.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpPercentNeutral.ToString()).Append("|");
+
+            Builder.Append(m_Stats.ArmorAgility.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPercentAgility.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpAgility.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpPercentNeutral.ToString()).Append("|");
+
+            Builder.Append(m_Stats.ArmorIntelligence.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPercentIntelligence.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpIntelligence.ToString()).Append("|");
+            Builder.Append(m_Stats.ArmorPvpPercentNeutral.ToString()).Append("|");
+
+            Builder.Append("1");
 
             return Builder.ToString();
         }

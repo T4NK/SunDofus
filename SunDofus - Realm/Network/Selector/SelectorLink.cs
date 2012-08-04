@@ -71,7 +71,6 @@ namespace realm.Network
             foreach (string Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
             {
                 if (Packet == "") continue;
-                SunDofus.Logger.Packets("[Receive]! " + Packet);
                 m_Parser.Parse(Packet);
             }
         }
@@ -85,7 +84,6 @@ namespace realm.Network
 
         public void Send(string Message)
         {
-            SunDofus.Logger.Packets("[Sent]! " + Message);
             byte[] P = Encoding.ASCII.GetBytes(Message + "\x00");
             m_Socket.Send(P);
         }

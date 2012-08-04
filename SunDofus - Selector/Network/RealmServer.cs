@@ -22,7 +22,7 @@ namespace selector.Network
         public void AcceptRealmClient(SilverSocket Socket)
         {
             if (Socket == null) return;
-            SunDofus.Logger.Infos("New inputed server connection !");
+            SunDofus.Logger.Infos("New inputted server connection !");
             m_Clients.Add(new Client.RealmClient(Socket));
         }
 

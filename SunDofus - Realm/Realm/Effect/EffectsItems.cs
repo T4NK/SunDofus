@@ -197,9 +197,149 @@ namespace realm.Realm.Effect
                     AddMonster();
                     break;
 
-                    /*TODO :: Différencier les Dommages pièges et les %dommages */
+                case 210: // + %Armure terre
+                    AddArmorStrenght();
+                    break;
+
+                case 211: // + %Armure Chance
+                    AddArmorLuck();
+                    break;
+
+                case 212: // + %Armure Agilité
+                    AddArmorAgility();
+                    break;
+
+                case 213: // + %Armure Intelligence
+                    AddArmorIntelligence();
+                    break;
+
+                case 214: // + %Armure Neutre
+                    AddArmorNeutral();
+                    break;
+
+                case 215: // - %Armure Terre
+                    SubArmorPercentStrenght();
+                    break;
+
+                case 216: // -%Armure Chance
+                    SubArmorPercentLuck();
+                    break;
+
+                case 217: // - %Armure Agilité
+                    SubArmorPercentAgility();
+                    break;
+
+                case 218: // - %Armure Intel
+                    SubArmorPercentIntelligence();
+                    break;
+
+                case 219: // - %Armure Neutre
+                    SubArmorPercentNeutral();
+                    break;
+
+                /*TODO :: Différencier les Dommages pièges et les %dommages */
                 case 225: // + Dommage Piege (%?)
                     AddTrapDamage();
+                    break;
+
+                case 240: // + Armor Force
+                    AddArmorStrenght();
+                    break;
+
+                case 241: // + Armor Chance
+                    AddArmorLuck();
+                    break;
+
+                case 242: // + Armor Agilité
+                    AddArmorAgility();
+                    break;
+
+                case 243: // + Armor Intelligence
+                    AddArmorIntelligence();
+                    break;
+
+                case 244: // + Armor Neutre
+                    AddArmorNeutral();
+                    break;
+
+                case 245: // - Armor Force
+                    SubArmorStrenght();
+                    break;
+
+                case 246: // - Armor Chance
+                    SubArmorLuck();
+                    break;
+
+                case 247: // - Armor Agilité
+                    SubArmorAgility();
+                    break;
+
+                case 248: // - Armor Intel
+                    SubArmorIntelligence();
+                    break;
+
+                case 249: // - Armor Neutre
+                    SubArmorNeutral();
+                    break;
+
+                case 250: // + %Pvp Armor Force
+                    AddArmorPvpStrenghtPercent();
+                    break;
+
+                case 251: // + %Pvp Armor Chance
+                    AddArmorPvpLuckPercent();
+                    break;
+
+                case 252: // + %Pvp Armor Agilité
+                    AddArmorPvpAgilityPercent();
+                    break;
+
+                case 253: // + %Pvp Armor Intel
+                    AddArmorPvpIntelligencePercent();
+                    break;
+
+                case 254: // + %Pvp Armor Neutre
+                    AddArmorPvpNeutralPercent();
+                    break;
+
+                case 255: // -%Pvp Armor Force
+                    SubArmorPvpStrenghtPercent();
+                    break;
+
+                case 256: // - %Pvp Armor Chance
+                    SubArmorPvpLuckPercent();
+                    break;
+
+                case 257: // -%Pvp Armor Agilité
+                    SubArmorPvpAgilityPercent();
+                    break;
+
+                case 258: // -%Pvp Armor Intel
+                    SubArmorPvpIntelligencePercent();
+                    break;
+
+                case 259: // -%Pvp Armor Neutre
+                    SubArmorPvpNeutralPercent();
+                    break;
+
+                case 260: // + Pvp Armor Force
+                    AddArmorPvpStrenght();
+                    break;
+
+                case 261: // + Pvp Armor Chance
+                    AddArmorPvpLuck();
+                    break;
+
+                case 262: // + Pvp Armor Agilité
+                    AddArmorPvpAgility();
+                    break;
+
+                case 263: // + Pvp Armor Intelligence
+                    AddArmorPvpIntelligence();
+                    break;
+
+                case 264: // + Pvp Armor Neutre
+                    AddArmorPvpNeutral();
                     break;
             }
         }
@@ -424,6 +564,181 @@ namespace realm.Realm.Effect
         private void SubVitality()
         {
             Client.m_Stats.Life.Items -= Value;
+        }
+
+        private void AddArmorStrenght()
+        {
+            Client.m_Stats.ArmorStrenght.Items += Value;
+        }
+
+        private void AddArmorNeutral()
+        {
+            Client.m_Stats.ArmorNeutral.Items += Value;
+        }
+
+        private void AddArmorLuck()
+        {
+            Client.m_Stats.ArmorLuck.Items += Value;
+        }
+
+        private void AddArmorAgility()
+        {
+            Client.m_Stats.ArmorAgility.Items += Value;
+        }
+
+        private void AddArmorIntelligence()
+        {
+            Client.m_Stats.ArmorIntelligence.Items += Value;
+        }
+
+        private void AddArmorPercentStrenght()
+        {
+            Client.m_Stats.ArmorPercentStrenght.Items += Value;
+        }
+
+        private void AddArmorPercentIntelligence()
+        {
+            Client.m_Stats.ArmorPercentIntelligence.Items += Value;
+        }
+
+        private void AddArmorPercentAgility()
+        {
+            Client.m_Stats.ArmorPercentAgility.Items += Value;
+        }
+
+        private void AddArmorPercentLuck()
+        {
+            Client.m_Stats.ArmorPercentLuck.Items += Value;
+        }
+
+        private void AddArmorPercentNeutral()
+        {
+            Client.m_Stats.ArmorPercentNeutral.Items += Value;
+        }
+
+        private void AddArmorPvpStrenght()
+        {
+            Client.m_Stats.ArmorPvpStrenght.Items += Value;
+        }
+
+        private void AddArmorPvpNeutral()
+        {
+            Client.m_Stats.ArmorPvpNeutral.Items += Value;
+        }
+
+        private void AddArmorPvpLuck()
+        {
+            Client.m_Stats.ArmorPvpLuck.Items += Value;
+        }
+
+        private void AddArmorPvpAgility()
+        {
+            Client.m_Stats.ArmorPvpAgility.Items += Value;
+        }
+
+        private void AddArmorPvpIntelligence()
+        {
+            Client.m_Stats.ArmorPvpIntelligence.Items += Value;
+        }
+
+        private void AddArmorPvpStrenghtPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentStrenght.Items += Value;
+        }
+
+        private void AddArmorPvpIntelligencePercent()
+        {
+            Client.m_Stats.ArmorPvpPercentIntelligence.Items += Value;
+        }
+
+        private void AddArmorPvpAgilityPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentAgility.Items += Value;
+        }
+
+        private void AddArmorPvpLuckPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentLuck.Items += Value;
+        }
+
+        private void AddArmorPvpNeutralPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentNeutral.Items += Value;
+        }
+
+        private void SubArmorPercentStrenght()
+        {
+            Client.m_Stats.ArmorPercentStrenght.Items -= Value;
+        }
+
+        private void SubArmorPercentLuck()
+        {
+            Client.m_Stats.ArmorPercentLuck.Items -= Value;
+        }
+
+        private void SubArmorPercentAgility()
+        {
+            Client.m_Stats.ArmorPercentAgility.Items -= Value;
+        }
+
+        private void SubArmorPercentNeutral()
+        {
+            Client.m_Stats.ArmorPercentNeutral.Items -= Value;
+        }
+
+        private void SubArmorPercentIntelligence()
+        {
+            Client.m_Stats.ArmorPercentIntelligence.Items -= Value;
+        }
+
+        private void SubArmorStrenght()
+        {
+            Client.m_Stats.ArmorStrenght.Items -= Value;
+        }
+
+        private void SubArmorIntelligence()
+        {
+            Client.m_Stats.ArmorIntelligence.Items -= Value;
+        }
+
+        private void SubArmorAgility()
+        {
+            Client.m_Stats.ArmorAgility.Items -= Value;
+        }
+
+        private void SubArmorLuck()
+        {
+            Client.m_Stats.ArmorLuck.Items -= Value;
+        }
+
+        private void SubArmorNeutral()
+        {
+            Client.m_Stats.ArmorNeutral.Items -= Value;
+        }
+
+        private void SubArmorPvpStrenghtPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentStrenght.Items -= Value;
+        }
+
+        private void SubArmorPvpNeutralPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentNeutral.Items -= Value;
+        }
+
+        private void SubArmorPvpLuckPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentLuck.Items -= Value;
+        }
+
+        private void SubArmorPvpAgilityPercent()
+        {
+            Client.m_Stats.ArmorPvpPercentAgility.Items -= Value;
+        }
+
+        private void SubArmorPvpIntelligencePercent()
+        {
+            Client.m_Stats.ArmorPvpPercentIntelligence.Items -= Value;
         }
 
         #endregion
