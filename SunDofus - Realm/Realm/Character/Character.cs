@@ -256,6 +256,9 @@ namespace realm.Realm.Character
             m_Stats.MaxMonsters.Items = 0;
             m_Stats.MaxPods.Items = 0;
 
+            m_Stats.DodgePA.Items = 0;
+            m_Stats.DodgePM.Items = 0;
+
             m_Stats.BonusDamage.Items = 0;
             m_Stats.ReturnDamage.Items = 0;
             m_Stats.BonusDamagePercent.Items = 0;
@@ -266,6 +269,31 @@ namespace realm.Realm.Character
             m_Stats.BonusDamageTrapPercent.Items = 0;
             m_Stats.BonusCritical.Items = 0;
             m_Stats.BonusFail.Items = 0;
+
+            m_Stats.ArmorNeutral.Items = 0;
+            m_Stats.ArmorPercentNeutral.Items = 0;
+            m_Stats.ArmorPvpNeutral.Items = 0;
+            m_Stats.ArmorPvpPercentNeutral.Items = 0;
+
+            m_Stats.ArmorIntelligence.Items = 0;
+            m_Stats.ArmorPercentIntelligence.Items = 0;
+            m_Stats.ArmorPvpIntelligence.Items = 0;
+            m_Stats.ArmorPvpPercentIntelligence.Items = 0;
+
+            m_Stats.ArmorStrenght.Items = 0;
+            m_Stats.ArmorPercentStrenght.Items = 0;
+            m_Stats.ArmorPvpStrenght.Items = 0;
+            m_Stats.ArmorPvpPercentStrenght.Items = 0;
+
+            m_Stats.ArmorLuck.Items = 0;
+            m_Stats.ArmorPercentLuck.Items = 0;
+            m_Stats.ArmorPvpLuck.Items = 0;
+            m_Stats.ArmorPvpPercentLuck.Items = 0;
+
+            m_Stats.ArmorAgility.Items = 0;
+            m_Stats.ArmorPercentAgility.Items = 0;
+            m_Stats.ArmorPvpAgility.Items = 0;
+            m_Stats.ArmorPvpPercentAgility.Items = 0;
         }
 
         public void ResetDons()

@@ -237,9 +237,12 @@ namespace realm.Realm.Effect
                     SubArmorPercentNeutral();
                     break;
 
-                /*TODO :: Différencier les Dommages pièges et les %dommages */
-                case 225: // + Dommage Piege (%?)
+                case 225: // + Dommage Piege
                     AddTrapDamage();
+                    break;
+
+                case 226: // + %Dommage Piege
+                    AddTrapPercentDamage();
                     break;
 
                 case 240: // + Armor Force
