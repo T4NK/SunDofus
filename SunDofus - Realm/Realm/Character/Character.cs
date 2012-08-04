@@ -326,6 +326,24 @@ namespace realm.Realm.Character
             m_Stats.BonusFail.Bases = 0;
         }
 
+        public void AddLife(int NewLife)
+        {
+            if (Life == MaximumLife)
+            {
+                Client.SendMessage("Vous avez déjà un nombre maximum de point de vie !");
+            }
+            else if ((Life + NewLife) > MaximumLife)
+            {
+                Client.SendMessage("Vous venez de récupérer '" + (MaximumLife - Life) + "' de vie !");
+                Life = MaximumLife;
+            }
+            else
+            {
+                Client.SendMessage("Vous venez de récupérer '" + NewLife + "' de vie !");
+                Life += NewLife;
+            }
+        }
+
         public void UpdateStats()
         {
             int Dif = 0;

@@ -18,7 +18,7 @@ namespace realm.Realm.Effect
                     break;
 
                 case 1: //Life
-
+                    Client.AddLife(int.Parse(Data[0]));
                     break;
             }
         }

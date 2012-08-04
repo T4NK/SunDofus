@@ -158,6 +158,7 @@ namespace realm.Client
 
                     Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
 
+                    Client.Send("TB");
                     Client.Send("AAK");
                     SendCharacterList("");
                 }
