@@ -71,7 +71,7 @@ namespace realm.Realm.Character.Items
             }
             else if (EID.ID == 800)
             {
-
+                EID.Value3 = 10; // PDV Des familiers !
             }
             else
             {

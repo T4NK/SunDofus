@@ -248,11 +248,8 @@ namespace realm.Client
                 Add = true;
                 Chanel = Chanel.Replace("+", "");
             }
-            else if (Chanel.Contains("-"))
-            {
-                Add = false;
+            else if (Chanel.Contains("-")) 
                 Chanel = Chanel.Replace("-", "");
-            }
             else return;
 
             if (Add == true)
