@@ -23,18 +23,27 @@ namespace realm.Client
                 switch (Datas[0])
                 {
                     case "save":
-                        Realm.World.Save.ParseSave(Datas[1]);
+                        Realm.World.Save.ParseSave(Datas.Length > 1 ? Datas[1] : "all");
                         break;
 
                     case "vita":
+                        if (Datas.Length < 2)
+                            return;
+
                         Client.m_Player.ResetVita(Datas[1]);
                         break;
 
                     case "item":
+                        if (Datas.Length < 2)
+                            return;
+
                         Client.m_Player.m_Inventary.AddItem(int.Parse(Datas[1]));
                         break;
 
                     case "teleport":
+                        if (Datas.Length < 3)
+                            return;
+
                         Client.m_Player.TeleportNewMap(int.Parse(Datas[1]), int.Parse(Datas[2]));
                         break;
                 }

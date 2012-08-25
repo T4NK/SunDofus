@@ -71,5 +71,20 @@ namespace selector.Client
         {
             Send("AYK" + m_Client.m_Server.Ip + ":" + m_Client.m_Server.Port + ";" + m_Key);
         }
+
+        public string ReturnMyGifts()
+        {
+            if (Database.GiftsManager.myGifts.Any(x => x.target == this.m_Account.Id))
+            {
+                string Packet = "";
+
+                foreach (Database.Data.Gift myGift in Database.GiftsManager.myGifts.Where(x => x.target == this.m_Account.Id))
+                    Packet += myGift.id + "~" + myGift.title + "~" + myGift.message + "~" + myGift.itemID + "+";
+
+                return Packet.Substring(0, Packet.Length - 1); ;
+            }
+
+            return "";
+        }
     }
 }

@@ -29,6 +29,8 @@ namespace realm.Client
             m_Packets["AA"] = CreateCharacter;
             m_Packets["AB"] = StatsBoosts;
             m_Packets["AD"] = DeleteCharacter;
+            m_Packets["Ag"] = SendGifts;
+            m_Packets["AG"] = AcceptGift;
             m_Packets["AL"] = SendCharacterList;
             m_Packets["AP"] = SendRandomName;
             m_Packets["AS"] = SelectCharacter;
@@ -104,9 +106,9 @@ namespace realm.Client
 
         public void SendCharacterList(string test)
         {
-            string Pack = "ALK" + (Client.m_Infos.Subscription * 1000) +"|" + Client.m_Infos.CharactersNames.Count;
+            string Pack = "ALK" + (Client.m_Infos.Subscription * 1000) +"|" + Client.m_Infos.myCharacters.Count;
 
-            if (Client.m_Infos.CharactersNames.Count != 0)
+            if (Client.m_Infos.myCharacters.Count != 0)
             {
                 foreach (Realm.Character.Character m_C in Client.m_Characters)
                 {
@@ -207,6 +209,20 @@ namespace realm.Client
             }
             else
                 Client.Send("ASE");
+        }
+
+        #endregion
+
+        #region Gift
+
+        public void SendGifts(string test)
+        {
+            Client.SendGifts();
+        }
+
+        public void AcceptGift(string ID)
+        {
+            Client.Send("AG0");
         }
 
         #endregion

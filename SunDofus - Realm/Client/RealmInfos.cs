@@ -14,12 +14,16 @@ namespace realm.Client
         public int Level;
         public string Characters;
         public long Subscription;
+        public string Gifts;
 
-        public List<string> CharactersNames;
+        public List<string> myCharacters;
+        public List<RealmGifts> myGifts;
 
         public RealmInfos()
         {
-            CharactersNames = new List<string>();
+            myCharacters = new List<string>();
+            myGifts = new List<RealmGifts>();
+
             Pseudo = "";
             Question = "";
             Answer = "";
@@ -27,6 +31,7 @@ namespace realm.Client
             Level = -1;
             Characters = "";
             Subscription = 0;
+            Gifts = "";
         }
 
         public void ParseCharacters()
@@ -36,8 +41,25 @@ namespace realm.Client
             foreach (string Data in AllData)
             {
                 string[] CharData = Data.Split(',');
-                if (!CharactersNames.Contains(CharData[0]) && Program.m_ServerID == int.Parse(CharData[1]))
-                    CharactersNames.Add(CharData[0]);
+                if (!myCharacters.Contains(CharData[0]) && Program.m_ServerID == int.Parse(CharData[1]))
+                    myCharacters.Add(CharData[0]);
+            }
+        }
+
+        public void ParseGifts()
+        {
+            if (Gifts == "") return;
+            string[] AllData = Gifts.Split('+');
+            foreach (string Data in AllData)
+            {
+                string[] Infos = Data.Split('~');
+                RealmGifts myGift = new RealmGifts();
+                myGift.id = int.Parse(Infos[0]);
+                myGift.title = Infos[1];
+                myGift.message = Infos[2];
+                myGift.itemID = int.Parse(Infos[3]);
+
+                myGifts.Add(myGift);
             }
         }
 
@@ -51,7 +73,7 @@ namespace realm.Client
             {
                 Characters = Characters + ":" + Name + "," + Program.m_ServerID;
             }
-            CharactersNames.Add(Name);
+            myCharacters.Add(Name);
             return Characters;
         }
 
@@ -69,7 +91,7 @@ namespace realm.Client
             {
                 Characters = Characters.Replace(":" + Name + "," + Program.m_ServerID, "");
             }
-            CharactersNames.Remove(Name);
+            myCharacters.Remove(Name);
             return Characters;
         }
     }

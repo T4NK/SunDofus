@@ -15,9 +15,10 @@ namespace realm
         static void Main(string[] args)
         {
             Config.ConfigurationManager.IniConfig();
+            SunDofus.Logger.Debug = Config.ConfigurationManager.GetBool("Debug");
             Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Shaak [c]  2012";
-            Database.SQLManager.Initialise();
 
+            Database.SQLManager.Initialise();
             Database.Data.ItemSql.LoadItems();
             Database.Data.ItemSql.LoadItemsSets();
             Database.Data.ItemSql.LoadUsablesItems();

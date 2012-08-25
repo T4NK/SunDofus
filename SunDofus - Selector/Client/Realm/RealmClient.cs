@@ -80,7 +80,8 @@ namespace selector.Client
             Builder.Append(m_Client.m_Account.Answer).Append( "|");
             Builder.Append(m_Client.m_Account.Level).Append( "|");
             Builder.Append(m_Client.m_Account.BaseChar).Append("|");
-            Builder.Append(m_Client.m_Account.SubscriptionTime());
+            Builder.Append(m_Client.m_Account.SubscriptionTime()).Append("|");
+            Builder.Append(m_Client.ReturnMyGifts());
             Send(Builder.ToString());
 
             m_Server.Clients.Add(m_Client.m_Account.Pseudo);

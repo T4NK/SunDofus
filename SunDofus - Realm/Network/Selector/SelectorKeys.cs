@@ -25,10 +25,13 @@ namespace realm.Network
             m_Infos.Answer = Data[5];
             m_Infos.Level = int.Parse(Data[6]);
             m_Infos.Characters = Data[7];
+
             if (Config.ConfigurationManager.Subscription == true)
                 m_Infos.Subscription = long.Parse(Data[8].Substring(0, Data[8].Length - 3));
             else
                 m_Infos.Subscription = (60 * 60 * 24 * 365);
+
+            m_Infos.Gifts = Data[9];
         }
     }
 }

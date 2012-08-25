@@ -47,13 +47,26 @@ namespace realm.Client
 
         public void ParseCharacters()
         {
-            foreach (string Name in m_Infos.CharactersNames)
+            foreach (string Name in m_Infos.myCharacters)
             {
                 Realm.Character.Character m_C = Realm.Character.CharactersManager.CharactersList.First(x => x.m_Name == Name);
                 if (m_C != null)
                 {
                     m_Characters.Add(m_C);
                 }
+            }
+        }
+
+        public void SendGifts()
+        {
+            m_Infos.ParseGifts();
+            foreach (RealmGifts myGift in m_Infos.myGifts)
+            {
+                Realm.Character.Items.CharItem Item = new Realm.Character.Items.CharItem(Database.Data.ItemSql.ItemsList.First(x => x.ID == myGift.itemID));
+                Item.GeneratItem();
+
+                this.Send("Ag1|" + myGift.id + "|" + myGift.title + "|" + myGift.message + "|http://s2.e-monsite.com/2009/12/26/04/167wpr7.png|" + SunDofus.Basic.DeciToHex(Item.BaseItem.ID) +
+                    "~" + SunDofus.Basic.DeciToHex(Item.BaseItem.ID) + "~" + SunDofus.Basic.DeciToHex(Item.Quantity) + "~~" + Item.EffectsInfos() + ";;");
             }
         }
 

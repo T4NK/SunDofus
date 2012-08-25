@@ -164,15 +164,10 @@ namespace realm.Realm.Character
 
         public void LoadMap()
         {
-            Map.Map m_M = Database.Data.MapSql.MapsList.First(x => x.id == this.MapID);
-            if (m_M == null) return;
+            if (Database.Data.MapSql.MapsList.Any(x => x.id == this.MapID))
+            {
+                Map.Map m_M = Database.Data.MapSql.MapsList.First(x => x.id == this.MapID);
 
-            if (m_M.key == "")
-            {
-                Client.Send("GDM|" + m_M.id + "|" + m_M.date);
-            }
-            else
-            {
                 Client.Send("GDM|" + m_M.id + "|" + m_M.date + "|" + m_M.key);
             }
         }

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Client\RealmClient.cs" />
     <Compile Include="Client\RealmCommand.cs" />
+    <Compile Include="Client\RealmGifts.cs" />
     <Compile Include="Client\RealmInfos.cs" />
     <Compile Include="Client\RealmParser.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
