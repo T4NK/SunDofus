@@ -7,6 +7,8 @@ namespace SunDofus
 {
     public class Logger
     {
+        public static bool Debug = false;
+
         public static void Write() { Console.WriteLine(); }
         public static void Write(string M) { Console.WriteLine(M); }
 
@@ -39,14 +41,20 @@ namespace SunDofus
 
         public static void Infos(string I)
         {
-            Write("Infos >> ", ConsoleColor.White, false);
-            Write(I);
+            if (Debug == true)
+            {
+                Write("Infos >> ", ConsoleColor.White, false);
+                Write(I);
+            }
         }
 
         public static void Packets(string P)
         {
-            Write("Packets >> ", ConsoleColor.Magenta, false);
-            Write(P);
+            if (Debug == true)
+            {
+                Write("Packets >> ", ConsoleColor.Magenta, false);
+                Write(P);
+            }
         }
 
         public static void Error(string E) { Write("Error >> " + E, ConsoleColor.Yellow); }

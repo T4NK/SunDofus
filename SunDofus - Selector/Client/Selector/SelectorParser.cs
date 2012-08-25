@@ -38,13 +38,13 @@ namespace selector.Client
 
         public void Version(string Packet)
         {
-            if (Packet.Contains(Config.ConfigurationManager.GetString("Auth_Version")))
+            if (Packet.Contains(Config.ConfigurationManager.GetString("Version")))
             {
                 Client.m_State = SelectorClient.State.Account;
             }
             else
             {
-                Client.Send("AlEv" + Config.ConfigurationManager.GetString("Auth_Version"));
+                Client.Send("AlEv" + Config.ConfigurationManager.GetString("Version"));
                 Client.m_State = SelectorClient.State.None;
             }
         }
@@ -53,15 +53,13 @@ namespace selector.Client
         {
             if (!Packet.Contains("#1")) return;
             string[] Infos = Packet.Split('#');
-            string Username = Infos[0].Replace(Config.ConfigurationManager.GetString("Auth_Version"), "");
+            string Username = Infos[0].Replace(Config.ConfigurationManager.GetString("Version"), "");
             string Password = Infos[1];
 
-            Database.Data.Account AccountRequested = new Database.Data.Account(Username);
-
-            if (Password == SunDofus.Basic.Encrypt(AccountRequested.Password, Client.m_Key))
+            if (Database.AccountsManager.myAccounts.Count(x => x.Username == Username && SunDofus.Basic.Encrypt(x.Password, Client.m_Key) == Password) > 0)
             {
-                Client.m_Account = AccountRequested;
-                SunDofus.Logger.Infos("Client '" + AccountRequested.Pseudo + "' authentified !");
+                Client.m_Account = Database.AccountsManager.myAccounts.First(x => x.Username == Username);
+                SunDofus.Logger.Infos("Client '" + Client.m_Account.Pseudo + "' authentified !");
                 Client.m_State = SelectorClient.State.OnList;
                 Client.SendInformations();
             }
@@ -82,17 +80,14 @@ namespace selector.Client
                 else
                     Pack += "31536000000";
 
-                foreach (Database.Data.Server m_Server in Database.Data.Server.ListOfServers)
+                foreach (Database.Data.Server m_Server in Database.ServersManager.myServers)
                 {
-                    if (Client.m_Account.Characters.ContainsKey(m_Server.ID))
-                    {
-                        Pack += "|" + m_Server.ID + "," + Client.m_Account.Characters[m_Server.ID].Count;
-                    }
-                    else
-                    {
-                        Pack += "|" + m_Server.ID + ",0";
-                    }
+                    if (!Client.m_Account.Characters.ContainsKey(m_Server.ID)) 
+                        Client.m_Account.Characters.Add(m_Server.ID, new List<string>());
+
+                    Pack += "|" + m_Server.ID + "," + Client.m_Account.Characters[m_Server.ID].Count;
                 }
+
                 Client.Send(Pack);
             }
             else if (Packet.StartsWith("AX"))
@@ -114,10 +109,8 @@ namespace selector.Client
 
                 foreach (Client.RealmClient m_Server in Program.m_Realm.m_Clients)
                 {
-                    if(m_Server.m_Server.Clients.Contains(Packet.Replace("AF", "")))
-                    {
+                    if (m_Server.m_Server.Clients.Contains(Packet.Replace("AF", "")))
                         PacketPseudo += m_Server.m_Server.ID + ";";
-                    }
                 }
 
                 if (PacketPseudo == "AF")

@@ -15,7 +15,7 @@ namespace realm
         static void Main(string[] args)
         {
             Config.ConfigurationManager.IniConfig();
-            Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Nicolas Petit [c]  2012";
+            Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Shaak [c]  2012";
             Database.SQLManager.Initialise();
 
             Database.Data.ItemSql.LoadItems();

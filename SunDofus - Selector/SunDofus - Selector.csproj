@@ -57,8 +57,12 @@
     <Compile Include="Client\Selector\SelectorParser.cs" />
     <Compile Include="Client\Selector\SelectorQueue.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
+    <Compile Include="Database\AccountsManager.cs" />
     <Compile Include="Database\Data\Account.cs" />
+    <Compile Include="Database\Data\Gift.cs" />
     <Compile Include="Database\Data\Server.cs" />
+    <Compile Include="Database\GiftsManager.cs" />
+    <Compile Include="Database\ServersManager.cs" />
     <Compile Include="Database\SQLManager.cs" />
     <Compile Include="Network\AuthenticationServer.cs" />
     <Compile Include="Network\RealmServer.cs" />

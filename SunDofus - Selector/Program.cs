@@ -12,11 +12,15 @@ namespace selector
 
         static void Main(string[] args)
         {
-            Console.Title = "SunDofus - RealmSelector | Nicolas Petit [c]  2012";
+            Console.Title = "SunDofus - RealmSelector | Shaak [c]  2012";
 
             Config.ConfigurationManager.IniConfig();
+            SunDofus.Logger.Debug = Config.ConfigurationManager.GetBool("Debug");
+
             Database.SQLManager.Initialise();
-            Database.Data.Server.LoadServer();
+            Database.ServersManager.ReloadCache(new object(), new EventArgs());
+            Database.GiftsManager.ReloadCache(new object(), new EventArgs());
+            Database.AccountsManager.ReloadCache(new object(), new EventArgs());
 
             m_Auth = new Network.AuthenticationServer();
             m_Auth.Start();

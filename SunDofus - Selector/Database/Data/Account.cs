@@ -8,44 +8,6 @@ namespace selector.Database.Data
 {
     class Account
     {
-        public Account(string Username)
-        {
-            ReloadThis(Username);
-        }
-
-        public void ReloadThis(string Username)
-        {
-            try
-            {
-                string SQLText = "SELECT * FROM accounts WHERE username=@name";
-                MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
-                SQLCommand.Parameters.Add(new MySqlParameter("@name", Username));
-                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-                if (SQLReader.Read())
-                {
-                    Id = SQLReader.GetInt16("id");
-                    Username = SQLReader.GetString("username");
-                    Password = SQLReader.GetString("password");
-                    Level = SQLReader.GetInt16("gmlevel");
-                    Communauty = SQLReader.GetInt16("communauty");
-                    Pseudo = SQLReader.GetString("pseudo");
-                    Question = SQLReader.GetString("question");
-                    Answer = SQLReader.GetString("answer");
-                    BaseChar = SQLReader.GetString("characters");
-                    if (BaseChar != "") ParseCharacter();
-                    BaseGifts = SQLReader.GetString("gifts");
-                    SubscriptionDate = SQLReader.GetDateTime("subscription");
-                }
-
-                SQLReader.Close();
-            }
-            catch (Exception e)
-            {
-                SunDofus.Logger.Error(e);
-            }
-        }
-
         public int Id = -1;
         public string Username = "";
         public string Password = "";
@@ -54,16 +16,23 @@ namespace selector.Database.Data
         public string Pseudo = "";
         public string Question = "";
         public string Answer = "";
-        public string BaseChar = "";
         public string BaseGifts = "";
+        public string BaseChar = "";
         public DateTime SubscriptionDate = new DateTime();
 
         public Dictionary<int, List<string>> Characters = new Dictionary<int, List<string>>();
 
-        public void ParseCharacter()
+        public void ParseCharacter(string BaseCharacters)
         {
+            if (BaseCharacters == "")
+            {
+                Characters = new Dictionary<int, List<string>>();
+                return;
+            }
+
+            BaseChar = BaseCharacters;
             Dictionary<int, List<string>> Dico = new Dictionary<int, List<string>>();
-            string[] AllData = BaseChar.Split(':');
+            string[] AllData = BaseCharacters.Split(':');
             foreach (string Data in AllData)
             {
                 string[] CharData = Data.Split(',');

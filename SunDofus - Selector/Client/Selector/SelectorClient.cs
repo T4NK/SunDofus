@@ -46,18 +46,16 @@ namespace selector.Client
         public void SendHosts()
         {
             string Packet = "AH";
-            foreach (Database.Data.Server m_Server in Database.Data.Server.ListOfServers)
+
+            foreach (Database.Data.Server m_Server in Database.ServersManager.myServers)
             {
                 Packet += m_Server.ToString();
             }
+
             if (Packet != "AH")
-            {
-                Send(Packet.Substring(0, Packet.Length -1));
-            }
+                Send(Packet.Substring(0, Packet.Length - 1));
             else
-            {
                 Send("AH");
-            }
         }
 
         public enum State

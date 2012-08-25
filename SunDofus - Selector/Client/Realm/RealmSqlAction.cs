@@ -10,8 +10,6 @@ namespace selector.Client
     {
         public static void UpdateCharacters(int CompteID, string NewCharacters)
         {
-            if (!Database.SQLManager.isRunning == true) Database.SQLManager.Initialise();
-
             string SQLText = "UPDATE accounts SET characters=@NewCharacters WHERE id=@Me";
             MySqlCommand SQLCommand = new MySqlCommand(SQLText, Database.SQLManager.m_Connection);
 

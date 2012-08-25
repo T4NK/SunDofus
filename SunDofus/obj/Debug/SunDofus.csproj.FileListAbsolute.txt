@@ -8,3 +8,8 @@ F:\Programmation\Développements\Projet Origine v3\SunDofus\Debug application\Su
 F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus\obj\Debug\ResolveAssemblyReference.cache
 F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.dll
 F:\Programmation\Développements\Projet Origine v3\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.pdb
+C:\Users\user\Documents\Project\SunDofus\Debug application\SunDofus.dll
+C:\Users\user\Documents\Project\SunDofus\Debug application\SunDofus.pdb
+C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.dll
+C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.pdb

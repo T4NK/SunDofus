@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SunDofus")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Nicolas Petit")]
+[assembly: AssemblyCompany("Shaak ©")]
 [assembly: AssemblyProduct("Emulateur DOFUS")]
-[assembly: AssemblyCopyright("Copyright Nicolas Petit ©  2012")]
+[assembly: AssemblyCopyright("Copyright Shaak ©  2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut 
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.0.15")]
-[assembly: AssemblyFileVersion("0.1.0.15")]
+[assembly: AssemblyVersion("0.1.0.16")]
+[assembly: AssemblyFileVersion("0.1.0.16")]

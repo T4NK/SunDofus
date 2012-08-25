@@ -50,7 +50,7 @@ namespace selector.Client
 
         public void Authentification(int ServerId, string ServerIp, int ServerPort)
         {
-            foreach(Database.Data.Server m_Server in Database.Data.Server.ListOfServers)
+            foreach(Database.Data.Server m_Server in Database.ServersManager.myServers)
             {
                 if (m_Server.ID == ServerId && m_Server.Ip == ServerIp && m_Server.Port == ServerPort)
                 {
