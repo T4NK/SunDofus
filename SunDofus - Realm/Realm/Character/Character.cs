@@ -168,7 +168,7 @@ namespace realm.Realm.Character
             {
                 Map.Map m_M = Database.Data.MapSql.MapsList.First(x => x.id == this.MapID);
 
-                Client.Send("GDM|" + m_M.id + "|" + m_M.date + "|" + m_M.key);
+                Client.Send("GDM|" + m_M.id + "|0" + m_M.date + "|" + m_M.key);
             }
         }
 

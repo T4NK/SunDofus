@@ -74,20 +74,20 @@ namespace realm.Client
         public void ParseTicket(string Data)
         {
             Data = Data.Replace("AT", "");
-            foreach (Network.SelectorKeys Key in Network.SelectorKeys.m_Keys)
+            if (Network.SelectorKeys.m_Keys.Any(x => x.m_Key == Data))
             {
-                if (Key.m_Key == Data)
-                {
-                    Client.m_Infos = Key.m_Infos;
-                    Client.m_Infos.ParseCharacters();
-                    Client.ParseCharacters();
+                Network.SelectorKeys Key = Network.SelectorKeys.m_Keys.First(x => x.m_Key == Data);
+                Client.m_Infos = Key.m_Infos;
+                Client.m_Infos.ParseCharacters();
+                Client.ParseCharacters();
 
-                    Client.isAuth = true;
+                Client.isAuth = true;
 
-                    Program.m_RealmLink.Send("NC|" + Client.m_Infos.Pseudo);
-                    Client.Send("ATK0");
-                }
+                Program.m_RealmLink.Send("NC|" + Client.m_Infos.Pseudo);
+                Client.Send("ATK0");
             }
+            else
+                Client.Send("ATE");
         }
 
         #endregion
