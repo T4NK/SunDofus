@@ -18,56 +18,102 @@ namespace realm.Realm.Character.Items
             SetsList = new Dictionary<int,CharSet>();
         }
 
-        public void AddItem(int ID)
+        public void AddItem(int ID, bool OffLine)
         {
-            if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
-            AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
-            Items.CharItem m_I = new CharItem(BaseItem);
-            m_I.ParseJet();
-            m_I.GeneratItem();
-
-            foreach (CharItem i2 in ItemsList)
+            if (OffLine == true)
             {
-                if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
+                AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
+                Items.CharItem m_I = new CharItem(BaseItem);
+                m_I.ParseJet();
+                m_I.GeneratItem();
+
+                foreach (CharItem i2 in ItemsList)
                 {
-                    i2.Quantity += m_I.Quantity;
-                    Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
-                    RefreshBonus();
-                    Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
-                    return;
+                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    {
+                        i2.Quantity += m_I.Quantity;
+                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        return;
+                    }
                 }
+
+                m_I.ID = ItemsManager.GetNewID();
+                ItemsList.Add(m_I);
+
+                Client.Pods += m_I.BaseItem.Pods;
             }
+            else if (OffLine == false)
+            {
+                if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
+                AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
+                Items.CharItem m_I = new CharItem(BaseItem);
+                m_I.ParseJet();
+                m_I.GeneratItem();
 
-            m_I.ID = ItemsManager.GetNewID();
-            ItemsList.Add(m_I);
+                foreach (CharItem i2 in ItemsList)
+                {
+                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    {
+                        i2.Quantity += m_I.Quantity;
+                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        RefreshBonus();
+                        Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
+                        return;
+                    }
+                }
 
-            Client.Pods += m_I.BaseItem.Pods;
-            RefreshBonus();
+                m_I.ID = ItemsManager.GetNewID();
+                ItemsList.Add(m_I);
 
-            Client.Client.Send("OAKO" + m_I.ToString());
+                Client.Pods += m_I.BaseItem.Pods;
+                RefreshBonus();
+
+                Client.Client.Send("OAKO" + m_I.ToString());
+            }
         }
 
-        public void AddItem(CharItem m_I)
+        public void AddItem(CharItem m_I, bool OffLine)
         {
-            foreach (CharItem i2 in ItemsList)
+            if(OffLine == true)
             {
-                if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                foreach (CharItem i2 in ItemsList)
                 {
-                    i2.Quantity += m_I.Quantity;
-                    Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
-                    RefreshBonus();
-                    Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
-                    return;
+                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    {
+                        i2.Quantity += m_I.Quantity;
+                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        return;
+                    }
                 }
+
+                m_I.ID = ItemsManager.GetNewID();
+                ItemsList.Add(m_I);
+
+                Client.Pods += m_I.BaseItem.Pods;
             }
+            else if (OffLine == false)
+            {
+                foreach (CharItem i2 in ItemsList)
+                {
+                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    {
+                        i2.Quantity += m_I.Quantity;
+                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        RefreshBonus();
+                        Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
+                        return;
+                    }
+                }
 
-            m_I.ID = ItemsManager.GetNewID();
-            ItemsList.Add(m_I);
+                m_I.ID = ItemsManager.GetNewID();
+                ItemsList.Add(m_I);
 
-            Client.Pods += m_I.BaseItem.Pods;
-            RefreshBonus();
+                Client.Pods += m_I.BaseItem.Pods;
+                RefreshBonus();
 
-            Client.Client.Send("OAKO" + m_I.ToString());
+                Client.Client.Send("OAKO" + m_I.ToString());
+            }
         }
 
         public void DeleteItem(int ID, int Quantity)
@@ -180,7 +226,7 @@ namespace realm.Realm.Character.Items
                             Copy.Position = -1;
 
                         m_I.Quantity = Quantity;
-                        AddItem(Copy);
+                        AddItem(Copy, false);
                     }
                     else
                     {
@@ -190,7 +236,7 @@ namespace realm.Realm.Character.Items
                         Copy.Position = -1;
 
                         m_I.Quantity = 1;
-                        AddItem(Copy);
+                        AddItem(Copy, false);
                     }
 
                     Client.Client.Send("OQ" + m_I.ID + "|" + m_I.Quantity);

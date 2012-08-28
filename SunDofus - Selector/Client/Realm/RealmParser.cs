@@ -16,39 +16,46 @@ namespace selector.Client
 
         public void Parse(string Data)
         {
-            string[] Packet = Data.Split('|');
-
-            switch (Packet[0])
+            try
             {
-                case "Auth":
-                    Authentification(int.Parse(Packet[1]), Packet[2], int.Parse(Packet[3]));
-                    break;
+                string[] Packet = Data.Split('|');
 
-                case "DC":
-                    Client.m_Server.Clients.Remove(Packet[1]);
-                    break;
+                switch (Packet[0])
+                {
+                    case "Auth":
+                        Authentification(int.Parse(Packet[1]), Packet[2], int.Parse(Packet[3]));
+                        break;
 
-                case "DG":
-                    RealmSqlAction.DeleteGift(int.Parse(Packet[1]), int.Parse(Packet[2]));
-                    break;
+                    case "DC":
+                        Client.m_Server.Clients.Remove(Packet[1]);
+                        break;
 
-                case "NC":
-                    Client.m_Server.Clients.Add(Packet[1]);
-                    break;
+                    case "DG":
+                        RealmSqlAction.DeleteGift(int.Parse(Packet[1]), int.Parse(Packet[2]));
+                        break;
 
-                case "NCHAR":
-                    RealmSqlAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2], Client.m_Server.ID);
-                    break;
+                    case "NC":
+                        Client.m_Server.Clients.Add(Packet[1]);
+                        break;
 
-                case"StartM":
-                    Client.m_Server.Connected = 2;
-                    Program.m_Auth.RefreshAllHosts();
-                    break;
+                    case "NCHAR":
+                        RealmSqlAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2], Client.m_Server.ID);
+                        break;
 
-                case "StopM":
-                    Client.m_Server.Connected = 1;
-                    Program.m_Auth.RefreshAllHosts();
-                    break;
+                    case "StartM":
+                        Client.m_Server.Connected = 2;
+                        Program.m_Auth.RefreshAllHosts();
+                        break;
+
+                    case "StopM":
+                        Client.m_Server.Connected = 1;
+                        Program.m_Auth.RefreshAllHosts();
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                SunDofus.Logger.Error(e);
             }
         }
 

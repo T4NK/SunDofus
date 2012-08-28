@@ -37,7 +37,7 @@ namespace realm.Client
                         if (Datas.Length < 2)
                             return;
 
-                        Client.m_Player.m_Inventary.AddItem(int.Parse(Datas[1]));
+                        Client.m_Player.m_Inventary.AddItem(int.Parse(Datas[1]), false);
                         break;
 
                     case "teleport":

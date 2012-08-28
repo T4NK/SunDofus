@@ -222,7 +222,31 @@ namespace realm.Client
 
         public void AcceptGift(string ID)
         {
-            Client.Send("AG0");
+            try
+            {
+                string[] Infos = ID.Split('|');
+                if (Client.m_Characters.Any(x => x.ID == int.Parse(Infos[1])))
+                {
+                    if (Client.m_Infos.myGifts.Any(x => x.id == int.Parse(Infos[0])))
+                    {
+                        RealmGifts myGift = Client.m_Infos.myGifts.First(e => e.id == int.Parse(Infos[0]));
+                        Client.m_Characters.First(x => x.ID == int.Parse(Infos[1])).m_Inventary.AddItem(myGift.item, true);
+
+                        Client.Send("AG0");
+                        Program.m_RealmLink.Send("DG|" + myGift.id + "|" + Client.m_Infos.Id);
+                        Client.m_Infos.myGifts.Remove(myGift);
+
+                    }
+                    else
+                        Client.Send("AGE");
+                }
+                else
+                    Client.Send("AGE");
+            }
+            catch (Exception e)
+            {
+                SunDofus.Logger.Error(e);
+            }
         }
 
         #endregion

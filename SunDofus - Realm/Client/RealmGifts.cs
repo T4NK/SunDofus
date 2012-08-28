@@ -9,5 +9,6 @@ namespace realm.Client
     {
         public int id = -1, itemID = -1;
         public string title = "", message = "";
+        public Realm.Character.Items.CharItem item = null;
     }
 }

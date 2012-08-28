@@ -63,10 +63,13 @@ namespace realm.Client
             foreach (RealmGifts myGift in m_Infos.myGifts)
             {
                 Realm.Character.Items.CharItem Item = new Realm.Character.Items.CharItem(Database.Data.ItemSql.ItemsList.First(x => x.ID == myGift.itemID));
+                Item.ParseJet();
                 Item.GeneratItem();
 
-                this.Send("Ag1|" + myGift.id + "|" + myGift.title + "|" + myGift.message + "|http://s2.e-monsite.com/2009/12/26/04/167wpr7.png|" + SunDofus.Basic.DeciToHex(Item.BaseItem.ID) +
-                    "~" + SunDofus.Basic.DeciToHex(Item.BaseItem.ID) + "~" + SunDofus.Basic.DeciToHex(Item.Quantity) + "~~" + Item.EffectsInfos() + ";;");
+                myGift.item = Item;
+
+                this.Send("Ag1|" + myGift.id + "|" + myGift.title + "|" + myGift.message + "|http://s2.e-monsite.com/2009/12/26/04/167wpr7.png" + "|" + SunDofus.Basic.DeciToHex(Item.BaseItem.ID) +
+                    "~" + SunDofus.Basic.DeciToHex(Item.BaseItem.ID) + "~" + SunDofus.Basic.DeciToHex(Item.Quantity) + "~~" + Item.EffectsInfos() + ";");
             }
         }
 
