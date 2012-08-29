@@ -28,6 +28,8 @@ namespace selector
             m_Realm = new Network.RealmServer();
             m_Realm.Start();
 
+            Client.SelectorQueue.StartInstance();
+
             Console.ReadLine();
         }
     }

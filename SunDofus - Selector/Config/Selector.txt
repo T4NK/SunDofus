@@ -18,6 +18,9 @@ Realm_Port = 488
 TimeReloadServers = 600000
 TimeReloadAccounts = 300000
 TimeReloadGifts = 1200000
+TimeReloadQueue = 2500
+
+MaxClientsForQueue = 10
 
 Subscription = false
 Version = 1.29.1

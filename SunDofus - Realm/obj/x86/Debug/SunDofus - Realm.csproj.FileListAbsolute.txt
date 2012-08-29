@@ -19,4 +19,4 @@ C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus - Realm\obj\x86\Debug\
 C:\Users\user\Documents\Project\SunDofus\Debug application\Config\Config.txt
 C:\Users\user\Documents\Project\SunDofus\Debug application\RealmServer.exe
 C:\Users\user\Documents\Project\SunDofus\Debug application\RealmServer.pdb
-C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus - Realm\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus - Realm\obj\x86\Debug\SunDofus - Realm.csprojResolveAssemblyReference.cache

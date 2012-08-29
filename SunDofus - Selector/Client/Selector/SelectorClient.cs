@@ -12,6 +12,7 @@ namespace selector.Client
         public SelectorParser m_Parser;
         public State m_State;
         public Database.Data.Account m_Account;
+        public int WaitPosition = 0;
 
         public SelectorClient(SilverSocket Socket) : base(Socket)
         {

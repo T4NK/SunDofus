@@ -27,7 +27,7 @@ namespace selector.Client
                     break;
 
                 case SelectorClient.State.Queue:
-                    //Waiting Queue
+                    Queue();
                     break;
 
                 case SelectorClient.State.OnList:
@@ -60,14 +60,21 @@ namespace selector.Client
             {
                 Client.m_Account = Database.AccountsManager.myAccounts.First(x => x.Username == Username);
                 SunDofus.Logger.Infos("Client '" + Client.m_Account.Pseudo + "' authentified !");
-                Client.m_State = SelectorClient.State.OnList;
                 Client.SendInformations();
+
+                Client.m_State = SelectorClient.State.Queue;
+                SelectorQueue.AddToQueue(Client);
             }
             else
             {
                 Client.Send("AlEx");
                 Client.m_State = SelectorClient.State.None;
             }
+        }
+
+        public void Queue()
+        {
+            SelectorQueue.RefreshQueue(Client);
         }
 
         public void Server(string Packet)
