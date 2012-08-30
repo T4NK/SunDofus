@@ -23,6 +23,9 @@ namespace realm
             Database.Data.ItemSql.LoadItemsSets();
             Database.Data.ItemSql.LoadUsablesItems();
 
+            Database.Data.SpellSql.LoadSpells();
+            Database.Data.SpellSql.LoadSpellsToLearn();
+
             Database.Data.MapSql.LoadMaps();
             Database.Data.TriggerSql.LoadTriggers();
 

@@ -35,5 +35,12 @@ namespace realm.Realm.Map
 
             return true;
         }
+
+        public static string GetDirChar(int DirNum)
+        {
+            string hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+            if (DirNum >= hash.Length) return "";
+            return hash[DirNum].ToString();
+        }
     }
 }

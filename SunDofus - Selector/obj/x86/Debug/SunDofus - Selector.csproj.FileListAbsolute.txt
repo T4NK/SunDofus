@@ -19,3 +19,4 @@ C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus - Selector\obj\x86\Deb
 C:\Users\user\Documents\Project\SunDofus\Debug application\Config\Selector.txt
 C:\Users\user\Documents\Project\SunDofus\Debug application\Selector.exe
 C:\Users\user\Documents\Project\SunDofus\Debug application\Selector.pdb
+C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus - Selector.csprojResolveAssemblyReference.cache

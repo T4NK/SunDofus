@@ -46,6 +46,12 @@ namespace realm.Client
 
                         Client.m_Player.TeleportNewMap(int.Parse(Datas[1]), int.Parse(Datas[2]));
                         break;
+
+                    case "level":
+                        if (Datas.Length < 2)
+                            return;
+
+                        break;
                 }
             }
         }

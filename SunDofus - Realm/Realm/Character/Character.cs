@@ -25,6 +25,7 @@ namespace realm.Realm.Character
 
         public Stats.Stats m_Stats;
         public Items.InventaryItems m_Inventary;
+        public Spells.InventarySpells m_SpellInventary;
 
         public Client.RealmClient Client;
         public CharacterState State;
@@ -35,7 +36,22 @@ namespace realm.Realm.Character
         {
             m_Stats = new Stats.Stats();
             m_Inventary = new Items.InventaryItems(this);
+            m_SpellInventary = new Spells.InventarySpells(this);
         }
+
+        #region Exp
+
+        public void AddExp(int _Exp)
+        {
+            Exp += Exp;
+        }
+
+        public void LevelUp()
+        {
+
+        }
+
+        #endregion
 
         #region Items
 

@@ -154,6 +154,8 @@ namespace realm.Client
                         return;
                     }
 
+                    m_Character.m_SpellInventary.LearnSpells();
+
                     Database.Data.CharacterSql.CreateCharacter(m_Character);
                     CharactersManager.CharactersList.Add(m_Character);
                     Client.m_Characters.Add(m_Character);
@@ -265,6 +267,7 @@ namespace realm.Client
 
             Client.Send("cC+*#$p%i:?!");
             Client.Send("SLo+");
+            Client.m_Player.m_SpellInventary.SendAllSpells();
             Client.Send("BT" + SunDofus.Basic.GetActuelTime());
 
             if (Client.m_Player.Life == 0)
