@@ -12,3 +12,9 @@ C:\Users\user\Documents\Project\SunDofus\Debug application\SunDofus.dll
 C:\Users\user\Documents\Project\SunDofus\Debug application\SunDofus.pdb
 C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.dll
 C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.pdb
+C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.csprojResolveAssemblyReference.cache
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.csprojResolveAssemblyReference.cache
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Library.dll
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Library.pdb
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.Library.dll
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.Library.pdb

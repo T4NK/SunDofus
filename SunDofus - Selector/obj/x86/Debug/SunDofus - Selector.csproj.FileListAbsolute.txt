@@ -20,3 +20,13 @@ C:\Users\user\Documents\Project\SunDofus\Debug application\Config\Selector.txt
 C:\Users\user\Documents\Project\SunDofus\Debug application\Selector.exe
 C:\Users\user\Documents\Project\SunDofus\Debug application\Selector.pdb
 C:\Users\user\Documents\Project\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus - Selector.csprojResolveAssemblyReference.cache
+C:\Users\user\Documents\Project\SunDofus\Debug application\Selector.exe.config
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Debug application\Selector.exe.config
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Debug application\SunDofus.Selector.exe.config
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Selector\SunDofus.Selector.exe.config
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus - Selector.csprojResolveAssemblyReference.cache
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Selector\Config\Selector.txt
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Selector\SunDofus.Selector.exe
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Selector\SunDofus.Selector.pdb
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus.Selector.exe
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus.Selector.pdb
