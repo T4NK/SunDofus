@@ -30,11 +30,11 @@ namespace auth.Network.Auth
 
         public void SendInformations()
         {
-            Send("Ad" + myAccount.myPseudo);
-            Send("Ac" + myAccount.myCommunauty);
+            Send(string.Format("Ad{0}",myAccount.myPseudo));
+            Send(string.Format("Ac{0}", myAccount.myCommunauty));
             SendHosts();
-            Send("AlK" + myAccount.myLevel);
-            Send("AQ" + myAccount.myQuestion);
+            Send(string.Format("AlK{0}", myAccount.myLevel));
+            Send(string.Format("AQ{0}", myAccount.myQuestion));
         }
 
         public void SendHosts()
@@ -140,7 +140,7 @@ namespace auth.Network.Auth
             {
                 Utilities.Loggers.ErrorsLogger.Write(string.Format("Client @<{0}>@ has false dofus-version !", myIp()));
                 myState = State.None;
-                this.Send("AlEv" + Utilities.Config.myConfig.GetStringElement("Login_Version"));
+                this.Send(string.Format("AlEv{0}", Utilities.Config.myConfig.GetStringElement("Login_Version")));
             }
         }
 
@@ -175,7 +175,7 @@ namespace auth.Network.Auth
                 else
                 {
                     AuthQueue.AddinQueue(this);
-                    Send("Af" + (WaitPosition - AuthQueue.Confirmed) + "|" + (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2) + "|0|1");
+                    Send(string.Format("Af{0}|{1}|0|1", (WaitPosition - AuthQueue.Confirmed), (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2)));
                     myState = State.Queue;
                 }
             }
@@ -189,7 +189,7 @@ namespace auth.Network.Auth
         void CheckQueue()
         {
             if(myState == State.Queue)
-                Send("Aq" + (WaitPosition - AuthQueue.Confirmed) + "|" + (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2) + "|0|1");
+                Send(string.Format("Aq{0}|{1}|0|1", (WaitPosition - AuthQueue.Confirmed), (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2)));
         }
 
         void CheckServerPacket(string Data)
@@ -205,7 +205,7 @@ namespace auth.Network.Auth
                         if (!myAccount.myCharacters.ContainsKey(myServer.myID))
                             myAccount.myCharacters.Add(myServer.myID, new List<string>());
 
-                        lPacket += "|" + myServer.myID + "," + myAccount.myCharacters[myServer.myID].Count;
+                        lPacket += string.Format("|{0},{1}", myServer.myID, myAccount.myCharacters[myServer.myID].Count);
                     }
 
                     Send(lPacket);
@@ -234,7 +234,7 @@ namespace auth.Network.Auth
                     foreach (Database.Models.ServerModel myServer in Database.Cache.ServersCache.myServers)
                     {
                         if (myServer.myClients.Contains(Data.Replace("AF", "")))
-                            pPacket += myServer.myID + ";";
+                            pPacket += string.Format("{0};", myServer.myID);
                     }
 
                     if (pPacket == "AF")

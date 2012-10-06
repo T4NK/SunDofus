@@ -1,0 +1,2 @@
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Realm\SunDofus.Realm.exe.config
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus.Realm\obj\x86\Debug\SunDofus.Realm.csprojResolveAssemblyReference.cache
