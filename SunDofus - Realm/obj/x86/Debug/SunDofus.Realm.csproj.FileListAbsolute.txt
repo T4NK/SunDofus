@@ -1,0 +1,1 @@
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Realm\SunDofus.Realm.exe.config

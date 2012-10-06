@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus - Realm", "SunDofus - Realm\SunDofus - Realm.csproj", "{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus.Realm", "SunDofus - Realm\SunDofus.Realm.csproj", "{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D4D38385-8752-40E3-A782-892227F5E7AC} = {D4D38385-8752-40E3-A782-892227F5E7AC}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus - Selector", "SunDofus - Selector\SunDofus - Selector.csproj", "{C1DBF4D7-B4F3-4941-969C-3078F936954C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus.Auth", "SunDofus - Selector\SunDofus.Auth.csproj", "{C1DBF4D7-B4F3-4941-969C-3078F936954C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D4D38385-8752-40E3-A782-892227F5E7AC} = {D4D38385-8752-40E3-A782-892227F5E7AC}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus", "SunDofus\SunDofus.csproj", "{D4D38385-8752-40E3-A782-892227F5E7AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunDofus.Library", "SunDofus\SunDofus.Library.csproj", "{D4D38385-8752-40E3-A782-892227F5E7AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

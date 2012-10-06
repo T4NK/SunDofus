@@ -3,34 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace selector
+namespace auth
 {
     class Program
     {
-        public static Network.AuthenticationServer m_Auth;
-        public static Network.RealmServer m_Realm;
-
         static void Main(string[] args)
         {
-            Console.Title = "SunDofus - RealmSelector | Shaak [c]  2012";
+            Console.Title = "SunDofus.Auth | Shaak [c]";
 
-            Config.ConfigurationManager.IniConfig();
-            SunDofus.Logger.Debug = Config.ConfigurationManager.GetBool("Debug");
+            Utilities.Config.LoadConfiguration();
+            Utilities.Loggers.InitialiseLoggers();
 
-            Database.SQLManager.Initialise();
-            Database.ServersManager.ReloadCache(new object(), new EventArgs());
-            Database.GiftsManager.ReloadCache(new object(), new EventArgs());
-            Database.AccountsManager.ReloadCache(new object(), new EventArgs());
+            Database.DatabaseHandler.InitialiseConnection();
+            Database.Cache.ServersCache.ReloadCache(new object(), new EventArgs());
+            Database.Cache.GiftsCache.ReloadCache(new object(), new EventArgs());
+            Database.Cache.AccountsCache.ReloadCache(new object(), new EventArgs());
 
-            m_Auth = new Network.AuthenticationServer();
-            m_Auth.Start();
+            Network.ServersHandler.InitialiseServers();
 
-            m_Realm = new Network.RealmServer();
-            m_Realm.Start();
-
-            Client.SelectorQueue.StartInstance();
-
-            Console.ReadLine();
+            while (true)
+                Utilities.Commands.ParseCommand(Console.ReadLine());
         }
     }
 }

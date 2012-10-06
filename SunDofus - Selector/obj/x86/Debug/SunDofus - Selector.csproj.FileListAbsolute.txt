@@ -30,3 +30,5 @@ I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\Su
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Selector\SunDofus.Selector.pdb
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus.Selector.exe
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus.Selector.pdb
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Selector\SunDofus.Auth.exe.config
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Auth\SunDofus.Auth.exe.config

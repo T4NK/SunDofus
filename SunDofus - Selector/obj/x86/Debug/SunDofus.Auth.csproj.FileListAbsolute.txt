@@ -1,0 +1,7 @@
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Auth\SunDofus.Auth.exe.config
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus.Auth.csprojResolveAssemblyReference.cache
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Auth\SunAuth.conf
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Auth\SunDofus.Auth.exe
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Auth\SunDofus.Auth.pdb
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus.Auth.exe
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus - Selector\obj\x86\Debug\SunDofus.Auth.pdb
