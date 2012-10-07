@@ -5,7 +5,7 @@ using System.Text;
 
 namespace realm.Realm.Character.Items
 {
-    class ItemsManager
+    class ItemsHandler
     {
         public static int LastID = 0;
 
@@ -21,7 +21,7 @@ namespace realm.Realm.Character.Items
 
         }
 
-        public static bool ConditionsAvaliable(AbstractItem m_I, Character m_C)
+        public static bool ConditionsAvaliable(Database.Models.Items.ItemModel m_I, Character m_C)
         {
             string Condi = m_I.Conditions;
 

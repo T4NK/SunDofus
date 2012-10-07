@@ -32,7 +32,7 @@ namespace realm.Database.Cache
 
             SQLReader.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' triggers from the database !", TriggersList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' triggers@ from the database !", TriggersList.Count));
         }
 
         public static void ParseTrigger(Database.Models.Maps.TriggerModel myT)

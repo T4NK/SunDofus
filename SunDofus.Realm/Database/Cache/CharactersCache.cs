@@ -45,7 +45,7 @@ namespace realm.Database.Cache
 
             SQLResult.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' characters from the database !",Realm.Character.CharactersManager.CharactersList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' characters@ from the database !",Realm.Character.CharactersManager.CharactersList.Count));
         }
 
         public static void CreateCharacter(Realm.Character.Character m_C)

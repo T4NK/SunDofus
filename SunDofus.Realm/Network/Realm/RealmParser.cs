@@ -8,7 +8,7 @@ using realm.Realm.Character.Stats;
 using realm.Realm;
 using realm.Realm.World;
 
-namespace realm.Client
+namespace realm.Network.Realm
 {
     class RealmParser
     {
@@ -74,16 +74,16 @@ namespace realm.Client
         public void ParseTicket(string Data)
         {
             Data = Data.Replace("AT", "");
-            if (Network.SelectorKeys.m_Keys.Any(x => x.m_Key == Data))
+            if (Network.Authentication.AuthenticationKeys.m_Keys.Any(x => x.m_Key == Data))
             {
-                Network.SelectorKeys Key = Network.SelectorKeys.m_Keys.First(x => x.m_Key == Data);
+                Network.Authentication.AuthenticationKeys Key = Network.Authentication.AuthenticationKeys.m_Keys.First(x => x.m_Key == Data);
                 Client.m_Infos = Key.m_Infos;
                 Client.m_Infos.ParseCharacters();
                 Client.ParseCharacters();
 
                 Client.isAuth = true;
 
-                Program.m_RealmLink.Send("NC|" + Client.m_Infos.Pseudo);
+                Network.ServersHandler.myAuthLink.Send("NC|" + Client.m_Infos.Pseudo);
                 Client.Send("ATK0");
             }
             else
@@ -96,7 +96,7 @@ namespace realm.Client
 
         public void SendRandomName(string test)
         {
-            Client.Send("APK" + SunDofus.Basic.RandomName());
+            Client.Send("APK" + Utilities.Basic.RandomName());
         }
 
         public void AV_Packet(string t)
@@ -110,7 +110,7 @@ namespace realm.Client
 
             if (Client.m_Infos.myCharacters.Count != 0)
             {
-                foreach (Realm.Character.Character m_C in Client.m_Characters)
+                foreach (realm.Realm.Character.Character m_C in Client.m_Characters)
                 {
                     Pack += "|" + m_C.PatternList();
                 }
@@ -130,18 +130,18 @@ namespace realm.Client
                     Character m_Character = new Character();
                     m_Character.ID = Database.Cache.CharactersCache.GetNewID();
                     m_Character.m_Name = CharData[0];
-                    m_Character.Level = Config.ConfigurationManager.GetInt("Start_Level");
-                    m_Character.Class = int.Parse(CharData[1]);
-                    m_Character.Sex = int.Parse(CharData[2]);
-                    m_Character.Skin = int.Parse(m_Character.Class + "" + m_Character.Sex);
-                    m_Character.Size = 100;
-                    m_Character.Color = int.Parse(CharData[3]);
-                    m_Character.Color2 = int.Parse(CharData[4]);
-                    m_Character.Color3 = int.Parse(CharData[5]);
+                    //m_Character.Level = Config.ConfigurationManager.GetInt("Start_Level");
+                    //m_Character.Class = int.Parse(CharData[1]);
+                    //m_Character.Sex = int.Parse(CharData[2]);
+                    //m_Character.Skin = int.Parse(m_Character.Class + "" + m_Character.Sex);
+                    //m_Character.Size = 100;
+                    //m_Character.Color = int.Parse(CharData[3]);
+                    //m_Character.Color2 = int.Parse(CharData[4]);
+                    //m_Character.Color3 = int.Parse(CharData[5]);
 
-                    m_Character.MapID = Config.ConfigurationManager.GetInt("Start_Map");
-                    m_Character.MapCell = Config.ConfigurationManager.GetInt("Start_Cell");
-                    m_Character.Dir = Config.ConfigurationManager.GetInt("Start_Dir");
+                    //m_Character.MapID = Config.ConfigurationManager.GetInt("Start_Map");
+                    //m_Character.MapCell = Config.ConfigurationManager.GetInt("Start_Cell");
+                    //m_Character.Dir = Config.ConfigurationManager.GetInt("Start_Dir");
 
                     m_Character.CharactPoint = (m_Character.Level - 1) * 5;
                     m_Character.SpellPoint = (m_Character.Level - 1);
@@ -160,7 +160,7 @@ namespace realm.Client
                     CharactersManager.CharactersList.Add(m_Character);
                     Client.m_Characters.Add(m_Character);
 
-                    Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
+                    Network.ServersHandler.myAuthLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
 
                     Client.Send("TB");
                     Client.Send("AAK");
@@ -173,7 +173,7 @@ namespace realm.Client
             }
             catch (Exception e)
             {
-                SunDofus.Logger.Error(e);
+                Utilities.Loggers.ErrorsLogger.Write(e.ToString());
             }
         }
 
@@ -190,7 +190,7 @@ namespace realm.Client
             CharactersManager.CharactersList.Remove(m_C);
             Client.m_Characters.Remove(m_C);
 
-            Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.m_Name));
+            Network.ServersHandler.myAuthLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.m_Name));
             Database.Cache.CharactersCache.DeleteCharacter(m_C.m_Name);
 
             SendCharacterList("");
@@ -231,11 +231,11 @@ namespace realm.Client
                 {
                     if (Client.m_Infos.myGifts.Any(x => x.id == int.Parse(Infos[0])))
                     {
-                        RealmGifts myGift = Client.m_Infos.myGifts.First(e => e.id == int.Parse(Infos[0]));
+                        Database.Models.Clients.GiftModel myGift = Client.m_Infos.myGifts.First(e => e.id == int.Parse(Infos[0]));
                         Client.m_Characters.First(x => x.ID == int.Parse(Infos[1])).m_Inventary.AddItem(myGift.item, true);
 
                         Client.Send("AG0");
-                        Program.m_RealmLink.Send("DG|" + myGift.id + "|" + Client.m_Infos.Id);
+                        Network.ServersHandler.myAuthLink.Send("DG|" + myGift.id + "|" + Client.m_Infos.Id);
                         Client.m_Infos.myGifts.Remove(myGift);
 
                     }
@@ -247,7 +247,7 @@ namespace realm.Client
             }
             catch (Exception e)
             {
-                SunDofus.Logger.Error(e);
+                Utilities.Loggers.ErrorsLogger.Write(e.ToString());
             }
         }
 
@@ -257,7 +257,7 @@ namespace realm.Client
 
         void SendDate(string t)
         {
-            Client.Send("BD" + SunDofus.Basic.GetDofusDate());
+            Client.Send("BD" + Utilities.Basic.GetDofusDate());
         }
 
         public void CreateGame(string t)
@@ -268,7 +268,7 @@ namespace realm.Client
             Client.Send("cC+*#$p%i:?!");
             Client.Send("SLo+");
             Client.m_Player.m_SpellInventary.SendAllSpells();
-            Client.Send("BT" + SunDofus.Basic.GetActuelTime());
+            Client.Send("BT" + Utilities.Basic.GetActuelTime());
 
             if (Client.m_Player.Life == 0)
             {
@@ -382,7 +382,7 @@ namespace realm.Client
 
                         if (Client.m_Player.GetMap().myTriggers.Any(x => x.CellID == Client.m_Player.MapCell))
                         {
-                            Trigger m_T = Client.m_Player.GetMap().myTriggers.First(x => x.CellID == Client.m_Player.MapCell);
+                            Database.Models.Maps.TriggerModel m_T = Client.m_Player.GetMap().myTriggers.First(x => x.CellID == Client.m_Player.MapCell);
                             Client.m_Player.TeleportNewMap(m_T.NewMapID, m_T.NewCellID);
                         }
                     }

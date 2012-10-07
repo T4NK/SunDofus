@@ -39,7 +39,7 @@ namespace realm.Database.Cache
 
             SQLReader.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' maps from the database !", MapsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' maps@ from the database !", MapsList.Count));
         }
     }
 }

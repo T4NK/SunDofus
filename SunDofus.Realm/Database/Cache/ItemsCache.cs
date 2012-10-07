@@ -36,7 +36,7 @@ namespace realm.Database.Cache
 
             SQLReader.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' items from the database !", ItemsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items@ from the database !", ItemsList.Count));
         }
 
         public static void LoadItemsSets()
@@ -59,7 +59,7 @@ namespace realm.Database.Cache
 
             SQLReader.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' items_sets from the database !", SetsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items sets@ from the database !", SetsList.Count));
         }
 
         public static void LoadUsablesItems()
@@ -83,7 +83,7 @@ namespace realm.Database.Cache
 
             SQLReader.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' items_usables from the database !", UsablesList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items usables@ from the database !", UsablesList.Count));
         }
     }
 }

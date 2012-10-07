@@ -8,8 +8,8 @@ namespace realm.Database.Cache
 {
     class SpellsCache
     {
-        public static List<Realm.Character.Spells.SpellModel> SpellsList = new List<Realm.Character.Spells.SpellModel>();
-        public static List<Realm.Character.Spells.SpellToLearn> SpellsToLearn = new List<Realm.Character.Spells.SpellToLearn>();
+        public static List<Database.Models.Spells.SpellModel> SpellsList = new List<Database.Models.Spells.SpellModel>();
+        public static List<Database.Models.Spells.SpellToLearnModel> SpellsToLearn = new List<Database.Models.Spells.SpellToLearnModel>();
 
         public static void LoadSpells()
         {
@@ -20,7 +20,7 @@ namespace realm.Database.Cache
 
             while (SQLReader.Read())
             {
-                Realm.Character.Spells.SpellModel myS = new Realm.Character.Spells.SpellModel();
+                Database.Models.Spells.SpellModel myS = new Database.Models.Spells.SpellModel();
 
                 myS.id = SQLReader.GetInt16("id");
                 myS.sprite = SQLReader.GetInt16("sprite");
@@ -34,7 +34,7 @@ namespace realm.Database.Cache
 
             SQLReader.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' spells from the database !", SpellsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells@ from the database !", SpellsList.Count));
         }
 
         public static void LoadSpellsToLearn()
@@ -46,7 +46,7 @@ namespace realm.Database.Cache
 
             while (SQLReader.Read())
             {
-                Realm.Character.Spells.SpellToLearn myS = new Realm.Character.Spells.SpellToLearn();
+                Database.Models.Spells.SpellToLearnModel myS = new Database.Models.Spells.SpellToLearnModel();
                 
                 myS.Race = SQLReader.GetInt16("Classe");
                 myS.Level = SQLReader.GetInt16("Level");
@@ -58,7 +58,7 @@ namespace realm.Database.Cache
 
             SQLReader.Close();
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' spells to learn from the database !", SpellsToLearn.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells to learn@ from the database !", SpellsToLearn.Count));
         }
     }
 }

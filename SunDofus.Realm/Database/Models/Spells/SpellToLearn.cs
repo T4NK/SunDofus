@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Realm.Character.Spells
+namespace realm.Database.Models.Spells
 {
-    class SpellToLearn
+    class SpellToLearnModel
     {
         public int Race = 0, Level = 0, SpellID = 0, Pos = 0;
     }

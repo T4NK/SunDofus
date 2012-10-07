@@ -5,11 +5,11 @@ using System.Text;
 
 namespace realm.Realm.Character.Spells
 {
-    class CharSpell
+    class CharacterSpell
     {
         public int id = -1, level = 0, position = -1;
 
-        public CharSpell(int mid, int mlvl, int mpos)
+        public CharacterSpell(int mid, int mlvl, int mpos)
         {
             id = mid;
             level = mlvl;

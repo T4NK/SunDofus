@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Client
+namespace realm.Network.Realm
 {
     class RealmCommand
     {
@@ -25,7 +25,7 @@ namespace realm.Client
                     switch (Datas[0])
                     {
                         case "save":
-                            Realm.World.Save.ParseSave(Datas.Length > 1 ? Datas[1] : "all");
+                            realm.Realm.World.Save.ParseSave(Datas.Length > 1 ? Datas[1] : "all");
                             break;
 
                         case "vita":

@@ -7,12 +7,12 @@ namespace realm.Realm.Character.Spells
 {
     class InventarySpells
     {
-        public List<CharSpell> mySpells;
+        public List<CharacterSpell> mySpells;
         public Character Client;
 
         public InventarySpells(Character client)
         {
-            mySpells = new List<CharSpell>();
+            mySpells = new List<CharacterSpell>();
             Client = client;
         }
 
@@ -29,7 +29,7 @@ namespace realm.Realm.Character.Spells
 
         public void LearnSpells()
         {
-            foreach (SpellToLearn m_S in Database.Cache.SpellsCache.SpellsToLearn.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
+            foreach (realm.Database.Models.Spells.SpellToLearnModel m_S in Database.Cache.SpellsCache.SpellsToLearn.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
             {
                 if (mySpells.Any(x => x.id == m_S.SpellID)) continue;
                 AddSpells(m_S.SpellID, 1, m_S.Pos);
@@ -46,14 +46,14 @@ namespace realm.Realm.Character.Spells
             if (pos > 25) pos = 25;
             if (pos < 1) pos = 25;
 
-            mySpells.Add(new CharSpell(id, level, pos));
+            mySpells.Add(new CharacterSpell(id, level, pos));
         }
 
         public void SendAllSpells()
         {
             string Packet = "";
 
-            foreach (CharSpell m_S in mySpells)
+            foreach (CharacterSpell m_S in mySpells)
                 Packet += m_S.id + "~" + m_S.level + "~" + Map.Cells.GetDirChar(m_S.position) + ";";
 
             Client.Client.Send("SL" + Packet);
@@ -63,7 +63,7 @@ namespace realm.Realm.Character.Spells
         {
             string Data = "";
 
-            foreach (CharSpell m_S in mySpells)
+            foreach (CharacterSpell m_S in mySpells)
                 Data += m_S.id + "," + m_S.level + "," + m_S.position + "|";
 
             if (Data == "")

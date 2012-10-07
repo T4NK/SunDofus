@@ -43,19 +43,19 @@ namespace realm.Realm.Map
                 case 'a':
                     return fight ? -1 : caseID + 1;
                 case 'b':
-                    return caseID + _map.width;
+                    return caseID + _map.myMap.width;
                 case 'c':
-                    return fight ? -1 : caseID + (_map.width * 2 - 1);
+                    return fight ? -1 : caseID + (_map.myMap.width * 2 - 1);
                 case 'd':
-                    return caseID + (_map.width - 1);
+                    return caseID + (_map.myMap.width - 1);
                 case 'e':
                     return fight ? -1 : caseID - 1;
                 case 'f':
-                    return caseID - _map.width;
+                    return caseID - _map.myMap.width;
                 case 'g':
-                    return fight ? -1 : caseID - (_map.width * 2 - 1);
+                    return fight ? -1 : caseID - (_map.myMap.width * 2 - 1);
                 case 'h':
-                    return caseID - _map.width + 1;
+                    return caseID - _map.myMap.width + 1;
             }
             return -1; 
         }
@@ -117,25 +117,25 @@ namespace realm.Realm.Map
                     return cell + 1;
 
                 case 1:
-                    return cell + _map.width;
+                    return cell + _map.myMap.width;
 
                 case 2:
-                    return cell + (_map.width * 2) - 1;
+                    return cell + (_map.myMap.width * 2) - 1;
 
                 case 3:
-                    return cell + _map.width - 1;
+                    return cell + _map.myMap.width - 1;
 
                 case 4:
                     return cell - 1;
 
                 case 5:
-                    return cell - _map.width;
+                    return cell - _map.myMap.width;
 
                 case 6:
-                    return cell - (_map.width * 2) + 1;
+                    return cell - (_map.myMap.width * 2) + 1;
 
                 case 7:
-                    return cell - _map.width + 1;
+                    return cell - _map.myMap.width + 1;
 
             }
             return -1;
@@ -203,13 +203,13 @@ namespace realm.Realm.Map
 
         public int GetCellXCoord(int cellid)
         {
-            int w = _map.width;
+            int w = _map.myMap.width;
             return ((cellid - (w - 1) * GetCellYCoord(cellid)) / w);
         }
 
         public int GetCellYCoord(int cellid)
         {
-            int w = _map.width;
+            int w = _map.myMap.width;
             int loc5 = (int)(cellid / ((w * 2) - 1));
             int loc6 = cellid - loc5 * ((w * 2) - 1);
             int loc7 = loc6 % w;

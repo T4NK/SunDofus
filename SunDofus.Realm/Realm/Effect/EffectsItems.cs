@@ -13,14 +13,14 @@ namespace realm.Realm.Effect
 
         public override string ToString()
         {
-            return SunDofus.Basic.DeciToHex(ID) + "#" + (Value <= 0 ? "" : SunDofus.Basic.DeciToHex(Value)) + 
-                "#" + (Value2 <= 0 ? "" : SunDofus.Basic.DeciToHex(Value2)) + "#" + (Value3 <= 0 ? "0" : SunDofus.Basic.DeciToHex(Value3)) + "#" + Effect;
+            return Utilities.Basic.DeciToHex(ID) + "#" + (Value <= 0 ? "" : Utilities.Basic.DeciToHex(Value)) +
+                "#" + (Value2 <= 0 ? "" : Utilities.Basic.DeciToHex(Value2)) + "#" + (Value3 <= 0 ? "0" : Utilities.Basic.DeciToHex(Value3)) + "#" + Effect;
         }
 
         public string SetString()
         {
-            return SunDofus.Basic.DeciToHex(ID) + "#" + (Value <= 0 ? "" : SunDofus.Basic.DeciToHex(Value)) +
-                "#" + (Value2 <= 0 ? "" : SunDofus.Basic.DeciToHex(Value2));
+            return Utilities.Basic.DeciToHex(ID) + "#" + (Value <= 0 ? "" : Utilities.Basic.DeciToHex(Value)) +
+                "#" + (Value2 <= 0 ? "" : Utilities.Basic.DeciToHex(Value2));
         }
 
         public void ParseEffect(Character.Character _Client)

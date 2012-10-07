@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Client
+namespace realm.Database.Models.Clients
 {
-    class RealmInfos
+    class AccountModel
     {
         public string Pseudo;
         public string Question;
@@ -17,12 +17,12 @@ namespace realm.Client
         public string Gifts;
 
         public List<string> myCharacters;
-        public List<RealmGifts> myGifts;
+        public List<GiftModel> myGifts;
 
-        public RealmInfos()
+        public AccountModel()
         {
             myCharacters = new List<string>();
-            myGifts = new List<RealmGifts>();
+            myGifts = new List<GiftModel>();
 
             Pseudo = "";
             Question = "";
@@ -53,7 +53,7 @@ namespace realm.Client
             foreach (string Data in AllData)
             {
                 string[] Infos = Data.Split('~');
-                RealmGifts myGift = new RealmGifts();
+                GiftModel myGift = new GiftModel();
                 myGift.id = int.Parse(Infos[0]);
                 myGift.title = Infos[1];
                 myGift.message = Infos[2];

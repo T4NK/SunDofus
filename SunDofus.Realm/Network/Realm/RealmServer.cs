@@ -9,12 +9,12 @@ namespace realm.Network.Realm
 {
     class RealmServer : AbstractServer
     {
-        public List<Client.RealmClient> m_Clients;
+        public List<RealmClient> m_Clients;
 
         public RealmServer()
-            : base(Config.ConfigurationManager.GetString("Server_Ip"), Config.ConfigurationManager.GetInt("Server_Port"))
+            : base(Utilities.Config.myConfig.GetStringElement("ServerIp"), Utilities.Config.myConfig.GetIntElement("ServerPort"))
         {
-            m_Clients = new List<Client.RealmClient>();
+            m_Clients = new List<RealmClient>();
             this.RaiseAcceptEvent += new AcceptEvent(this.AcceptRealmClient);
             this.RaiseListenEvent += new OnListenEvent(this.ListenRealm);
             this.RaiseListenFailedEvent += new OnListenFailedEvent(this.ListenFailedRealm);
@@ -23,18 +23,18 @@ namespace realm.Network.Realm
         public void AcceptRealmClient(SilverSocket Socket)
         {
             if (Socket == null) return;
-            SunDofus.Logger.Infos("New inputted connection !");
-            m_Clients.Add(new Client.RealmClient(Socket));
+            Utilities.Loggers.InfosLogger.Write("New inputted client connection !");
+            m_Clients.Add(new RealmClient(Socket));
         }
 
         public void ListenRealm(string Remote)
         {
-            SunDofus.Logger.Status("RealmServer started on <" + Remote + "> !");
+            Utilities.Loggers.StatusLogger.Write(string.Format("RealmServer started on <{0}> !", Remote));
         }
 
         public void ListenFailedRealm(Exception e)
         {
-            SunDofus.Logger.Error(e);
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot start the RealmServer because : {0}", e.ToString()));
         }
     }
 }

@@ -1,2 +1,7 @@
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Realm\SunDofus.Realm.exe.config
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus.Realm\obj\x86\Debug\SunDofus.Realm.csprojResolveAssemblyReference.cache
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Realm\SunRealm.conf
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Realm\SunDofus.Realm.exe
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Realm\SunDofus.Realm.pdb
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus.Realm\obj\x86\Debug\SunDofus.Realm.exe
+I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus.Realm\obj\x86\Debug\SunDofus.Realm.pdb

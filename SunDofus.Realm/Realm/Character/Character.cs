@@ -27,7 +27,7 @@ namespace realm.Realm.Character
         public Items.InventaryItems m_Inventary;
         public Spells.InventarySpells m_SpellInventary;
 
-        public Client.RealmClient Client;
+        public Network.Realm.RealmClient Client;
         public CharacterState State;
 
         public string Channel = "*#$p%i:?!";
@@ -60,23 +60,23 @@ namespace realm.Realm.Character
             string m = "";
 
             if (m_Inventary.ItemsList.Any(x => x.Position == 1))
-                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 1).BaseItem.ID);
+                m += Utilities.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 1).BaseItem.ID);
             m += ",";
 
             if (m_Inventary.ItemsList.Any(x => x.Position == 6))
-                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 6).BaseItem.ID);
+                m += Utilities.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 6).BaseItem.ID);
             m += ",";
 
             if (m_Inventary.ItemsList.Any(x => x.Position == 7))
-                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 7).BaseItem.ID);
+                m += Utilities.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 7).BaseItem.ID);
             m += ",";
 
             if (m_Inventary.ItemsList.Any(x => x.Position == 8))
-                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 8).BaseItem.ID);
+                m += Utilities.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 8).BaseItem.ID);
             m += ",";
 
             if (m_Inventary.ItemsList.Any(x => x.Position == 15))
-                m += SunDofus.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 15).BaseItem.ID);
+                m += Utilities.Basic.DeciToHex(m_Inventary.ItemsList.First(x => x.Position == 15).BaseItem.ID);
             m += ",";
 
             return m;
@@ -86,7 +86,7 @@ namespace realm.Realm.Character
         {
             string m = "";
 
-            foreach (Items.CharItem m_I in m_Inventary.ItemsList)
+            foreach (Items.CharacterItem m_I in m_Inventary.ItemsList)
             {
                 m += m_I.ToString() + ";";
             }
@@ -101,7 +101,7 @@ namespace realm.Realm.Character
         {
             string m = "";
 
-            foreach (Items.CharItem m_I in m_Inventary.ItemsList)
+            foreach (Items.CharacterItem m_I in m_Inventary.ItemsList)
             {
                 m += m_I.SaveString() + ";";
             }
@@ -124,9 +124,9 @@ namespace realm.Realm.Character
             Builder.Append(m_Name).Append(";");
             Builder.Append(Level).Append(";");
             Builder.Append(Skin).Append(";");
-            Builder.Append(Basic.DeciToHex(Color)).Append(";");
-            Builder.Append(Basic.DeciToHex(Color2)).Append(";");
-            Builder.Append(Basic.DeciToHex(Color3)).Append(";");
+            Builder.Append(Utilities.Basic.DeciToHex(Color)).Append(";");
+            Builder.Append(Utilities.Basic.DeciToHex(Color2)).Append(";");
+            Builder.Append(Utilities.Basic.DeciToHex(Color3)).Append(";");
             Builder.Append(GetItemsPos()).Append(";");
             Builder.Append("0;").Append(Program.m_ServerID).Append(";;;");
 
@@ -142,9 +142,9 @@ namespace realm.Realm.Character
             Builder.Append(Level).Append("|");
             Builder.Append(Class).Append("|");
             Builder.Append(Skin).Append("|");
-            Builder.Append(Basic.DeciToHex(Color)).Append("|");
-            Builder.Append(Basic.DeciToHex(Color2)).Append("|");
-            Builder.Append(Basic.DeciToHex(Color3)).Append("||");
+            Builder.Append(Utilities.Basic.DeciToHex(Color)).Append("|");
+            Builder.Append(Utilities.Basic.DeciToHex(Color2)).Append("|");
+            Builder.Append(Utilities.Basic.DeciToHex(Color3)).Append("||");
             Builder.Append(GetItems()).Append("|");
 
             return Builder.ToString();
@@ -161,9 +161,9 @@ namespace realm.Realm.Character
             Builder.Append(Class + ";");
             Builder.Append(Skin + "^" + Size + ";");
             Builder.Append(Sex + ";0,0,0," + (Level + ID) + ";"); // Sex + Alignment
-            Builder.Append(SunDofus.Basic.DeciToHex(Color) + ";");
-            Builder.Append(SunDofus.Basic.DeciToHex(Color2) + ";");
-            Builder.Append(SunDofus.Basic.DeciToHex(Color3) + ";");
+            Builder.Append(Utilities.Basic.DeciToHex(Color) + ";");
+            Builder.Append(Utilities.Basic.DeciToHex(Color2) + ";");
+            Builder.Append(Utilities.Basic.DeciToHex(Color3) + ";");
             Builder.Append(GetItemsPos()).Append(";"); // Items
             Builder.Append("0;"); //Aura
             Builder.Append(";;");
@@ -180,11 +180,11 @@ namespace realm.Realm.Character
 
         public void LoadMap()
         {
-            if (Database.Cache.MapsCache.MapsList.Any(x => x.id == this.MapID))
+            if (Database.Cache.MapsCache.MapsList.Any(x => x.myMap.id == this.MapID))
             {
-                Map.Map m_M = Database.Cache.MapsCache.MapsList.First(x => x.id == this.MapID);
+                Map.Map m_M = Database.Cache.MapsCache.MapsList.First(x => x.myMap.id == this.MapID);
 
-                Client.Send("GDM|" + m_M.id + "|0" + m_M.date + "|" + m_M.key);
+                Client.Send("GDM|" + m_M.myMap.id + "|0" + m_M.myMap.date + "|" + m_M.myMap.key);
             }
         }
 
@@ -193,9 +193,9 @@ namespace realm.Realm.Character
             Client.Send("GA;2;" + ID + ";");
 
             GetMap().DelPlayer(this);
-            Map.Map m_M = Database.Cache.MapsCache.MapsList.First(x => x.id == m_MID);
+            Map.Map m_M = Database.Cache.MapsCache.MapsList.First(x => x.myMap.id == m_MID);
 
-            MapID = m_M.id;
+            MapID = m_M.myMap.id;
             MapCell = m_C;
 
             LoadMap();
@@ -203,7 +203,7 @@ namespace realm.Realm.Character
 
         public Map.Map GetMap()
         {
-            return Database.Cache.MapsCache.MapsList.First(x => x.id == this.MapID);
+            return Database.Cache.MapsCache.MapsList.First(x => x.myMap.id == this.MapID);
         }
 
         #endregion

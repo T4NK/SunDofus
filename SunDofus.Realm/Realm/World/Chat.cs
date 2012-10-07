@@ -8,13 +8,13 @@ namespace realm.Realm.World
 {
     class Chat
     {
-        public static void SendGeneralMessage(Client.RealmClient Client, string Message)
+        public static void SendGeneralMessage(Network.Realm.RealmClient Client, string Message)
         {
             if (Client.m_Player.GetMap() == null) return;
             Client.m_Player.GetMap().Send("cMK|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
         }
 
-        public static void SendPrivateMessage(Client.RealmClient Client, string Receiver, string Message)
+        public static void SendPrivateMessage(Network.Realm.RealmClient Client, string Receiver, string Message)
         {
             if(CharactersManager.CharactersList.Any(x => x.m_Name == Receiver))
             {

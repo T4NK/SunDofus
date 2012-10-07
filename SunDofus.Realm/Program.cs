@@ -12,8 +12,10 @@ namespace realm
         static void Main(string[] args)
         {
             Utilities.Config.LoadConfiguration();
+            Utilities.Loggers.InitialiseLoggers();
 
-            Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Shaak [c]";
+            Console.Title = string.Format("SunDofus.Realm ~ {0} | Shaak [c]",
+                Utilities.Config.myConfig.GetIntElement("ServerId"));
 
             Database.DatabaseHandler.InitialiseConnection();
 

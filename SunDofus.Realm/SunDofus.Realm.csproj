@@ -55,8 +55,8 @@
   <ItemGroup>
     <Compile Include="Network\Realm\RealmClient.cs" />
     <Compile Include="Network\Realm\RealmCommand.cs" />
-    <Compile Include="Database\Models\RealmGifts.cs" />
-    <Compile Include="Database\Models\RealmInfos.cs" />
+    <Compile Include="Database\Models\Clients\GiftModel.cs" />
+    <Compile Include="Database\Models\Clients\AccountModel.cs" />
     <Compile Include="Network\Realm\RealmParser.cs" />
     <Compile Include="Database\Cache\CharactersCache.cs" />
     <Compile Include="Database\Cache\ItemsCache.cs" />
@@ -69,7 +69,6 @@
     <Compile Include="Network\Commander\CommanderServer.cs" />
     <Compile Include="Network\Authentication\AuthenticationKeys.cs" />
     <Compile Include="Network\Authentication\AuthenticationLink.cs" />
-    <Compile Include="Network\Authentication\Parser.cs" />
     <Compile Include="Network\ServersHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -78,16 +77,16 @@
     <Compile Include="Realm\Character\CharacterState.cs" />
     <Compile Include="Database\Models\Items\ItemModel.cs" />
     <Compile Include="Realm\Character\Items\InventaryItems.cs" />
-    <Compile Include="Realm\Character\Items\Char\CharItem.cs" />
-    <Compile Include="Realm\Character\Items\ItemsManager.cs" />
+    <Compile Include="Realm\Character\Items\Char\CharacterItem.cs" />
+    <Compile Include="Realm\Character\Items\ItemsHandler.cs" />
     <Compile Include="Database\Models\Items\SetModel.cs" />
-    <Compile Include="Realm\Character\Items\Char\CharSet.cs" />
+    <Compile Include="Realm\Character\Items\Char\CharacterSet.cs" />
     <Compile Include="Database\Models\Items\ItemUsableModel.cs" />
     <Compile Include="Database\Models\Spells\SpellModel.cs" />
     <Compile Include="Database\Models\Spells\SpellLevelModel.cs" />
-    <Compile Include="Realm\Character\Spells\Char\CharSpell.cs" />
+    <Compile Include="Realm\Character\Spells\Char\ChararcterSpell.cs" />
     <Compile Include="Realm\Character\Spells\InventarySpells.cs" />
-    <Compile Include="Realm\Character\Spells\SpellToLearn.cs" />
+    <Compile Include="Database\Models\Spells\SpellToLearn.cs" />
     <Compile Include="Realm\Character\Spells\Target.cs" />
     <Compile Include="Realm\Character\Stats\AbstractStats.cs" />
     <Compile Include="Realm\Character\Stats\Stats.cs" />

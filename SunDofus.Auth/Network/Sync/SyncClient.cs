@@ -28,7 +28,7 @@ namespace auth.Network.Sync
         public void SendNewTicket(string myKey, Auth.AuthClient myClient)
         {
             StringBuilder Builder = new StringBuilder();
-            Builder.Append("ANT|");
+            Builder.Append("ANTS|");
             Builder.Append(myKey).Append("|");
             Builder.Append(myClient.myAccount.myId).Append("|");
             Builder.Append(myClient.myAccount.myPseudo).Append("|");
@@ -135,7 +135,7 @@ namespace auth.Network.Sync
                 Send("HCSS");
                 
                 ChangeState(SyncClient.State.Connected);
-                Utilities.Loggers.InfosLogger.Write(string.Format("Sync @{0}@ authentified !", this.myIp()));
+                Utilities.Loggers.InfosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
             }
             else
                 Disconnect();

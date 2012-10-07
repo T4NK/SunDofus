@@ -58,7 +58,19 @@ namespace realm.Utilities
             if (!myConfig.ExistElement("Database_Pass"))
                 myConfig.InsertElement("Database_Pass", "");
             if (!myConfig.ExistElement("Database_Name"))
-                myConfig.InsertElement("Database_Name", "suncore");
+                myConfig.InsertElement("Database_Name", "sundofus");
+
+            //AuthServer & RealmServer
+            if (!myConfig.ExistElement("AuthIp"))
+                myConfig.InsertElement("AuthIp", "127.0.0.1");
+            if (!myConfig.ExistElement("AuthPort"))
+                myConfig.InsertElement("AuthPort", "486");
+            if (!myConfig.ExistElement("ServerId"))
+                myConfig.InsertElement("ServerId", "6");
+            if (!myConfig.ExistElement("ServerIp"))
+                myConfig.InsertElement("ServerIp", "127.0.0.1");
+            if (!myConfig.ExistElement("ServerPort"))
+                myConfig.InsertElement("ServerPort", "5555");
         }
     }
 }
