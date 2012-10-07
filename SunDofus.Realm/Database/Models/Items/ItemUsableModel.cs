@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using realm.Realm;
+using realm.Realm.Character;
 
-namespace realm.Realm.Character.Items
+namespace realm.Database.Models.Items
 {
-    class CharUsableItem
+    class ItemUsableModel
     {
         public int BaseItemID = -1;
         public string Args = "";
 
         public void AttributeItem()
         {
-            if(Database.Data.ItemSql.ItemsList.Any(x => x.ID == BaseItemID))
+            if(Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == BaseItemID))
             {
-                Database.Data.ItemSql.ItemsList.First(x => x.ID == BaseItemID).Usable = true;
+                Database.Cache.ItemsCache.ItemsList.First(x => x.ID == BaseItemID).Usable = true;
             }
         }
 
@@ -30,7 +32,7 @@ namespace realm.Realm.Character.Items
             foreach (string AllData in Data)
             {
                 string[] Infos = AllData.Split(';');
-                Effect.EffectsActions.ParseEffect(Client, int.Parse(Infos[0]), Infos[1]);
+                Realm.Effect.EffectsActions.ParseEffect(Client, int.Parse(Infos[0]), Infos[1]);
             }
         }
     }

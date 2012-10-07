@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Realm.Character.Spells
+namespace realm.Database.Models.Spells
 {
-    class AbstractSpell
+    class SpellModel
     {
         public int id = -1, sprite = -1;
         public string spriteInfos = "";
-        public List<AbstractSpellLevel> myLevels;
+        public List<SpellLevelModel> myLevels;
 
-        public AbstractSpell()
+        public SpellModel()
         {
-            myLevels = new List<AbstractSpellLevel>();
+            myLevels = new List<SpellLevelModel>();
         }
 
         public void ParseLevel(string Data)
@@ -21,7 +21,7 @@ namespace realm.Realm.Character.Spells
             if (Data == "-1")
                 return;
 
-            AbstractSpellLevel m_L = new AbstractSpellLevel();
+            SpellLevelModel m_L = new SpellLevelModel();
 
             string[] Stats = Data.Split(',');
             string Effect = Stats[0];

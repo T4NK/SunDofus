@@ -17,17 +17,17 @@ namespace realm
 
             Database.DatabaseHandler.InitialiseConnection();
 
-            Database.Data.ItemSql.LoadItems();
-            Database.Data.ItemSql.LoadItemsSets();
-            Database.Data.ItemSql.LoadUsablesItems();
+            Database.Cache.ItemsCache.LoadItems();
+            Database.Cache.ItemsCache.LoadItemsSets();
+            Database.Cache.ItemsCache.LoadUsablesItems();
 
-            Database.Data.SpellSql.LoadSpells();
-            Database.Data.SpellSql.LoadSpellsToLearn();
+            Database.Cache.SpellsCache.LoadSpells();
+            Database.Cache.SpellsCache.LoadSpellsToLearn();
 
-            Database.Data.MapSql.LoadMaps();
-            Database.Data.TriggerSql.LoadTriggers();
+            Database.Cache.MapsCache.LoadMaps();
+            Database.Cache.TriggersCache.LoadTriggers();
 
-            Database.Data.CharacterSql.LoadCharacters();
+            Database.Cache.CharactersCache.LoadCharacters();
 
             Network.ServersHandler.InitialiseServers();
 

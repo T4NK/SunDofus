@@ -22,8 +22,8 @@ namespace realm.Realm.Character.Items
         {
             if (OffLine == true)
             {
-                if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
-                AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == ID)) return;
+                AbstractItem BaseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == ID);
                 Items.CharItem m_I = new CharItem(BaseItem);
                 m_I.ParseJet();
                 m_I.GeneratItem();
@@ -45,8 +45,8 @@ namespace realm.Realm.Character.Items
             }
             else if (OffLine == false)
             {
-                if (!Database.Data.ItemSql.ItemsList.Any(x => x.ID == ID)) return;
-                AbstractItem BaseItem = Database.Data.ItemSql.ItemsList.First(x => x.ID == ID);
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == ID)) return;
+                AbstractItem BaseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == ID);
                 Items.CharItem m_I = new CharItem(BaseItem);
                 m_I.ParseJet();
                 m_I.GeneratItem();
@@ -262,7 +262,7 @@ namespace realm.Realm.Character.Items
             foreach (string Infos in Spliter)
             {
                 string[] AllInfos = Infos.Split('~');
-                Items.CharItem m_I = new CharItem(Database.Data.ItemSql.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
+                Items.CharItem m_I = new CharItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
 
                 m_I.ID = ItemsManager.GetNewID();
                 m_I.Quantity = Convert.ToInt32(AllInfos[1], 16);
@@ -395,7 +395,7 @@ namespace realm.Realm.Character.Items
                 return;
             }
 
-            CharUsableItem m_I = Database.Data.ItemSql.UsablesList.First(x => x.BaseItemID == Item.BaseItem.ID);
+            CharUsableItem m_I = Database.Cache.ItemsCache.UsablesList.First(x => x.BaseItemID == Item.BaseItem.ID);
             Character m_C = CharactersManager.CharactersList.First(x => x.ID == CharID);
 
             if (!m_I.ConditionsAvaliable(m_C))

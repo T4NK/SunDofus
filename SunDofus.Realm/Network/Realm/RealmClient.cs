@@ -62,7 +62,7 @@ namespace realm.Client
             m_Infos.ParseGifts();
             foreach (RealmGifts myGift in m_Infos.myGifts)
             {
-                Realm.Character.Items.CharItem Item = new Realm.Character.Items.CharItem(Database.Data.ItemSql.ItemsList.First(x => x.ID == myGift.itemID));
+                Realm.Character.Items.CharItem Item = new Realm.Character.Items.CharItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == myGift.itemID));
                 Item.ParseJet();
                 Item.GeneratItem();
 

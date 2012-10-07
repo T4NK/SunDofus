@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 
-namespace realm.Database.Data
+namespace realm.Database.Cache
 {
-    class CharacterSql
+    class CharactersCache
     {
         public static void LoadCharacters()
         {
@@ -45,7 +45,7 @@ namespace realm.Database.Data
 
             SQLResult.Close();
 
-            SunDofus.Logger.Status("Loaded '" + Realm.Character.CharactersManager.CharactersList.Count + "' characters from the database !");
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded '{0}' characters from the database !",Realm.Character.CharactersManager.CharactersList.Count));
         }
 
         public static void CreateCharacter(Realm.Character.Character m_C)

@@ -29,7 +29,7 @@ namespace realm.Realm.Character.Spells
 
         public void LearnSpells()
         {
-            foreach (SpellToLearn m_S in Database.Data.SpellSql.SpellsToLearn.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
+            foreach (SpellToLearn m_S in Database.Cache.SpellsCache.SpellsToLearn.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
             {
                 if (mySpells.Any(x => x.id == m_S.SpellID)) continue;
                 AddSpells(m_S.SpellID, 1, m_S.Pos);

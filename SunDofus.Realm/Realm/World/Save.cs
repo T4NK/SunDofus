@@ -31,7 +31,7 @@ namespace realm.Realm.World
             Program.m_RealmLink.Send("StartM");
             foreach (Character.Character m_C in Character.CharactersManager.CharactersList)
             {
-                Database.Data.CharacterSql.SaveCharacter(m_C);
+                Database.Cache.CharactersCache.SaveCharacter(m_C);
                 System.Threading.Thread.Sleep(100);
             }
             Program.m_RealmLink.Send("StopM");

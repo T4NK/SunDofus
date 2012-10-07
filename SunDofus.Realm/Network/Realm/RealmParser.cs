@@ -128,7 +128,7 @@ namespace realm.Client
                 if (CharData[0] != "" | CharactersManager.ExistsName(CharData[0]) == false)
                 {
                     Character m_Character = new Character();
-                    m_Character.ID = Database.Data.CharacterSql.GetNewID();
+                    m_Character.ID = Database.Cache.CharactersCache.GetNewID();
                     m_Character.m_Name = CharData[0];
                     m_Character.Level = Config.ConfigurationManager.GetInt("Start_Level");
                     m_Character.Class = int.Parse(CharData[1]);
@@ -156,7 +156,7 @@ namespace realm.Client
 
                     m_Character.m_SpellInventary.LearnSpells();
 
-                    Database.Data.CharacterSql.CreateCharacter(m_Character);
+                    Database.Cache.CharactersCache.CreateCharacter(m_Character);
                     CharactersManager.CharactersList.Add(m_Character);
                     Client.m_Characters.Add(m_Character);
 
@@ -191,7 +191,7 @@ namespace realm.Client
             Client.m_Characters.Remove(m_C);
 
             Program.m_RealmLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.m_Name));
-            Database.Data.CharacterSql.DeleteCharacter(m_C.m_Name);
+            Database.Cache.CharactersCache.DeleteCharacter(m_C.m_Name);
 
             SendCharacterList("");
         }
@@ -380,9 +380,9 @@ namespace realm.Client
                         Client.m_Player.State.MoveCell = -1;
                         Client.Send("BN");
 
-                        if (Client.m_Player.GetMap().m_Triggers.Any(x => x.CellID == Client.m_Player.MapCell))
+                        if (Client.m_Player.GetMap().myTriggers.Any(x => x.CellID == Client.m_Player.MapCell))
                         {
-                            Trigger m_T = Client.m_Player.GetMap().m_Triggers.First(x => x.CellID == Client.m_Player.MapCell);
+                            Trigger m_T = Client.m_Player.GetMap().myTriggers.First(x => x.CellID == Client.m_Player.MapCell);
                             Client.m_Player.TeleportNewMap(m_T.NewMapID, m_T.NewCellID);
                         }
                     }

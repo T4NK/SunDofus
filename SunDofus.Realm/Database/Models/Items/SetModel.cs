@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using realm.Realm;
 
-namespace realm.Realm.Character.Items
+namespace realm.Database.Models.Items
 {
-    class AbstractSet
+    class SetModel
     {
         public List<int> ItemsList = new List<int>();
         public int ID = -1;
-        public Dictionary<int, List<Effect.EffectsItems>> BonusList = new Dictionary<int, List<Effect.EffectsItems>>();
+        public Dictionary<int, List<Realm.Effect.EffectsItems>> BonusList = new Dictionary<int, List<Realm.Effect.EffectsItems>>();
 
         public void ParseItems(string Data)
         {
@@ -17,9 +18,9 @@ namespace realm.Realm.Character.Items
             foreach (string Infos in Data.Split(','))
             {
                 int IID = int.Parse(Infos.Replace(" ", ""));
-                if (Database.Data.ItemSql.ItemsList.Any(x => x.ID == IID))
+                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == IID))
                 {
-                    Realm.Character.Items.AbstractItem Item = Database.Data.ItemSql.ItemsList.First(x => x.ID == IID);
+                    Database.Models.Items.ItemModel Item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == IID);
                     Item.Set = this.ID;
                 }
                 ItemsList.Add(ID);
@@ -33,11 +34,11 @@ namespace realm.Realm.Character.Items
             foreach (string Infos in Data.Split(';'))
             {
                 if (Infos == "") continue;
-                BonusList.Add(++Nb, new List<Effect.EffectsItems>());
+                BonusList.Add(++Nb, new List<Realm.Effect.EffectsItems>());
                 foreach (string AllData in Infos.Split(','))
                 {
                     if (AllData == "") continue;
-                    Effect.EffectsItems m_B = new Effect.EffectsItems();
+                    Realm.Effect.EffectsItems m_B = new Realm.Effect.EffectsItems();
                     m_B.ID = int.Parse(AllData.Split(':')[0]);
                     m_B.Value = int.Parse(AllData.Split(':')[1]);
                     BonusList[Nb].Add(m_B);

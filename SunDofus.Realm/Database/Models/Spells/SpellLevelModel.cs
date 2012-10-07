@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using realm.Realm.Character.Spells;
 
-namespace realm.Realm.Character.Spells
+namespace realm.Database.Models.Spells
 {
-    class AbstractSpellLevel
+    class SpellLevelModel
     {
-        public List<Effect.EffectsSpells> myEffects;
-        public List<Effect.EffectsSpells> myCriticalEffects;
+        public List<Realm.Effect.EffectsSpells> myEffects;
+        public List<Realm.Effect.EffectsSpells> myCriticalEffects;
 
         public int Level = -1, Cost = 0, MinPO = 0, MaxPO = 1;
         public int CC = 0, EC = 0, MaxPerTurn = 0, MaxPerPlayer = 0, TurnNumber = 0;
@@ -17,10 +18,10 @@ namespace realm.Realm.Character.Spells
 
         public string Type = "";
 
-        public AbstractSpellLevel()
+        public SpellLevelModel()
         {
-            myCriticalEffects = new List<Effect.EffectsSpells>();
-            myEffects = new List<Effect.EffectsSpells>();
+            myCriticalEffects = new List<Realm.Effect.EffectsSpells>();
+            myEffects = new List<Realm.Effect.EffectsSpells>();
         }
 
         public void ParseEffect(string Data, bool CC)
@@ -30,7 +31,7 @@ namespace realm.Realm.Character.Spells
             foreach (string ActualEffect in List)
             {
                 if (ActualEffect == "-1" | ActualEffect == "") continue;
-                Effect.EffectsSpells m_E = new Effect.EffectsSpells();
+                Realm.Effect.EffectsSpells m_E = new Realm.Effect.EffectsSpells();
                 string[] Infos = ActualEffect.Split(';');
 
                 m_E.id = int.Parse(Infos[0]);

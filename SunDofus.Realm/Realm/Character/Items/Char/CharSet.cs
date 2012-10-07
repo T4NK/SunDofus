@@ -14,7 +14,7 @@ namespace realm.Realm.Character.Items
         public CharSet(int _ID)
         {
             ID = _ID;
-            BonusList = Database.Data.ItemSql.SetsList.First(x => x.ID == ID).BonusList;
+            BonusList = Database.Cache.ItemsCache.SetsList.First(x => x.ID == ID).BonusList;
             BonusList[1] = new List<Effect.EffectsItems>();
         }
     }
