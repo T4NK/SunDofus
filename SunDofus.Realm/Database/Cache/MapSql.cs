@@ -13,7 +13,7 @@ namespace realm.Database.Data
         public static void LoadMaps()
         {
             string SQLText = "SELECT * FROM maps";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 

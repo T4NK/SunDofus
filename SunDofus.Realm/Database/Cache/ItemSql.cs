@@ -15,7 +15,7 @@ namespace realm.Database.Data
         public static void LoadItems()
         {
             string SQLText = "SELECT * FROM items";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
@@ -42,7 +42,7 @@ namespace realm.Database.Data
         public static void LoadItemsSets()
         {
             string SQLText = "SELECT * FROM items_sets";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
@@ -65,7 +65,7 @@ namespace realm.Database.Data
         public static void LoadUsablesItems()
         {
             string SQLText = "SELECT * FROM items_usables";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 

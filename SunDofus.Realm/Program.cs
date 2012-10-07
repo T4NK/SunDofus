@@ -9,16 +9,14 @@ namespace realm
     {
         public static int m_ServerID = -1;
 
-        public static Network.SelectorLink m_RealmLink;
-        public static Network.AuthenticationServer m_AuthServer;
-
         static void Main(string[] args)
         {
-            Config.ConfigurationManager.IniConfig();
-            SunDofus.Logger.Debug = Config.ConfigurationManager.GetBool("Debug");
-            Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Shaak [c]  2012";
+            Utilities.Config.LoadConfiguration();
 
-            Database.SQLManager.Initialise();
+            Console.Title = "SunDofus - Realm ~ " + m_ServerID + " | Shaak [c]";
+
+            Database.DatabaseHandler.InitialiseConnection();
+
             Database.Data.ItemSql.LoadItems();
             Database.Data.ItemSql.LoadItemsSets();
             Database.Data.ItemSql.LoadUsablesItems();
@@ -31,13 +29,10 @@ namespace realm
 
             Database.Data.CharacterSql.LoadCharacters();
 
-            m_AuthServer = new Network.AuthenticationServer();
-            m_AuthServer.Start();
+            Network.ServersHandler.InitialiseServers();
 
-            m_RealmLink = new Network.SelectorLink();
-            m_RealmLink.Start();
-
-            Console.ReadLine();
+            while(true)
+                Console.ReadLine();
         }
     }
 }

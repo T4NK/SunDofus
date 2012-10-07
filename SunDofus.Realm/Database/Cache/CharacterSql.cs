@@ -11,7 +11,7 @@ namespace realm.Database.Data
         public static void LoadCharacters()
         {
             string SQLText = "SELECT * FROM characters";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlDataReader SQLResult = SQLCommand.ExecuteReader();
 
@@ -51,7 +51,7 @@ namespace realm.Database.Data
         public static void CreateCharacter(Realm.Character.Character m_C)
         {
             string SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items, @spells)";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlParameterCollection P = SQLCommand.Parameters;
             P.Add(new MySqlParameter("@id", m_C.ID));
@@ -76,7 +76,7 @@ namespace realm.Database.Data
         {
             string SQLText = "UPDATE characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex," + 
             " color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats, items=@items, spells=@spells WHERE id=@id";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlParameterCollection P = SQLCommand.Parameters;
             P.Add(new MySqlParameter("@id", m_C.ID));
@@ -98,7 +98,7 @@ namespace realm.Database.Data
         public static void DeleteCharacter(string Name)
         {
             string SQLText = "DELETE FROM characters WHERE name=@CharName";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
             SQLCommand.Parameters.Add(new MySqlParameter("@CharName", Name));
 
             SQLCommand.ExecuteNonQuery();
@@ -111,7 +111,7 @@ namespace realm.Database.Data
             if (LastID == -1)
             {
                 string SQLText = "SELECT id FROM characters ORDER BY id DESC LIMIT 0,1";
-                MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+                MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
                 MySqlDataReader SQLResult = SQLCommand.ExecuteReader();
 

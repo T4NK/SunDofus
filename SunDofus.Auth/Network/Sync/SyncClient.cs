@@ -67,34 +67,47 @@ namespace auth.Network.Sync
 
                 switch (Packet[0])
                 {
-                    case "Auth":
-                        Authentification(int.Parse(Packet[1]), Packet[2], int.Parse(Packet[3]));
+                    case "SAI":
+                        //Sync Account Identification
+                        Authentication(int.Parse(Packet[1]), Packet[2], int.Parse(Packet[3]));
                         break;
 
-                    case "DC":
-                        myServer.myClients.Remove(Packet[1]);
+                    case "SDAC":
+                        //Sync Deleted Account Character
+                        SyncAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2], myServer.myID);  
                         break;
 
-                    case "DG":
-                        SyncAction.DeleteGift(int.Parse(Packet[1]), int.Parse(Packet[2]));
+                    case "SNAC":
+                        //Sync New Account Character
+                        SyncAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2], myServer.myID);
                         break;
 
-                    case "NC":
+                    case "SNC":
+                        //Sync New Connected
                         myServer.myClients.Add(Packet[1]);
                         break;
 
-                    case "NCHAR":
-
-                        SyncAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2], myServer.myID);                        
+                    case "SND":
+                        //Sync New Disconnected 
+                        myServer.myClients.Remove(Packet[1]);                     
                         break;
 
-                    case "StartM":
+                    case "SNDG":
+                        //Sync New Deleted Gift  
+                        SyncAction.DeleteGift(int.Parse(Packet[1]), int.Parse(Packet[2]));
+                        break;
 
+                    case "SNLC":
+                        //Sync New List Connected
+                        break;
+
+                    case "SSM":
+                        //Sync Start Maintenance
                         ChangeState(State.Maintenance);
                         break;
 
-                    case "StopM":
-
+                    case "STM":
+                        //Sync Stop Maintenance
                         ChangeState(State.Connected);
                         break;
                 }
@@ -105,7 +118,7 @@ namespace auth.Network.Sync
             }
         }
 
-        void Authentification(int ServerId, string ServerIp, int ServerPort)
+        void Authentication(int ServerId, string ServerIp, int ServerPort)
         {
             if (Database.Cache.ServersCache.myServers.Any(x => x.myID == ServerId && x.myIp == ServerIp && x.myPort == ServerPort && x.myState == 0))
             {
@@ -119,7 +132,7 @@ namespace auth.Network.Sync
 
                 myServer = m_Server;
 
-                Send("Connected!");
+                Send("HCSS");
                 
                 ChangeState(SyncClient.State.Connected);
                 Utilities.Loggers.InfosLogger.Write(string.Format("Sync @{0}@ authentified !", this.myIp()));

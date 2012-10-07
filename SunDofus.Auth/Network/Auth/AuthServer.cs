@@ -11,7 +11,7 @@ namespace auth.Network.Auth
         public List<AuthClient> myClients;
 
         public AuthServer()
-            : base(Utilities.Config.myConfig.GetStringElement("Realm_Ip"), Utilities.Config.myConfig.GetIntElement("Realm_Port"))
+            : base(Utilities.Config.myConfig.GetStringElement("Auth_Ip"), Utilities.Config.myConfig.GetIntElement("Auth_Port"))
         {
             myClients = new List<AuthClient>();
             this.RaiseAcceptEvent += new AcceptEvent(this.AcceptClientServer);

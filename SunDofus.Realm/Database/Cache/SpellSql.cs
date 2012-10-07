@@ -14,7 +14,7 @@ namespace realm.Database.Data
         public static void LoadSpells()
         {
             string SQLText = "SELECT * FROM spells";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
@@ -40,7 +40,7 @@ namespace realm.Database.Data
         public static void LoadSpellsToLearn()
         {
             string SQLText = "SELECT * FROM spells_learn";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, SQLManager.m_Connection);
+            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
             MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 

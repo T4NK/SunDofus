@@ -5,13 +5,13 @@ using System.Text;
 using SilverSock;
 using SunDofus;
 
-namespace realm.Network
+namespace realm.Network.Realm
 {
-    class AuthenticationServer : AbstractServer
+    class RealmServer : AbstractServer
     {
         public List<Client.RealmClient> m_Clients;
 
-        public AuthenticationServer()
+        public RealmServer()
             : base(Config.ConfigurationManager.GetString("Server_Ip"), Config.ConfigurationManager.GetInt("Server_Port"))
         {
             m_Clients = new List<Client.RealmClient>();
@@ -27,9 +27,9 @@ namespace realm.Network
             m_Clients.Add(new Client.RealmClient(Socket));
         }
 
-        public void ListenRealm(int m_Port)
+        public void ListenRealm(string Remote)
         {
-            SunDofus.Logger.Status("AuthenticationServer started on the port '" + m_Port + "' !");
+            SunDofus.Logger.Status("RealmServer started on <" + Remote + "> !");
         }
 
         public void ListenFailedRealm(Exception e)
