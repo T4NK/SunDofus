@@ -72,15 +72,96 @@ namespace realm.Utilities
             if (!myConfig.ExistElement("ServerPort"))
                 myConfig.InsertElement("ServerPort", "5555");
 
-            //Start
+            #region Start
+
             if (!myConfig.ExistElement("StartLevel"))
                 myConfig.InsertElement("StartLevel", "1");
-            if (!myConfig.ExistElement("StartMap"))
-                myConfig.InsertElement("StartMap", "10111");
-            if (!myConfig.ExistElement("StartCell"))
-                myConfig.InsertElement("StartCell", "255");
-            if (!myConfig.ExistElement("StartDir"))
-                myConfig.InsertElement("StartDir", "3");            
+
+            if (!myConfig.ExistElement("StartMap_Feca"))
+                myConfig.InsertElement("StartMap_Feca", "10300");
+            if (!myConfig.ExistElement("StartCell_Feca"))
+                myConfig.InsertElement("StartCell_Feca", "337");
+            if (!myConfig.ExistElement("StartDir_Feca"))
+                myConfig.InsertElement("StartDir_Feca", "3");
+
+            if (!myConfig.ExistElement("StartMap_Osa"))
+                myConfig.InsertElement("StartMap_Osa", "10258");
+            if (!myConfig.ExistElement("StartCell_Osa"))
+                myConfig.InsertElement("StartCell_Osa", "210");
+            if (!myConfig.ExistElement("StartDir_Osa"))
+                myConfig.InsertElement("StartDir_Osa", "3");
+
+            if (!myConfig.ExistElement("StartMap_Enu"))
+                myConfig.InsertElement("StartMap_Enu", "10299");
+            if (!myConfig.ExistElement("StartCell_Enu"))
+                myConfig.InsertElement("StartCell_Enu", "300");
+            if (!myConfig.ExistElement("StartDir_Enu"))
+                myConfig.InsertElement("StartDir_Enu", "3");
+
+            if (!myConfig.ExistElement("StartMap_Sram"))
+                myConfig.InsertElement("StartMap_Sram", "10285");
+            if (!myConfig.ExistElement("StartCell_Sram"))
+                myConfig.InsertElement("StartCell_Sram", "263");
+            if (!myConfig.ExistElement("StartDir_Sram"))
+                myConfig.InsertElement("StartDir_Sram", "3");
+
+            if (!myConfig.ExistElement("StartMap_Xel"))
+                myConfig.InsertElement("StartMap_Xel", "10298");
+            if (!myConfig.ExistElement("StartCell_Xel"))
+                myConfig.InsertElement("StartCell_Xel", "301");
+            if (!myConfig.ExistElement("StartDir_Xel"))
+                myConfig.InsertElement("StartDir_Xel", "3");
+
+            if (!myConfig.ExistElement("StartMap_Eca"))
+                myConfig.InsertElement("StartMap_Eca", "10276");
+            if (!myConfig.ExistElement("StartCell_Eca"))
+                myConfig.InsertElement("StartCell_Eca", "296");
+            if (!myConfig.ExistElement("StartDir_Eca"))
+                myConfig.InsertElement("StartDir_Eca", "3");
+
+            if (!myConfig.ExistElement("StartMap_Eni"))
+                myConfig.InsertElement("StartMap_Eni", "10283");
+            if (!myConfig.ExistElement("StartCell_Eni"))
+                myConfig.InsertElement("StartCell_Eni", "299");
+            if (!myConfig.ExistElement("StartDir_Eni"))
+                myConfig.InsertElement("StartDir_Eni", "3");
+
+            if (!myConfig.ExistElement("StartMap_Iop"))
+                myConfig.InsertElement("StartMap_Iop", "10294");
+            if (!myConfig.ExistElement("StartCell_Iop"))
+                myConfig.InsertElement("StartCell_Iop", "263");
+            if (!myConfig.ExistElement("StartDir_Iop"))
+                myConfig.InsertElement("StartDir_Iop", "3");
+
+            if (!myConfig.ExistElement("StartMap_Cra"))
+                myConfig.InsertElement("StartMap_Cra", "10292");
+            if (!myConfig.ExistElement("StartCell_Cra"))
+                myConfig.InsertElement("StartCell_Cra", "299");
+            if (!myConfig.ExistElement("StartDir_Cra"))
+                myConfig.InsertElement("StartDir_Cra", "3");
+
+            if (!myConfig.ExistElement("StartMap_Sadi"))
+                myConfig.InsertElement("StartMap_Sadi", "10279");
+            if (!myConfig.ExistElement("StartCell_Sadi"))
+                myConfig.InsertElement("StartCell_Sadi", "269");
+            if (!myConfig.ExistElement("StartDir_Sadi"))
+                myConfig.InsertElement("StartDir_Sadi", "3");
+
+            if (!myConfig.ExistElement("StartMap_Sacri"))
+                myConfig.InsertElement("StartMap_Sacri", "10296");
+            if (!myConfig.ExistElement("StartCell_Sacri"))
+                myConfig.InsertElement("StartCell_Sacri", "244");
+            if (!myConfig.ExistElement("StartDir_Sacri"))
+                myConfig.InsertElement("StartDir_Sacri", "3");
+
+            if (!myConfig.ExistElement("StartMap_Panda"))
+                myConfig.InsertElement("StartMap_Panda", "10289");
+            if (!myConfig.ExistElement("StartCell_Panda"))
+                myConfig.InsertElement("StartCell_Panda", "264");
+            if (!myConfig.ExistElement("StartDir_Panda"))
+                myConfig.InsertElement("StartDir_Panda", "3"); 
+
+            #endregion         
         }
     }
 }

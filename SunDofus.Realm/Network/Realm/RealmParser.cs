@@ -139,9 +139,69 @@ namespace realm.Network.Realm
                     myCharacter.Color2 = int.Parse(CharData[4]);
                     myCharacter.Color3 = int.Parse(CharData[5]);
 
-                    myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap");
-                    myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell");
-                    myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir");
+                    switch (myCharacter.Class)
+                    {
+                        case 1:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Feca");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Feca");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Feca");
+                            break;
+                        case 2:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Osa");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Osa");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Osa");
+                            break;
+                        case 3:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Enu");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Enu");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Enu");
+                            break;
+                        case 4:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Sram");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Sram");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Sram");
+                            break;
+                        case 5:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Xel");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Xel");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Xel");
+                            break;
+                        case 6:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Eca");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Eca");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Eca");
+                            break;
+                        case 7:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Eni");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Eni");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Eni");
+                            break;
+                        case 8:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Iop");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Iop");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Iop");
+                            break;
+                        case 9:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Cra");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Cra");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Cra");
+                            break;
+                        case 10:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Sadi");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Sadi");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Sadi");
+                            break;
+                        case 11:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Sacri");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Sacri");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Sacri");
+                            break;
+                        case 12:
+                            myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap_Panda");
+                            myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell_Panda");
+                            myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir_Panda");
+                            break;
+                    }
 
                     myCharacter.CharactPoint = (myCharacter.Level - 1) * 5;
                     myCharacter.SpellPoint = (myCharacter.Level - 1);
