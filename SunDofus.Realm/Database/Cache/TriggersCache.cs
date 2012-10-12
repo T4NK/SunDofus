@@ -12,34 +12,37 @@ namespace realm.Database.Cache
 
         public static void LoadTriggers()
         {
-            string SQLText = "SELECT * FROM triggers";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
-
-            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-            while (SQLReader.Read())
+            lock (DatabaseHandler.myLocker)
             {
-                Database.Models.Maps.TriggerModel myT = new Database.Models.Maps.TriggerModel();
+                var SQLText = "SELECT * FROM triggers";
+                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
-                myT.MapID = SQLReader.GetInt16("MapID");
-                myT.CellID = SQLReader.GetInt16("CellID");
-                myT.NewMapID = int.Parse(SQLReader.GetString("NewMap").Split(',')[0]);
-                myT.NewCellID = int.Parse(SQLReader.GetString("NewMap").Split(',')[1]);
+                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
-                TriggersList.Add(myT);
-                ParseTrigger(myT);
+                while (SQLReader.Read())
+                {
+                    var myTrigger = new Database.Models.Maps.TriggerModel();
+
+                    myTrigger.myMapID = SQLReader.GetInt16("MapID");
+                    myTrigger.myCellID = SQLReader.GetInt16("CellID");
+                    myTrigger.myNewMapID = int.Parse(SQLReader.GetString("NewMap").Split(',')[0]);
+                    myTrigger.myNewCellID = int.Parse(SQLReader.GetString("NewMap").Split(',')[1]);
+
+                    TriggersList.Add(myTrigger);
+                    ParseTrigger(myTrigger);
+                }
+
+                SQLReader.Close();
             }
-
-            SQLReader.Close();
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' triggers@ from the database !", TriggersList.Count));
         }
 
-        public static void ParseTrigger(Database.Models.Maps.TriggerModel myT)
+        public static void ParseTrigger(Database.Models.Maps.TriggerModel myTrigger)
         {
-            foreach (Realm.Map.Map myM in MapsCache.MapsList)
+            foreach (var myM in MapsCache.MapsList)
             {
-                if (myM.myMap.id == myT.MapID) myM.myTriggers.Add(myT);
+                if (myM.myMap.myId == myTrigger.myMapID) myM.myTriggers.Add(myTrigger);
             }
         }
     }

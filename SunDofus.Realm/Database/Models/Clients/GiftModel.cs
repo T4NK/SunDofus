@@ -7,8 +7,8 @@ namespace realm.Database.Models.Clients
 {
     class GiftModel
     {
-        public int id = -1, itemID = -1;
-        public string title = "", message = "";
-        public Realm.Character.Items.CharacterItem item = null;
+        public int myId = -1, myItemID = -1;
+        public string myTitle = "", myMessage = "";
+        public Realm.Character.Items.CharacterItem myItem = null;
     }
 }

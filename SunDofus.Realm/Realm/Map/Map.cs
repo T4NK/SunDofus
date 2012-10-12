@@ -22,33 +22,31 @@ namespace realm.Realm.Map
 
         public void Send(string Message)
         {
-            foreach (Character.Character m_C in myCharacters)
+            foreach (var myCharacter in myCharacters)
             {
-                m_C.Client.Send(Message);
+                myCharacter.Client.Send(Message);
             }
         }
 
-        public void AddPlayer(Character.Character m_C)
+        public void AddPlayer(Character.Character myCharacter)
         {
-            Send("GM|+" + m_C.PatternDisplayChar());
-            myCharacters.Add(m_C);
-            m_C.Client.Send("GM" + CharactersPattern());
+            Send(string.Format("GM|+{0}", myCharacter.PatternDisplayChar()));
+            myCharacters.Add(myCharacter);
+            myCharacter.Client.Send(string.Format("GM{0}", CharactersPattern()));
         }
 
-        public void DelPlayer(Character.Character m_C)
+        public void DelPlayer(Character.Character myCharacter)
         {
-            Send("GM|-" + m_C.ID);
-            myCharacters.Remove(m_C);
+            Send(string.Format("GM|-{0}", myCharacter.ID));
+            myCharacters.Remove(myCharacter);
         }
 
         public string CharactersPattern()
         {
-            string Packet = "|+";
+            var Packet = "|+";
 
-            foreach (Character.Character m_C in myCharacters)
-            {
-                Packet += "|+" + m_C.PatternDisplayChar();
-            }
+            foreach (var myCharacter in myCharacters)
+                Packet += string.Format("|+{0}", myCharacter.PatternDisplayChar());
 
             return Packet;
         }

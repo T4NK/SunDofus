@@ -10,24 +10,25 @@ namespace realm.Realm.World
     {
         public static void SendGeneralMessage(Network.Realm.RealmClient Client, string Message)
         {
-            if (Client.m_Player.GetMap() == null) return;
-            Client.m_Player.GetMap().Send("cMK|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
+            if (Client.myPlayer.GetMap() == null) 
+                return;
+
+            Client.myPlayer.GetMap().Send(string.Format("cMK|{0}|{1}|{2}", Client.myPlayer.ID, Client.myPlayer.myName, Message));
         }
 
         public static void SendPrivateMessage(Network.Realm.RealmClient Client, string Receiver, string Message)
         {
-            if(CharactersManager.CharactersList.Any(x => x.m_Name == Receiver))
+            if(CharactersManager.CharactersList.Any(x => x.myName == Receiver))
             {
-                Character.Character m_C = CharactersManager.CharactersList.First(x => x.m_Name == Receiver);
-                if (m_C.isConnected == true)
+                var myCharacter = CharactersManager.CharactersList.First(x => x.myName == Receiver);
+
+                if (myCharacter.isConnected == true)
                 {
-                    m_C.Client.Send("cMKF|" + Client.m_Player.ID + "|" + Client.m_Player.m_Name + "|" + Message);
-                    Client.Send("cMKT|" + Client.m_Player.ID + "|" + m_C.m_Name + "|" + Message);
+                    myCharacter.Client.Send(string.Format("cMKF|{0}|{1}|{2}", Client.myPlayer.ID, Client.myPlayer.myName, Message));
+                    Client.Send(string.Format("cMKT|{0}|{1}|{2}", Client.myPlayer.ID, myCharacter.myName, Message));
                 }
                 else
-                {
-                    Client.Send("cMEf" + Receiver);
-                }
+                    Client.Send(string.Format("cMEf{0}", Receiver));
             }
         }
     }

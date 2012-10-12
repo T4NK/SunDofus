@@ -13,14 +13,14 @@ namespace realm.Realm.Effect
 
         public override string ToString()
         {
-            return Utilities.Basic.DeciToHex(ID) + "#" + (Value <= 0 ? "" : Utilities.Basic.DeciToHex(Value)) +
-                "#" + (Value2 <= 0 ? "" : Utilities.Basic.DeciToHex(Value2)) + "#" + (Value3 <= 0 ? "0" : Utilities.Basic.DeciToHex(Value3)) + "#" + Effect;
+            return string.Format("{0}#{1}#{2}#{3}#{4}", Utilities.Basic.DeciToHex(ID), (Value <= 0 ? "" : Utilities.Basic.DeciToHex(Value)),
+                (Value2 <= 0 ? "" : Utilities.Basic.DeciToHex(Value2)), (Value3 <= 0 ? "0" : Utilities.Basic.DeciToHex(Value3)), Effect);
         }
 
         public string SetString()
         {
-            return Utilities.Basic.DeciToHex(ID) + "#" + (Value <= 0 ? "" : Utilities.Basic.DeciToHex(Value)) +
-                "#" + (Value2 <= 0 ? "" : Utilities.Basic.DeciToHex(Value2));
+            return string.Format("{0}#{1}#{2}", Utilities.Basic.DeciToHex(ID), (Value <= 0 ? "" : Utilities.Basic.DeciToHex(Value)),
+                (Value2 <= 0 ? "" : Utilities.Basic.DeciToHex(Value2)));
         }
 
         public void ParseEffect(Character.Character _Client)
@@ -351,397 +351,397 @@ namespace realm.Realm.Effect
 
         private void AddLife()
         {
-            Client.m_Stats.Life.Items += Value;
+            Client.myStats.Life.Items += Value;
         }
 
         private void SubLife()
         {
-            Client.m_Stats.Life.Items -= Value;
+            Client.myStats.Life.Items -= Value;
         }
 
         private void AddPA()
         {
-            Client.m_Stats.PA.Items += Value;
+            Client.myStats.PA.Items += Value;
         }
 
         private void AddPM()
         {
-            Client.m_Stats.PM.Items += Value;
+            Client.myStats.PM.Items += Value;
         }
 
         private void AddPO()
         {
-            Client.m_Stats.PO.Items += Value;
+            Client.myStats.PO.Items += Value;
         }
 
         private void AddWisdom()
         {
-            Client.m_Stats.Wisdom.Items += Value;
+            Client.myStats.Wisdom.Items += Value;
         }
 
         private void AddStrenght()
         {
-            Client.m_Stats.Strenght.Items += Value;
+            Client.myStats.Strenght.Items += Value;
         }
 
         private void AddIntel()
         {
-            Client.m_Stats.Intelligence.Items += Value;
+            Client.myStats.Intelligence.Items += Value;
         }
 
         private void AddLuck()
         {
-            Client.m_Stats.Luck.Items += Value;
+            Client.myStats.Luck.Items += Value;
         }
 
         private void AddAgility()
         {
-            Client.m_Stats.Agility.Items += Value;
+            Client.myStats.Agility.Items += Value;
         }
 
         private void AddInitiative()
         {
-            Client.m_Stats.Initiative.Items += Value;
+            Client.myStats.Initiative.Items += Value;
         }
 
         private void AddProspection()
         {
-            Client.m_Stats.Prospection.Items += Value;
+            Client.myStats.Prospection.Items += Value;
         }
 
         private void AddPercentDamage()
         {
-            Client.m_Stats.BonusDamagePercent.Items += Value;
+            Client.myStats.BonusDamagePercent.Items += Value;
         }
 
         private void AddCritic()
         {
-            Client.m_Stats.BonusCritical.Items += Value;
+            Client.myStats.BonusCritical.Items += Value;
         }
 
         private void AddMagicDamage()
         {
-            Client.m_Stats.BonusDamageMagic.Items += Value;
+            Client.myStats.BonusDamageMagic.Items += Value;
         }
 
         private void AddPhysicDamage()
         {
-            Client.m_Stats.BonusDamagePhysic.Items += Value;
+            Client.myStats.BonusDamagePhysic.Items += Value;
         }
 
         private void AddTrapDamage()
         {
-            Client.m_Stats.BonusDamageTrap.Items += Value;
+            Client.myStats.BonusDamageTrap.Items += Value;
         }
 
         private void AddTrapPercentDamage()
         {
-            Client.m_Stats.BonusDamageTrapPercent.Items += Value;
+            Client.myStats.BonusDamageTrapPercent.Items += Value;
         }
 
         private void AddFail()
         {
-            Client.m_Stats.BonusFail.Items += Value;
+            Client.myStats.BonusFail.Items += Value;
         }
 
         private void AddDodgePA()
         {
-            Client.m_Stats.DodgePA.Items += Value;
+            Client.myStats.DodgePA.Items += Value;
         }
 
         private void AddDodgePM()
         {
-            Client.m_Stats.DodgePM.Items += Value;
+            Client.myStats.DodgePM.Items += Value;
         }
 
         private void AddMonster()
         {
-            Client.m_Stats.MaxMonsters.Items += Value;
+            Client.myStats.MaxMonsters.Items += Value;
         }
 
         private void AddPods()
         {
-            Client.m_Stats.MaxPods.Items += Value;
+            Client.myStats.MaxPods.Items += Value;
         }
 
         private void AddHeal()
         {
-            Client.m_Stats.BonusHeal.Items += Value;
+            Client.myStats.BonusHeal.Items += Value;
         }
 
         private void AddDamage()
         {
-            Client.m_Stats.BonusDamage.Items += Value;
+            Client.myStats.BonusDamage.Items += Value;
         }
 
         private void SubAgility()
         {
-            Client.m_Stats.Agility.Items -= Value;
+            Client.myStats.Agility.Items -= Value;
         }
 
         private void SubLuck()
         {
-            Client.m_Stats.Luck.Items -= Value;
+            Client.myStats.Luck.Items -= Value;
         }
 
         private void SubDamage()
         {
-            Client.m_Stats.BonusDamage.Items -= Value;
+            Client.myStats.BonusDamage.Items -= Value;
         }
 
         private void SubCritic()
         {
-            Client.m_Stats.BonusCritical.Items -= Value;
+            Client.myStats.BonusCritical.Items -= Value;
         }
 
         private void SubMagic()
         {
-            Client.m_Stats.BonusDamageMagic.Items -= Value;
+            Client.myStats.BonusDamageMagic.Items -= Value;
         }
 
         private void SubPhysic()
         {
-            Client.m_Stats.BonusDamagePhysic.Items -= Value;
+            Client.myStats.BonusDamagePhysic.Items -= Value;
         }
 
         private void SubDodgePA()
         {
-            Client.m_Stats.DodgePA.Items -= Value;
+            Client.myStats.DodgePA.Items -= Value;
         }
 
         private void SubDodgePM()
         {
-            Client.m_Stats.DodgePM.Items -= Value;
+            Client.myStats.DodgePM.Items -= Value;
         }
 
         private void SubStrenght()
         {
-            Client.m_Stats.Strenght.Items -= Value;
+            Client.myStats.Strenght.Items -= Value;
         }
 
         private void SubInitiative()
         {
-            Client.m_Stats.Initiative.Items -= Value;
+            Client.myStats.Initiative.Items -= Value;
         }
 
         private void SubIntelligence()
         {
-            Client.m_Stats.Intelligence.Items -= Value;
+            Client.myStats.Intelligence.Items -= Value;
         }
 
         private void SubPA()
         {
-            Client.m_Stats.PA.Items -= Value;
+            Client.myStats.PA.Items -= Value;
         }
 
         private void SubPM()
         {
-            Client.m_Stats.PM.Items -= Value;
+            Client.myStats.PM.Items -= Value;
         }
 
         private void SubPO()
         {
-            Client.m_Stats.PO.Items -= Value;
+            Client.myStats.PO.Items -= Value;
         }
 
         private void SubPods()
         {
-            Client.m_Stats.MaxPods.Items -= Value;
+            Client.myStats.MaxPods.Items -= Value;
         }
 
         private void SubProspection()
         {
-            Client.m_Stats.Prospection.Items -= Value;
+            Client.myStats.Prospection.Items -= Value;
         }
 
         private void SubWisdom()
         {
-            Client.m_Stats.Wisdom.Items -= Value;
+            Client.myStats.Wisdom.Items -= Value;
         }
 
         private void SubHeal()
         {
-            Client.m_Stats.BonusHeal.Items -= Value;
+            Client.myStats.BonusHeal.Items -= Value;
         }
 
         private void SubVitality()
         {
-            Client.m_Stats.Life.Items -= Value;
+            Client.myStats.Life.Items -= Value;
         }
 
         private void AddArmorStrenght()
         {
-            Client.m_Stats.ArmorStrenght.Items += Value;
+            Client.myStats.ArmorStrenght.Items += Value;
         }
 
         private void AddArmorNeutral()
         {
-            Client.m_Stats.ArmorNeutral.Items += Value;
+            Client.myStats.ArmorNeutral.Items += Value;
         }
 
         private void AddArmorLuck()
         {
-            Client.m_Stats.ArmorLuck.Items += Value;
+            Client.myStats.ArmorLuck.Items += Value;
         }
 
         private void AddArmorAgility()
         {
-            Client.m_Stats.ArmorAgility.Items += Value;
+            Client.myStats.ArmorAgility.Items += Value;
         }
 
         private void AddArmorIntelligence()
         {
-            Client.m_Stats.ArmorIntelligence.Items += Value;
+            Client.myStats.ArmorIntelligence.Items += Value;
         }
 
         private void AddArmorPercentStrenght()
         {
-            Client.m_Stats.ArmorPercentStrenght.Items += Value;
+            Client.myStats.ArmorPercentStrenght.Items += Value;
         }
 
         private void AddArmorPercentIntelligence()
         {
-            Client.m_Stats.ArmorPercentIntelligence.Items += Value;
+            Client.myStats.ArmorPercentIntelligence.Items += Value;
         }
 
         private void AddArmorPercentAgility()
         {
-            Client.m_Stats.ArmorPercentAgility.Items += Value;
+            Client.myStats.ArmorPercentAgility.Items += Value;
         }
 
         private void AddArmorPercentLuck()
         {
-            Client.m_Stats.ArmorPercentLuck.Items += Value;
+            Client.myStats.ArmorPercentLuck.Items += Value;
         }
 
         private void AddArmorPercentNeutral()
         {
-            Client.m_Stats.ArmorPercentNeutral.Items += Value;
+            Client.myStats.ArmorPercentNeutral.Items += Value;
         }
 
         private void AddArmorPvpStrenght()
         {
-            Client.m_Stats.ArmorPvpStrenght.Items += Value;
+            Client.myStats.ArmorPvpStrenght.Items += Value;
         }
 
         private void AddArmorPvpNeutral()
         {
-            Client.m_Stats.ArmorPvpNeutral.Items += Value;
+            Client.myStats.ArmorPvpNeutral.Items += Value;
         }
 
         private void AddArmorPvpLuck()
         {
-            Client.m_Stats.ArmorPvpLuck.Items += Value;
+            Client.myStats.ArmorPvpLuck.Items += Value;
         }
 
         private void AddArmorPvpAgility()
         {
-            Client.m_Stats.ArmorPvpAgility.Items += Value;
+            Client.myStats.ArmorPvpAgility.Items += Value;
         }
 
         private void AddArmorPvpIntelligence()
         {
-            Client.m_Stats.ArmorPvpIntelligence.Items += Value;
+            Client.myStats.ArmorPvpIntelligence.Items += Value;
         }
 
         private void AddArmorPvpStrenghtPercent()
         {
-            Client.m_Stats.ArmorPvpPercentStrenght.Items += Value;
+            Client.myStats.ArmorPvpPercentStrenght.Items += Value;
         }
 
         private void AddArmorPvpIntelligencePercent()
         {
-            Client.m_Stats.ArmorPvpPercentIntelligence.Items += Value;
+            Client.myStats.ArmorPvpPercentIntelligence.Items += Value;
         }
 
         private void AddArmorPvpAgilityPercent()
         {
-            Client.m_Stats.ArmorPvpPercentAgility.Items += Value;
+            Client.myStats.ArmorPvpPercentAgility.Items += Value;
         }
 
         private void AddArmorPvpLuckPercent()
         {
-            Client.m_Stats.ArmorPvpPercentLuck.Items += Value;
+            Client.myStats.ArmorPvpPercentLuck.Items += Value;
         }
 
         private void AddArmorPvpNeutralPercent()
         {
-            Client.m_Stats.ArmorPvpPercentNeutral.Items += Value;
+            Client.myStats.ArmorPvpPercentNeutral.Items += Value;
         }
 
         private void SubArmorPercentStrenght()
         {
-            Client.m_Stats.ArmorPercentStrenght.Items -= Value;
+            Client.myStats.ArmorPercentStrenght.Items -= Value;
         }
 
         private void SubArmorPercentLuck()
         {
-            Client.m_Stats.ArmorPercentLuck.Items -= Value;
+            Client.myStats.ArmorPercentLuck.Items -= Value;
         }
 
         private void SubArmorPercentAgility()
         {
-            Client.m_Stats.ArmorPercentAgility.Items -= Value;
+            Client.myStats.ArmorPercentAgility.Items -= Value;
         }
 
         private void SubArmorPercentNeutral()
         {
-            Client.m_Stats.ArmorPercentNeutral.Items -= Value;
+            Client.myStats.ArmorPercentNeutral.Items -= Value;
         }
 
         private void SubArmorPercentIntelligence()
         {
-            Client.m_Stats.ArmorPercentIntelligence.Items -= Value;
+            Client.myStats.ArmorPercentIntelligence.Items -= Value;
         }
 
         private void SubArmorStrenght()
         {
-            Client.m_Stats.ArmorStrenght.Items -= Value;
+            Client.myStats.ArmorStrenght.Items -= Value;
         }
 
         private void SubArmorIntelligence()
         {
-            Client.m_Stats.ArmorIntelligence.Items -= Value;
+            Client.myStats.ArmorIntelligence.Items -= Value;
         }
 
         private void SubArmorAgility()
         {
-            Client.m_Stats.ArmorAgility.Items -= Value;
+            Client.myStats.ArmorAgility.Items -= Value;
         }
 
         private void SubArmorLuck()
         {
-            Client.m_Stats.ArmorLuck.Items -= Value;
+            Client.myStats.ArmorLuck.Items -= Value;
         }
 
         private void SubArmorNeutral()
         {
-            Client.m_Stats.ArmorNeutral.Items -= Value;
+            Client.myStats.ArmorNeutral.Items -= Value;
         }
 
         private void SubArmorPvpStrenghtPercent()
         {
-            Client.m_Stats.ArmorPvpPercentStrenght.Items -= Value;
+            Client.myStats.ArmorPvpPercentStrenght.Items -= Value;
         }
 
         private void SubArmorPvpNeutralPercent()
         {
-            Client.m_Stats.ArmorPvpPercentNeutral.Items -= Value;
+            Client.myStats.ArmorPvpPercentNeutral.Items -= Value;
         }
 
         private void SubArmorPvpLuckPercent()
         {
-            Client.m_Stats.ArmorPvpPercentLuck.Items -= Value;
+            Client.myStats.ArmorPvpPercentLuck.Items -= Value;
         }
 
         private void SubArmorPvpAgilityPercent()
         {
-            Client.m_Stats.ArmorPvpPercentAgility.Items -= Value;
+            Client.myStats.ArmorPvpPercentAgility.Items -= Value;
         }
 
         private void SubArmorPvpIntelligencePercent()
         {
-            Client.m_Stats.ArmorPvpPercentIntelligence.Items -= Value;
+            Client.myStats.ArmorPvpPercentIntelligence.Items -= Value;
         }
 
         #endregion

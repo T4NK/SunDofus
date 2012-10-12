@@ -14,35 +14,35 @@ namespace auth.Utilities
 
         public static string RandomString(int lenght)
         {
-            string str = string.Empty;
-            for (int i = 1; i <= lenght; i++)
+            var str = string.Empty;
+
+            for (var i = 1; i <= lenght; i++)
             {
-                int randomInt = Randomizer.Next(0, HASH.Length);
+                var randomInt = Randomizer.Next(0, HASH.Length);
                 str += HASH[randomInt];
             }
+
             return str;
         }
 
         public static string Encrypt(string Password, string Key)
         {
-            string _Crypted = "1";
+            var _Crypted = "1";
 
-            for (int i = 0; i < Password.Length; i++)
+            for (var i = 0; i < Password.Length; i++)
             {
-                char PPass = Password[i];
-                char PKey = Key[i];
-
-                int APass = (int)PPass / 16;
-
-                int AKey = (int)PPass % 16;
-
-                int ANB = (APass + (int)PKey) % HASH.Length;
-                int ANB2 = (AKey + (int)PKey) % HASH.Length;
+                var PPass = Password[i];
+                var PKey = Key[i];
+                var APass = (int)PPass / 16;
+                var AKey = (int)PPass % 16;
+                var ANB = (APass + (int)PKey) % HASH.Length;
+                var ANB2 = (AKey + (int)PKey) % HASH.Length;
 
                 _Crypted += HASH[ANB];
                 _Crypted += HASH[ANB2];
 
             }
+
             return _Crypted;
         }
     }

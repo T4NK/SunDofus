@@ -7,6 +7,6 @@ namespace realm.Database.Models.Maps
 {
     class TriggerModel
     {
-        public int MapID = -1, CellID = -1, NewMapID = -1, NewCellID = -1;
+        public int myMapID = -1, myCellID = -1, myNewMapID = -1, myNewCellID = -1;
     }
 }

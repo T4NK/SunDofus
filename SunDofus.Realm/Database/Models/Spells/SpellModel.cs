@@ -7,8 +7,8 @@ namespace realm.Database.Models.Spells
 {
     class SpellModel
     {
-        public int id = -1, sprite = -1;
-        public string spriteInfos = "";
+        public int myId = -1, mySprite = -1;
+        public string mySpriteInfos = "";
         public List<SpellLevelModel> myLevels;
 
         public SpellModel()
@@ -21,37 +21,37 @@ namespace realm.Database.Models.Spells
             if (Data == "-1")
                 return;
 
-            SpellLevelModel m_L = new SpellLevelModel();
+            var myLevel = new SpellLevelModel();
 
             string[] Stats = Data.Split(',');
-            string Effect = Stats[0];
-            string EffectCC = Stats[1];
+            var Effect = Stats[0];
+            var EffectCC = Stats[1];
 
             if (Stats[2] != "" && Stats[2] != "-1")
-                m_L.Cost = int.Parse(Stats[2]);
+                myLevel.myCost = int.Parse(Stats[2]);
             else
-                m_L.Cost = 6;
+                myLevel.myCost = 6;
 
-            m_L.MinPO = int.Parse(Stats[3]);
-            m_L.MaxPO = int.Parse(Stats[4]);
-            m_L.CC = int.Parse(Stats[5]);
-            m_L.EC = int.Parse(Stats[6]);
+            myLevel.myMinPO = int.Parse(Stats[3]);
+            myLevel.myMaxPO = int.Parse(Stats[4]);
+            myLevel.myCC = int.Parse(Stats[5]);
+            myLevel.myEC = int.Parse(Stats[6]);
 
-            m_L.OnlyLine = (Stats[7] == "true" ? true : false);
-            m_L.OnlyViewLine = (Stats[8] == "true" ? true : false);
-            m_L.EmptyCell = (Stats[9] == "true" ? true : false);
-            m_L.AlterablePO = (Stats[10] == "true" ? true : false);
+            myLevel.myOnlyLine = (Stats[7] == "true" ? true : false);
+            myLevel.myOnlyViewLine = (Stats[8] == "true" ? true : false);
+            myLevel.myEmptyCell = (Stats[9] == "true" ? true : false);
+            myLevel.myAlterablePO = (Stats[10] == "true" ? true : false);
 
-            m_L.MaxPerTurn = int.Parse(Stats[12]);
-            m_L.MaxPerPlayer = int.Parse(Stats[13]);
-            m_L.TurnNumber = int.Parse(Stats[14]);
-            m_L.Type = Stats[15];
-            m_L.ECEndTurn = (Stats[19] == "true" ? true : false);
+            myLevel.myMaxPerTurn = int.Parse(Stats[12]);
+            myLevel.myMaxPerPlayer = int.Parse(Stats[13]);
+            myLevel.myTurnNumber = int.Parse(Stats[14]);
+            myLevel.myType = Stats[15];
+            myLevel.myECEndTurn = (Stats[19] == "true" ? true : false);
 
-            m_L.ParseEffect(Effect, false);
-            m_L.ParseEffect(EffectCC, true);
+            myLevel.ParseEffect(Effect, false);
+            myLevel.ParseEffect(EffectCC, true);
 
-            myLevels.Add(m_L);
+            myLevels.Add(myLevel);
         }
     }
 }

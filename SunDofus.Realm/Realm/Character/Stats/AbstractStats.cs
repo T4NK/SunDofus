@@ -21,7 +21,7 @@ namespace realm.Realm.Character.Stats
 
         public override string ToString()
         {
-            return Bases + "," + Items + "," + Dons + "," + Boosts;
+            return string.Format("{0},{1},{2},{3}", Bases, Items, Dons, Boosts);
         }
     }
 }

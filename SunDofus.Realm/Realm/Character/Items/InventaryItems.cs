@@ -8,12 +8,12 @@ namespace realm.Realm.Character.Items
     class InventaryItems
     {
         public List<CharacterItem> ItemsList;
-        public Character Client;
+        public Character myClient;
         public Dictionary<int,CharacterSet> SetsList;
 
-        public InventaryItems(Character Ch)
+        public InventaryItems(Character myCharacter)
         {
-            Client = Ch;
+            myClient = myCharacter;
             ItemsList = new List<CharacterItem>();
             SetsList = new Dictionary<int,CharacterSet>();
         }
@@ -22,120 +22,125 @@ namespace realm.Realm.Character.Items
         {
             if (OffLine == true)
             {
-                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == ID)) return;
-                Database.Models.Items.ItemModel BaseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == ID);
-                Items.CharacterItem m_I = new CharacterItem(BaseItem);
-                m_I.ParseJet();
-                m_I.GeneratItem();
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.myID == ID)) return;
 
-                foreach (CharacterItem i2 in ItemsList)
+                var BaseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.myID == ID);
+                var myItem = new CharacterItem(BaseItem);
+
+                myItem.ParseJet();
+                myItem.GeneratItem();
+
+                foreach (var myItem2 in ItemsList)
                 {
-                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    if (myItem2.myBaseItem.myID == myItem.myBaseItem.myID && myItem2.EffectsInfos() == myItem.EffectsInfos() && myItem2.myPosition == myItem.myPosition)
                     {
-                        i2.Quantity += m_I.Quantity;
-                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        myItem2.myQuantity += myItem.myQuantity;
+                        myClient.Pods += (myItem.myBaseItem.myPods * myItem.myQuantity);
                         return;
                     }
                 }
 
-                m_I.ID = ItemsHandler.GetNewID();
-                ItemsList.Add(m_I);
+                myItem.myID = ItemsHandler.GetNewID();
+                ItemsList.Add(myItem);
 
-                Client.Pods += m_I.BaseItem.Pods;
+                myClient.Pods += myItem.myBaseItem.myPods;
             }
             else if (OffLine == false)
             {
-                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == ID)) return;
-                Database.Models.Items.ItemModel BaseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == ID);
-                Items.CharacterItem m_I = new CharacterItem(BaseItem);
-                m_I.ParseJet();
-                m_I.GeneratItem();
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.myID == ID)) return;
 
-                foreach (CharacterItem i2 in ItemsList)
+                var BaseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.myID == ID);
+                var myItem = new CharacterItem(BaseItem);
+
+                myItem.ParseJet();
+                myItem.GeneratItem();
+
+                foreach (var myItem2 in ItemsList)
                 {
-                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    if (myItem2.myBaseItem.myID == myItem.myBaseItem.myID && myItem2.EffectsInfos() == myItem.EffectsInfos() && myItem2.myPosition == myItem.myPosition)
                     {
-                        i2.Quantity += m_I.Quantity;
-                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        myItem2.myQuantity += myItem.myQuantity;
+                        myClient.Pods += (myItem.myBaseItem.myPods * myItem.myQuantity);
                         RefreshBonus();
-                        Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
+                        myClient.Client.Send(string.Format("OQ{0}|{1}", myItem2.myID, myItem2.myQuantity));
                         return;
                     }
                 }
 
-                m_I.ID = ItemsHandler.GetNewID();
-                ItemsList.Add(m_I);
+                myItem.myID = ItemsHandler.GetNewID();
+                ItemsList.Add(myItem);
 
-                Client.Pods += m_I.BaseItem.Pods;
+                myClient.Pods += myItem.myBaseItem.myPods;
                 RefreshBonus();
 
-                Client.Client.Send("OAKO" + m_I.ToString());
+                myClient.Client.Send(string.Format("OAKO{0}", myItem.ToString()));
             }
         }
 
-        public void AddItem(CharacterItem m_I, bool OffLine)
+        public void AddItem(CharacterItem myItem, bool OffLine)
         {
             if(OffLine == true)
             {
-                foreach (CharacterItem i2 in ItemsList)
+                foreach (var myItem2 in ItemsList)
                 {
-                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    if (myItem2.myBaseItem.myID == myItem.myBaseItem.myID && myItem2.EffectsInfos() == myItem.EffectsInfos() && myItem2.myPosition == myItem.myPosition)
                     {
-                        i2.Quantity += m_I.Quantity;
-                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        myItem2.myQuantity += myItem.myQuantity;
+                        myClient.Pods += (myItem.myBaseItem.myPods * myItem.myQuantity);
                         return;
                     }
                 }
 
-                m_I.ID = ItemsHandler.GetNewID();
-                ItemsList.Add(m_I);
+                myItem.myID = ItemsHandler.GetNewID();
+                ItemsList.Add(myItem);
 
-                Client.Pods += m_I.BaseItem.Pods;
+                myClient.Pods += myItem.myBaseItem.myPods;
             }
             else if (OffLine == false)
             {
-                foreach (CharacterItem i2 in ItemsList)
+                foreach (var myItem2 in ItemsList)
                 {
-                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position)
+                    if (myItem2.myBaseItem.myID == myItem.myBaseItem.myID && myItem2.EffectsInfos() == myItem.EffectsInfos() && myItem2.myPosition == myItem.myPosition)
                     {
-                        i2.Quantity += m_I.Quantity;
-                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        myItem2.myQuantity += myItem.myQuantity;
+                        myClient.Pods += (myItem.myBaseItem.myPods * myItem.myQuantity);
                         RefreshBonus();
-                        Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
+                        myClient.Client.Send(string.Format("OQ{0}|{1}", myItem2.myID, myItem2.myQuantity));
                         return;
                     }
                 }
 
-                m_I.ID = ItemsHandler.GetNewID();
-                ItemsList.Add(m_I);
+                myItem.myID = ItemsHandler.GetNewID();
+                ItemsList.Add(myItem);
 
-                Client.Pods += m_I.BaseItem.Pods;
+                myClient.Pods += myItem.myBaseItem.myPods;
                 RefreshBonus();
 
-                Client.Client.Send("OAKO" + m_I.ToString());
+                myClient.Client.Send(string.Format("OAKO{0}", myItem.ToString()));
             }
         }
 
         public void DeleteItem(int ID, int Quantity)
         {
-            if (ItemsList.Any(x => x.ID == ID))
+            if (ItemsList.Any(x => x.myID == ID))
             {
-                CharacterItem m_I = ItemsList.First(x => x.ID == ID);
-                if (m_I.Quantity <= Quantity)
-                {
-                    Client.Pods -= (m_I.Quantity * m_I.BaseItem.Pods);
+                var myItem = ItemsList.First(x => x.myID == ID);
 
-                    ItemsList.Remove(m_I);
-                    Client.Client.Send("OR" + m_I.ID);
+                if (myItem.myQuantity <= Quantity)
+                {
+                    myClient.Pods -= (myItem.myQuantity * myItem.myBaseItem.myPods);
+
+                    ItemsList.Remove(myItem);
+                    myClient.Client.Send(string.Format("OR{0}", myItem.myID));
 
                     RefreshBonus();
                 }
                 else
                 {
-                    Client.Pods -= (Quantity * m_I.BaseItem.Pods);
+                    myClient.Pods -= (Quantity * myItem.myBaseItem.myPods);
 
-                    m_I.Quantity -= Quantity;
-                    Client.Client.Send("OQ" + m_I.ID + "|" + m_I.Quantity);
+                    myItem.myQuantity -= Quantity;
+                    myClient.Client.Send(string.Format("OQ{0}|{1}", myItem.myID, myItem.myQuantity));
 
                     RefreshBonus();
                 }
@@ -144,114 +149,116 @@ namespace realm.Realm.Character.Items
 
         public void MoveItem(int ID, int Pos, int Quantity)
         {
-            if (!ItemsList.Any(x => x.ID == ID)) return;
+            if (!ItemsList.Any(x => x.myID == ID)) return;
 
-            CharacterItem m_I = ItemsList.First(x => x.ID == ID);
-            if (ItemsHandler.PositionAvaliable(m_I.BaseItem.Type, m_I.BaseItem.Usable, Pos) == false)
+            var myItem = ItemsList.First(x => x.myID == ID);
+
+            if (ItemsHandler.PositionAvaliable(myItem.myBaseItem.myType, myItem.myBaseItem.meUsable, Pos) == false)
             {
-                Client.Client.Send("BN");
+                myClient.Client.Send("BN");
                 return;
             }
 
-            if (Pos == 1 && m_I.BaseItem.TwoHands == true && isOccuptedPos(15)) // Arme à deux mains avec Bouclier
+            if (Pos == 1 && myItem.myBaseItem.meTwoHands == true && isOccuptedPos(15)) // Arme à deux mains avec Bouclier
             {
-                Client.Client.Send("BN");
+                myClient.Client.Send("BN");
                 return;
             }
 
-            if (ItemsHandler.ConditionsAvaliable(m_I.BaseItem, Client) == false)
+            if (ItemsHandler.ConditionsAvaliable(myItem.myBaseItem, myClient) == false)
             {
-                Client.Client.Send("Im119|44");
+                myClient.Client.Send("Im119|44");
                 return;
             }
 
             if (Pos == 15 && isOccuptedPos(1)) // Bouclier avec Arme à deux mains
             {
-                if (ItemsList.First(x => x.Position == 1).BaseItem.TwoHands == true)
+                if (ItemsList.First(x => x.myPosition == 1).myBaseItem.meTwoHands == true)
                 {
-                    Client.Client.Send("BN");
+                    myClient.Client.Send("BN");
                     return;
                 }
             }
 
-            if (m_I.BaseItem.Type == 23 && Pos != -1) // DOFUS
+            if (myItem.myBaseItem.myType == 23 && Pos != -1) // DOFUS
             {
-                if (!ItemsList.Any(x => x.BaseItem.ID == m_I.BaseItem.ID && x.Position != -1 && x.BaseItem.Type == 23))
+                if (!ItemsList.Any(x => x.myBaseItem.myID == myItem.myBaseItem.myID && x.myPosition != -1 && x.myBaseItem.myType == 23))
                 {
-                    Client.Client.Send("OAEA");
+                    myClient.Client.Send("OAEA");
                     return;
                 }
             }
 
-            if (m_I.BaseItem.Level > Client.Level) //Si trop petit level
+            if (myItem.myBaseItem.myLevel > myClient.Level) //Si trop petit level
             {
-                Client.Client.Send("OAEL");
+                myClient.Client.Send("OAEL");
                 return;
             }
 
-            m_I.Position = Pos;
+            myItem.myPosition = Pos;
 
-            if (m_I.Position == -1)
+            if (myItem.myPosition == -1)
             {
-                foreach (CharacterItem i2 in ItemsList)
+                foreach (var myItem2 in ItemsList)
                 {
-                    if (i2.BaseItem.ID == m_I.BaseItem.ID && i2.EffectsInfos() == m_I.EffectsInfos() && i2.Position == m_I.Position
-                        && i2 != m_I)
+                    if (myItem2.myBaseItem.myID == myItem.myBaseItem.myID && myItem2.EffectsInfos() == myItem.EffectsInfos() && myItem2.myPosition == myItem.myPosition
+                        && myItem2 != myItem)
                     {
-                        i2.Quantity += m_I.Quantity;
-                        Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                        myItem2.myQuantity += myItem.myQuantity;
+                        myClient.Pods += (myItem.myBaseItem.myPods * myItem.myQuantity);
                         RefreshBonus();
-                        Client.Client.Send("OQ" + i2.ID + "|" + i2.Quantity);
-                        Client.Client.Send("OR" + m_I.ID);
-                        ItemsList.Remove(m_I);
+                        myClient.Client.Send(string.Format("OQ{0}|{1}", myItem2.myID, myItem2.myQuantity));
+                        myClient.Client.Send(string.Format("OR{0}", myItem.myID));
+                        ItemsList.Remove(myItem);
                         return;
                     }
                 }
             }
             else
             {
-                if (m_I.Quantity > 1)
+                if (myItem.myQuantity > 1)
                 {
-                    if (m_I.BaseItem.Type == 12 | m_I.BaseItem.Type == 13 | m_I.BaseItem.Type == 14 | m_I.BaseItem.Type == 28 |
-                        m_I.BaseItem.Type == 33 | m_I.BaseItem.Type == 37 | m_I.BaseItem.Type == 42 | m_I.BaseItem.Type == 49 |
-                        m_I.BaseItem.Type == 69 | m_I.BaseItem.Type == 87)
+                    if (myItem.myBaseItem.myType == 12 | myItem.myBaseItem.myType == 13 | myItem.myBaseItem.myType == 14 | myItem.myBaseItem.myType == 28 |
+                        myItem.myBaseItem.myType == 33 | myItem.myBaseItem.myType == 37 | myItem.myBaseItem.myType == 42 | myItem.myBaseItem.myType == 49 |
+                        myItem.myBaseItem.myType == 69 | myItem.myBaseItem.myType == 87)
                     {
                         if (Quantity <= 0) return;
-                        CharacterItem Copy = m_I;
-                        Copy.Quantity -= Quantity;
 
-                        if (m_I.Quantity == Quantity)
-                            Copy.Position = Pos;
+                        var Copy = myItem;
+                        Copy.myQuantity -= Quantity;
+
+                        if (myItem.myQuantity == Quantity)
+                            Copy.myPosition = Pos;
                         else
-                            Copy.Position = -1;
+                            Copy.myPosition = -1;
 
-                        m_I.Quantity = Quantity;
+                        myItem.myQuantity = Quantity;
                         AddItem(Copy, false);
                     }
                     else
                     {
-                        CharacterItem Copy = m_I;
+                        var Copy = myItem;
 
-                        Copy.Quantity -= 1;
-                        Copy.Position = -1;
+                        Copy.myQuantity -= 1;
+                        Copy.myPosition = -1;
 
-                        m_I.Quantity = 1;
+                        myItem.myQuantity = 1;
                         AddItem(Copy, false);
                     }
 
-                    Client.Client.Send("OQ" + m_I.ID + "|" + m_I.Quantity);
+                    myClient.Client.Send(string.Format("OQ{0}|{1}", myItem.myID, myItem.myQuantity));
                 }
             }
 
-            Client.Client.Send("OM" + m_I.ID + "|" + (m_I.Position != -1 ? m_I.Position.ToString() : ""));
-            Client.GetMap().Send("Oa" + Client.ID + "|" + Client.GetItemsPos());
+            myClient.Client.Send(string.Format("OM{0}|{1}", myItem.myID, (myItem.myPosition != -1 ? myItem.myPosition.ToString() : "")));
+            myClient.GetMap().Send(string.Format("Oa{0}|{1}", myClient.ID, myClient.GetItemsPos()));
 
             RefreshBonus();
         }
 
         public bool isOccuptedPos(int Pos)
         {
-            if (ItemsList.Any(x => x.Position == Pos)) return true;
+            if (ItemsList.Any(x => x.myPosition == Pos)) return true;
             return false;
         }
 
@@ -259,26 +266,27 @@ namespace realm.Realm.Character.Items
         {
             string[] Spliter = Data.Split(';');
 
-            foreach (string Infos in Spliter)
+            foreach (var Infos in Spliter)
             {
                 string[] AllInfos = Infos.Split('~');
-                Items.CharacterItem m_I = new CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == Convert.ToInt32(AllInfos[0], 16)));
 
-                m_I.ID = ItemsHandler.GetNewID();
-                m_I.Quantity = Convert.ToInt32(AllInfos[1], 16);
+                var myItem = new CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.myID == Convert.ToInt32(AllInfos[0], 16)));
+
+                myItem.myID = ItemsHandler.GetNewID();
+                myItem.myQuantity = Convert.ToInt32(AllInfos[1], 16);
 
                 if (AllInfos[2] != "")
-                    m_I.Position = Convert.ToInt32(AllInfos[2], 16);
+                    myItem.myPosition = Convert.ToInt32(AllInfos[2], 16);
                 else
-                    m_I.Position = -1;
+                    myItem.myPosition = -1;
 
                 if (AllInfos[3] != "")
                 {
                     string[] EffectsList = AllInfos[3].Split(',');
 
-                    foreach (string Effect in EffectsList)
+                    foreach (var Effect in EffectsList)
                     {
-                        Effect.EffectsItems NewEffect = new Effect.EffectsItems();
+                        var NewEffect = new Effect.EffectsItems();
                         string[] EffectInfos = Effect.Split('#');
 
                         NewEffect.ID = Convert.ToInt32(EffectInfos[0], 16);
@@ -294,86 +302,81 @@ namespace realm.Realm.Character.Items
 
                         NewEffect.Effect = EffectInfos[4];
 
-                        m_I.EffectsList.Add(NewEffect);
+                        myItem.myEffectsList.Add(NewEffect);
                     }
 
                 }
 
-                Client.Pods += (m_I.BaseItem.Pods * m_I.Quantity);
+                myClient.Pods += (myItem.myBaseItem.myPods * myItem.myQuantity);
 
-                ItemsList.Add(m_I);
+                ItemsList.Add(myItem);
             }
         }
 
         public void RefreshBonus()
         {
-            Client.ResetItemsStats();
+            myClient.ResetItemsStats();
             SetsList.Clear();
 
-            foreach (CharacterItem m_I in ItemsList)
+            foreach (var myItem in ItemsList)
             {
-                if (m_I.Position != -1 && m_I.Position < 23)
+                if (myItem.myPosition != -1 && myItem.myPosition < 23)
                 {
-                    foreach (Effect.EffectsItems m_E in m_I.EffectsList)
-                    {
-                        m_E.ParseEffect(Client);
-                    }
+                    foreach (var myEffect in myItem.myEffectsList)
+                        myEffect.ParseEffect(myClient);
                 }
-                if (m_I.BaseItem.Set != -1 && m_I.Position != -1)
+                if (myItem.myBaseItem.mySet != -1 && myItem.myPosition != -1)
                 {
-                    if (SetsList.ContainsKey(m_I.BaseItem.Set))
+                    if (SetsList.ContainsKey(myItem.myBaseItem.mySet))
                     {
-                        if(! SetsList[m_I.BaseItem.Set].ItemsList.Contains(m_I.BaseItem.ID))
-                        {
-                            SetsList[m_I.BaseItem.Set].ItemsList.Add(m_I.BaseItem.ID);
-                        }
+                        if (!SetsList[myItem.myBaseItem.mySet].myItemsList.Contains(myItem.myBaseItem.myID))
+                            SetsList[myItem.myBaseItem.mySet].myItemsList.Add(myItem.myBaseItem.myID);
                     }
                     else
                     {
-                        SetsList.Add(m_I.BaseItem.Set, new CharacterSet(m_I.BaseItem.Set));
-                        SetsList[m_I.BaseItem.Set].ItemsList.Clear();
-                        SetsList[m_I.BaseItem.Set].ItemsList.Add(m_I.BaseItem.ID);
+                        SetsList.Add(myItem.myBaseItem.mySet, new CharacterSet(myItem.myBaseItem.mySet));
+                        SetsList[myItem.myBaseItem.mySet].myItemsList.Clear();
+                        SetsList[myItem.myBaseItem.mySet].myItemsList.Add(myItem.myBaseItem.myID);
                     }
                 }
             }
 
-            foreach (CharacterSet m_S in SetsList.Values)
+            foreach (var mySet in SetsList.Values)
             {
-                int NumberItems = m_S.ItemsList.Count;
-                string StrItems = "";
-                string StrEffects = "";
+                var NumberItems = mySet.myItemsList.Count;
+                var StrItems = "";
+                var StrEffects = "";
 
-                foreach (int ItemID in m_S.ItemsList)
+                foreach (var ItemID in mySet.myItemsList)
+                    StrItems += string.Format("{0};", ItemID);
+
+                foreach (var myEffect in mySet.myBonusList[NumberItems])
                 {
-                    StrItems += ItemID + ";";
+                    StrEffects += string.Format("{0},", myEffect.SetString());
+                    myEffect.ParseEffect(myClient);
                 }
 
-                foreach (Effect.EffectsItems m_E in m_S.BonusList[NumberItems])
-                {
-                    StrEffects += m_E.SetString() + ",";
-                    m_E.ParseEffect(Client);
-                }
-
-                Client.Client.Send("OS+" + m_S.ID + "|" + (StrItems == "" ? "" : StrItems.Substring(0, StrItems.Length - 1)) + "|"
-                    + (StrEffects == "" ? "" : StrEffects.Substring(0, StrEffects.Length - 1)));
+                myClient.Client.Send(string.Format("OS+{0}|{1}|{2}", mySet.myID, (StrItems == "" ? "" : StrItems.Substring(0, StrItems.Length - 1)),
+                    (StrEffects == "" ? "" : StrEffects.Substring(0, StrEffects.Length - 1))));
             }
 
-            Client.SendPods();
-            Client.SendCharStats();
+            myClient.SendPods();
+            myClient.SendCharStats();
         }
 
         public void UseItem(string Data)
         {
-            if (Client.State.OnMove == true)
+            if (myClient.State.OnMove == true)
             {
-                Client.Client.Send("BN");
+                myClient.Client.Send("BN");
                 return;
             }
+
             string[] AllData = Data.Split('|');
 
-            int ItemID = int.Parse(AllData[0]);
-            int CharID = Client.ID;
-            int CellID = Client.MapCell;
+            var ItemID = int.Parse(AllData[0]);
+            var CharID = myClient.ID;
+            var CellID = myClient.MapCell;
 
             if (AllData.Length > 2)
             {
@@ -381,32 +384,32 @@ namespace realm.Realm.Character.Items
                 CellID = int.Parse(AllData[2]);
             }
 
-            if (!ItemsList.Any(x => x.ID == ItemID))
+            if (!ItemsList.Any(x => x.myID == ItemID))
             {
-                Client.Client.Send("OUE");
+                myClient.Client.Send("OUE");
                 return;
             }
 
-            CharacterItem Item = ItemsList.First(x => x.ID == ItemID);
+            var myItem = ItemsList.First(x => x.myID == ItemID);
 
-            if (Item.BaseItem.Usable == false)
+            if (myItem.myBaseItem.meUsable == false)
             {
-                Client.Client.Send("BN");
+                myClient.Client.Send("BN");
                 return;
             }
 
-            Database.Models.Items.ItemUsableModel m_I = Database.Cache.ItemsCache.UsablesList.First(x => x.BaseItemID == Item.BaseItem.ID);
-            Character m_C = CharactersManager.CharactersList.First(x => x.ID == CharID);
+            var myUsable = Database.Cache.ItemsCache.UsablesList.First(x => x.myBaseItemID == myItem.myBaseItem.myID);
+            var myCharacter = CharactersManager.CharactersList.First(x => x.ID == CharID);
 
-            if (!m_I.ConditionsAvaliable(m_C))
+            if (!myUsable.ConditionsAvaliable(myCharacter))
             {
-                Client.Client.Send("Im119|44");
+                myClient.Client.Send("Im119|44");
                 return;
             }
 
-            m_I.ParseEffect(m_C);
+            myUsable.ParseEffect(myCharacter);
 
-            DeleteItem(Item.ID, 1);
+            DeleteItem(myItem.myID, 1);
         }
     }
 }

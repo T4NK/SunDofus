@@ -28,13 +28,15 @@ namespace realm.Realm.World
 
         public static void SaveChar()
         {
-            Network.ServersHandler.myAuthLink.Send("StartM");
-            foreach (Character.Character m_C in Character.CharactersManager.CharactersList)
+            Network.ServersHandler.myAuthLink.Send("SSM");
+
+            foreach (var myCharacter in Character.CharactersManager.CharactersList)
             {
-                Database.Cache.CharactersCache.SaveCharacter(m_C);
+                Database.Cache.CharactersCache.SaveCharacter(myCharacter);
                 System.Threading.Thread.Sleep(100);
             }
-            Network.ServersHandler.myAuthLink.Send("StopM");
+
+            Network.ServersHandler.myAuthLink.Send("STM");
         }
     }
 }

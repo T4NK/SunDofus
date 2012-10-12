@@ -43,69 +43,64 @@ namespace realm.Realm.Map
                 case 'a':
                     return fight ? -1 : caseID + 1;
                 case 'b':
-                    return caseID + _map.myMap.width;
+                    return caseID + _map.myMap.myWidth;
                 case 'c':
-                    return fight ? -1 : caseID + (_map.myMap.width * 2 - 1);
+                    return fight ? -1 : caseID + (_map.myMap.myWidth * 2 - 1);
                 case 'd':
-                    return caseID + (_map.myMap.width - 1);
+                    return caseID + (_map.myMap.myWidth - 1);
                 case 'e':
                     return fight ? -1 : caseID - 1;
                 case 'f':
-                    return caseID - _map.myMap.width;
+                    return caseID - _map.myMap.myWidth;
                 case 'g':
-                    return fight ? -1 : caseID - (_map.myMap.width * 2 - 1);
+                    return fight ? -1 : caseID - (_map.myMap.myWidth * 2 - 1);
                 case 'h':
-                    return caseID - _map.myMap.width + 1;
+                    return caseID - _map.myMap.myWidth + 1;
             }
+
             return -1; 
         }
 
         public static int GetCellNum(string CellChars)
         {
+            var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
 
-            string hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
-
-            int NumChar1 = hash.IndexOf(CellChars[0]) * hash.Length;
-            int NumChar2 = hash.IndexOf(CellChars[1]);
+            var NumChar1 = hash.IndexOf(CellChars[0]) * hash.Length;
+            var NumChar2 = hash.IndexOf(CellChars[1]);
 
             return NumChar1 + NumChar2;
-
         }
 
         public static string GetCellChars(int CellNum)
         {
+            var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
 
-            string hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
-
-            int CharCode2 = (CellNum % hash.Length);
-            int CharCode1 = (CellNum - CharCode2) / hash.Length;
+            var CharCode2 = (CellNum % hash.Length);
+            var CharCode1 = (CellNum - CharCode2) / hash.Length;
 
             return hash[CharCode1].ToString() + hash[CharCode2].ToString();
-
         }
 
         public static string GetDirChar(int DirNum)
         {
-
-            string hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+            var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
             if (DirNum >= hash.Length)
                 return "";
-            return hash[DirNum].ToString();
 
+            return hash[DirNum].ToString();
         }
 
         public static int GetDirNum(string DirChar)
         {
-
-            string hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+            var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
             return hash.IndexOf(DirChar);
-
         }
 
         public bool InLine(int cell1, int cell2)
         {
-            bool isX = GetCellXCoord(cell1) == GetCellXCoord(cell2);
-            bool isY = GetCellYCoord(cell1) == GetCellYCoord(cell2);
+            var isX = GetCellXCoord(cell1) == GetCellXCoord(cell2);
+            var isY = GetCellYCoord(cell1) == GetCellYCoord(cell2);
+
             return isX || isY;
         }
 
@@ -117,35 +112,37 @@ namespace realm.Realm.Map
                     return cell + 1;
 
                 case 1:
-                    return cell + _map.myMap.width;
+                    return cell + _map.myMap.myWidth;
 
                 case 2:
-                    return cell + (_map.myMap.width * 2) - 1;
+                    return cell + (_map.myMap.myWidth * 2) - 1;
 
                 case 3:
-                    return cell + _map.myMap.width - 1;
+                    return cell + _map.myMap.myWidth - 1;
 
                 case 4:
                     return cell - 1;
 
                 case 5:
-                    return cell - _map.myMap.width;
+                    return cell - _map.myMap.myWidth;
 
                 case 6:
-                    return cell - (_map.myMap.width * 2) + 1;
+                    return cell - (_map.myMap.myWidth * 2) + 1;
 
                 case 7:
-                    return cell - _map.myMap.width + 1;
+                    return cell - _map.myMap.myWidth + 1;
 
             }
+
             return -1;
         }
 
         public string RemakeLine(int lastCell, string cell, int finalCell)
         {
-            int direction = GetDirNum(cell[0].ToString());
-            int toCell = GetCellNum(cell.Substring(1));
-            int lenght = 0;
+            var direction = GetDirNum(cell[0].ToString());
+            var toCell = GetCellNum(cell.Substring(1));
+            var lenght = 0;
+
             if (InLine(lastCell, toCell))
             {
                 lenght = GetEstimateDistanceBetween(lastCell, toCell);
@@ -154,32 +151,38 @@ namespace realm.Realm.Map
             {
                 lenght = int.Parse(Math.Truncate((GetEstimateDistanceBetween(lastCell, toCell) / 1.4)).ToString());
             }
-            int backCell = lastCell;
-            int actuelCell = lastCell;
-            for (int i = 1; i <= lenght; i++)
+
+            var backCell = lastCell;
+            var actuelCell = lastCell;
+
+            for (var i = 1; i <= lenght; i++)
             {
                 actuelCell = NextCell(actuelCell, direction);
                 backCell = actuelCell;
             }
+
             return cell + ",1";
         }
 
         public string RemakePath()
         {
-            string newPath = "";
-            int newCell = GetCellNum(_strPath.Substring(_strPath.Length - 2, 2));
-            int lastCell = _startCell;
-            for (int i = 0; i <= _strPath.Length - 1; i += 3)
+            var newPath = "";
+            var newCell = GetCellNum(_strPath.Substring(_strPath.Length - 2, 2));
+            var lastCell = _startCell;
+
+            for (var i = 0; i <= _strPath.Length - 1; i += 3)
             {
-                string actualCell = _strPath.Substring(i, 3);
+                var actualCell = _strPath.Substring(i, 3);
                 string[] lineData = RemakeLine(lastCell, actualCell, newCell).Split(',');
                 newPath += lineData[0];
                 if (lineData[1] == null)
                     return newPath;
                 lastCell = GetCellNum(actualCell.Substring(1));
             }
+
             Destination = GetCellNum(_strPath.Substring(_strPath.Length - 2, 2));
             NewDirection = GetDirNum(_strPath.Substring(_strPath.Length - 3, 1));
+
             return newPath;
         }
 
@@ -187,8 +190,10 @@ namespace realm.Realm.Map
         {
             if (id1 == id2) return 0;
             if (_map == null) return 0;
-            int diffX = Math.Abs(GetCellXCoord(id1) - GetCellXCoord(id2));
-            int diffY = Math.Abs(GetCellYCoord(id1) - GetCellYCoord(id2));
+
+            var diffX = Math.Abs(GetCellXCoord(id1) - GetCellXCoord(id2));
+            var diffY = Math.Abs(GetCellYCoord(id1) - GetCellYCoord(id2));
+
             return (diffX + diffY);
         }
 
@@ -196,23 +201,26 @@ namespace realm.Realm.Map
         {
             if (id1 == id2) return 0;
             if (_map == null) return 0;
-            int diffX = Math.Abs(GetCellXCoord(id1) - GetCellXCoord(id2));
-            int diffY = Math.Abs(GetCellYCoord(id1) - GetCellYCoord(id2));
+
+            var diffX = Math.Abs(GetCellXCoord(id1) - GetCellXCoord(id2));
+            var diffY = Math.Abs(GetCellYCoord(id1) - GetCellYCoord(id2));
+
             return int.Parse(Math.Truncate(Math.Sqrt(Math.Pow(diffX, 2) + Math.Pow(diffY, 2))).ToString());
         }
 
         public int GetCellXCoord(int cellid)
         {
-            int w = _map.myMap.width;
+            var w = _map.myMap.myWidth;
             return ((cellid - (w - 1) * GetCellYCoord(cellid)) / w);
         }
 
         public int GetCellYCoord(int cellid)
         {
-            int w = _map.myMap.width;
-            int loc5 = (int)(cellid / ((w * 2) - 1));
-            int loc6 = cellid - loc5 * ((w * 2) - 1);
-            int loc7 = loc6 % w;
+            var w = _map.myMap.myWidth;
+            var loc5 = (int)(cellid / ((w * 2) - 1));
+            var loc6 = cellid - loc5 * ((w * 2) - 1);
+            var loc7 = loc6 % w;
+
             return (loc5 - loc7);
         }
     }

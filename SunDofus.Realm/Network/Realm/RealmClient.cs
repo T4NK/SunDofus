@@ -8,24 +8,24 @@ namespace realm.Network.Realm
 {
     class RealmClient : SunDofus.AbstractClient
     {
-        public Database.Models.Clients.AccountModel m_Infos;
-        public List<realm.Realm.Character.Character> m_Characters;
-        public realm.Realm.Character.Character m_Player = null;
+        public Database.Models.Clients.AccountModel myInfos;
+        public List<realm.Realm.Character.Character> myCharacters;
+        public realm.Realm.Character.Character myPlayer = null;
         public bool isAuth = false;
-        public RealmCommand m_Commander;
+        public RealmCommand myCommander;
 
-        object PacketLocker;
+        object myPacketLocker;
         RealmParser myParser;
 
         public RealmClient(SilverSocket Socket) :  base(Socket)
         {
-            PacketLocker = new object();
+            myPacketLocker = new object();
 
             this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
             this.RaiseDataArrivalEvent += new DataArrivalEvent(this.ReceivedPackets);
 
-            m_Characters = new List<realm.Realm.Character.Character>();
-            m_Commander = new RealmCommand(this);
+            myCharacters = new List<realm.Realm.Character.Character>();
+            myCommander = new RealmCommand(this);
             myParser = new RealmParser(this);
 
             Send("HG");
@@ -33,61 +33,65 @@ namespace realm.Network.Realm
 
         public void ParseCharacters()
         {
-            foreach (string Name in m_Infos.myCharacters)
+            foreach (var Name in myInfos.myCharacters)
             {
-                realm.Realm.Character.Character m_C = realm.Realm.Character.CharactersManager.CharactersList.First(x => x.m_Name == Name);
-                if (m_C != null)
-                {
-                    m_Characters.Add(m_C);
-                }
+                if (!realm.Realm.Character.CharactersManager.CharactersList.Any(x => x.myName == Name)) continue;
+
+                var m_C = realm.Realm.Character.CharactersManager.CharactersList.First(x => x.myName == Name);
+                myCharacters.Add(m_C);
             }
         }
 
         public void SendGifts()
         {
-            m_Infos.ParseGifts();
-            foreach (Database.Models.Clients.GiftModel myGift in m_Infos.myGifts)
+            myInfos.ParseGifts();
+
+            foreach (var myGift in myInfos.myGifts)
             {
-                realm.Realm.Character.Items.CharacterItem Item = new realm.Realm.Character.Items.CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == myGift.itemID));
+                var Item = new realm.Realm.Character.Items.CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.myID == myGift.myItemID));
+
                 Item.ParseJet();
                 Item.GeneratItem();
 
-                myGift.item = Item;
+                myGift.myItem = Item;
 
-                this.Send("Ag1|" + myGift.id + "|" + myGift.title + "|" + myGift.message + "|http://s2.e-monsite.com/2009/12/26/04/167wpr7.png" + "|" + Utilities.Basic.DeciToHex(Item.BaseItem.ID) +
-                    "~" + Utilities.Basic.DeciToHex(Item.BaseItem.ID) + "~" + Utilities.Basic.DeciToHex(Item.Quantity) + "~~" + Item.EffectsInfos() + ";");
+                this.Send(string.Format("Ag1|{0}|{1}|{2}|{3}|{4}~{5}~{6}~~{7};", myGift.myId, myGift.myTitle, myGift.myMessage, "http://s2.e-monsite.com/2009/12/26/04/167wpr7.png",
+                   Utilities.Basic.DeciToHex(Item.myBaseItem.myID), Utilities.Basic.DeciToHex(Item.myBaseItem.myID), Utilities.Basic.DeciToHex(Item.myQuantity), Item.EffectsInfos()));
             }
         }
 
         public void SendConsoleMessage(string Message, int Color)
         {
-            Send("BAT" + Color + Message);
+            Send(string.Format("BAT{0}{1}", Color, Message));
         }
 
         public void SendMessage(string Message)
         {
-            Send("cs<font color=\"#FF0000\">" + Message + "</font>");
+            Send(string.Format("cs<font color=\"#FF0000\">{0}</font>", Message));
         }
 
         void ReceivedPackets(string Data)
         {
-            lock (PacketLocker)
+            Utilities.Loggers.InfosLogger.Write(string.Format("Receive data from <{0}> ({1})", myIp(), Data));
+
+            lock (myPacketLocker)
                 myParser.Parse(Data);
         }
 
         void Disconnected()
         {
             Utilities.Loggers.InfosLogger.Write("New closed client connection !");
+
             if (isAuth == true)
             {
-                Network.ServersHandler.myAuthLink.Send("DC|" + m_Infos.Pseudo);
-                if (m_Player != null)
+                Network.ServersHandler.myAuthLink.Send(string.Format("SND|{0}", myInfos.mymPseudo));
+                if (myPlayer != null)
                 {
-                    m_Player.GetMap().DelPlayer(m_Player);
-                    m_Player.isConnected = false;
+                    myPlayer.GetMap().DelPlayer(myPlayer);
+                    myPlayer.isConnected = false;
                 }
             }
-            Network.ServersHandler.myRealmServer.m_Clients.Remove(this);
+            Network.ServersHandler.myRealmServer.myClients.Remove(this);
         }
     }
 }

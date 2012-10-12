@@ -19,7 +19,7 @@ namespace auth.Database.Cache
 
             try
             {
-                lock (DatabaseHandler.myConnectionLocker)
+                lock (DatabaseHandler.myLocker)
                 {
                     string Text = "SELECT * FROM servers";
                     MySqlCommand Command = new MySqlCommand(Text, DatabaseHandler.myConnection);
@@ -34,9 +34,7 @@ namespace auth.Database.Cache
                         newServer.myPort = Reader.GetInt16("Port");
 
                         if (!myServers.Any(x => x.myID == newServer.myID))
-                        {
                             myServers.Add(newServer);
-                        }
                     }
 
                     Reader.Close();

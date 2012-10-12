@@ -71,6 +71,16 @@ namespace realm.Utilities
                 myConfig.InsertElement("ServerIp", "127.0.0.1");
             if (!myConfig.ExistElement("ServerPort"))
                 myConfig.InsertElement("ServerPort", "5555");
+
+            //Start
+            if (!myConfig.ExistElement("StartLevel"))
+                myConfig.InsertElement("StartLevel", "1");
+            if (!myConfig.ExistElement("StartMap"))
+                myConfig.InsertElement("StartMap", "10111");
+            if (!myConfig.ExistElement("StartCell"))
+                myConfig.InsertElement("StartCell", "255");
+            if (!myConfig.ExistElement("StartDir"))
+                myConfig.InsertElement("StartDir", "3");            
         }
     }
 }

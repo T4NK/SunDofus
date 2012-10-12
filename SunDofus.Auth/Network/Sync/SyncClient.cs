@@ -28,6 +28,7 @@ namespace auth.Network.Sync
         public void SendNewTicket(string myKey, Auth.AuthClient myClient)
         {
             StringBuilder Builder = new StringBuilder();
+
             Builder.Append("ANTS|");
             Builder.Append(myKey).Append("|");
             Builder.Append(myClient.myAccount.myId).Append("|");
@@ -53,7 +54,7 @@ namespace auth.Network.Sync
         void Disconnected()
         {
             ChangeState(State.Disconnected);
-            Utilities.Loggers.InfosLogger.Write("New closed sync connection @<" + this.myIp() + ">@ !");
+            Utilities.Loggers.InfosLogger.Write(string.Format("New closed sync connection @<{0}>@ !", this.myIp()));
 
             lock (ServersHandler.mySyncServer.myClients)
                 ServersHandler.mySyncServer.myClients.Remove(this);
@@ -122,7 +123,7 @@ namespace auth.Network.Sync
         {
             if (Database.Cache.ServersCache.myServers.Any(x => x.myID == ServerId && x.myIp == ServerIp && x.myPort == ServerPort && x.myState == 0))
             {
-                Database.Models.ServerModel m_Server = Database.Cache.ServersCache.myServers.First(x => x.myID == ServerId && x.myIp == ServerIp && x.myPort == ServerPort && x.myState == 0);
+                var myServer2 = Database.Cache.ServersCache.myServers.First(x => x.myID == ServerId && x.myIp == ServerIp && x.myPort == ServerPort && x.myState == 0);
 
                 if (!myIp().Contains(ServerIp))
                 {
@@ -130,7 +131,7 @@ namespace auth.Network.Sync
                     return;
                 }
 
-                myServer = m_Server;
+                myServer = myServer2;
 
                 Send("HCSS");
                 

@@ -15,8 +15,8 @@ namespace auth.Network.Sync
                 Database.Models.AccountModel myAccount = Database.Cache.AccountsCache.myAccounts.First(x => x.myId == CompteID);
                 myAccount.ParseCharacter(NewCharacters);
 
-                string SQLText = "UPDATE accounts SET characters=@NewCharacters WHERE Id=@Me";
-                MySqlCommand SQLCommand = new MySqlCommand(SQLText, Database.DatabaseHandler.myConnection);
+                var SQLText = "UPDATE accounts SET characters=@NewCharacters WHERE Id=@Me";
+                var SQLCommand = new MySqlCommand(SQLText, Database.DatabaseHandler.myConnection);
 
                 SQLCommand.Parameters.Add(new MySqlParameter("@Me", CompteID));
                 SQLCommand.Parameters.Add(new MySqlParameter("@NewCharacters", NewCharacters));
@@ -35,8 +35,8 @@ namespace auth.Network.Sync
             {
                 Database.Cache.GiftsCache.myGifts.Remove(Database.Cache.GiftsCache.myGifts.First(x => x.myId == GiftID && x.myTarget == CompteID));
 
-                string SQLText = "DELETE FROM gifts WHERE id=@ID";
-                MySqlCommand SQLCommand = new MySqlCommand(SQLText, Database.DatabaseHandler.myConnection);
+                var SQLText = "DELETE FROM gifts WHERE id=@ID";
+                var SQLCommand = new MySqlCommand(SQLText, Database.DatabaseHandler.myConnection);
 
                 SQLCommand.Parameters.Add(new MySqlParameter("@ID", GiftID));
 

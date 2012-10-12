@@ -19,7 +19,7 @@ namespace auth.Database.Cache
 
             try
             {
-                lock (DatabaseHandler.myConnectionLocker)
+                lock (DatabaseHandler.myLocker)
                 {
                     string Text = "SELECT * FROM accounts";
                     MySqlCommand Command = new MySqlCommand(Text, DatabaseHandler.myConnection);
@@ -40,9 +40,7 @@ namespace auth.Database.Cache
                         newAccount.mySubscriptionDate = Reader.GetDateTime("subscription");
 
                         if (!myAccounts.Any(x => x.myId == newAccount.myId))
-                        {
                             myAccounts.Add(newAccount);
-                        }
                     }
 
                     Reader.Close();

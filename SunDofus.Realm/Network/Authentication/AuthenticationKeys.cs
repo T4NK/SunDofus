@@ -7,27 +7,26 @@ namespace realm.Network.Authentication
 {
     class AuthenticationKeys
     {
-        public static List<AuthenticationKeys> m_Keys = new List<AuthenticationKeys>();
+        public static List<AuthenticationKeys> myKeys = new List<AuthenticationKeys>();
 
-        public string m_Key;
-        public Database.Models.Clients.AccountModel m_Infos;
+        public string myKey;
+        public Database.Models.Clients.AccountModel myInfos;
 
         public AuthenticationKeys(string Packet)
         {
-            m_Key = "";
-            m_Infos = new Database.Models.Clients.AccountModel();
+            myKey = "";
+            myInfos = new Database.Models.Clients.AccountModel();
 
             string[] Data = Packet.Split('|');
-            m_Key = Data[1];
-            m_Infos.Id = int.Parse(Data[2]);
-            m_Infos.Pseudo = Data[3];
-            m_Infos.Question = Data[4];
-            m_Infos.Answer = Data[5];
-            m_Infos.Level = int.Parse(Data[6]);
-            m_Infos.Characters = Data[7];
-            m_Infos.Subscription = long.Parse(Data[8]);
-
-            m_Infos.Gifts = Data[9];
+            myKey = Data[1];
+            myInfos.myId = int.Parse(Data[2]);
+            myInfos.mymPseudo = Data[3];
+            myInfos.myQuestion = Data[4];
+            myInfos.myAnswer = Data[5];
+            myInfos.myLevel = int.Parse(Data[6]);
+            myInfos.Characters = Data[7];
+            myInfos.mySubscription = long.Parse(Data[8]);
+            myInfos.Gifts = Data[9];
         }
     }
 }

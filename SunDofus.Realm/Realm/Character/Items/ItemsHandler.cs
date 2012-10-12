@@ -7,11 +7,11 @@ namespace realm.Realm.Character.Items
 {
     class ItemsHandler
     {
-        public static int LastID = 0;
+        public static int myLastID = 0;
 
         public static int GetNewID()
         {
-            return ++LastID;
+            return ++myLastID;
         }
 
         public static bool PositionAvaliable(int ItemType, bool Usable, int Position)
@@ -21,20 +21,20 @@ namespace realm.Realm.Character.Items
 
         }
 
-        public static bool ConditionsAvaliable(Database.Models.Items.ItemModel m_I, Character m_C)
+        public static bool ConditionsAvaliable(Database.Models.Items.ItemModel myItem, Character myCharacter)
         {
-            string Condi = m_I.Conditions;
+            var Condi = myItem.myConditions;
 
             if (Condi == "")
                 return true;
 
-            bool Avaliable = false;
+            var Avaliable = false;
 
-            foreach(string Cond in Condi.Split('&'))
+            foreach(var Cond in Condi.Split('&'))
             {
-                string Spliter = Cond.Substring(2, 1);
-                int Value = -1;
-                int ToCompare = int.Parse(Cond.Substring(3));
+                var Spliter = Cond.Substring(2, 1);
+                var Value = -1;
+                var ToCompare = int.Parse(Cond.Substring(3));
 
                 switch(Cond.Substring(0,1))
                 {
@@ -43,51 +43,51 @@ namespace realm.Realm.Character.Items
                         switch(Cond.Substring(1,1))
                         {
                             case "a":
-                                Value = m_C.m_Stats.Agility.Bases;
+                                Value = myCharacter.myStats.Agility.Bases;
                                 break;
 
                             case "i":
-                                Value = m_C.m_Stats.Intelligence.Bases;
+                                Value = myCharacter.myStats.Intelligence.Bases;
                                 break;
 
                             case "c":
-                                Value = m_C.m_Stats.Luck.Bases;
+                                Value = myCharacter.myStats.Luck.Bases;
                                 break;
 
                             case "s":
-                                Value = m_C.m_Stats.Strenght.Bases;
+                                Value = myCharacter.myStats.Strenght.Bases;
                                 break;
 
                             case "v":
-                                Value = m_C.m_Stats.Life.Bases;
+                                Value = myCharacter.myStats.Life.Bases;
                                 break;
 
                             case "w":
-                                Value = m_C.m_Stats.Wisdom.Bases;
+                                Value = myCharacter.myStats.Wisdom.Bases;
                                 break;
 
                             case "A":
-                                Value = m_C.m_Stats.Agility.Total();
+                                Value = myCharacter.myStats.Agility.Total();
                                 break;
 
                             case "I":
-                                Value = m_C.m_Stats.Intelligence.Total();
+                                Value = myCharacter.myStats.Intelligence.Total();
                                 break;
 
                             case "C":
-                                Value = m_C.m_Stats.Luck.Total();
+                                Value = myCharacter.myStats.Luck.Total();
                                 break;
 
                             case "S":
-                                Value = m_C.m_Stats.Strenght.Total();
+                                Value = myCharacter.myStats.Strenght.Total();
                                 break;
 
                             case "V":
-                                Value = m_C.m_Stats.Life.Total();
+                                Value = myCharacter.myStats.Life.Total();
                                 break;
 
                             case "W":
-                                Value = m_C.m_Stats.Wisdom.Total();
+                                Value = myCharacter.myStats.Wisdom.Total();
                                 break;
 
                             default:
@@ -102,15 +102,15 @@ namespace realm.Realm.Character.Items
                         switch(Cond.Substring(1,1))
                         {
                             case "G":
-                                Value = m_C.Class;
+                                Value = myCharacter.Class;
                                 break;
 
                             case "L":
-                                Value = m_C.Level;
+                                Value = myCharacter.Level;
                                 break;
 
                             case "K":
-                                Value = m_C.Kamas;
+                                Value = myCharacter.Kamas;
                                 break;
 
                             default:

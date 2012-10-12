@@ -18,10 +18,11 @@ namespace realm.Database
 
             try
             {
-                myConnection.ConnectionString = "server=" + Utilities.Config.myConfig.GetStringElement("Database_Server") +
-                        ";uid=" + Utilities.Config.myConfig.GetStringElement("Database_User") +
-                        ";pwd='" + Utilities.Config.myConfig.GetStringElement("Database_Pass") +
-                        "';database=" + Utilities.Config.myConfig.GetStringElement("Database_Name");
+                myConnection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}", 
+                    Utilities.Config.myConfig.GetStringElement("Database_Server"), 
+                    Utilities.Config.myConfig.GetStringElement("Database_User"), 
+                    Utilities.Config.myConfig.GetStringElement("Database_Pass"), 
+                    Utilities.Config.myConfig.GetStringElement("Database_Name"));
 
                 lock (myLocker)
                     myConnection.Open();
@@ -30,7 +31,7 @@ namespace realm.Database
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write("Can't connect to the @database@ : " + e.ToString());
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Can't connect to the @database@ : {0}", e.ToString()));
             }
         }
     }

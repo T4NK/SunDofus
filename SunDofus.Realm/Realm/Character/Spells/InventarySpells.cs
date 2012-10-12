@@ -8,19 +8,19 @@ namespace realm.Realm.Character.Spells
     class InventarySpells
     {
         public List<CharacterSpell> mySpells;
-        public Character Client;
+        public Character myClient;
 
         public InventarySpells(Character client)
         {
             mySpells = new List<CharacterSpell>();
-            Client = client;
+            myClient = client;
         }
 
         public void ParseSpells(string Data)
         {
             string[] Spells = Data.Split('|');
 
-            foreach (string Spell in Spells)
+            foreach (var Spell in Spells)
             {
                 string[] Infos = Spell.Split(',');
                 AddSpells(int.Parse(Infos[0]), int.Parse(Infos[1]), int.Parse(Infos[2]));
@@ -29,16 +29,16 @@ namespace realm.Realm.Character.Spells
 
         public void LearnSpells()
         {
-            foreach (realm.Database.Models.Spells.SpellToLearnModel m_S in Database.Cache.SpellsCache.SpellsToLearn.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
+            foreach (var mySpell in Database.Cache.SpellsCache.SpellsToLearn.Where(x => x.myRace == myClient.Class && x.myLevel <= myClient.Level))
             {
-                if (mySpells.Any(x => x.id == m_S.SpellID)) continue;
-                AddSpells(m_S.SpellID, 1, m_S.Pos);
+                if (mySpells.Any(x => x.myId == mySpell.mySpellID)) continue;
+                AddSpells(mySpell.mySpellID, 1, mySpell.myPos);
             }
         }
 
         public void AddSpells(int id, int level, int pos)
         {
-            if (mySpells.Any(x => x.id == id)) return;
+            if (mySpells.Any(x => x.myId == id)) return;
 
             if (level < 1) level = 1;
             if (level > 6) level = 6;
@@ -51,20 +51,20 @@ namespace realm.Realm.Character.Spells
 
         public void SendAllSpells()
         {
-            string Packet = "";
+            var Packet = "";
 
-            foreach (CharacterSpell m_S in mySpells)
-                Packet += m_S.id + "~" + m_S.level + "~" + Map.Cells.GetDirChar(m_S.position) + ";";
+            foreach (var mySpell in mySpells)
+                Packet += string.Format("{0}~{1}~{2};", mySpell.myId, mySpell.myLevel, Map.Cells.GetDirChar(mySpell.myPosition));
 
-            Client.Client.Send("SL" + Packet);
+            myClient.Client.Send(string.Format("SL{0}", Packet));
         }
 
         public string SaveSpells()
         {
-            string Data = "";
+            var Data = "";
 
-            foreach (CharacterSpell m_S in mySpells)
-                Data += m_S.id + "," + m_S.level + "," + m_S.position + "|";
+            foreach (var mySpell in mySpells)
+                Data += string.Format("{0},{1},{2}|", mySpell.myId, mySpell.myLevel, mySpell.myPosition);
 
             if (Data == "")
                 return Data;

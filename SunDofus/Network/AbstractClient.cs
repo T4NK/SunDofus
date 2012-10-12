@@ -52,7 +52,7 @@ namespace SunDofus
         {
             try
             {
-                byte[] P = Encoding.ASCII.GetBytes(Message + "\x00");
+                byte[] P = Encoding.ASCII.GetBytes(string.Format("{0}\x00", Message));
                 mySocket.Send(P);
             }
             catch { }

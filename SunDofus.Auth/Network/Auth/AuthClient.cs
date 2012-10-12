@@ -41,7 +41,7 @@ namespace auth.Network.Auth
         {
             var Packet = "AH";
 
-            foreach (Database.Models.ServerModel m_Server in Database.Cache.ServersCache.myServers)
+            foreach (var m_Server in Database.Cache.ServersCache.myServers)
             {
                 Packet += m_Server.ToString();
             }
@@ -63,7 +63,7 @@ namespace auth.Network.Auth
             {
                 var Packet = "";
 
-                foreach (Database.Models.GiftModel myGift in Database.Cache.GiftsCache.myGifts.Where(x => x.myTarget == this.myAccount.myId))
+                foreach (var myGift in Database.Cache.GiftsCache.myGifts.Where(x => x.myTarget == this.myAccount.myId))
                     Packet += string.Format("{0}~{1}~{2}~{3}+", myGift.myId, myGift.myTitle, myGift.myMessage, myGift.myItemID);
 
                 return Packet.Substring(0, Packet.Length - 1); ;
@@ -198,9 +198,9 @@ namespace auth.Network.Auth
             {
                 case "x":
 
-                    string lPacket = "AxK" + myAccount.mySubscriptionTime();
+                    var lPacket = "AxK" + myAccount.mySubscriptionTime();
 
-                    foreach (Database.Models.ServerModel myServer in Database.Cache.ServersCache.myServers)
+                    foreach (var myServer in Database.Cache.ServersCache.myServers)
                     {
                         if (!myAccount.myCharacters.ContainsKey(myServer.myID))
                             myAccount.myCharacters.Add(myServer.myID, new List<string>());
@@ -214,13 +214,13 @@ namespace auth.Network.Auth
 
                 case "X":
 
-                    int ID = int.Parse(Data.Replace("AX", ""));
+                    var ID = int.Parse(Data.Replace("AX", ""));
 
                     if (ServersHandler.mySyncServer.myClients.Any(x => x.myServer.myID == ID))
                     {
-                        Sync.SyncClient myServer = ServersHandler.mySyncServer.myClients.First(x => x.myServer.myID == ID);
+                        var myServer = ServersHandler.mySyncServer.myClients.First(x => x.myServer.myID == ID);
+                        var myKey = Utilities.Basic.RandomString(16);
 
-                        string myKey = Utilities.Basic.RandomString(16);
                         myServer.SendNewTicket(myKey, this);
                         SendNewTicket(myKey, myServer);
                     }
@@ -229,9 +229,9 @@ namespace auth.Network.Auth
 
                 case "F":
 
-                    string pPacket = "AF";
+                    var pPacket = "AF";
 
-                    foreach (Database.Models.ServerModel myServer in Database.Cache.ServersCache.myServers)
+                    foreach (var myServer in Database.Cache.ServersCache.myServers)
                     {
                         if (myServer.myClients.Contains(Data.Replace("AF", "")))
                             pPacket += string.Format("{0};", myServer.myID);

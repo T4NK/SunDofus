@@ -29,7 +29,8 @@ namespace realm.Utilities
 
         public static string RandomName()
         {
-            string Name = "";
+            var Name = "";
+
             Name += GetConsonants();
             Name += GetVowels();
             Name += GetVowels();
@@ -60,29 +61,28 @@ namespace realm.Utilities
 
         public static string GetActuelTime()
         {
-            return (DateTime.Now.Hour * 3600000) + (DateTime.Now.Minute * 60000) + (DateTime.Now.Second * 1000) + DateTime.Now.Millisecond.ToString();
+            return string.Format("{0}{1}{2}{3}", (DateTime.Now.Hour * 3600000), (DateTime.Now.Minute * 60000),
+                (DateTime.Now.Second * 1000), DateTime.Now.Millisecond.ToString());
         }
 
         public static string GetDofusDate()
         {
-            return "BD" + (DateTime.Now.Year - 1370).ToString() + "|" + (DateTime.Now.Month - 1) + "|" + (DateTime.Now.Day);
+            return string.Format("BD{0}|{1}|{2}", (DateTime.Now.Year - 1370).ToString(), (DateTime.Now.Month - 1), (DateTime.Now.Day));
         }
 
         public static int GetRandomJet(string Jet)
         {
             if (Jet.Length > 3)
             {
-                int Damage = 0;
-                int DS = int.Parse(Jet.Split('d')[0]);
-                int Faces = int.Parse(Jet.Split('d')[1].Split('+')[0]);
-                int Fixe = int.Parse(Jet.Split('d')[1].Split('+')[1]);
+                var Damage = 0;
+                var DS = int.Parse(Jet.Split('d')[0]);
+                var Faces = int.Parse(Jet.Split('d')[1].Split('+')[0]);
+                var Fixe = int.Parse(Jet.Split('d')[1].Split('+')[1]);
 
                 if (DS != 0)
                 {
-                    for (int i = 1; i <= DS; i++)
-                    {
+                    for (var i = 1; i <= DS; i++)
                         Damage += Rand(1, Faces);
-                    }
                 }
 
                 return (Damage + Fixe);

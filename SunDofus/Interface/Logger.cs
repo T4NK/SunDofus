@@ -66,7 +66,7 @@ namespace SunDofus
             if (inFile == true)
             {
                 Message = Message.Replace("@", "");
-                myWriter.WriteLine("[" + myName + "] (" + DateTime.Now.ToString() + ") : " + Message);
+                myWriter.WriteLine("[{0}] ({1}) : {2}", myName, DateTime.Now.ToString(), Message);
             }
         }
     }

@@ -7,13 +7,13 @@ namespace realm.Realm.Character.Spells
 {
     class CharacterSpell
     {
-        public int id = -1, level = 0, position = -1;
+        public int myId = -1, myLevel = 0, myPosition = -1;
 
         public CharacterSpell(int mid, int mlvl, int mpos)
         {
-            id = mid;
-            level = mlvl;
-            position = mpos;
+            myId = mid;
+            myLevel = mlvl;
+            myPosition = mpos;
         }
     }
 }

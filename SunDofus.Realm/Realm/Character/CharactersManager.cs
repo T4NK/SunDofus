@@ -11,9 +11,9 @@ namespace realm.Realm.Character
 
         public static bool ExistsName(string Name)
         {
-            foreach (Character m_C in CharactersList)
+            foreach (var myCharacter in CharactersList)
             {
-                if (m_C.m_Name == Name) return true;
+                if (myCharacter.myName == Name) return true;
             }
             return false;
         }

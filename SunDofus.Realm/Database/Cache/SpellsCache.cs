@@ -13,50 +13,56 @@ namespace realm.Database.Cache
 
         public static void LoadSpells()
         {
-            string SQLText = "SELECT * FROM spells";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
-
-            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-            while (SQLReader.Read())
+            lock (DatabaseHandler.myLocker)
             {
-                Database.Models.Spells.SpellModel myS = new Database.Models.Spells.SpellModel();
+                var SQLText = "SELECT * FROM spells";
+                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
-                myS.id = SQLReader.GetInt16("id");
-                myS.sprite = SQLReader.GetInt16("sprite");
-                myS.spriteInfos = SQLReader.GetString("spriteInfos");
+                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
-                for (int i = 1; i <= 6; i++)
-                    myS.ParseLevel(SQLReader.GetString("lvl" + i));
+                while (SQLReader.Read())
+                {
+                    var mySpell = new Database.Models.Spells.SpellModel();
 
-                SpellsList.Add(myS);
+                    mySpell.myId = SQLReader.GetInt16("id");
+                    mySpell.mySprite = SQLReader.GetInt16("sprite");
+                    mySpell.mySpriteInfos = SQLReader.GetString("spriteInfos");
+
+                    for (int i = 1; i <= 6; i++)
+                        mySpell.ParseLevel(SQLReader.GetString("lvl" + i));
+
+                    SpellsList.Add(mySpell);
+                }
+
+                SQLReader.Close();
             }
-
-            SQLReader.Close();
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells@ from the database !", SpellsList.Count));
         }
 
         public static void LoadSpellsToLearn()
         {
-            string SQLText = "SELECT * FROM spells_learn";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
-
-            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-            while (SQLReader.Read())
+            lock (DatabaseHandler.myLocker)
             {
-                Database.Models.Spells.SpellToLearnModel myS = new Database.Models.Spells.SpellToLearnModel();
-                
-                myS.Race = SQLReader.GetInt16("Classe");
-                myS.Level = SQLReader.GetInt16("Level");
-                myS.SpellID = SQLReader.GetInt16("SpellId");
-                myS.Pos = SQLReader.GetInt16("Position");
+                var SQLText = "SELECT * FROM spells_learn";
+                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
-                SpellsToLearn.Add(myS);
+                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
+
+                while (SQLReader.Read())
+                {
+                    var mySpell = new Database.Models.Spells.SpellToLearnModel();
+
+                    mySpell.myRace = SQLReader.GetInt16("Classe");
+                    mySpell.myLevel = SQLReader.GetInt16("Level");
+                    mySpell.mySpellID = SQLReader.GetInt16("SpellId");
+                    mySpell.myPos = SQLReader.GetInt16("Position");
+
+                    SpellsToLearn.Add(mySpell);
+                }
+
+                SQLReader.Close();
             }
-
-            SQLReader.Close();
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells to learn@ from the database !", SpellsToLearn.Count));
         }

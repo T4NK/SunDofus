@@ -42,7 +42,9 @@ namespace auth.Network.Auth
 
             foreach (AuthClient myClient in myClients.Keys)
             {
-                if (myClient.myState != AuthClient.State.Queue) return;
+                if (myClient.myState != AuthClient.State.Queue) 
+                    return;
+
                 if (Count <= Utilities.Config.myConfig.GetIntElement("Max_Clients_inQueue"))
                 {
                     Count++;
@@ -51,6 +53,7 @@ namespace auth.Network.Auth
                     myClient.myState = AuthClient.State.OnList;
                     myClient.SendInformations();
                 }
+
                 else
                 {
                     Rest++;
@@ -59,9 +62,7 @@ namespace auth.Network.Auth
             }
 
             if (Rest == 0)
-            {
                 myClients.Clear();
-            }
 
             Utilities.Loggers.InfosLogger.Write("@Queue@ refreshed !");
         }

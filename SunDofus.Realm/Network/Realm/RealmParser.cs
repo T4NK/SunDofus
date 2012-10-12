@@ -12,61 +12,61 @@ namespace realm.Network.Realm
 {
     class RealmParser
     {
-        public RealmClient Client;
+        public RealmClient myClient;
 
-        delegate void Packets(string s);
-        Dictionary<string, Packets> m_Packets;
+        delegate void Packets(string myString);
+        Dictionary<string, Packets> myPackets;
 
-        public RealmParser(RealmClient m_C)
+        public RealmParser(RealmClient newClient)
         {
-            Client = m_C;
-            m_Packets = new Dictionary<string, Packets>();
+            myClient = newClient;
+            myPackets = new Dictionary<string, Packets>();
             RegisterPackets();
         }
 
         void RegisterPackets()
         {
-            m_Packets["AA"] = CreateCharacter;
-            m_Packets["AB"] = StatsBoosts;
-            m_Packets["AD"] = DeleteCharacter;
-            m_Packets["Ag"] = SendGifts;
-            m_Packets["AG"] = AcceptGift;
-            m_Packets["AL"] = SendCharacterList;
-            m_Packets["AP"] = SendRandomName;
-            m_Packets["AS"] = SelectCharacter;
-            m_Packets["AT"] = ParseTicket;
-            m_Packets["AV"] = AV_Packet;
-            m_Packets["BA"] = ParseConsoleMessage;
-            m_Packets["BD"] = SendDate;
-            m_Packets["BM"] = ParseChatMessage;
-            m_Packets["cC"] = ChangeChannel;
-            m_Packets["GA"] = GameAction;
-            m_Packets["GC"] = CreateGame;
-            m_Packets["GI"] = GameInformations;
-            m_Packets["GK"] = EndAction;
-            m_Packets["Od"] = DeleteItem;
-            m_Packets["OM"] = MoveItem;
-            m_Packets["OU"] = UseItem;
+            myPackets["AA"] = CreateCharacter;
+            myPackets["AB"] = StatsBoosts;
+            myPackets["AD"] = DeleteCharacter;
+            myPackets["Ag"] = SendGifts;
+            myPackets["AG"] = AcceptGift;
+            myPackets["AL"] = SendCharacterList;
+            myPackets["AP"] = SendRandomName;
+            myPackets["AS"] = SelectCharacter;
+            myPackets["AT"] = ParseTicket;
+            myPackets["AV"] = AV_Packet;
+            myPackets["BA"] = ParseConsoleMessage;
+            myPackets["BD"] = SendDate;
+            myPackets["BM"] = ParseChatMessage;
+            myPackets["cC"] = ChangeChannel;
+            myPackets["GA"] = GameAction;
+            myPackets["GC"] = CreateGame;
+            myPackets["GI"] = GameInformations;
+            myPackets["GK"] = EndAction;
+            myPackets["Od"] = DeleteItem;
+            myPackets["OM"] = MoveItem;
+            myPackets["OU"] = UseItem;
         }
 
         public void Parse(string Data)
         {
             if (Data == "ping")
-                Client.Send("pong");
+                myClient.Send("pong");
             else if (Data == "qping")
-                Client.Send("qpong");
+                myClient.Send("qpong");
 
             if (Data.Length < 2) return;
 
             string Header = Data.Substring(0, 2);
 
-            if (!m_Packets.ContainsKey(Header))
+            if (!myPackets.ContainsKey(Header))
             {
-                Client.Send("BN");
+                myClient.Send("BN");
                 return;
             }
 
-            m_Packets[Header](Data.Substring(2));
+            myPackets[Header](Data.Substring(2));
         }
 
         #region Ticket
@@ -74,49 +74,48 @@ namespace realm.Network.Realm
         public void ParseTicket(string Data)
         {
             Data = Data.Replace("AT", "");
-            if (Network.Authentication.AuthenticationKeys.m_Keys.Any(x => x.m_Key == Data))
+            if (Network.Authentication.AuthenticationKeys.myKeys.Any(x => x.myKey == Data))
             {
-                Network.Authentication.AuthenticationKeys Key = Network.Authentication.AuthenticationKeys.m_Keys.First(x => x.m_Key == Data);
-                Client.m_Infos = Key.m_Infos;
-                Client.m_Infos.ParseCharacters();
-                Client.ParseCharacters();
+                var Key = Network.Authentication.AuthenticationKeys.myKeys.First(x => x.myKey == Data);
 
-                Client.isAuth = true;
+                myClient.myInfos = Key.myInfos;
+                myClient.myInfos.ParseCharacters();
+                myClient.ParseCharacters();
 
-                Network.ServersHandler.myAuthLink.Send("NC|" + Client.m_Infos.Pseudo);
-                Client.Send("ATK0");
+                myClient.isAuth = true;
+
+                Network.ServersHandler.myAuthLink.Send(string.Format("SNC|{0}", myClient.myInfos.mymPseudo));
+                myClient.Send("ATK0");
             }
             else
-                Client.Send("ATE");
+                myClient.Send("ATE");
         }
 
         #endregion
         
         #region Character
 
-        public void SendRandomName(string test)
+        public void SendRandomName(string myStr)
         {
-            Client.Send("APK" + Utilities.Basic.RandomName());
+            myClient.Send(string.Format("APK{0}", Utilities.Basic.RandomName()));
         }
 
-        public void AV_Packet(string t)
+        public void AV_Packet(string myStr)
         {
-            Client.Send("AV0");
+            myClient.Send("AV0");
         }
 
-        public void SendCharacterList(string test)
+        public void SendCharacterList(string myStr)
         {
-            string Pack = "ALK" + (Client.m_Infos.Subscription * 1000) +"|" + Client.m_Infos.myCharacters.Count;
+            string Pack = string.Format("ALK{0}|{1}", myClient.myInfos.mySubscription, myClient.myInfos.myCharacters.Count);
 
-            if (Client.m_Infos.myCharacters.Count != 0)
+            if (myClient.myInfos.myCharacters.Count != 0)
             {
-                foreach (realm.Realm.Character.Character m_C in Client.m_Characters)
-                {
-                    Pack += "|" + m_C.PatternList();
-                }
+                foreach (realm.Realm.Character.Character m_C in myClient.myCharacters)
+                    Pack += string.Format("|{0}", m_C.PatternList());
             }
 
-            Client.Send(Pack);
+            myClient.Send(Pack);
         }
 
         public void CreateCharacter(string Packet)
@@ -127,48 +126,49 @@ namespace realm.Network.Realm
 
                 if (CharData[0] != "" | CharactersManager.ExistsName(CharData[0]) == false)
                 {
-                    Character m_Character = new Character();
-                    m_Character.ID = Database.Cache.CharactersCache.GetNewID();
-                    m_Character.m_Name = CharData[0];
-                    //m_Character.Level = Config.ConfigurationManager.GetInt("Start_Level");
-                    //m_Character.Class = int.Parse(CharData[1]);
-                    //m_Character.Sex = int.Parse(CharData[2]);
-                    //m_Character.Skin = int.Parse(m_Character.Class + "" + m_Character.Sex);
-                    //m_Character.Size = 100;
-                    //m_Character.Color = int.Parse(CharData[3]);
-                    //m_Character.Color2 = int.Parse(CharData[4]);
-                    //m_Character.Color3 = int.Parse(CharData[5]);
+                    var myCharacter = new Character();
 
-                    //m_Character.MapID = Config.ConfigurationManager.GetInt("Start_Map");
-                    //m_Character.MapCell = Config.ConfigurationManager.GetInt("Start_Cell");
-                    //m_Character.Dir = Config.ConfigurationManager.GetInt("Start_Dir");
+                    myCharacter.ID = Database.Cache.CharactersCache.GetNewID();
+                    myCharacter.myName = CharData[0];
+                    myCharacter.Level = Utilities.Config.myConfig.GetIntElement("StartLevel");
+                    myCharacter.Class = int.Parse(CharData[1]);
+                    myCharacter.Sex = int.Parse(CharData[2]);
+                    myCharacter.Skin = int.Parse(myCharacter.Class + "" + myCharacter.Sex);
+                    myCharacter.Size = 100;
+                    myCharacter.Color = int.Parse(CharData[3]);
+                    myCharacter.Color2 = int.Parse(CharData[4]);
+                    myCharacter.Color3 = int.Parse(CharData[5]);
 
-                    m_Character.CharactPoint = (m_Character.Level - 1) * 5;
-                    m_Character.SpellPoint = (m_Character.Level - 1);
+                    myCharacter.MapID = Utilities.Config.myConfig.GetIntElement("StartMap");
+                    myCharacter.MapCell = Utilities.Config.myConfig.GetIntElement("StartCell");
+                    myCharacter.Dir = Utilities.Config.myConfig.GetIntElement("StartDir");
 
-                    m_Character.NewCharacter = true;
+                    myCharacter.CharactPoint = (myCharacter.Level - 1) * 5;
+                    myCharacter.SpellPoint = (myCharacter.Level - 1);
 
-                    if (m_Character.Class < 1 | m_Character.Class > 12 | m_Character.Sex < 0 | m_Character.Sex > 1)
+                    myCharacter.NewCharacter = true;
+
+                    if (myCharacter.Class < 1 | myCharacter.Class > 12 | myCharacter.Sex < 0 | myCharacter.Sex > 1)
                     {
-                        Client.Send("AAE");
+                        myClient.Send("AAE");
                         return;
                     }
 
-                    m_Character.m_SpellInventary.LearnSpells();
+                    myCharacter.mySpellInventary.LearnSpells();
 
-                    Database.Cache.CharactersCache.CreateCharacter(m_Character);
-                    CharactersManager.CharactersList.Add(m_Character);
-                    Client.m_Characters.Add(m_Character);
+                    Database.Cache.CharactersCache.CreateCharacter(myCharacter);
+                    CharactersManager.CharactersList.Add(myCharacter);
+                    myClient.myCharacters.Add(myCharacter);
 
-                    Network.ServersHandler.myAuthLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.AddNewCharacterToAccount(m_Character.m_Name));
+                    Network.ServersHandler.myAuthLink.Send(string.Format("SNAC|{0}|{1}", myClient.myInfos.myId, myClient.myInfos.AddNewCharacterToAccount(myCharacter.myName)));
 
-                    Client.Send("TB");
-                    Client.Send("AAK");
+                    myClient.Send("TB");
+                    myClient.Send("AAK");
                     SendCharacterList("");
                 }
                 else
                 {
-                    Client.Send("AAE");
+                    myClient.Send("AAE");
                 }
             }
             catch (Exception e)
@@ -179,47 +179,49 @@ namespace realm.Network.Realm
 
         public void DeleteCharacter(string Packet)
         {
-            int ID = int.Parse(Packet.Split('|')[0]);
-            Character m_C = CharactersManager.CharactersList.First(x => x.ID == ID);
-            if (Packet.Split('|')[1] != Client.m_Infos.Answer && m_C.Level >= 20)
+            var ID = int.Parse(Packet.Split('|')[0]);
+            var myCharacter = CharactersManager.CharactersList.First(x => x.ID == ID);
+
+            if (Packet.Split('|')[1] != myClient.myInfos.myAnswer && myCharacter.Level >= 20)
             {
-                Client.Send("ADE");
+                myClient.Send("ADE");
                 return;
             }
 
-            CharactersManager.CharactersList.Remove(m_C);
-            Client.m_Characters.Remove(m_C);
+            CharactersManager.CharactersList.Remove(myCharacter);
+            myClient.myCharacters.Remove(myCharacter);
 
-            Network.ServersHandler.myAuthLink.Send("NCHAR|" + Client.m_Infos.Id + "|" + Client.m_Infos.RemoveCharacterToAccount(m_C.m_Name));
-            Database.Cache.CharactersCache.DeleteCharacter(m_C.m_Name);
+            Network.ServersHandler.myAuthLink.Send(string.Format("SDAC|{0}|{1}", myClient.myInfos.myId, myClient.myInfos.RemoveCharacterToAccount(myCharacter.myName)));
+            Database.Cache.CharactersCache.DeleteCharacter(myCharacter.myName);
 
             SendCharacterList("");
         }
 
         public void SelectCharacter(string Packet)
         {
-            Character m_C = CharactersManager.CharactersList.First(x => x.ID == int.Parse(Packet));
-            if (Client.m_Characters.Contains(m_C))
+            var myCharacter = CharactersManager.CharactersList.First(x => x.ID == int.Parse(Packet));
+
+            if (myClient.myCharacters.Contains(myCharacter))
             {
-                Client.m_Player = m_C;
-                Client.m_Player.State = new CharacterState(Client.m_Player);
-                Client.m_Player.Client = Client;
+                myClient.myPlayer = myCharacter;
+                myClient.myPlayer.State = new CharacterState(myClient.myPlayer);
+                myClient.myPlayer.Client = myClient;
 
-                Client.m_Player.isConnected = true;
+                myClient.myPlayer.isConnected = true;
 
-                Client.Send("ASK" + Client.m_Player.PatternSelect());
+                myClient.Send(string.Format("ASK{0}", myClient.myPlayer.PatternSelect()));
             }
             else
-                Client.Send("ASE");
+                myClient.Send("ASE");
         }
 
         #endregion
 
         #region Gift
 
-        public void SendGifts(string test)
+        public void SendGifts(string myStr)
         {
-            Client.SendGifts();
+            myClient.SendGifts();
         }
 
         public void AcceptGift(string ID)
@@ -227,23 +229,24 @@ namespace realm.Network.Realm
             try
             {
                 string[] Infos = ID.Split('|');
-                if (Client.m_Characters.Any(x => x.ID == int.Parse(Infos[1])))
-                {
-                    if (Client.m_Infos.myGifts.Any(x => x.id == int.Parse(Infos[0])))
-                    {
-                        Database.Models.Clients.GiftModel myGift = Client.m_Infos.myGifts.First(e => e.id == int.Parse(Infos[0]));
-                        Client.m_Characters.First(x => x.ID == int.Parse(Infos[1])).m_Inventary.AddItem(myGift.item, true);
 
-                        Client.Send("AG0");
-                        Network.ServersHandler.myAuthLink.Send("DG|" + myGift.id + "|" + Client.m_Infos.Id);
-                        Client.m_Infos.myGifts.Remove(myGift);
+                if (myClient.myCharacters.Any(x => x.ID == int.Parse(Infos[1])))
+                {
+                    if (myClient.myInfos.myGifts.Any(x => x.myId == int.Parse(Infos[0])))
+                    {
+                        var myGift = myClient.myInfos.myGifts.First(e => e.myId == int.Parse(Infos[0]));
+                        myClient.myCharacters.First(x => x.ID == int.Parse(Infos[1])).myInventary.AddItem(myGift.myItem, true);
+
+                        myClient.Send("AG0");
+                        Network.ServersHandler.myAuthLink.Send(string.Format("SNDG|{0}|{1}", myGift.myId, myClient.myInfos.myId));
+                        myClient.myInfos.myGifts.Remove(myGift);
 
                     }
                     else
-                        Client.Send("AGE");
+                        myClient.Send("AGE");
                 }
                 else
-                    Client.Send("AGE");
+                    myClient.Send("AGE");
             }
             catch (Exception e)
             {
@@ -255,92 +258,97 @@ namespace realm.Network.Realm
 
         #region Realm
 
-        void SendDate(string t)
+        void SendDate(string myStr)
         {
-            Client.Send("BD" + Utilities.Basic.GetDofusDate());
+            myClient.Send(string.Format("BD{0}", Utilities.Basic.GetDofusDate()));
         }
 
-        public void CreateGame(string t)
+        public void CreateGame(string myStr)
         {
-            Client.Send("GCK|1|" + Client.m_Player.m_Name);
-            Client.Send("AR6bk");
+            myClient.Send(string.Format("GCK|1|{0}", myClient.myPlayer.myName));
+            myClient.Send("AR6bk");
 
-            Client.Send("cC+*#$p%i:?!");
-            Client.Send("SLo+");
-            Client.m_Player.m_SpellInventary.SendAllSpells();
-            Client.Send("BT" + Utilities.Basic.GetActuelTime());
+            myClient.Send("cC+*#$p%i:?!");
+            myClient.Send("SLo+");
+            myClient.myPlayer.mySpellInventary.SendAllSpells();
+            myClient.Send(string.Format("BT{0}", Utilities.Basic.GetActuelTime()));
 
-            if (Client.m_Player.Life == 0)
+            if (myClient.myPlayer.Life == 0)
             {
-                Client.m_Player.UpdateStats();
-                Client.m_Player.Life = Client.m_Player.MaximumLife;
+                myClient.myPlayer.UpdateStats();
+                myClient.myPlayer.Life = myClient.myPlayer.MaximumLife;
             }
 
-            Client.m_Player.m_Inventary.RefreshBonus();
-            Client.m_Player.SendPods();
-            Client.m_Player.SendCharStats();
+            myClient.myPlayer.myInventary.RefreshBonus();
+            myClient.myPlayer.SendPods();
+            myClient.myPlayer.SendCharStats();
 
-            Client.m_Player.LoadMap();
+            myClient.myPlayer.LoadMap();
         }
 
         public void ChangeChannel(string Chanel)
         {
-            bool Add = false;
+            var Add = false;
+
             if (Chanel.Contains("+"))
             {
                 Add = true;
                 Chanel = Chanel.Replace("+", "");
             }
+
             else if (Chanel.Contains("-")) 
                 Chanel = Chanel.Replace("-", "");
-            else return;
+            else 
+                return;
 
             if (Add == true)
             {
-                if(!Client.m_Player.Channel.Contains(Chanel)) Client.m_Player.Channel = Client.m_Player.Channel + "" + Chanel;
-                Client.Send("cC+" + Chanel);
+                if(!myClient.myPlayer.Channel.Contains(Chanel)) myClient.myPlayer.Channel = myClient.myPlayer.Channel + Chanel;
+                myClient.Send("cC+" + Chanel);
             }
             else
             {
-                Client.m_Player.Channel = Client.m_Player.Channel.Replace(Chanel, "");
-                Client.Send("cC-" + Chanel);
+                myClient.myPlayer.Channel = myClient.myPlayer.Channel.Replace(Chanel, "");
+                myClient.Send("cC-" + Chanel);
             }
         }
 
         public void ParseChatMessage(string Data)
         {
             string[] SplitData = Data.Split('|');
-            string Channel = SplitData[0];
-            string Message = SplitData[1];
+
+            var Channel = SplitData[0];
+            var Message = SplitData[1];
 
             switch (Channel)
             {
                 case "*":
-                    Chat.SendGeneralMessage(Client, Message);
+                    Chat.SendGeneralMessage(myClient, Message);
                     break;
             }
 
             if (Channel.Length > 1 && Channel != "*")
             {
-                Chat.SendPrivateMessage(Client, Channel, Message);
+                Chat.SendPrivateMessage(myClient, Channel, Message);
             }
         }
 
         public void ParseConsoleMessage(string Data)
         {
-            Client.m_Commander.ParseCommand(Data);
+            myClient.myCommander.ParseCommand(Data);
         }
 
         public void GameInformations(string Data)
         {
-            Client.m_Player.GetMap().AddPlayer(Client.m_Player);
-            Client.Send("GDK");
-            Client.Send("fC0"); //Fight
+            myClient.myPlayer.GetMap().AddPlayer(myClient.myPlayer);
+            myClient.Send("GDK");
+            myClient.Send("fC0"); //Fight
         }
 
         public void GameAction(string Data)
         {
-            int Pack = int.Parse(Data.Substring(0, 3));
+            var Pack = int.Parse(Data.Substring(0, 3));
+
             switch (Pack)
             {
                 case 1:
@@ -351,21 +359,23 @@ namespace realm.Network.Realm
 
         public void GameMove(string Data)
         {
-            string Pack = Data.Substring(3);
-            if (!Cells.isValidCell(Client.m_Player, Pack) == true)
+            var Pack = Data.Substring(3);
+
+            if (!Cells.isValidCell(myClient.myPlayer, Pack) == true)
             {
-                Client.Send("GA;0");
+                myClient.Send("GA;0");
             }
 
-            Pathfinding Path = new Pathfinding(Pack, Client.m_Player.GetMap(), Client.m_Player.MapCell, Client.m_Player.Dir);
-            string NewPath = Path.RemakePath();
+            var Path = new Pathfinding(Pack, myClient.myPlayer.GetMap(), myClient.myPlayer.MapCell, myClient.myPlayer.Dir);
+            var NewPath = Path.RemakePath();
+
             NewPath = Path.GetStartPath + NewPath;
 
-            Client.m_Player.Dir = Path.NewDirection;
-            Client.m_Player.State.MoveCell = Path.Destination;
-            Client.m_Player.State.OnMove = true;
+            myClient.myPlayer.Dir = Path.NewDirection;
+            myClient.myPlayer.State.MoveCell = Path.Destination;
+            myClient.myPlayer.State.OnMove = true;
 
-            Client.m_Player.GetMap().Send("GA0;1;" + Client.m_Player.ID + ";" + NewPath);
+            myClient.myPlayer.GetMap().Send(string.Format("GA0;1;{0};{1}", myClient.myPlayer.ID, NewPath));
         }
 
         public void EndAction(string Data)
@@ -373,25 +383,29 @@ namespace realm.Network.Realm
             switch(Data.Substring(0,1))
             {
                 case "K":
-                    if (Client.m_Player.State.OnMove == true)
-                    {
-                        Client.m_Player.State.OnMove = false;
-                        Client.m_Player.MapCell = Client.m_Player.State.MoveCell;
-                        Client.m_Player.State.MoveCell = -1;
-                        Client.Send("BN");
 
-                        if (Client.m_Player.GetMap().myTriggers.Any(x => x.CellID == Client.m_Player.MapCell))
+                    if (myClient.myPlayer.State.OnMove == true)
+                    {
+                        myClient.myPlayer.State.OnMove = false;
+                        myClient.myPlayer.MapCell = myClient.myPlayer.State.MoveCell;
+                        myClient.myPlayer.State.MoveCell = -1;
+                        myClient.Send("BN");
+
+                        if (myClient.myPlayer.GetMap().myTriggers.Any(x => x.myCellID == myClient.myPlayer.MapCell))
                         {
-                            Database.Models.Maps.TriggerModel m_T = Client.m_Player.GetMap().myTriggers.First(x => x.CellID == Client.m_Player.MapCell);
-                            Client.m_Player.TeleportNewMap(m_T.NewMapID, m_T.NewCellID);
+                            var m_T = myClient.myPlayer.GetMap().myTriggers.First(x => x.myCellID == myClient.myPlayer.MapCell);
+                            myClient.myPlayer.TeleportNewMap(m_T.myNewMapID, m_T.myNewCellID);
                         }
                     }
+
                     break;
 
                 case "E":
+
                     int NewCell = int.Parse(Data.Split('|')[1]);
-                    Client.m_Player.State.OnMove = false;
-                    Client.m_Player.MapCell = NewCell;
+                    myClient.myPlayer.State.OnMove = false;
+                    myClient.myPlayer.MapCell = NewCell;
+
                     break;
             }
         }
@@ -400,20 +414,34 @@ namespace realm.Network.Realm
 
         public void DeleteItem(string Data)
         {
-            string[] AllData = Data.Split('|');
-            if (int.Parse(AllData[1]) <= 0) return;
-            Client.m_Player.m_Inventary.DeleteItem(int.Parse(AllData[0]), int.Parse(AllData[1]));
+            try
+            {
+                string[] AllData = Data.Split('|');
+                if (int.Parse(AllData[1]) <= 0) return;
+                myClient.myPlayer.myInventary.DeleteItem(int.Parse(AllData[0]), int.Parse(AllData[1]));
+            }
+            catch (Exception e)
+            {
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot delete item from <{0}> because : {1}", myClient.myIp(), e.ToString()));
+            }
         }
 
         public void MoveItem(string Data)
         {
-            string[] AllData = Data.Split('|');
-            Client.m_Player.m_Inventary.MoveItem(int.Parse(AllData[0]), int.Parse(AllData[1]), (AllData.Length >= 3 ? int.Parse(AllData[2]) : 1));
+            try
+            {
+                string[] AllData = Data.Split('|');
+                myClient.myPlayer.myInventary.MoveItem(int.Parse(AllData[0]), int.Parse(AllData[1]), (AllData.Length >= 3 ? int.Parse(AllData[2]) : 1));
+            }
+            catch (Exception e)
+            {
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot move item from <{0}> because : {1}", myClient.myIp(), e.ToString()));
+            }
         }
 
         public void UseItem(string Data)
         {
-            Client.m_Player.m_Inventary.UseItem(Data);
+            myClient.myPlayer.myInventary.UseItem(Data);
         }
 
         #endregion
@@ -422,264 +450,264 @@ namespace realm.Network.Realm
 
         public void StatsBoosts(string Data)
         {
-            int Caract = int.Parse(Data);
-            int Count = 0;
+            var Caract = int.Parse(Data);
+            var Count = 0;
 
             switch (Caract)
             {
                 case 11:
 
-                    if (Client.m_Player.CharactPoint < 1) return;
+                    if (myClient.myPlayer.CharactPoint < 1) return;
 
-                    if (Client.m_Player.Class == 11)
+                    if (myClient.myPlayer.Class == 11)
                     {
-                        Client.m_Player.m_Stats.Life.Bases += 2;
-                        Client.m_Player.Life += 2;
+                        myClient.myPlayer.myStats.Life.Bases += 2;
+                        myClient.myPlayer.Life += 2;
                     }
                     else
                     {
-                        Client.m_Player.m_Stats.Life.Bases += 1;
-                        Client.m_Player.Life += 1;
+                        myClient.myPlayer.myStats.Life.Bases += 1;
+                        myClient.myPlayer.Life += 1;
                     }
 
-                    Client.m_Player.CharactPoint -= 1;
-                    Client.m_Player.SendCharStats();
+                    myClient.myPlayer.CharactPoint -= 1;
+                    myClient.myPlayer.SendCharStats();
 
                     break;
 
                 case 12:
 
-                    if (Client.m_Player.CharactPoint < 3) return;
+                    if (myClient.myPlayer.CharactPoint < 3) return;
 
-                    Client.m_Player.m_Stats.Wisdom.Bases += 1;
-                    Client.m_Player.CharactPoint -= 3;
-                    Client.m_Player.SendCharStats();
+                    myClient.myPlayer.myStats.Wisdom.Bases += 1;
+                    myClient.myPlayer.CharactPoint -= 3;
+                    myClient.myPlayer.SendCharStats();
 
                     break;
 
                 case 10:
 
-                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 7 | Client.m_Player.Class == 2 | Client.m_Player.Class == 5)
+                    if (myClient.myPlayer.Class == 1 | myClient.myPlayer.Class == 7 | myClient.myPlayer.Class == 2 | myClient.myPlayer.Class == 5)
                     {
-                        if (Client.m_Player.m_Stats.Strenght.Bases < 51) Count = 2;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 50) Count = 3;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 150) Count = 4;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 250) Count = 5;
+                        if (myClient.myPlayer.myStats.Strenght.Bases < 51) Count = 2;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 50) Count = 3;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 150) Count = 4;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 250) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 3 | Client.m_Player.Class == 9)
+                    else if (myClient.myPlayer.Class == 3 | myClient.myPlayer.Class == 9)
                     {
-                        if (Client.m_Player.m_Stats.Strenght.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 150) Count = 3;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 250) Count = 4;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 350) Count = 5;
+                        if (myClient.myPlayer.myStats.Strenght.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 150) Count = 3;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 250) Count = 4;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 350) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 4 | Client.m_Player.Class == 6 | Client.m_Player.Class == 8 | Client.m_Player.Class == 10)
+                    else if (myClient.myPlayer.Class == 4 | myClient.myPlayer.Class == 6 | myClient.myPlayer.Class == 8 | myClient.myPlayer.Class == 10)
                     {
-                        if (Client.m_Player.m_Stats.Strenght.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 200) Count = 3;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 300) Count = 4;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 400) Count = 5;
+                        if (myClient.myPlayer.myStats.Strenght.Bases < 101) Count = 1;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 100) Count = 2;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 300) Count = 4;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 400) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 11)
+                    else if (myClient.myPlayer.Class == 11)
                     {
                         Count = 3;
                     }
 
-                    else if (Client.m_Player.Class == 12)
+                    else if (myClient.myPlayer.Class == 12)
                     {
-                        if (Client.m_Player.m_Stats.Strenght.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Strenght.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Strenght.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Strenght.Bases > 200) Count = 3;
                     }
 
-                    if (Client.m_Player.CharactPoint >= Count)
+                    if (myClient.myPlayer.CharactPoint >= Count)
                     {
-                        Client.m_Player.m_Stats.Strenght.Bases += 1;
-                        Client.m_Player.CharactPoint -= Count;
-                        Client.m_Player.SendCharStats();
+                        myClient.myPlayer.myStats.Strenght.Bases += 1;
+                        myClient.myPlayer.CharactPoint -= Count;
+                        myClient.myPlayer.SendCharStats();
                     }
                     else
-                        Client.Send("ABE");
+                        myClient.Send("ABE");
 
                     break;
 
                 case 15:
 
-                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 2 | Client.m_Player.Class == 5 | Client.m_Player.Class == 7 | Client.m_Player.Class == 10)
+                    if (myClient.myPlayer.Class == 1 | myClient.myPlayer.Class == 2 | myClient.myPlayer.Class == 5 | myClient.myPlayer.Class == 7 | myClient.myPlayer.Class == 10)
                     {
-                        if (Client.m_Player.m_Stats.Intelligence.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 200) Count = 3;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 300) Count = 4;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 400) Count = 5;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases < 101) Count = 1;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 100) Count = 2;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 300) Count = 4;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 400) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 3)
+                    else if (myClient.myPlayer.Class == 3)
                     {
-                        if (Client.m_Player.m_Stats.Intelligence.Bases < 21) Count = 1;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 20) Count = 2;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 60) Count = 3;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 100) Count = 4;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 140) Count = 5;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases < 21) Count = 1;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 20) Count = 2;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 60) Count = 3;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 100) Count = 4;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 140) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 4)
+                    else if (myClient.myPlayer.Class == 4)
                     {
-                        if (Client.m_Player.m_Stats.Intelligence.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 150) Count = 3;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 250) Count = 4;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 150) Count = 3;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 250) Count = 4;
                     }
 
-                    else if (Client.m_Player.Class == 6 | Client.m_Player.Class == 8)
+                    else if (myClient.myPlayer.Class == 6 | myClient.myPlayer.Class == 8)
                     {
-                        if (Client.m_Player.m_Stats.Intelligence.Bases < 21) Count = 1;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 20) Count = 2;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 40) Count = 3;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 60) Count = 4;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 80) Count = 5;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases < 21) Count = 1;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 20) Count = 2;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 40) Count = 3;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 60) Count = 4;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 80) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 9)
+                    else if (myClient.myPlayer.Class == 9)
                     {
-                        if (Client.m_Player.m_Stats.Intelligence.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 150) Count = 3;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 250) Count = 4;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 350) Count = 5;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 150) Count = 3;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 250) Count = 4;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 350) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 11)
+                    else if (myClient.myPlayer.Class == 11)
                     {
                         Count = 3;
                     }
 
-                    else if (Client.m_Player.Class == 12)
+                    else if (myClient.myPlayer.Class == 12)
                     {
-                        if (Client.m_Player.m_Stats.Intelligence.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Intelligence.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Intelligence.Bases > 200) Count = 3;
                     }
 
-                    if (Client.m_Player.CharactPoint >= Count)
+                    if (myClient.myPlayer.CharactPoint >= Count)
                     {
-                        Client.m_Player.m_Stats.Intelligence.Bases += 1;
-                        Client.m_Player.CharactPoint -= Count;
-                        Client.m_Player.SendCharStats();
+                        myClient.myPlayer.myStats.Intelligence.Bases += 1;
+                        myClient.myPlayer.CharactPoint -= Count;
+                        myClient.myPlayer.SendCharStats();
                     }
                     else
-                        Client.Send("ABE");
+                        myClient.Send("ABE");
 
                     break;
 
                 case 13:
 
-                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 4 | Client.m_Player.Class == 5
-                        | Client.m_Player.Class == 6 | Client.m_Player.Class == 7 | Client.m_Player.Class == 8 | Client.m_Player.Class == 9)
+                    if (myClient.myPlayer.Class == 1 | myClient.myPlayer.Class == 4 | myClient.myPlayer.Class == 5
+                        | myClient.myPlayer.Class == 6 | myClient.myPlayer.Class == 7 | myClient.myPlayer.Class == 8 | myClient.myPlayer.Class == 9)
                     {
-                        if (Client.m_Player.m_Stats.Luck.Bases < 21) Count = 1;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 20) Count = 2;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 40) Count = 3;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 60) Count = 4;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 80) Count = 5;
+                        if (myClient.myPlayer.myStats.Luck.Bases < 21) Count = 1;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 20) Count = 2;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 40) Count = 3;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 60) Count = 4;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 80) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 2 | Client.m_Player.Class == 10)
+                    else if (myClient.myPlayer.Class == 2 | myClient.myPlayer.Class == 10)
                     {
-                        if (Client.m_Player.m_Stats.Luck.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 200) Count = 3;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 300) Count = 4;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 400) Count = 5;
+                        if (myClient.myPlayer.myStats.Luck.Bases < 101) Count = 1;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 100) Count = 2;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 300) Count = 4;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 400) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 3)
+                    else if (myClient.myPlayer.Class == 3)
                     {
-                        if (Client.m_Player.m_Stats.Luck.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 150) Count = 3;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 230) Count = 4;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 330) Count = 5;
+                        if (myClient.myPlayer.myStats.Luck.Bases < 101) Count = 1;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 100) Count = 2;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 150) Count = 3;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 230) Count = 4;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 330) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 11)
+                    else if (myClient.myPlayer.Class == 11)
                     {
                         Count = 3;
                     }
 
-                    else if (Client.m_Player.Class == 12)
+                    else if (myClient.myPlayer.Class == 12)
                     {
-                        if (Client.m_Player.m_Stats.Luck.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Luck.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Luck.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Luck.Bases > 200) Count = 3;
                     }
 
-                    if (Client.m_Player.CharactPoint >= Count)
+                    if (myClient.myPlayer.CharactPoint >= Count)
                     {
-                        Client.m_Player.m_Stats.Luck.Bases += 1;
-                        Client.m_Player.CharactPoint -= Count;
-                        Client.m_Player.SendCharStats();
+                        myClient.myPlayer.myStats.Luck.Bases += 1;
+                        myClient.myPlayer.CharactPoint -= Count;
+                        myClient.myPlayer.SendCharStats();
                     }
                     else
-                        Client.Send("ABE");
+                        myClient.Send("ABE");
 
                     break;
 
                 case 14:
 
-                    if (Client.m_Player.Class == 1 | Client.m_Player.Class == 2 | Client.m_Player.Class == 3 | Client.m_Player.Class == 5
-                        | Client.m_Player.Class == 7 | Client.m_Player.Class == 8 | Client.m_Player.Class == 10)
+                    if (myClient.myPlayer.Class == 1 | myClient.myPlayer.Class == 2 | myClient.myPlayer.Class == 3 | myClient.myPlayer.Class == 5
+                        | myClient.myPlayer.Class == 7 | myClient.myPlayer.Class == 8 | myClient.myPlayer.Class == 10)
                     {
-                        if (Client.m_Player.m_Stats.Agility.Bases < 21) Count = 1;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 20) Count = 2;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 40) Count = 3;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 60) Count = 4;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 80) Count = 5;
+                        if (myClient.myPlayer.myStats.Agility.Bases < 21) Count = 1;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 20) Count = 2;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 40) Count = 3;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 60) Count = 4;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 80) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 4)
+                    else if (myClient.myPlayer.Class == 4)
                     {
-                        if (Client.m_Player.m_Stats.Agility.Bases < 101) Count = 1;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 100) Count = 2;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 200) Count = 3;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 300) Count = 4;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 400) Count = 5;
+                        if (myClient.myPlayer.myStats.Agility.Bases < 101) Count = 1;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 100) Count = 2;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 300) Count = 4;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 400) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 6 | Client.m_Player.Class == 9)
+                    else if (myClient.myPlayer.Class == 6 | myClient.myPlayer.Class == 9)
                     {
-                        if (Client.m_Player.m_Stats.Agility.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 100) Count = 3;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 150) Count = 4;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 200) Count = 5;
+                        if (myClient.myPlayer.myStats.Agility.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 100) Count = 3;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 150) Count = 4;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 200) Count = 5;
                     }
 
-                    else if (Client.m_Player.Class == 11)
+                    else if (myClient.myPlayer.Class == 11)
                     {
                         Count = 3;
                     }
 
-                    else if (Client.m_Player.Class == 12)
+                    else if (myClient.myPlayer.Class == 12)
                     {
-                        if (Client.m_Player.m_Stats.Agility.Bases < 51) Count = 1;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 50) Count = 2;
-                        if (Client.m_Player.m_Stats.Agility.Bases > 200) Count = 3;
+                        if (myClient.myPlayer.myStats.Agility.Bases < 51) Count = 1;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 50) Count = 2;
+                        if (myClient.myPlayer.myStats.Agility.Bases > 200) Count = 3;
                     }
 
-                    if (Client.m_Player.CharactPoint >= Count)
+                    if (myClient.myPlayer.CharactPoint >= Count)
                     {
-                        Client.m_Player.m_Stats.Agility.Bases += 1;
-                        Client.m_Player.CharactPoint -= Count;
-                        Client.m_Player.SendCharStats();
+                        myClient.myPlayer.myStats.Agility.Bases += 1;
+                        myClient.myPlayer.CharactPoint -= Count;
+                        myClient.myPlayer.SendCharStats();
                     }
                     else
-                        Client.Send("ABE");
+                        myClient.Send("ABE");
 
                     break;
             }

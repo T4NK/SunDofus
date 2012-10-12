@@ -12,32 +12,35 @@ namespace realm.Database.Cache
 
         public static void LoadMaps()
         {
-            string SQLText = "SELECT * FROM maps";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
-
-            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-            while (SQLReader.Read())
+            lock (DatabaseHandler.myLocker)
             {
-                Models.Maps.MapModel myM = new Models.Maps.MapModel();
+                var SQLText = "SELECT * FROM maps";
+                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
-                myM.id = SQLReader.GetInt16("id");
-                myM.date = SQLReader.GetInt32("date");
-                myM.width = SQLReader.GetInt16("width");
-                myM.height = SQLReader.GetInt16("heigth");
-                myM.capabilities = SQLReader.GetInt16("capabilities");
-                myM.numgroup = SQLReader.GetInt16("numgroup");
-                myM.groupmaxsize = SQLReader.GetInt16("groupmaxsize");
-                myM.mappos = SQLReader.GetString("mappos");
-                myM.monsters = SQLReader.GetString("monsters");
-                myM.cells = SQLReader.GetString("cells");
-                myM.MapData = SQLReader.GetString("mapData");
-                myM.key = SQLReader.GetString("key");
+                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
-                MapsList.Add(new Realm.Map.Map(myM));
+                while (SQLReader.Read())
+                {
+                    var myMap = new Models.Maps.MapModel();
+
+                    myMap.myId = SQLReader.GetInt16("id");
+                    myMap.myDate = SQLReader.GetInt32("date");
+                    myMap.myWidth = SQLReader.GetInt16("width");
+                    myMap.myHeight = SQLReader.GetInt16("heigth");
+                    myMap.myCapabilities = SQLReader.GetInt16("capabilities");
+                    myMap.myNumgroup = SQLReader.GetInt16("numgroup");
+                    myMap.myGroupmaxsize = SQLReader.GetInt16("groupmaxsize");
+                    myMap.myMappos = SQLReader.GetString("mappos");
+                    myMap.myMonsters = SQLReader.GetString("monsters");
+                    myMap.myCells = SQLReader.GetString("cells");
+                    myMap.myMapData = SQLReader.GetString("mapData");
+                    myMap.myKey = SQLReader.GetString("key");
+
+                    MapsList.Add(new Realm.Map.Map(myMap));
+                }
+
+                SQLReader.Close();
             }
-
-            SQLReader.Close();
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' maps@ from the database !", MapsList.Count));
         }

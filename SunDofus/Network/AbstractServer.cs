@@ -22,7 +22,7 @@ namespace SunDofus
 
         public AbstractServer(string ip, int port)
         {
-            myRemote = ip + ":" + port;
+            myRemote = string.Format("{0}:{1}", ip, port);
 
             m_Server = new SilverServer(ip, port);
             m_Server.OnAcceptSocketEvent += new SilverEvents.AcceptSocket(this.AcceptSocket);

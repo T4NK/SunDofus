@@ -14,74 +14,83 @@ namespace realm.Database.Cache
 
         public static void LoadItems()
         {
-            string SQLText = "SELECT * FROM items";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
-
-            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-            while (SQLReader.Read())
+            lock (DatabaseHandler.myLocker)
             {
-                Models.Items.ItemModel myI = new Models.Items.ItemModel();
+                var SQLText = "SELECT * FROM items";
+                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
-                myI.ID = SQLReader.GetInt32("ID");
-                myI.Pods = SQLReader.GetInt16("Weight");
-                myI.Price = SQLReader.GetInt32("Price");
-                myI.Type = SQLReader.GetInt16("Type");
-                myI.Level = SQLReader.GetInt16("Level");
-                myI.Jet = SQLReader.GetString("Stats");
-                myI.Conditions = SQLReader.GetString("Conditions");
+                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
-                ItemsList.Add(myI);
+                while (SQLReader.Read())
+                {
+                    var myItem = new Models.Items.ItemModel();
+
+                    myItem.myID = SQLReader.GetInt32("ID");
+                    myItem.myPods = SQLReader.GetInt16("Weight");
+                    myItem.myPrice = SQLReader.GetInt32("Price");
+                    myItem.myType = SQLReader.GetInt16("Type");
+                    myItem.myLevel = SQLReader.GetInt16("Level");
+                    myItem.myJet = SQLReader.GetString("Stats");
+                    myItem.myConditions = SQLReader.GetString("Conditions");
+
+                    ItemsList.Add(myItem);
+                }
+
+                SQLReader.Close();
             }
-
-            SQLReader.Close();
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items@ from the database !", ItemsList.Count));
         }
 
         public static void LoadItemsSets()
         {
-            string SQLText = "SELECT * FROM items_sets";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
-
-            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-            while (SQLReader.Read())
+            lock (DatabaseHandler.myLocker)
             {
-                Models.Items.SetModel myS = new Models.Items.SetModel();
+                var SQLText = "SELECT * FROM items_sets";
+                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
-                myS.ID = SQLReader.GetInt16("ID");
-                myS.ParseBonus(SQLReader.GetString("bonus"));
-                myS.ParseItems(SQLReader.GetString("items"));
+                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
-                SetsList.Add(myS);
+                while (SQLReader.Read())
+                {
+                    var mySet = new Models.Items.SetModel();
+
+                    mySet.myID = SQLReader.GetInt16("ID");
+                    mySet.ParseBonus(SQLReader.GetString("bonus"));
+                    mySet.ParseItems(SQLReader.GetString("items"));
+
+                    SetsList.Add(mySet);
+                }
+
+                SQLReader.Close();
             }
-
-            SQLReader.Close();
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items sets@ from the database !", SetsList.Count));
         }
 
         public static void LoadUsablesItems()
         {
-            string SQLText = "SELECT * FROM items_usables";
-            MySqlCommand SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
-
-            MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
-
-            while (SQLReader.Read())
+            lock (DatabaseHandler.myLocker)
             {
-                Models.Items.ItemUsableModel myU = new Models.Items.ItemUsableModel();
+                var SQLText = "SELECT * FROM items_usables";
+                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
 
-                myU.BaseItemID = SQLReader.GetInt16("ID");
-                myU.Args = SQLReader.GetString("Args");
+                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
 
-                myU.AttributeItem();
+                while (SQLReader.Read())
+                {
+                    var myUsable = new Models.Items.ItemUsableModel();
 
-                UsablesList.Add(myU);
+                    myUsable.myBaseItemID = SQLReader.GetInt16("ID");
+                    myUsable.myArgs = SQLReader.GetString("Args");
+
+                    myUsable.AttributeItem();
+
+                    UsablesList.Add(myUsable);
+                }
+
+                SQLReader.Close();
             }
-
-            SQLReader.Close();
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items usables@ from the database !", UsablesList.Count));
         }

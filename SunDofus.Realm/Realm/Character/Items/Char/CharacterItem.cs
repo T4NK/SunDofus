@@ -7,25 +7,23 @@ namespace realm.Realm.Character.Items
 {
     class CharacterItem
     {
-        public Database.Models.Items.ItemModel BaseItem;
-        public int ID, Position = -1;
-        public int Quantity = 0;
-        public List<Effect.EffectsItems> EffectsList;
+        public Database.Models.Items.ItemModel myBaseItem;
+        public int myID, myPosition = -1;
+        public int myQuantity = 0;
+        public List<Effect.EffectsItems> myEffectsList;
 
-        public CharacterItem(Database.Models.Items.ItemModel b_I)
+        public CharacterItem(Database.Models.Items.ItemModel myBase)
         {
-            BaseItem = b_I;
-            EffectsList = new List<Effect.EffectsItems>();
+            myBaseItem = myBase;
+            myEffectsList = new List<Effect.EffectsItems>();
         }
 
         public string EffectsInfos()
         {
-            string Infos = "";
+            var Infos = "";
 
-            foreach (Effect.EffectsItems Effect in EffectsList)
-            {
-                Infos += Effect.ToString() + ",";
-            }
+            foreach (var Effect in myEffectsList)
+                Infos += string.Format("{0},", Effect.ToString());
 
             if (Infos == "") Infos = ",";
 
@@ -34,62 +32,60 @@ namespace realm.Realm.Character.Items
 
         public void ParseJet()
         {
-            string Jet = BaseItem.Jet;
+            var Jet = myBaseItem.myJet;
 
-            foreach (string m_J in Jet.Split(','))
+            foreach (var myJet in Jet.Split(','))
             {
-                if (m_J == "") continue;
-                string[] Infos = m_J.Split('#');
+                if (myJet == "") continue;
+                string[] Infos = myJet.Split('#');
 
-                Effect.EffectsItems e_I = new Effect.EffectsItems();
-                e_I.ID = Utilities.Basic.HexToDeci(Infos[0]);
-                if (Infos.Length > 1) e_I.Value = Utilities.Basic.HexToDeci(Infos[1]);
-                if (Infos.Length > 2) e_I.Value2 = Utilities.Basic.HexToDeci(Infos[2]);
-                if (Infos.Length > 3) e_I.Value3 = Utilities.Basic.HexToDeci(Infos[3]);
-                if (Infos.Length > 4) e_I.Effect = Infos[4];
+                var myEffect = new Effect.EffectsItems();
+                myEffect.ID = Utilities.Basic.HexToDeci(Infos[0]);
+                if (Infos.Length > 1) myEffect.Value = Utilities.Basic.HexToDeci(Infos[1]);
+                if (Infos.Length > 2) myEffect.Value2 = Utilities.Basic.HexToDeci(Infos[2]);
+                if (Infos.Length > 3) myEffect.Value3 = Utilities.Basic.HexToDeci(Infos[3]);
+                if (Infos.Length > 4) myEffect.Effect = Infos[4];
 
-                EffectsList.Add(e_I);
+                myEffectsList.Add(myEffect);
             }
         }
 
         public void GeneratItem()
         {
-            this.Quantity = 1;
-            this.Position = -1;
+            this.myQuantity = 1;
+            this.myPosition = -1;
 
-            foreach (Effect.EffectsItems Effect in EffectsList)
-            {
+            foreach (var Effect in myEffectsList)
                 NewJetAvaliable(Effect);
-            }
         }
 
-        public void NewJetAvaliable(Effect.EffectsItems EID)
+        public void NewJetAvaliable(Effect.EffectsItems myEffect)
         {
-            if (EID.ID == 91 | EID.ID == 92 | EID.ID == 93 | EID.ID == 94 | EID.ID == 95 | EID.ID == 96 | EID.ID == 97 | EID.ID == 98 | EID.ID == 99 | EID.ID == 100 | EID.ID == 101)
+            if (myEffect.ID == 91 | myEffect.ID == 92 | myEffect.ID == 93 | myEffect.ID == 94 | myEffect.ID == 95 | myEffect.ID == 96 | myEffect.ID == 97 | myEffect.ID == 98 | myEffect.ID == 99 | myEffect.ID == 100 | myEffect.ID == 101)
             {
 
             }
-            else if (EID.ID == 800)
+            else if (myEffect.ID == 800)
             {
-                EID.Value3 = 10; // PDV Des familiers !
+                myEffect.Value3 = 10; // PDV Des familiers !
             }
             else
             {
-                EID.Value = Utilities.Basic.GetRandomJet(EID.Effect);
-                EID.Value2 = -1;
+                myEffect.Value = Utilities.Basic.GetRandomJet(myEffect.Effect);
+                myEffect.Value2 = -1;
             }
         }
 
         public string SaveString()
         {
-            return Utilities.Basic.DeciToHex(BaseItem.ID) + "~" + Utilities.Basic.DeciToHex(Quantity) + "~"
-                + (Position == -1 ? "" : Utilities.Basic.DeciToHex(Position)) + "~" + EffectsInfos();
+            return string.Format("{0}~{1}~{2}~{3}", Utilities.Basic.DeciToHex(myBaseItem.myID), Utilities.Basic.DeciToHex(myQuantity),
+                (myPosition == -1 ? "" : Utilities.Basic.DeciToHex(myPosition)), EffectsInfos());
         }
 
         public override string ToString()
         {
-            return Utilities.Basic.DeciToHex(ID) + "~" + Utilities.Basic.DeciToHex(BaseItem.ID) + "~" + Utilities.Basic.DeciToHex(Quantity) + "~"
-                + (Position == -1 ? "" : Utilities.Basic.DeciToHex(Position)) + "~" + EffectsInfos();
+            return string.Format("{0}~{1}~{2}~{3}~{4}",Utilities.Basic.DeciToHex(myID), Utilities.Basic.DeciToHex(myBaseItem.myID),
+                Utilities.Basic.DeciToHex(myQuantity), (myPosition == -1 ? "" : Utilities.Basic.DeciToHex(myPosition)), EffectsInfos());
         }
     }
 }

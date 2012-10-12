@@ -7,13 +7,13 @@ namespace realm.Database.Models.Clients
 {
     class AccountModel
     {
-        public string Pseudo;
-        public string Question;
-        public string Answer;
-        public int Id;
-        public int Level;
+        public string mymPseudo;
+        public string myQuestion;
+        public string myAnswer;
+        public int myId;
+        public int myLevel;
+        public long mySubscription;
         public string Characters;
-        public long Subscription;
         public string Gifts;
 
         public List<string> myCharacters;
@@ -24,13 +24,13 @@ namespace realm.Database.Models.Clients
             myCharacters = new List<string>();
             myGifts = new List<GiftModel>();
 
-            Pseudo = "";
-            Question = "";
-            Answer = "";
-            Id = -1;
-            Level = -1;
+            mymPseudo = "";
+            myQuestion = "";
+            myAnswer = "";
+            myId = -1;
+            myLevel = -1;
             Characters = "";
-            Subscription = 0;
+            mySubscription = 0;
             Gifts = "";
         }
 
@@ -38,10 +38,10 @@ namespace realm.Database.Models.Clients
         {
             if (Characters == "") return;
             string[] AllData = Characters.Split(':');
-            foreach (string Data in AllData)
+            foreach (var Data in AllData)
             {
                 string[] CharData = Data.Split(',');
-                if (!myCharacters.Contains(CharData[0]) && Program.m_ServerID == int.Parse(CharData[1]))
+                if (!myCharacters.Contains(CharData[0]) && Utilities.Config.myConfig.GetIntElement("ServerId") == int.Parse(CharData[1]))
                     myCharacters.Add(CharData[0]);
             }
         }
@@ -50,14 +50,14 @@ namespace realm.Database.Models.Clients
         {
             if (Gifts == "") return;
             string[] AllData = Gifts.Split('+');
-            foreach (string Data in AllData)
+            foreach (var Data in AllData)
             {
                 string[] Infos = Data.Split('~');
-                GiftModel myGift = new GiftModel();
-                myGift.id = int.Parse(Infos[0]);
-                myGift.title = Infos[1];
-                myGift.message = Infos[2];
-                myGift.itemID = int.Parse(Infos[3]);
+                var myGift = new GiftModel();
+                myGift.myId = int.Parse(Infos[0]);
+                myGift.myTitle = Infos[1];
+                myGift.myMessage = Infos[2];
+                myGift.myItemID = int.Parse(Infos[3]);
 
                 myGifts.Add(myGift);
             }
@@ -66,31 +66,25 @@ namespace realm.Database.Models.Clients
         public string AddNewCharacterToAccount(string Name)
         {
             if (Characters == "")
-            {
-                Characters = Name + "," + Program.m_ServerID;
-            }
+                Characters = string.Format("{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId"));
             else
-            {
-                Characters = Characters + ":" + Name + "," + Program.m_ServerID;
-            }
+                Characters += string.Format(":{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId"));
+
             myCharacters.Add(Name);
             return Characters;
         }
 
         public string RemoveCharacterToAccount(string Name)
         {
-            if (Characters == (Name + "," + Program.m_ServerID))
-            {
-                Characters = Characters.Replace(Name + "," + Program.m_ServerID, "");
-            }
-            else if (Characters.StartsWith(Name + "," + Program.m_ServerID + ":"))
-            {
-                Characters = Characters.Replace(Name + "," + Program.m_ServerID + ":", "");
-            }
+            if (Characters == (string.Format("{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId"))))
+                Characters = Characters.Replace(string.Format("{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId")), "");
+
+            else if (Characters.StartsWith(string.Format("{0},{1}:", Name, Utilities.Config.myConfig.GetIntElement("ServerId"))))
+                Characters = Characters.Replace(string.Format("{0},{1}:", Name, Utilities.Config.myConfig.GetIntElement("ServerId")), "");
+
             else
-            {
-                Characters = Characters.Replace(":" + Name + "," + Program.m_ServerID, "");
-            }
+                Characters = Characters.Replace(string.Format(":{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId")), "");
+
             myCharacters.Remove(Name);
             return Characters;
         }

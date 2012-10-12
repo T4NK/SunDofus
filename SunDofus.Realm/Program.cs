@@ -7,8 +7,6 @@ namespace realm
 {
     class Program
     {
-        public static int m_ServerID = -1;
-
         static void Main(string[] args)
         {
             Utilities.Config.LoadConfiguration();

@@ -19,7 +19,7 @@ namespace auth.Database.Cache
 
             try
             {
-                lock (DatabaseHandler.myConnectionLocker)
+                lock (DatabaseHandler.myLocker)
                 {
                     string Text = "SELECT * FROM gifts";
                     MySqlCommand Command = new MySqlCommand(Text, DatabaseHandler.myConnection);
@@ -36,9 +36,7 @@ namespace auth.Database.Cache
                         newGifts.myMessage = Reader.GetString("Message");
 
                         if (!myGifts.Any(x => x.myId == newGifts.myId))
-                        {
                             myGifts.Add(newGifts);
-                        }
                     }
 
                     Reader.Close();

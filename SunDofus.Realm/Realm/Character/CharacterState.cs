@@ -9,9 +9,9 @@ namespace realm.Realm.Character
     {
         Character Client;
 
-        public CharacterState(Character m_C)
+        public CharacterState(Character myCharacter)
         {
-            Client = m_C;
+            Client = myCharacter;
             Created = false;
         }
 

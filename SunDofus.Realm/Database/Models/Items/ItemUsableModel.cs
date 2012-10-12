@@ -9,15 +9,13 @@ namespace realm.Database.Models.Items
 {
     class ItemUsableModel
     {
-        public int BaseItemID = -1;
-        public string Args = "";
+        public int myBaseItemID = -1;
+        public string myArgs = "";
 
         public void AttributeItem()
         {
-            if(Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == BaseItemID))
-            {
-                Database.Cache.ItemsCache.ItemsList.First(x => x.ID == BaseItemID).Usable = true;
-            }
+            if (Database.Cache.ItemsCache.ItemsList.Any(x => x.myID == myBaseItemID))
+                Database.Cache.ItemsCache.ItemsList.First(x => x.myID == myBaseItemID).meUsable = true;
         }
 
         public bool ConditionsAvaliable(Character Client)
@@ -27,9 +25,9 @@ namespace realm.Database.Models.Items
 
         public void ParseEffect(Character Client)
         {
-            string[] Data = Args.Split('|');
+            string[] Data = myArgs.Split('|');
 
-            foreach (string AllData in Data)
+            foreach (var AllData in Data)
             {
                 string[] Infos = AllData.Split(';');
                 Realm.Effect.EffectsActions.ParseEffect(Client, int.Parse(Infos[0]), Infos[1]);

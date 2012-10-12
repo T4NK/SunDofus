@@ -42,10 +42,8 @@ namespace auth.Network.Auth
 
         public void RefreshAllHosts()
         {
-            foreach (AuthClient Client in myClients)
-            {
+            foreach (var Client in myClients)
                 Client.SendHosts();
-            }
         }
     }
 }

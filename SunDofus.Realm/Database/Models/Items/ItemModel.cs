@@ -7,13 +7,13 @@ namespace realm.Database.Models.Items
 {
     class ItemModel
     {
-        public int ID, Type, Level, Pods, Price = 0;
-        public int Set = -1;
-        public string  Jet = "";
-        public bool TwoHands = false;
-        public string Conditions = "";
-        public bool Usable = false;
+        public int myID, myType, myLevel, myPods, myPrice = 0;
+        public int mySet = -1;
+        public string  myJet = "";
+        public bool meTwoHands = false;
+        public string myConditions = "";
+        public bool meUsable = false;
 
-        public List<Realm.Effect.EffectsItems> EffectsList = new List<Realm.Effect.EffectsItems>();
+        public List<Realm.Effect.EffectsItems> myEffectsList = new List<Realm.Effect.EffectsItems>();
     }
 }
