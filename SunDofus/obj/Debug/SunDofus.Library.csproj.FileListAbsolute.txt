@@ -2,4 +2,3 @@ I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\Su
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Assemblies\SunDofus.Library.pdb
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.Library.dll
 I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.Library.pdb
-I:\Programmation\Développements\DOFUS\Emulateur DOFUS\C#\SunDofus\Sources\SunDofus\obj\Debug\SunDofus.Library.csprojResolveAssemblyReference.cache

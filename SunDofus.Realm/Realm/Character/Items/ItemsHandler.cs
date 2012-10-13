@@ -33,7 +33,7 @@ namespace realm.Realm.Character.Items
             foreach(var Cond in Condi.Split('&'))
             {
                 var Spliter = Cond.Substring(2, 1);
-                var Value = -1;
+                long Value = -1;
                 var ToCompare = int.Parse(Cond.Substring(3));
 
                 switch(Cond.Substring(0,1))

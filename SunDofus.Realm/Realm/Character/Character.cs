@@ -12,8 +12,8 @@ namespace realm.Realm.Character
         public int ID, Color, Color2, Color3, Class, Sex, Skin, Size, Level, MapID, MapCell, Dir = -1;
         public bool NewCharacter, isConnected = false;
 
-        public int Exp = 0;
-        public int Kamas = 0;
+        public long Exp = 0;
+        public long Kamas = 0;
         public int CharactPoint = 0;
         public int SpellPoint = 0;
         public int Energy = 10000;
@@ -41,14 +41,27 @@ namespace realm.Realm.Character
 
         #region Exp
 
-        public void AddExp(int _Exp)
+        public void AddExp(long _Exp)
         {
-            Exp += Exp;
+            Exp += _Exp;
+            LevelUp();
         }
 
-        public void LevelUp()
+        void LevelUp()
         {
+            if (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
+            {
+                while (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
+                {
+                    Level++;
+                    SpellPoint++;
+                    CharactPoint += 5;
+                }
 
+                Client.Send(string.Format("AN{0}", Level));
+                mySpellInventary.LearnSpells();
+                SendCharStats();
+            }
         }
 
         #endregion
@@ -545,7 +558,8 @@ namespace realm.Realm.Character
             StringBuilder Builder = new StringBuilder();
 
             Builder.Append(Exp).Append(",");
-            Builder.Append("0,255|"); // Last MaxExpLevel , This MaxExpLevel
+            Builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level).Character).Append(",");
+            Builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character).Append("|");
             Builder.Append(Kamas).Append("|");
             Builder.Append(CharactPoint).Append("|");
             Builder.Append(SpellPoint).Append("|");

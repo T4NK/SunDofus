@@ -17,6 +17,8 @@ namespace realm
 
             Database.DatabaseHandler.InitialiseConnection();
 
+            Database.Cache.LevelsCache.LoadLevels();
+
             Database.Cache.ItemsCache.LoadItems();
             Database.Cache.ItemsCache.LoadItemsSets();
             Database.Cache.ItemsCache.LoadUsablesItems();

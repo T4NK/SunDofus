@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\Cache\LevelsCache.cs" />
+    <Compile Include="Database\Models\Levels\LevelModel.cs" />
     <Compile Include="Network\Realm\RealmClient.cs" />
     <Compile Include="Network\Realm\RealmCommand.cs" />
     <Compile Include="Database\Models\Clients\GiftModel.cs" />

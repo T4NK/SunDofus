@@ -53,12 +53,12 @@ namespace realm.Network.Realm
                             Client.myPlayer.TeleportNewMap(int.Parse(Datas[1]), int.Parse(Datas[2]));
                             break;
 
-                        case "level":
+                        case "exp":
 
                             if (Datas.Length < 2)
                                 return;
 
-                            //+ Level
+                            Client.myPlayer.AddExp(long.Parse(Datas[1]));
                             break;
                     }
                 }
