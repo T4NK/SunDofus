@@ -48,7 +48,7 @@ namespace SunDofus
             return mySocket.IP;
         }
 
-        public void Send(string Message)
+        protected void meSend(string Message)
         {
             try
             {

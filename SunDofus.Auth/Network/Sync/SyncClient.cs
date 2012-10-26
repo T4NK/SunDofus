@@ -43,6 +43,12 @@ namespace auth.Network.Sync
             Send(Builder.ToString());
         }
 
+        public void Send(string Message)
+        {
+            this.meSend(Message);
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), Message));
+        }
+
         void PacketsReceived(string Data)
         {
             Utilities.Loggers.InfosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), Data));

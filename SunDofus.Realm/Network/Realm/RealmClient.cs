@@ -31,6 +31,12 @@ namespace realm.Network.Realm
             Send("HG");
         }
 
+        public void Send(string Message)
+        {
+            this.meSend(Message);
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), Message));
+        }
+
         public void ParseCharacters()
         {
             foreach (var Name in myInfos.myCharacters)
@@ -72,7 +78,7 @@ namespace realm.Network.Realm
 
         void ReceivedPackets(string Data)
         {
-            Utilities.Loggers.InfosLogger.Write(string.Format("Receive data from <{0}> ({1})", myIp(), Data));
+            Utilities.Loggers.InfosLogger.Write(string.Format("Receive datas from @<{0}>@ : {1}", myIp(), Data));
 
             lock (myPacketLocker)
                 myParser.Parse(Data);
@@ -80,7 +86,7 @@ namespace realm.Network.Realm
 
         void Disconnected()
         {
-            Utilities.Loggers.InfosLogger.Write("New closed client connection !");
+            Utilities.Loggers.InfosLogger.Write(string.Format("New closed client @<{0}>@ connection !", myIp()));
 
             if (isAuth == true)
             {

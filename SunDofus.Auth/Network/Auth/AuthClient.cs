@@ -28,6 +28,12 @@ namespace auth.Network.Auth
             Send(string.Format("HC{0}", myKey));
         }
 
+        public void Send(string Message)
+        {
+            this.meSend(Message);
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), Message));
+        }
+
         public void SendInformations()
         {
             Send(string.Format("Ad{0}",myAccount.myPseudo));
