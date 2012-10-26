@@ -33,6 +33,8 @@ namespace realm.Database.Cache
                     myItem.myJet = SQLReader.GetString("Stats");
                     myItem.myConditions = SQLReader.GetString("Conditions");
 
+                    myItem.ParseConditions();
+
                     ItemsList.Add(myItem);
                 }
 
@@ -83,6 +85,11 @@ namespace realm.Database.Cache
 
                     myUsable.myBaseItemID = SQLReader.GetInt16("ID");
                     myUsable.myArgs = SQLReader.GetString("Args");
+
+                    if (SQLReader.GetInt16("MustDelete") == 1)
+                        myUsable.MustDelete = false;
+                    else if (SQLReader.GetInt16("MustDelete") == 0)
+                        myUsable.MustDelete = true;
 
                     myUsable.AttributeItem();
 

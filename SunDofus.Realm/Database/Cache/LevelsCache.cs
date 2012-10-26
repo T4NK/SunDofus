@@ -28,7 +28,7 @@ namespace realm.Database.Cache
                     newLevel.Job = SQLReader.GetInt64("Job");
                     newLevel.Mount = SQLReader.GetInt64("Mount");
                     newLevel.Alignment = SQLReader.GetInt64("Pvp");
-                    //newLevel.Guild = SQLReader.GetInt64("Guild");
+                    newLevel.Guild = SQLReader.GetInt64("Guild");
 
                     LevelsList.Add(newLevel);
                 }
@@ -45,6 +45,11 @@ namespace realm.Database.Cache
                 return LevelsList.First(x => x.Id == Level);
             else
                 return new Models.Levels.LevelModel(long.MaxValue);
+        }
+
+        public static int MaxLevel()
+        {
+            return LevelsList.First(x => x.Id > 0 && LevelsList.Any(y => y.Id > x.Id) == false).Id - 1;
         }
     }
 }

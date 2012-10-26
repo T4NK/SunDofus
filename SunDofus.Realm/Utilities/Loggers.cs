@@ -14,14 +14,14 @@ namespace realm.Utilities
 
         public static void InitialiseLoggers()
         {
-            StatusLogger = new Logger("Status", ConsoleColor.Green);
+            StatusLogger = new Logger("Status",Basic._Locker, ConsoleColor.Green);
 
             if (Config.myConfig.GetBoolElement("Status_inConsole") == true)
                 StatusLogger.StartConsoleLogger();
             if (Config.myConfig.GetBoolElement("Status_inFile") == true)
                 StatusLogger.StartFileLogger();
 
-            InfosLogger = new Logger("Infos", ConsoleColor.Magenta);
+            InfosLogger = new Logger("Infos", Basic._Locker, ConsoleColor.Magenta);
 
             if (Config.myConfig.GetBoolElement("Infos_inFile") == true)
                 InfosLogger.StartFileLogger();
@@ -29,7 +29,7 @@ namespace realm.Utilities
             if (Config.myConfig.GetBoolElement("Infos_inConsole") == true)
                 InfosLogger.StartConsoleLogger();
 
-            ErrorsLogger = new Logger("Errors", ConsoleColor.Yellow);
+            ErrorsLogger = new Logger("Errors", Basic._Locker, ConsoleColor.Yellow);
 
             if (Config.myConfig.GetBoolElement("Errors_inFile") == true)
                 ErrorsLogger.StartFileLogger();

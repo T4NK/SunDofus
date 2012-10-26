@@ -49,10 +49,16 @@ namespace realm.Realm.Character
 
         void LevelUp()
         {
+            if (this.Level == Database.Cache.LevelsCache.MaxLevel())
+                return;
+
             if (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
             {
                 while (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
                 {
+                    if (this.Level == Database.Cache.LevelsCache.MaxLevel())
+                        break;
+
                     Level++;
                     SpellPoint++;
                     CharactPoint += 5;
@@ -62,6 +68,43 @@ namespace realm.Realm.Character
                 mySpellInventary.LearnSpells();
                 SendCharStats();
             }
+        }
+
+        #endregion
+
+        #region ChatSpam
+
+        public long QuotaRecruitment = 0;
+        public long QuotaTrade = 0;
+
+        public long TimeTrade()
+        {
+            return (long)Math.Ceiling((double)((QuotaTrade - Environment.TickCount) / 1000));
+        }
+
+        public long TimeRecruitment()
+        {
+            return (long)Math.Ceiling((double)((QuotaRecruitment - Environment.TickCount) / 1000));
+        }
+
+        public bool CanSendinTrade()
+        {
+            return (TimeTrade() <= 0 ? true : false);
+        }
+
+        public bool CanSendinRecruitment()
+        {
+            return (TimeRecruitment() <= 0 ? true : false);
+        }
+
+        public void RefreshTrade()
+        {
+            QuotaTrade = Environment.TickCount + Utilities.Config.myConfig.GetLongElement("AntiSpamTrade");
+        }
+
+        public void RefreshRecruitment()
+        {
+            QuotaRecruitment = Environment.TickCount + Utilities.Config.myConfig.GetLongElement("AntiSpamRecruitment");
         }
 
         #endregion
@@ -202,7 +245,7 @@ namespace realm.Realm.Character
             }
         }
 
-        public void TeleportNewMap(int myMapID, int myCharacter)
+        public void TeleportNewMap(int myMapID, int myCell)
         {
             Client.Send(string.Format("GA;2;{0};", ID));
 
@@ -210,7 +253,7 @@ namespace realm.Realm.Character
             var m_M = Database.Cache.MapsCache.MapsList.First(x => x.myMap.myId == myMapID);
 
             MapID = m_M.myMap.myId;
-            MapCell = myCharacter;
+            MapCell = myCell;
 
             LoadMap();
         }

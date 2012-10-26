@@ -11,16 +11,12 @@ namespace realm.Database.Models.Items
     {
         public int myBaseItemID = -1;
         public string myArgs = "";
+        public bool MustDelete = true;
 
         public void AttributeItem()
         {
             if (Database.Cache.ItemsCache.ItemsList.Any(x => x.myID == myBaseItemID))
                 Database.Cache.ItemsCache.ItemsList.First(x => x.myID == myBaseItemID).meUsable = true;
-        }
-
-        public bool ConditionsAvaliable(Character Client)
-        {
-            return true;
         }
 
         public void ParseEffect(Character Client)

@@ -12,9 +12,11 @@ namespace SunDofus
         bool inConsole = false, inFile = false;
         StreamWriter myWriter;
         string myName = "";
+        object Locker;
 
-        public Logger(string newName, ConsoleColor newColor = ConsoleColor.Gray)
+        public Logger(string newName,object newLocker, ConsoleColor newColor = ConsoleColor.Gray)
         {
+            Locker = newLocker;
             myName = newName;
             myColor = newColor;
         }
@@ -38,29 +40,32 @@ namespace SunDofus
         {
             if (inConsole == true)
             {
-                Console.ForegroundColor = myColor;
-
-                Console.Write(">> ");
-
-                foreach (char c in Message)
+                lock (Locker)
                 {
-                    if (c == '@')
+                    Console.ForegroundColor = myColor;
+
+                    Console.Write(">> ");
+
+                    foreach (char c in Message)
                     {
-                        if (Console.ForegroundColor == ConsoleColor.White)
-                            Console.ForegroundColor = myColor;
+                        if (c == '@')
+                        {
+                            if (Console.ForegroundColor == ConsoleColor.White)
+                                Console.ForegroundColor = myColor;
+                            else
+                                Console.ForegroundColor = ConsoleColor.White;
+                        }
                         else
-                            Console.ForegroundColor = ConsoleColor.White;
+                        {
+                            Console.Write(c);
+                        }
                     }
-                    else
-                    {
-                        Console.Write(c);
-                    }
+
+                    if (Line == true)
+                        Console.WriteLine();
+
+                    Console.ForegroundColor = ConsoleColor.Gray;
                 }
-
-                if (Line == true)
-                    Console.WriteLine();
-
-                Console.ForegroundColor = ConsoleColor.Gray;
             }
 
             if (inFile == true)

@@ -8,6 +8,7 @@ namespace realm.Utilities
     class Basic
     {
         public static Random _Rando = new Random();
+        public static object _Locker = new object();
 
         public static string Vowels = "aeiouy";
         public static string Consonants = "bcdfghjklmnpqrstvwxz";
@@ -70,22 +71,30 @@ namespace realm.Utilities
             return string.Format("BD{0}|{1}|{2}", (DateTime.Now.Year - 1370).ToString(), (DateTime.Now.Month - 1), (DateTime.Now.Day));
         }
 
-        public static int GetRandomJet(string Jet)
+        public static int GetRandomJet(string JetStr, int Jet = 3)
         {
-            if (Jet.Length > 3)
+            if (JetStr.Length > 3)
             {
                 var Damage = 0;
-                var DS = int.Parse(Jet.Split('d')[0]);
-                var Faces = int.Parse(Jet.Split('d')[1].Split('+')[0]);
-                var Fixe = int.Parse(Jet.Split('d')[1].Split('+')[1]);
+                var DS = int.Parse(JetStr.Split('d')[0]);
+                var Faces = int.Parse(JetStr.Split('d')[1].Split('+')[0]);
+                var Fixe = int.Parse(JetStr.Split('d')[1].Split('+')[1]);
 
                 if (DS != 0)
                 {
                     for (var i = 1; i <= DS; i++)
-                        Damage += Rand(1, Faces);
+                    {
+                        if (Jet == 1)
+                            Damage += Faces;
+                        else if (Jet == 2)
+                            Damage += 1;
+                        else if (Jet == 3)
+                            Damage += (int)Math.Ceiling((double)(Faces / 2));
+                        else
+                            Damage += Rand(1, Faces);
+                    }
                 }
-
-                return (Damage + Fixe);
+                    return (Damage + Fixe);
             }
             else
                 return 0;

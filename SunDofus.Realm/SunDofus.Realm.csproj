@@ -101,6 +101,9 @@
     <Compile Include="Realm\Map\Pathfinding.cs" />
     <Compile Include="Database\Models\Maps\TriggerModel.cs" />
     <Compile Include="Realm\World\Chat.cs" />
+    <Compile Include="Realm\World\ConditionsHandler.cs" />
+    <Compile Include="Realm\World\Conditions\ItemCondition.cs" />
+    <Compile Include="Realm\World\Conditions\TriggerCondition.cs" />
     <Compile Include="Realm\World\Save.cs" />
     <Compile Include="Utilities\Basic.cs" />
     <Compile Include="Utilities\Config.cs" />

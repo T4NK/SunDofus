@@ -36,6 +36,8 @@ namespace realm.Database.Cache
                     myMap.myMapData = SQLReader.GetString("mapData");
                     myMap.myKey = SQLReader.GetString("key");
 
+                    myMap.ParsePos();
+
                     MapsList.Add(new Realm.Map.Map(myMap));
                 }
 

@@ -15,5 +15,11 @@ namespace realm.Database.Models.Items
         public bool meUsable = false;
 
         public List<Realm.Effect.EffectsItems> myEffectsList = new List<Realm.Effect.EffectsItems>();
+        public List<Realm.World.Conditions.ItemCondition> myConds;
+
+        public void ParseConditions()
+        {
+            myConds = new List<Realm.World.Conditions.ItemCondition>();
+        }
     }
 }

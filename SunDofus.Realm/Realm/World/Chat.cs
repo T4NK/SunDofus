@@ -31,5 +31,31 @@ namespace realm.Realm.World
                     Client.Send(string.Format("cMEf{0}", Receiver));
             }
         }
+
+        public static void SendTradeMessage(Network.Realm.RealmClient myClient, string Message)
+        {
+            if (myClient.myPlayer.CanSendinTrade() == true)
+            {
+                foreach (var me in Network.ServersHandler.myRealmServer.myClients.Where(x => x.isAuth == true))
+                    me.Send(string.Format("cMK:|{0}|{1}|{2}", myClient.myPlayer.ID, myClient.myPlayer.myName, Message));
+
+                myClient.myPlayer.RefreshTrade();
+            }
+            else
+                myClient.Send(string.Format("Im0115;{0}", myClient.myPlayer.TimeTrade()));
+        }
+
+        public static void SendRecruitmentMessage(Network.Realm.RealmClient myClient, string Message)
+        {
+            if (myClient.myPlayer.CanSendinRecruitment() == true)
+            {
+                foreach (var me in Network.ServersHandler.myRealmServer.myClients.Where(x => x.isAuth == true))
+                    me.Send(string.Format("cMK?|{0}|{1}|{2}", myClient.myPlayer.ID, myClient.myPlayer.myName, Message));
+
+                myClient.myPlayer.RefreshRecruitment();
+            }
+            else
+                myClient.Send(string.Format("Im0115;{0}", myClient.myPlayer.TimeRecruitment()));
+        }
     }
 }

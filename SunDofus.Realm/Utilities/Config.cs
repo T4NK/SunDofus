@@ -72,6 +72,12 @@ namespace realm.Utilities
             if (!myConfig.ExistElement("ServerPort"))
                 myConfig.InsertElement("ServerPort", "5555");
 
+            //ChatSpam
+            if (!myConfig.ExistElement("AntiSpamTrade"))
+                myConfig.InsertElement("AntiSpamTrade", "60000");
+            if (!myConfig.ExistElement("AntiSpamRecruitment"))
+                myConfig.InsertElement("AntiSpamRecruitment", "60000");
+
             #region Start
 
             if (!myConfig.ExistElement("StartLevel"))

@@ -25,8 +25,11 @@ namespace realm.Database.Cache
 
                     myTrigger.myMapID = SQLReader.GetInt16("MapID");
                     myTrigger.myCellID = SQLReader.GetInt16("CellID");
-                    myTrigger.myNewMapID = int.Parse(SQLReader.GetString("NewMap").Split(',')[0]);
-                    myTrigger.myNewCellID = int.Parse(SQLReader.GetString("NewMap").Split(',')[1]);
+                    myTrigger.myActionID = SQLReader.GetInt16("ActionID");
+                    myTrigger.myArgs = SQLReader.GetString("Args");
+                    myTrigger.myConditions = SQLReader.GetString("Conditions");
+
+                    myTrigger.ParseConditions();
 
                     TriggersList.Add(myTrigger);
                     ParseTrigger(myTrigger);

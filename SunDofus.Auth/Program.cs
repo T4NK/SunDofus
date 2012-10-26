@@ -15,9 +15,9 @@ namespace auth
             Utilities.Loggers.InitialiseLoggers();
 
             Database.DatabaseHandler.InitialiseConnection();
-            Database.Cache.ServersCache.ReloadCache(new object(), new EventArgs());
-            Database.Cache.GiftsCache.ReloadCache(new object(), new EventArgs());
-            Database.Cache.AccountsCache.ReloadCache(new object(), new EventArgs());
+            Database.Cache.ServersCache.ReloadCache();
+            Database.Cache.GiftsCache.ReloadCache();
+            Database.Cache.AccountsCache.ReloadCache();
 
             Network.ServersHandler.InitialiseServers();
 

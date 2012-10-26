@@ -6,27 +6,13 @@ using System.Text;
 namespace realm.Realm.World
 {
     class Save
-    {
-        public static void ParseSave(string Data)
-        {
-            switch (Data)
-            {
-                case "all":
-                    SaveWorld();
-                    break;
-
-                case "char":
-                    SaveChar();
-                    break;
-            }
-        }
-        
+    {        
         public static void SaveWorld()
         {
-
+            SaveChararacters();
         }
 
-        public static void SaveChar()
+        public static void SaveChararacters()
         {
             Network.ServersHandler.myAuthLink.Send("SSM");
 

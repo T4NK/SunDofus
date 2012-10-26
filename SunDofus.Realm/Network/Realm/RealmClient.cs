@@ -60,7 +60,7 @@ namespace realm.Network.Realm
             }
         }
 
-        public void SendConsoleMessage(string Message, int Color)
+        public void SendConsoleMessage(string Message, int Color = 1)
         {
             Send(string.Format("BAT{0}{1}", Color, Message));
         }

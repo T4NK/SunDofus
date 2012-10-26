@@ -47,6 +47,8 @@ namespace realm.Network.Realm
             myPackets["Od"] = DeleteItem;
             myPackets["OM"] = MoveItem;
             myPackets["OU"] = UseItem;
+            myPackets["SB"] = SpellBoost;
+            myPackets["SM"] = SpellMove;
         }
 
         public void Parse(string Data)
@@ -380,17 +382,53 @@ namespace realm.Network.Realm
             var Channel = SplitData[0];
             var Message = SplitData[1];
 
-            switch (Channel)
+            try
             {
-                case "*":
-                    Chat.SendGeneralMessage(myClient, Message);
-                    break;
-            }
+                switch (Channel)
+                {
+                    case "*":
+                        Chat.SendGeneralMessage(myClient, Message);
+                        break;
 
-            if (Channel.Length > 1 && Channel != "*")
-            {
-                Chat.SendPrivateMessage(myClient, Channel, Message);
+                    case "$":
+                        //PartyMessage
+                        break;
+
+                    case "%":
+                        //GuildMessage
+                        break;
+
+                    case "#":
+                        //TeamMessage
+                        break;
+
+                    case "?":
+                        Chat.SendRecruitmentMessage(myClient, Message);
+                        break;
+
+                    case "!":
+                        //AlignmentMessage
+                        break;
+
+                    case ":":
+                        Chat.SendTradeMessage(myClient, Message);
+                        break;
+
+                    case "@":
+                        //AdminMessage
+                        break;
+
+                    case "¤":
+                        //No idea
+                        break;
+
+                    default:
+                        if (Channel.Length > 1)
+                            Chat.SendPrivateMessage(myClient, Channel, Message);
+                        break;
+                }
             }
+            catch { }
         }
 
         public void ParseConsoleMessage(string Data)
@@ -454,7 +492,11 @@ namespace realm.Network.Realm
                         if (myClient.myPlayer.GetMap().myTriggers.Any(x => x.myCellID == myClient.myPlayer.MapCell))
                         {
                             var m_T = myClient.myPlayer.GetMap().myTriggers.First(x => x.myCellID == myClient.myPlayer.MapCell);
-                            myClient.myPlayer.TeleportNewMap(m_T.myNewMapID, m_T.myNewCellID);
+
+                            if (realm.Realm.World.ConditionsHandler.HasCondition(myClient, m_T.myConds))
+                                realm.Realm.Effect.EffectsActions.ParseEffect(myClient.myPlayer,m_T.myActionID, m_T.myArgs);
+                            else
+                                myClient.SendMessage("Vous ne possédez pas les conditions nécessaires pour cette action !");
                         }
                     }
 
@@ -771,6 +813,64 @@ namespace realm.Network.Realm
 
                     break;
             }
+        }
+
+        #endregion
+
+        #region Spells
+
+        void SpellBoost(string Packet)
+        {
+            try
+            {
+                var mySpellID = int.Parse(Packet);
+
+                if (!myClient.myPlayer.mySpellInventary.mySpells.Any(x => x.myId == mySpellID))
+                {
+                    myClient.Send("SUE");
+                    return;
+                }
+
+                var Level = myClient.myPlayer.mySpellInventary.mySpells.First(x => x.myId == mySpellID).myLevel;
+
+                if (myClient.myPlayer.SpellPoint < Level || Level >= 6)
+                {
+                    myClient.Send("SUE");
+                    return;
+                }
+
+                myClient.myPlayer.SpellPoint -= Level;
+                
+                myClient.myPlayer.mySpellInventary.mySpells.First(x => x.myId == mySpellID).myLevel++;
+
+                myClient.Send(string.Format("SUK{0}~{1}", mySpellID, Level + 1));
+                myClient.myPlayer.SendCharStats();
+            }
+            catch { }
+        }
+
+        void SpellMove(string Packet)
+        {
+            try
+            {
+                myClient.Send("BN");
+
+                var Data = Packet.Split('|');
+                var mySpellID = int.Parse(Data[0]);
+                var newPos = int.Parse(Data[1]);
+
+                if (!myClient.myPlayer.mySpellInventary.mySpells.Any(x => x.myId == mySpellID))
+                    return;
+
+                if (myClient.myPlayer.mySpellInventary.mySpells.Any(x => x.myPosition == newPos))
+                {
+                    myClient.myPlayer.mySpellInventary.mySpells.First(x => x.myPosition == newPos).myPosition = 25;
+                    myClient.myPlayer.mySpellInventary.mySpells.First(x => x.myId == mySpellID).myPosition = newPos;
+                }
+                else
+                    myClient.myPlayer.mySpellInventary.mySpells.First(x => x.myId == mySpellID).myPosition = newPos;
+            }
+            catch { }
         }
 
         #endregion

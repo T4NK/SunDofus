@@ -18,7 +18,7 @@ namespace realm.Realm.Character.Items
             SetsList = new Dictionary<int,CharacterSet>();
         }
 
-        public void AddItem(int ID, bool OffLine)
+        public void AddItem(int ID, bool OffLine, int Jet = 4)
         {
             if (OffLine == true)
             {
@@ -28,7 +28,7 @@ namespace realm.Realm.Character.Items
                 var myItem = new CharacterItem(BaseItem);
 
                 myItem.ParseJet();
-                myItem.GeneratItem();
+                myItem.GeneratItem(Jet);
 
                 foreach (var myItem2 in ItemsList)
                 {
@@ -53,7 +53,7 @@ namespace realm.Realm.Character.Items
                 var myItem = new CharacterItem(BaseItem);
 
                 myItem.ParseJet();
-                myItem.GeneratItem();
+                myItem.GeneratItem(Jet);
 
                 foreach (var myItem2 in ItemsList)
                 {
@@ -192,6 +192,12 @@ namespace realm.Realm.Character.Items
             if (myItem.myBaseItem.myLevel > myClient.Level) //Si trop petit level
             {
                 myClient.Client.Send("OAEL");
+                return;
+            }
+
+            if (!World.ConditionsHandler.HasCondition(myClient.Client, myItem.myBaseItem.myConds))
+            {
+                myClient.Client.Send("Im119|44");
                 return;
             }
 
@@ -401,7 +407,7 @@ namespace realm.Realm.Character.Items
             var myUsable = Database.Cache.ItemsCache.UsablesList.First(x => x.myBaseItemID == myItem.myBaseItem.myID);
             var myCharacter = CharactersManager.CharactersList.First(x => x.ID == CharID);
 
-            if (!myUsable.ConditionsAvaliable(myCharacter))
+            if (!World.ConditionsHandler.HasCondition(myClient.Client, myItem.myBaseItem.myConds))
             {
                 myClient.Client.Send("Im119|44");
                 return;
@@ -409,7 +415,8 @@ namespace realm.Realm.Character.Items
 
             myUsable.ParseEffect(myCharacter);
 
-            DeleteItem(myItem.myID, 1);
+            if(myUsable.MustDelete == true)
+                DeleteItem(myItem.myID, 1);
         }
     }
 }

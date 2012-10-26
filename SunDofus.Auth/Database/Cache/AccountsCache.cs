@@ -13,7 +13,7 @@ namespace auth.Database.Cache
         static bool AutoStarted = false;
         static Timer AutoCache = new Timer();
 
-        public static void ReloadCache(object sender, EventArgs e)
+        public static void ReloadCache(object sender = null, EventArgs e = null)
         {
             Utilities.Loggers.InfosLogger.Write("Reloading of @Accounts' Cache@ !");
 

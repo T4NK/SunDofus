@@ -50,16 +50,16 @@ namespace realm.Realm.Character.Items
             }
         }
 
-        public void GeneratItem()
+        public void GeneratItem(int Jet = 3)
         {
             this.myQuantity = 1;
             this.myPosition = -1;
 
             foreach (var Effect in myEffectsList)
-                NewJetAvaliable(Effect);
+                NewJetAvaliable(Effect, Jet);
         }
 
-        public void NewJetAvaliable(Effect.EffectsItems myEffect)
+        public void NewJetAvaliable(Effect.EffectsItems myEffect, int Jet = 3)
         {
             if (myEffect.ID == 91 | myEffect.ID == 92 | myEffect.ID == 93 | myEffect.ID == 94 | myEffect.ID == 95 | myEffect.ID == 96 | myEffect.ID == 97 | myEffect.ID == 98 | myEffect.ID == 99 | myEffect.ID == 100 | myEffect.ID == 101)
             {
@@ -71,7 +71,7 @@ namespace realm.Realm.Character.Items
             }
             else
             {
-                myEffect.Value = Utilities.Basic.GetRandomJet(myEffect.Effect);
+                myEffect.Value = Utilities.Basic.GetRandomJet(myEffect.Effect, Jet);
                 myEffect.Value2 = -1;
             }
         }
