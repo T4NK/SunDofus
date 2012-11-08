@@ -16,10 +16,11 @@ namespace auth
 
             Database.DatabaseHandler.InitialiseConnection();
             Database.Cache.ServersCache.ReloadCache();
-            Database.Cache.GiftsCache.ReloadCache();
-            Database.Cache.AccountsCache.ReloadCache();
 
             Network.ServersHandler.InitialiseServers();
+
+            Database.Cache.GiftsCache.ReloadCache();
+            Database.Cache.AccountsCache.ReloadCache();
 
             while (true)
                 Utilities.Commands.ParseCommand(Console.ReadLine());

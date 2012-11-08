@@ -8,7 +8,7 @@ namespace auth.Network.Sync
 {
     class SyncClient : SunDofus.AbstractClient
     {
-        State myState;
+        public State myState;
         public Database.Models.ServerModel myServer = null;
 
         object PacketLocker;
@@ -175,7 +175,7 @@ namespace auth.Network.Sync
             ServersHandler.myAuthServer.RefreshAllHosts();
         }
 
-        enum State
+        public enum State
         {
             Auth,
             Connected,

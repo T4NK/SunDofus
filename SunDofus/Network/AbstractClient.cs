@@ -8,7 +8,8 @@ namespace SunDofus
 {
     public class AbstractClient
     {
-        public SilverSocket mySocket;
+        SilverSocket mySocket;
+        public bool isConnected = false;
 
         public delegate void OnClosedEvent();
         public OnClosedEvent RaiseClosedEvent;
@@ -16,31 +17,21 @@ namespace SunDofus
         public delegate void DataArrivalEvent(string M);
         public DataArrivalEvent RaiseDataArrivalEvent;
 
+        public delegate void FailedConnectEvent(Exception e);
+        public FailedConnectEvent RaiseFailedConnectEvent;
+
         public AbstractClient(SilverSocket Socket)
         {
             mySocket = Socket;
+            mySocket.OnConnected += new SilverEvents.Connected(this.Connected);
             mySocket.OnSocketClosedEvent += new SilverEvents.SocketClosed(this.isDisconnected);
             mySocket.OnDataArrivalEvent += new SilverEvents.DataArrival(this.DataArrival);
+            mySocket.OnFailedToConnect += new SilverEvents.FailedToConnect(this.FailedToConnect);
         }
 
-        void DataArrival(byte[] data)
+        public void ConnectTo(string Ip, int Port)
         {
-            string NotParsed = Encoding.ASCII.GetString(data);
-            foreach (string Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
-            {
-                if (Packet == "") continue;
-                RaiseDataArrivalEvent(Packet);
-            }
-        }
-
-        void isDisconnected()
-        {
-            RaiseClosedEvent();
-        }
-
-        public void Disconnect()
-        {
-            mySocket.CloseSocket();
+            mySocket.ConnectTo(Ip, Port);
         }
 
         public string myIp()
@@ -56,6 +47,37 @@ namespace SunDofus
                 mySocket.Send(P);
             }
             catch { }
+        }
+
+        void Connected()
+        {
+            isConnected = true;
+        }
+
+        void FailedToConnect(Exception e)
+        {
+            RaiseFailedConnectEvent(e);
+        }
+
+        void DataArrival(byte[] data)
+        {
+            string NotParsed = Encoding.ASCII.GetString(data);
+            foreach (string Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
+            {
+                if (Packet == "") continue;
+                RaiseDataArrivalEvent(Packet);
+            }
+        }
+
+        void isDisconnected()
+        {
+            isConnected = false;
+            RaiseClosedEvent();
+        }
+
+        public void Disconnect()
+        {
+            mySocket.CloseSocket();
         }
     }
 }

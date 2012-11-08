@@ -53,6 +53,12 @@ namespace auth.Database.Cache
                     AutoCache.Enabled = true;
                     AutoCache.Elapsed += new ElapsedEventHandler(ReloadCache);
                 }
+
+                foreach (var server in Network.ServersHandler.mySyncServer.myClients.Where(x => x.myState == Network.Sync.SyncClient.State.Connected))
+                {
+                    foreach (var acc in myAccounts.Where(x => x.myLevel > 0))
+                        server.Send(string.Format("ANAA|{0}|{1}", acc.myUsername, acc.myPassword));
+                }
             }
             catch (Exception ex)
             {

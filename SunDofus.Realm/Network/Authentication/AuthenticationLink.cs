@@ -7,20 +7,17 @@ using System.Timers;
 
 namespace realm.Network.Authentication
 {
-    class AuthenticationLink
+    class AuthenticationLink : SunDofus.AbstractClient
     {
-        SilverSocket mySocket;
         Timer myTimer;
-        bool  isConnected = false, isLogged = false;
+        bool  isLogged = false;
         object myPacketLocker;
 
-        public AuthenticationLink()
+        public AuthenticationLink() : base (new SilverSocket())
         {
-            mySocket = new SilverSocket();
-            mySocket.OnConnected += new SilverEvents.Connected(this.Connected);
-            mySocket.OnFailedToConnect += new SilverEvents.FailedToConnect(this.FailedToConnect);
-            mySocket.OnDataArrivalEvent += new SilverEvents.DataArrival(this.DataArrival);
-            mySocket.OnSocketClosedEvent += new SilverEvents.SocketClosed(this.Disconnected);
+            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
+            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.DataArrival);
+            this.RaiseFailedConnectEvent += new FailedConnectEvent(this.FailedToConnect);
 
             myTimer = new Timer();
             myTimer.Interval = 1000;
@@ -32,24 +29,21 @@ namespace realm.Network.Authentication
 
         public void Start()
         {
-            mySocket.ConnectTo(Utilities.Config.myConfig.GetStringElement("AuthIp"), Utilities.Config.myConfig.GetIntElement("AuthPort"));
+            this.ConnectTo(Utilities.Config.myConfig.GetStringElement("AuthIp"), Utilities.Config.myConfig.GetIntElement("AuthPort"));
         }
 
         public void Send(string Message, bool Force = false)
         {
-            if (isLogged == false && Force == false) return;
+            if (isLogged == false && Force == false)
+                return;
 
-            try
-            {
-                byte[] P = Encoding.ASCII.GetBytes(string.Format("{0}\x00", Message));
-                mySocket.Send(P);
-            }
-            catch { }
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), Message));
+            this.meSend(Message);
         }
 
         void ElapsedVoid(object sender, EventArgs e)
         {
-            if (isConnected == false)
+            if (this.isConnected == false)
                 Start();
             else
                 myTimer.Stop();
@@ -60,31 +54,15 @@ namespace realm.Network.Authentication
             Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot connect to @AuthServer@ because {0}", e.ToString()));
         }
 
-        void Connected()
+        void DataArrival(string datas)
         {
-            isConnected = true;
-
-            Utilities.Loggers.StatusLogger.Write(string.Format("Connected with the @AuthServer@ <{0}:{1}> !",
-                Utilities.Config.myConfig.GetStringElement("AuthIp"), Utilities.Config.myConfig.GetIntElement("AuthPort")));
-        }
-
-        void DataArrival(byte[] data)
-        {
-            var NotParsed = Encoding.ASCII.GetString(data);
-            foreach (var Packet in NotParsed.Replace("\x0a", "").Split('\x00'))
-            {
-                if (Packet == "") continue;
-
-                lock(myPacketLocker)
-                    ParsePacket(Packet);
-            }
+            lock (myPacketLocker)
+                ParsePacket(datas);
         }
 
         void Disconnected()
         {
-            isConnected = false;
             Utilities.Loggers.StatusLogger.Write("Connection with the @AuthServer@ closed !");
-
             myTimer.Start();
         }
 
@@ -96,6 +74,14 @@ namespace realm.Network.Authentication
             {
                 switch (Infos[0])
                 {
+                    case "ANAA":
+
+                        if (!ServersHandler.adminAccount.ContainsKey(Infos[1]))
+                            ServersHandler.adminAccount.Add(Infos[1], Infos[2]);
+                        else
+                            ServersHandler.adminAccount[Infos[1]] = Infos[2];
+                        break;
+
                     case "ANTS":
 
                         AuthenticationKeys.myKeys.Add(new AuthenticationKeys(Data));
@@ -111,6 +97,7 @@ namespace realm.Network.Authentication
                     case "HCSS":
 
                         isLogged = true;
+                        Utilities.Loggers.InfosLogger.Write("Connected with the @AuthenticationServer@ !");
                         break;
                 }
             }

@@ -33,11 +33,14 @@ namespace realm.Database.Cache
 
                     TriggersList.Add(myTrigger);
                     ParseTrigger(myTrigger);
+
+                    Utilities.Loggers.InfosLogger.Write(string.Format("Loaded trigger @{0}:{1}@ !", myTrigger.myMapID, myTrigger.myCellID));
                 }
 
                 SQLReader.Close();
             }
 
+            Console.Clear();
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' triggers@ from the database !", TriggersList.Count));
         }
 

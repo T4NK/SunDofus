@@ -44,12 +44,6 @@ namespace realm.Utilities
             if (!myConfig.ExistElement("Errors_inConsole"))
                 myConfig.InsertElement("Errors_inConsole", "true");
 
-            //Realm
-            if (!myConfig.ExistElement("Realm_Ip"))
-                myConfig.InsertElement("Realm_Ip", "127.0.0.1");
-            if (!myConfig.ExistElement("Realm_Port"))
-                myConfig.InsertElement("Realm_Port", "5555");
-
             //Database
             if (!myConfig.ExistElement("Database_Server"))
                 myConfig.InsertElement("Database_Server", "localhost");
@@ -60,7 +54,7 @@ namespace realm.Utilities
             if (!myConfig.ExistElement("Database_Name"))
                 myConfig.InsertElement("Database_Name", "sundofus");
 
-            //AuthServer & RealmServer
+            //AuthServer & RealmServer & EditorServer
             if (!myConfig.ExistElement("AuthIp"))
                 myConfig.InsertElement("AuthIp", "127.0.0.1");
             if (!myConfig.ExistElement("AuthPort"))
@@ -71,6 +65,10 @@ namespace realm.Utilities
                 myConfig.InsertElement("ServerIp", "127.0.0.1");
             if (!myConfig.ExistElement("ServerPort"))
                 myConfig.InsertElement("ServerPort", "5555");
+            if (!myConfig.ExistElement("EditorIp"))
+                myConfig.InsertElement("EditorIp", "127.0.0.1");
+            if (!myConfig.ExistElement("EditorPort"))
+                myConfig.InsertElement("EditorPort", "487");
 
             //ChatSpam
             if (!myConfig.ExistElement("AntiSpamTrade"))

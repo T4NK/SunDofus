@@ -55,6 +55,8 @@
   <ItemGroup>
     <Compile Include="Database\Cache\LevelsCache.cs" />
     <Compile Include="Database\Models\Levels\LevelModel.cs" />
+    <Compile Include="Network\Editors\EditorClient.cs" />
+    <Compile Include="Network\Editors\EditorServer.cs" />
     <Compile Include="Network\Realm\RealmClient.cs" />
     <Compile Include="Network\Realm\RealmCommand.cs" />
     <Compile Include="Database\Models\Clients\GiftModel.cs" />
@@ -66,9 +68,7 @@
     <Compile Include="Database\Cache\SpellsCache.cs" />
     <Compile Include="Database\Cache\TriggersCache.cs" />
     <Compile Include="Database\DatabaseHandler.cs" />
-    <Compile Include="Network\Commander\CommanderClient.cs" />
     <Compile Include="Network\Realm\RealmServer.cs" />
-    <Compile Include="Network\Commander\CommanderServer.cs" />
     <Compile Include="Network\Authentication\AuthenticationKeys.cs" />
     <Compile Include="Network\Authentication\AuthenticationLink.cs" />
     <Compile Include="Network\ServersHandler.cs" />

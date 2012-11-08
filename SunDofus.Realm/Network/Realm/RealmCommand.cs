@@ -49,6 +49,10 @@ namespace realm.Network.Realm
                             ParseCommandHelp();
                             break;
 
+                        case "reloadmaps":
+                            Database.Cache.MapsCache.ReloadMaps();
+                            break;
+
                         default:
                             Client.SendConsoleMessage("Cannot parse your AdminCommand !");
                             Client.SendConsoleMessage("Use the command 'Help' for more informations !");
