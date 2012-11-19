@@ -15,7 +15,7 @@ namespace auth.Database.Cache
 
         public static void ReloadCache(object sender = null, EventArgs e = null)
         {
-            Utilities.Loggers.InfosLogger.Write("Reloading of @Servers' Cache@ !");
+            Utilities.Loggers.m_infosLogger.Write("Reloading of @Servers' Cache@ !");
 
             try
             {
@@ -43,14 +43,14 @@ namespace auth.Database.Cache
                 if (!AutoStarted == true)
                 {
                     AutoStarted = true;
-                    AutoCache.Interval = Utilities.Config.myConfig.GetIntElement("Time_Accounts_Reload");
+                    AutoCache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
                     AutoCache.Enabled = true;
                     AutoCache.Elapsed += new ElapsedEventHandler(ReloadCache);
                 }
             }
             catch (Exception ex)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot reload @servers@ ({0})", ex.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @servers@ ({0})", ex.ToString()));
             }
         }
     }

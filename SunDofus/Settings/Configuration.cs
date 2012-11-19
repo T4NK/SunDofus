@@ -4,65 +4,71 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace SunDofus
+namespace SunDofus.Settings
 {
     public class Configuration
     {
-        Dictionary<string, string> myElements;
+        Dictionary<string, string> m_elements;
 
         public Configuration()
         {
-            myElements = new Dictionary<string, string>();
-        }
+            m_elements = new Dictionary<string, string>();
+        } 
 
-        public void LoadConfiguration(string Path)
+        public void LoadConfiguration(string _path)
         {
-            StreamReader Reader = new StreamReader(Path);
+            var reader = new StreamReader(_path);
 
-            while (!Reader.EndOfStream)
+            while (!reader.EndOfStream)
             {
-                string Line = Reader.ReadLine();
-                if (Line.Contains("#")) continue;
-                if (Line == "") continue;
+                var Line = reader.ReadLine();
 
-                string[] Line_Infos = Line.Split(' ');
-                myElements.Add(Line_Infos[0], Line_Infos[1].Replace(";", ""));
+                if (Line.Contains("#")) 
+                    continue;
+                if (Line == "") 
+                    continue;
+
+                var lineInfos = Line.Split(' ');
+                m_elements.Add(lineInfos[0], lineInfos[1].Replace(";", ""));
             }
         }
 
-        public void InsertElement(string Key, string Value)
+        public void InsertElement(string _key, string _value)
         {
-            myElements.Add(Key, Value);
+            if(!m_elements.ContainsKey(_key))
+                m_elements.Add(_key, _value);
         }
 
-        public bool ExistElement(string Key)
+        public string GetStringElement(string _element)
         {
-            if (myElements.ContainsKey(Key)) return true;
-            return false;
+            if (!m_elements.ContainsKey(_element)) 
+                return "";
+
+            return m_elements[_element];
         }
 
-        public string GetStringElement(string Element)
+        public int GetIntElement(string _element)
         {
-            if (!myElements.ContainsKey(Element)) return "";
-            return myElements[Element];
+            if (!m_elements.ContainsKey(_element)) 
+                return -1;
+
+            return int.Parse(m_elements[_element]);
         }
 
-        public int GetIntElement(string Element)
+        public bool GetBoolElement(string _element)
         {
-            if (!myElements.ContainsKey(Element)) return -1;
-            return int.Parse(myElements[Element]);
+            if (!m_elements.ContainsKey(_element)) 
+                return false;
+
+            return bool.Parse(m_elements[_element]);
         }
 
-        public bool GetBoolElement(string Element)
+        public long GetLongElement(string _element)
         {
-            if (!myElements.ContainsKey(Element)) return false;
-            return bool.Parse(myElements[Element]);
-        }
+            if (!m_elements.ContainsKey(_element)) 
+                return -1;
 
-        public long GetLongElement(string Element)
-        {
-            if (!myElements.ContainsKey(Element)) return -1;
-            return long.Parse(myElements[Element]);
+            return long.Parse(m_elements[_element]);
         }
     }
 }

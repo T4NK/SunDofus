@@ -17,19 +17,19 @@ namespace auth.Network.Auth
             myClients = new Dictionary<AuthClient, int>();
 
             myRefreshTimer = new Timer();
-            myRefreshTimer.Interval = Utilities.Config.myConfig.GetIntElement("Time_Queue_Reload");
+            myRefreshTimer.Interval = Utilities.Config.m_config.GetIntElement("Time_Queue_Reload");
             myRefreshTimer.Enabled = true;
             myRefreshTimer.Elapsed += new ElapsedEventHandler(RefreshQueue);
             myRefreshTimer.Start();
 
-            Utilities.Loggers.StatusLogger.Write("@Queue@ for the servers' list started !");
+            Utilities.Loggers.m_statusLogger.Write("@Queue@ for the servers' list started !");
         }
 
         public static void AddinQueue(AuthClient myClient)
         {
-            Utilities.Loggers.InfosLogger.Write(string.Format("Add @{0}@ in queue !", myClient.myAccount.myPseudo));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Add @{0}@ in queue !", myClient.m_account.myPseudo));
             myClients.Add(myClient, myClients.Count + 1);
-            myClient.WaitPosition = (myClients.Count > 1 ? myClients.Count + 1 : 2);
+            myClient.m_waitPosition = (myClients.Count > 1 ? myClients.Count + 1 : 2);
         }
 
         static void RefreshQueue(object sender, EventArgs e)
@@ -42,29 +42,29 @@ namespace auth.Network.Auth
 
             foreach (AuthClient myClient in myClients.Keys)
             {
-                if (myClient.myState != AuthClient.State.Queue) 
+                if (myClient.m_state != AuthClient.State.Queue) 
                     return;
 
-                if (Count <= Utilities.Config.myConfig.GetIntElement("Max_Clients_inQueue"))
+                if (Count <= Utilities.Config.m_config.GetIntElement("Max_Clients_inQueue"))
                 {
                     Count++;
                     Confirmed++;
 
-                    myClient.myState = AuthClient.State.OnList;
+                    myClient.m_state = AuthClient.State.OnList;
                     myClient.SendInformations();
                 }
 
                 else
                 {
                     Rest++;
-                    myClient.WaitPosition = (myClients.Count > 1 ? myClients.Count + 1 : 2);
+                    myClient.m_waitPosition = (myClients.Count > 1 ? myClients.Count + 1 : 2);
                 }
             }
 
             if (Rest == 0)
                 myClients.Clear();
 
-            Utilities.Loggers.InfosLogger.Write("@Queue@ refreshed !");
+            Utilities.Loggers.m_infosLogger.Write("@Queue@ refreshed !");
         }
     }
 }

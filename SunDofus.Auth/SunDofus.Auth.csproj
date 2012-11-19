@@ -59,7 +59,6 @@
     <Compile Include="Network\Auth\AuthClient.cs" />
     <Compile Include="Network\Auth\AuthQueue.cs" />
     <Compile Include="Utilities\Basic.cs" />
-    <Compile Include="Utilities\Commands.cs" />
     <Compile Include="Utilities\Config.cs" />
     <Compile Include="Database\Cache\AccountsCache.cs" />
     <Compile Include="Database\Models\AccountModel.cs" />

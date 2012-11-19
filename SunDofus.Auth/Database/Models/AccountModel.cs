@@ -47,11 +47,11 @@ namespace auth.Database.Models
         {
             var Time = mySubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds;
 
-            if (Utilities.Config.myConfig.GetBoolElement("Subscription_Time") == false)
+            if (Utilities.Config.m_config.GetBoolElement("Subscription_Time") == false)
                 return 31536000000;
             else if (mySubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds <= 1)
                 return 0;
-            else if (Time >= Utilities.Config.myConfig.GetLongElement("Max_Subscription_Time"))
+            else if (Time >= Utilities.Config.m_config.GetLongElement("Max_Subscription_Time"))
                 return 31536000000;
 
             return (long)Time;

@@ -7,7 +7,7 @@ using System.Timers;
 
 namespace realm.Network.Authentication
 {
-    class AuthenticationLink : SunDofus.AbstractClient
+    class AuthenticationLink : SunDofus.Network.AbstractClient
     {
         Timer myTimer;
         bool  isLogged = false;
@@ -15,9 +15,9 @@ namespace realm.Network.Authentication
 
         public AuthenticationLink() : base (new SilverSocket())
         {
-            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
-            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.DataArrival);
-            this.RaiseFailedConnectEvent += new FailedConnectEvent(this.FailedToConnect);
+            this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
+            this.ReceivedDatas += new ReceiveDatasHandler(this.DataArrival);
+            this.ConnectFailed += new ConnectFailedHandler(this.FailedToConnect);
 
             myTimer = new Timer();
             myTimer.Interval = 1000;
@@ -38,7 +38,7 @@ namespace realm.Network.Authentication
                 return;
 
             Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), Message));
-            this.meSend(Message);
+            this.SendDatas(Message);
         }
 
         void ElapsedVoid(object sender, EventArgs e)

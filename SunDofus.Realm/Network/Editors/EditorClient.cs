@@ -6,26 +6,25 @@ using SilverSock;
 
 namespace realm.Network.Editors
 {
-    class EditorClient : SunDofus.AbstractClient
+    class EditorClient : SunDofus.Network.AbstractClient
     {
         object myPacketLocker;
         bool isLogged = false;
-        int LastMapId = 0;
 
         public EditorClient(SilverSocket socket)
             : base(socket)
         { 
             myPacketLocker = new object();
 
-            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
-            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.ReceivedPackets);
+            this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
+            this.ReceivedDatas += new ReceiveDatasHandler(this.ReceivedPackets);
 
             Send("HCE");
         }
 
         public void Send(string Message)
         {
-            this.meSend(Message);
+            this.SendDatas(Message);
             Utilities.Loggers.InfosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), Message));
         }
 
@@ -46,7 +45,8 @@ namespace realm.Network.Editors
 
                     case "ANM":
 
-                        Database.Cache.MapsCache.ReloadMaps();
+                        if(isLogged == true)
+                            Database.Cache.MapsCache.ReloadMaps();
                         break;
                 }
             }

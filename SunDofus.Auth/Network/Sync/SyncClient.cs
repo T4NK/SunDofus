@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace auth.Network.Sync
 {
-    class SyncClient : SunDofus.AbstractClient
+    class SyncClient : SunDofus.Network.AbstractClient
     {
         public State myState;
         public Database.Models.ServerModel myServer = null;
@@ -16,8 +16,8 @@ namespace auth.Network.Sync
         public SyncClient(SilverSocket Socket)
             : base(Socket)
         {
-            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.PacketsReceived);
-            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
+            this.ReceivedDatas += new ReceiveDatasHandler(this.PacketsReceived);
+            this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
 
             myState = State.Auth;
             PacketLocker = new object();
@@ -31,13 +31,13 @@ namespace auth.Network.Sync
 
             Builder.Append("ANTS|");
             Builder.Append(myKey).Append("|");
-            Builder.Append(myClient.myAccount.myId).Append("|");
-            Builder.Append(myClient.myAccount.myPseudo).Append("|");
-            Builder.Append(myClient.myAccount.myQuestion).Append("|");
-            Builder.Append(myClient.myAccount.myAnswer).Append("|");
-            Builder.Append(myClient.myAccount.myLevel).Append("|");
-            Builder.Append(myClient.myAccount.myBaseChar).Append("|");
-            Builder.Append(myClient.myAccount.mySubscriptionTime()).Append("|");
+            Builder.Append(myClient.m_account.myId).Append("|");
+            Builder.Append(myClient.m_account.myPseudo).Append("|");
+            Builder.Append(myClient.m_account.myQuestion).Append("|");
+            Builder.Append(myClient.m_account.myAnswer).Append("|");
+            Builder.Append(myClient.m_account.myLevel).Append("|");
+            Builder.Append(myClient.m_account.myBaseChar).Append("|");
+            Builder.Append(myClient.m_account.mySubscriptionTime()).Append("|");
             Builder.Append(myClient.MyGifts());
 
             Send(Builder.ToString());
@@ -45,13 +45,13 @@ namespace auth.Network.Sync
 
         public void Send(string Message)
         {
-            this.meSend(Message);
-            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), Message));
+            this.SendDatas(Message);
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), Message));
         }
 
         void PacketsReceived(string Data)
         {
-            Utilities.Loggers.InfosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), Data));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), Data));
 
             lock (PacketLocker)
                 Parse(Data);
@@ -60,10 +60,10 @@ namespace auth.Network.Sync
         void Disconnected()
         {
             ChangeState(State.Disconnected);
-            Utilities.Loggers.InfosLogger.Write(string.Format("New closed sync connection @<{0}>@ !", this.myIp()));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("New closed sync connection @<{0}>@ !", this.myIp()));
 
-            lock (ServersHandler.mySyncServer.myClients)
-                ServersHandler.mySyncServer.myClients.Remove(this);
+            lock (ServersHandler.m_syncServer.myClients)
+                ServersHandler.m_syncServer.myClients.Remove(this);
         }
 
         void Parse(string Data)
@@ -121,7 +121,7 @@ namespace auth.Network.Sync
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse sync packet : {0}", e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot parse sync packet : {0}", e.ToString()));
             }
         }
 
@@ -142,7 +142,7 @@ namespace auth.Network.Sync
                 Send("HCSS");
                 
                 ChangeState(SyncClient.State.Connected);
-                Utilities.Loggers.InfosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
+                Utilities.Loggers.m_infosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
             }
             else
                 Disconnect();
@@ -172,7 +172,7 @@ namespace auth.Network.Sync
                     break;
             }
 
-            ServersHandler.myAuthServer.RefreshAllHosts();
+            ServersHandler.m_authServer.RefreshAllHosts();
         }
 
         public enum State

@@ -7,34 +7,34 @@ namespace auth.Utilities
 {
     class Basic
     {
-        public static Random Randomizer = new Random();
-        public static object Locker = new object();
+        public static Random m_randomizer = new Random();
+        public static object m_locker = new object();
 
         private static char[] HASH = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'};
 
-        public static string RandomString(int lenght)
+        public static string RandomString(int _lenght)
         {
             var str = string.Empty;
 
-            for (var i = 1; i <= lenght; i++)
+            for (var i = 1; i <= _lenght; i++)
             {
-                var randomInt = Randomizer.Next(0, HASH.Length);
+                var randomInt = m_randomizer.Next(0, HASH.Length);
                 str += HASH[randomInt];
             }
 
             return str;
         }
 
-        public static string Encrypt(string Password, string Key)
+        public static string Encrypt(string _password, string _key)
         {
             var _Crypted = "1";
 
-            for (var i = 0; i < Password.Length; i++)
+            for (var i = 0; i < _password.Length; i++)
             {
-                var PPass = Password[i];
-                var PKey = Key[i];
+                var PPass = _password[i];
+                var PKey = _key[i];
                 var APass = (int)PPass / 16;
                 var AKey = (int)PPass % 16;
                 var ANB = (APass + (int)PKey) % HASH.Length;

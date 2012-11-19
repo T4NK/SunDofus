@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace realm.Network.Realm
 {
-    class RealmClient : SunDofus.AbstractClient
+    class RealmClient : SunDofus.Network.AbstractClient
     {
         public Database.Models.Clients.AccountModel myInfos;
         public List<realm.Realm.Character.Character> myCharacters;
@@ -21,8 +21,8 @@ namespace realm.Network.Realm
         {
             myPacketLocker = new object();
 
-            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
-            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.ReceivedPackets);
+            this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
+            this.ReceivedDatas += new ReceiveDatasHandler(this.ReceivedPackets);
 
             myCharacters = new List<realm.Realm.Character.Character>();
             myCommander = new RealmCommand(this);
@@ -33,7 +33,7 @@ namespace realm.Network.Realm
 
         public void Send(string Message)
         {
-            this.meSend(Message);
+            this.SendDatas(Message);
             Utilities.Loggers.InfosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), Message));
         }
 

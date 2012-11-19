@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using SunDofus;
+using SunDofus.Settings;
 
 namespace auth.Utilities
 {
     class Config
     {
-        public static Configuration myConfig;
+        public static Configuration m_config;
 
         public static void LoadConfiguration()
         {
             try
             {
-                myConfig = new Configuration();
-                myConfig.LoadConfiguration("SunAuth.conf");
+                m_config = new Configuration();
+                m_config.LoadConfiguration("SunAuth.conf");
                 AddDefaultsParameters();
             }
             catch (Exception e)
@@ -28,67 +28,45 @@ namespace auth.Utilities
         static void AddDefaultsParameters()
         {
             //Status
-            if (!myConfig.ExistElement("Status_inConsole"))
-                myConfig.InsertElement("Status_inConsole", "true");
-            if (!myConfig.ExistElement("Status_inFile"))
-                myConfig.InsertElement("Status_inFile", "false");
+            m_config.InsertElement("Status_inConsole", "true");
+            m_config.InsertElement("Status_inFile", "false");
 
             //Infos
-            if (!myConfig.ExistElement("Infos_inFile"))
-                myConfig.InsertElement("Infos_inFile", "false");
-            if (!myConfig.ExistElement("Infos_inConsole"))
-                myConfig.InsertElement("Infos_inConsole", "true");
+            m_config.InsertElement("Infos_inFile", "false");
+            m_config.InsertElement("Infos_inConsole", "true");
 
             //Errors
-            if (!myConfig.ExistElement("Errors_inFile"))
-                myConfig.InsertElement("Errors_inFile", "true");
-            if (!myConfig.ExistElement("Errors_inConsole"))
-                myConfig.InsertElement("Errors_inConsole", "true");
+            m_config.InsertElement("Errors_inFile", "true");
+            m_config.InsertElement("Errors_inConsole", "true");
 
             //Auth & Sync
-            if (!myConfig.ExistElement("Auth_Ip"))
-                myConfig.InsertElement("Auth_Ip", "127.0.0.1");
-            if (!myConfig.ExistElement("Auth_Port"))
-                myConfig.InsertElement("Auth_Port", "485");
-            if (!myConfig.ExistElement("Sync_Ip"))
-                myConfig.InsertElement("Sync_Ip", "127.0.0.1");
-            if (!myConfig.ExistElement("Sync_Port"))
-                myConfig.InsertElement("Sync_Port", "486");
+            m_config.InsertElement("Auth_Ip", "127.0.0.1");
+            m_config.InsertElement("Auth_Port", "485");
+            m_config.InsertElement("Sync_Ip", "127.0.0.1");
+            m_config.InsertElement("Sync_Port", "486");
 
             //Client
-            if (!myConfig.ExistElement("Login_Version"))
-                myConfig.InsertElement("Login_Version", "1.29.1");
+            m_config.InsertElement("Login_Version", "1.29.1");
 
             //Database
-            if (!myConfig.ExistElement("Database_Server"))
-                myConfig.InsertElement("Database_Server", "localhost");
-            if (!myConfig.ExistElement("Database_User"))
-                myConfig.InsertElement("Database_User", "root");
-            if (!myConfig.ExistElement("Database_Pass"))
-                myConfig.InsertElement("Database_Pass", "");
-            if (!myConfig.ExistElement("Database_Name"))
-                myConfig.InsertElement("Database_Name", "sundofus");
+            m_config.InsertElement("Database_Server", "localhost");
+            m_config.InsertElement("Database_User", "root");
+            m_config.InsertElement("Database_Pass", "");
+            m_config.InsertElement("Database_Name", "sundofus");
 
             //Cache
-            if (!myConfig.ExistElement("Time_Accounts_Reload"))
-                myConfig.InsertElement("Time_Accounts_Reload", "60000");
-            if (!myConfig.ExistElement("Time_Servers_Reload"))
-                myConfig.InsertElement("Time_Servers_Reload", "60000");
-            if (!myConfig.ExistElement("Time_Gifts_Reload"))
-                myConfig.InsertElement("Time_Gifts_Reload", "60000");
+            m_config.InsertElement("Time_Accounts_Reload", "60000");
+            m_config.InsertElement("Time_Servers_Reload", "60000");
+            m_config.InsertElement("Time_Gifts_Reload", "60000");
 
 
             //Queue
-            if (!myConfig.ExistElement("Max_Clients_inQueue"))
-                myConfig.InsertElement("Max_Clients_inQueue", "50");
-            if (!myConfig.ExistElement("Time_Queue_Reload"))
-                myConfig.InsertElement("Time_Queue_Reload", "2000");
+            m_config.InsertElement("Max_Clients_inQueue", "50");
+            m_config.InsertElement("Time_Queue_Reload", "2000");
 
             //Subscription
-            if (!myConfig.ExistElement("Max_Subscription_Time"))
-                myConfig.InsertElement("Max_Subscription_Time", "31536000000");
-            if (!myConfig.ExistElement("Subscription_Time"))
-                myConfig.InsertElement("Subscription_Time", "true");
+            m_config.InsertElement("Max_Subscription_Time", "31536000000");
+            m_config.InsertElement("Subscription_Time", "true");
 
         }
     }

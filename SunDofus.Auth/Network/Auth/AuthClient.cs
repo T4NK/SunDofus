@@ -6,41 +6,41 @@ using SilverSock;
 
 namespace auth.Network.Auth
 {
-    class AuthClient : SunDofus.AbstractClient
+    class AuthClient : SunDofus.Network.AbstractClient
     {
-        public string myKey = "";
-        public State myState;
-        public Database.Models.AccountModel myAccount;
-        public int WaitPosition = 0;
+        public string m_key = "";
+        public State m_state;
+        public Database.Models.AccountModel m_account;
+        public int m_waitPosition = 0;
 
-        object PacketLocker;
+        object m_packetLocker;
 
         public AuthClient(SilverSocket Socket) : base(Socket)
         {
-            PacketLocker = new object();
+            m_packetLocker = new object();
 
-            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
-            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.PacketReceived);
+            this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
+            this.ReceivedDatas += new ReceiveDatasHandler(this.PacketReceived);
 
-            myKey = Utilities.Basic.RandomString(32);
-            myState = State.Version;
+            m_key = Utilities.Basic.RandomString(32);
+            m_state = State.Version;
 
-            Send(string.Format("HC{0}", myKey));
+            Send(string.Format("HC{0}", m_key));
         }
 
         public void Send(string Message)
         {
-            this.meSend(Message);
-            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), Message));
+            this.SendDatas(Message);
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), Message));
         }
 
         public void SendInformations()
         {
-            Send(string.Format("Ad{0}",myAccount.myPseudo));
-            Send(string.Format("Ac{0}", myAccount.myCommunauty));
+            Send(string.Format("Ad{0}",m_account.myPseudo));
+            Send(string.Format("Ac{0}", m_account.myCommunauty));
             SendHosts();
-            Send(string.Format("AlK{0}", myAccount.myLevel));
-            Send(string.Format("AQ{0}", myAccount.myQuestion));
+            Send(string.Format("AlK{0}", m_account.myLevel));
+            Send(string.Format("AQ{0}", m_account.myQuestion));
         }
 
         public void SendHosts()
@@ -65,11 +65,11 @@ namespace auth.Network.Auth
 
         public string MyGifts()
         {
-            if (Database.Cache.GiftsCache.myGifts.Any(x => x.myTarget == this.myAccount.myId))
+            if (Database.Cache.GiftsCache.myGifts.Any(x => x.myTarget == this.m_account.myId))
             {
                 var Packet = "";
 
-                foreach (var myGift in Database.Cache.GiftsCache.myGifts.Where(x => x.myTarget == this.myAccount.myId))
+                foreach (var myGift in Database.Cache.GiftsCache.myGifts.Where(x => x.myTarget == this.m_account.myId))
                     Packet += string.Format("{0}~{1}~{2}~{3}+", myGift.myId, myGift.myTitle, myGift.myMessage, myGift.myItemID);
 
                 return Packet.Substring(0, Packet.Length - 1); ;
@@ -89,17 +89,17 @@ namespace auth.Network.Auth
 
         void Disconnected()
         {
-            Utilities.Loggers.InfosLogger.Write(string.Format("New closed client connection @<{0}>@ !", this.myIp()));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("New closed client connection @<{0}>@ !", this.myIp()));
 
-            lock (ServersHandler.myAuthServer.myClients)
-                ServersHandler.myAuthServer.myClients.Remove(this);
+            lock (ServersHandler.m_authServer.myClients)
+                ServersHandler.m_authServer.myClients.Remove(this);
         }
 
         void PacketReceived(string Data)
         {
-            Utilities.Loggers.InfosLogger.Write(string.Format("Receive from client @<{0}>@ : [{1}]", this.myIp(), Data));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Receive from client @<{0}>@ : [{1}]", this.myIp(), Data));
 
-            lock (PacketLocker)
+            lock (m_packetLocker)
                 Parse(Data);
         }
 
@@ -107,7 +107,7 @@ namespace auth.Network.Auth
         {
             try
             {
-                switch (myState)
+                switch (m_state)
                 {
                     case State.Version:
                         CheckVersion(Data);
@@ -131,22 +131,22 @@ namespace auth.Network.Auth
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Can't parse packet from @<{0}>@ : {1}", myIp(), e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Can't parse packet from @<{0}>@ : {1}", myIp(), e.ToString()));
             }
         }
 
         void CheckVersion(string Data)
         {
-            if (Data.Contains(Utilities.Config.myConfig.GetStringElement("Login_Version")))
+            if (Data.Contains(Utilities.Config.m_config.GetStringElement("Login_Version")))
             {
-                Utilities.Loggers.InfosLogger.Write(string.Format("Client @<{0}>@ has good dofus-version !", myIp()));
-                myState = State.Account;
+                Utilities.Loggers.m_infosLogger.Write(string.Format("Client @<{0}>@ has good dofus-version !", myIp()));
+                m_state = State.Account;
             }
             else
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Client @<{0}>@ has false dofus-version !", myIp()));
-                myState = State.None;
-                this.Send(string.Format("AlEv{0}", Utilities.Config.myConfig.GetStringElement("Login_Version")));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Client @<{0}>@ has false dofus-version !", myIp()));
+                m_state = State.None;
+                this.Send(string.Format("AlEv{0}", Utilities.Config.m_config.GetStringElement("Login_Version")));
             }
         }
 
@@ -158,44 +158,44 @@ namespace auth.Network.Auth
             var Username = Infos[0];
             var Password = Infos[1];
 
-            if (Database.Cache.AccountsCache.myAccounts.Any(x => x.myUsername == Username && Utilities.Basic.Encrypt(x.myPassword, myKey) == Password))
+            if (Database.Cache.AccountsCache.myAccounts.Any(x => x.myUsername == Username && Utilities.Basic.Encrypt(x.myPassword, m_key) == Password))
             {
-                myAccount = Database.Cache.AccountsCache.myAccounts.First
-                    (x => x.myUsername == Username && Utilities.Basic.Encrypt(x.myPassword, myKey) == Password);
+                m_account = Database.Cache.AccountsCache.myAccounts.First
+                    (x => x.myUsername == Username && Utilities.Basic.Encrypt(x.myPassword, m_key) == Password);
 
-                Utilities.Loggers.InfosLogger.Write(string.Format("Client @{0}@ authentified !", myAccount.myPseudo));
+                Utilities.Loggers.m_infosLogger.Write(string.Format("Client @{0}@ authentified !", m_account.myPseudo));
 
                 SendInformations();
 
                 if (AuthQueue.myClients.Count == 0)
                 {
                     SendInformations();
-                    myState = State.OnList;
+                    m_state = State.OnList;
                 }
-                else if (AuthQueue.myClients.Count >= Utilities.Config.myConfig.GetIntElement("Max_Clients_inQueue"))
+                else if (AuthQueue.myClients.Count >= Utilities.Config.m_config.GetIntElement("Max_Clients_inQueue"))
                 {
                     Send("M00\0");
                     this.Disconnect();
-                    myState = State.None;
+                    m_state = State.None;
                 }
                 else
                 {
                     AuthQueue.AddinQueue(this);
-                    Send(string.Format("Af{0}|{1}|0|1", (WaitPosition - AuthQueue.Confirmed), (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2)));
-                    myState = State.Queue;
+                    Send(string.Format("Af{0}|{1}|0|1", (m_waitPosition - AuthQueue.Confirmed), (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2)));
+                    m_state = State.Queue;
                 }
             }
             else
             {
                 Send("AlEx");
-                myState = State.None;
+                m_state = State.None;
             }
         }
 
         void CheckQueue()
         {
-            if(myState == State.Queue)
-                Send(string.Format("Aq{0}|{1}|0|1", (WaitPosition - AuthQueue.Confirmed), (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2)));
+            if(m_state == State.Queue)
+                Send(string.Format("Aq{0}|{1}|0|1", (m_waitPosition - AuthQueue.Confirmed), (AuthQueue.myClients.Count >= 2 ? AuthQueue.myClients.Count : 2)));
         }
 
         void CheckServerPacket(string Data)
@@ -204,14 +204,14 @@ namespace auth.Network.Auth
             {
                 case "x":
 
-                    var lPacket = "AxK" + myAccount.mySubscriptionTime();
+                    var lPacket = "AxK" + m_account.mySubscriptionTime();
 
                     foreach (var myServer in Database.Cache.ServersCache.myServers)
                     {
-                        if (!myAccount.myCharacters.ContainsKey(myServer.myID))
-                            myAccount.myCharacters.Add(myServer.myID, new List<string>());
+                        if (!m_account.myCharacters.ContainsKey(myServer.myID))
+                            m_account.myCharacters.Add(myServer.myID, new List<string>());
 
-                        lPacket += string.Format("|{0},{1}", myServer.myID, myAccount.myCharacters[myServer.myID].Count);
+                        lPacket += string.Format("|{0},{1}", myServer.myID, m_account.myCharacters[myServer.myID].Count);
                     }
 
                     Send(lPacket);
@@ -222,9 +222,9 @@ namespace auth.Network.Auth
 
                     var ID = int.Parse(Data.Replace("AX", ""));
 
-                    if (ServersHandler.mySyncServer.myClients.Any(x => x.myServer.myID == ID))
+                    if (ServersHandler.m_syncServer.myClients.Any(x => x.myServer.myID == ID))
                     {
-                        var myServer = ServersHandler.mySyncServer.myClients.First(x => x.myServer.myID == ID);
+                        var myServer = ServersHandler.m_syncServer.myClients.First(x => x.myServer.myID == ID);
                         var myKey = Utilities.Basic.RandomString(16);
 
                         myServer.SendNewTicket(myKey, this);

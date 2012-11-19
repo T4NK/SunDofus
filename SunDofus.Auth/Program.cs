@@ -23,7 +23,7 @@ namespace auth
             Database.Cache.AccountsCache.ReloadCache();
 
             while (true)
-                Utilities.Commands.ParseCommand(Console.ReadLine());
+                Console.ReadLine();
         }
     }
 }

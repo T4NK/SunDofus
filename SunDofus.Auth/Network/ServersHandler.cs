@@ -7,16 +7,16 @@ namespace auth.Network
 {
     class ServersHandler
     {
-        public static Auth.AuthServer myAuthServer;
-        public static Sync.SyncServer mySyncServer;
+        public static Auth.AuthServer m_authServer;
+        public static Sync.SyncServer m_syncServer;
 
         public static void InitialiseServers()
         {
-            myAuthServer = new Auth.AuthServer();
-            myAuthServer.Start();
+            m_authServer = new Auth.AuthServer();
+            m_authServer.Start();
 
-            mySyncServer = new Sync.SyncServer();
-            mySyncServer.Start();
+            m_syncServer = new Sync.SyncServer();
+            m_syncServer.Start();
         }
     }
 }

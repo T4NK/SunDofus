@@ -6,16 +6,16 @@ using SilverSock;
 
 namespace SunDofus.Editor.Network
 {
-    class TCPClient : SunDofus.AbstractClient
+    class TCPClient : SunDofus.Network.AbstractClient
     {
         bool isLogged = false;
 
         public TCPClient()
             : base(new SilverSocket())
         {
-            this.RaiseDataArrivalEvent += new DataArrivalEvent(this.DataArrival);
-            this.RaiseFailedConnectEvent += new FailedConnectEvent(this.FailedToConnect);
-            this.RaiseClosedEvent += new OnClosedEvent(this.Disconnected);
+            this.ReceivedDatas += new ReceiveDatasHandler(this.DataArrival);
+            this.ConnectFailed += new ConnectFailedHandler(this.FailedToConnect);
+            this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
         }
 
         public void Send(string Message, bool Force = false)
@@ -23,7 +23,7 @@ namespace SunDofus.Editor.Network
             if (isLogged == false && Force == false)
                 return;
 
-            meSend(Message);
+            SendDatas(Message);
         }
 
         void FailedToConnect(Exception e)

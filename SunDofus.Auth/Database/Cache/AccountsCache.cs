@@ -15,7 +15,7 @@ namespace auth.Database.Cache
 
         public static void ReloadCache(object sender = null, EventArgs e = null)
         {
-            Utilities.Loggers.InfosLogger.Write("Reloading of @Accounts' Cache@ !");
+            Utilities.Loggers.m_infosLogger.Write("Reloading of @Accounts' Cache@ !");
 
             try
             {
@@ -49,12 +49,12 @@ namespace auth.Database.Cache
                 if (!AutoStarted == true)
                 {
                     AutoStarted = true;
-                    AutoCache.Interval = Utilities.Config.myConfig.GetIntElement("Time_Accounts_Reload");
+                    AutoCache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
                     AutoCache.Enabled = true;
                     AutoCache.Elapsed += new ElapsedEventHandler(ReloadCache);
                 }
 
-                foreach (var server in Network.ServersHandler.mySyncServer.myClients.Where(x => x.myState == Network.Sync.SyncClient.State.Connected))
+                foreach (var server in Network.ServersHandler.m_syncServer.myClients.Where(x => x.myState == Network.Sync.SyncClient.State.Connected))
                 {
                     foreach (var acc in myAccounts.Where(x => x.myLevel > 0))
                         server.Send(string.Format("ANAA|{0}|{1}", acc.myUsername, acc.myPassword));
@@ -62,7 +62,7 @@ namespace auth.Database.Cache
             }
             catch (Exception ex)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot reload @accounts@ ({0})", ex.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @accounts@ ({0})", ex.ToString()));
             }
         }
     }

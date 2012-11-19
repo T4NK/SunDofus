@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace realm.Network.Editors
 {
-    class EditorServer : SunDofus.AbstractServer
+    class EditorServer : SunDofus.Network.AbstractServer
     {
         public List<EditorClient> myClients;
         
@@ -15,9 +15,9 @@ namespace realm.Network.Editors
         {
             myClients = new List<EditorClient>();
 
-            this.RaiseAcceptEvent += new AcceptEvent(this.AcceptedClient);
-            this.RaiseListenEvent += new OnListenEvent(this.Listening);
-            this.RaiseListenFailedEvent += new OnListenFailedEvent(this.ListenFailed);
+            this.SocketClientAccepted += new AcceptSocketHandler(this.AcceptedClient);
+            this.ListeningServer += new ListeningServerHandler(this.Listening);
+            this.ListeningServerFailed += new ListeningServerFailedHandler(this.ListenFailed);
         }
 
         void AcceptedClient(SilverSocket socket)

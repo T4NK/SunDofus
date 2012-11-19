@@ -25,7 +25,7 @@ namespace auth.Network.Sync
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot update characters from the account {0} ({1})", CompteID, e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot update characters from the account {0} ({1})", CompteID, e.ToString()));
             }
         }
 
@@ -44,7 +44,7 @@ namespace auth.Network.Sync
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot remove gift from the account {0} ({1})", CompteID, e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot remove gift from the account {0} ({1})", CompteID, e.ToString()));
             }
         }
     }

@@ -6,17 +6,17 @@ using SilverSock;
 
 namespace auth.Network.Auth
 {
-    class AuthServer : SunDofus.AbstractServer
+    class AuthServer : SunDofus.Network.AbstractServer
     {
         public List<AuthClient> myClients;
 
         public AuthServer()
-            : base(Utilities.Config.myConfig.GetStringElement("Auth_Ip"), Utilities.Config.myConfig.GetIntElement("Auth_Port"))
+            : base(Utilities.Config.m_config.GetStringElement("Auth_Ip"), Utilities.Config.m_config.GetIntElement("Auth_Port"))
         {
             myClients = new List<AuthClient>();
-            this.RaiseAcceptEvent += new AcceptEvent(this.AcceptClientServer);
-            this.RaiseListenEvent += new OnListenEvent(this.OnListenServer);
-            this.RaiseListenFailedEvent += new OnListenFailedEvent(this.OnListenFailedServer);
+            this.SocketClientAccepted += new AcceptSocketHandler(this.AcceptClientServer);
+            this.ListeningServer += new ListeningServerHandler(this.OnListenServer);
+            this.ListeningServerFailed += new ListeningServerFailedHandler(this.OnListenFailedServer);
 
             AuthQueue.Start();
         }
@@ -24,7 +24,7 @@ namespace auth.Network.Auth
         public void AcceptClientServer(SilverSocket newSocket)
         {
             if (newSocket == null) return;
-            Utilities.Loggers.InfosLogger.Write(string.Format("New inputted realm connection @<{0}>@ !", newSocket.IP));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("New inputted realm connection @<{0}>@ !", newSocket.IP));
 
             lock (myClients)
                 myClients.Add(new AuthClient(newSocket));
@@ -32,12 +32,12 @@ namespace auth.Network.Auth
 
         public void OnListenServer(string Remote)
         {
-            Utilities.Loggers.StatusLogger.Write(string.Format("@RealmServer@ starded on <{0}> !", Remote));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("@RealmServer@ starded on <{0}> !", Remote));
         }
 
         public void OnListenFailedServer(Exception e)
         {
-            Utilities.Loggers.ErrorsLogger.Write(string.Format("@RealmServer@ can't start : {0}", e.ToString()));
+            Utilities.Loggers.m_errorsLogger.Write(string.Format("@RealmServer@ can't start : {0}", e.ToString()));
         }
 
         public void RefreshAllHosts()

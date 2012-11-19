@@ -4,21 +4,22 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace SunDofus
+namespace SunDofus.Interface
 {
     public class Logger
     {
-        ConsoleColor myColor;
-        bool inConsole = false, inFile = false;
-        StreamWriter myWriter;
-        string myName = "";
-        object Locker;
+        ConsoleColor my_color;
+        StreamWriter m_writer;
 
-        public Logger(string newName,object newLocker, ConsoleColor newColor = ConsoleColor.Gray)
+        bool inConsole = false, inFile = false;
+        string m_name = "";
+        object m_locker;
+
+        public Logger(string _name,object _locker, ConsoleColor _color = ConsoleColor.Gray)
         {
-            Locker = newLocker;
-            myName = newName;
-            myColor = newColor;
+            m_locker = _locker;
+            m_name = _name;
+            my_color = _color;
         }
 
         public void StartConsoleLogger()
@@ -29,29 +30,30 @@ namespace SunDofus
         public void StartFileLogger()
         {
             inFile = true;
+
             if (!Directory.Exists("logs"))
                 Directory.CreateDirectory("logs");
 
-            myWriter = new StreamWriter("logs/SunDofus [" + myName + "].log");
-            myWriter.AutoFlush = true;
+            m_writer = new StreamWriter(string.Format("logs/SunDofus {0} - {1}.log", m_name, DateTime.Now.ToString().Replace("/", ".")));
+            m_writer.AutoFlush = true;
         }
 
-        public void Write(string Message, bool Line = true)
+        public void Write(string _message, bool _line = true)
         {
             if (inConsole == true)
             {
-                lock (Locker)
+                lock (m_locker)
                 {
-                    Console.ForegroundColor = myColor;
+                    Console.ForegroundColor = my_color;
 
                     Console.Write(">> ");
 
-                    foreach (char c in Message)
+                    foreach (char c in _message)
                     {
                         if (c == '@')
                         {
                             if (Console.ForegroundColor == ConsoleColor.White)
-                                Console.ForegroundColor = myColor;
+                                Console.ForegroundColor = my_color;
                             else
                                 Console.ForegroundColor = ConsoleColor.White;
                         }
@@ -61,7 +63,7 @@ namespace SunDofus
                         }
                     }
 
-                    if (Line == true)
+                    if (_line == true)
                         Console.WriteLine();
 
                     Console.ForegroundColor = ConsoleColor.Gray;
@@ -70,8 +72,8 @@ namespace SunDofus
 
             if (inFile == true)
             {
-                Message = Message.Replace("@", "");
-                myWriter.WriteLine("[{0}] ({1}) : {2}", myName, DateTime.Now.ToString(), Message);
+                _message = _message.Replace("@", "");
+                m_writer.WriteLine("[{0}] ({1}) : {2}", m_name, DateTime.Now.ToString(), _message);
             }
         }
     }

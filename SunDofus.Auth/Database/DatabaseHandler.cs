@@ -19,19 +19,19 @@ namespace auth.Database
             try
             {
                 myConnection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}",
-                    Utilities.Config.myConfig.GetStringElement("Database_Server"),
-                    Utilities.Config.myConfig.GetStringElement("Database_User"),
-                    Utilities.Config.myConfig.GetStringElement("Database_Pass"),
-                    Utilities.Config.myConfig.GetStringElement("Database_Name"));
+                    Utilities.Config.m_config.GetStringElement("Database_Server"),
+                    Utilities.Config.m_config.GetStringElement("Database_User"),
+                    Utilities.Config.m_config.GetStringElement("Database_Pass"),
+                    Utilities.Config.m_config.GetStringElement("Database_Name"));
 
                 lock (myLocker)
                     myConnection.Open();
 
-                Utilities.Loggers.StatusLogger.Write("Connected to the @database@ !");
+                Utilities.Loggers.m_statusLogger.Write("Connected to the @database@ !");
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Can't connect to the @database@ ({0})",e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Can't connect to the @database@ ({0})",e.ToString()));
             }
         }
     }
