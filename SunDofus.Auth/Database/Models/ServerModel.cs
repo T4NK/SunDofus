@@ -8,14 +8,21 @@ namespace auth.Database.Models
 {
     class ServerModel
     {
-        public int myID = 0, myPort = 0, myState = 0;
-        public string myIp = "";
+        public int m_id { get; set; }
+        public int m_port { get; set; }
+        public int m_state { get; set; }
 
-        public List<string> myClients = new List<string>();
+        public string m_ip { get; set; }
+        public List<string> m_clients { get; set; }
+
+        public ServerModel()
+        {
+            m_clients = new List<string>();
+        }
 
         public override string ToString()
         {
-            return this.myID + ";" + myState + ";" + (75 * this.myID) + ";1|";
+            return this.m_id + ";" + m_state + ";" + (75 * this.m_id) + ";1";
         }
     }
 }

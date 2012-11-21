@@ -9,9 +9,9 @@ namespace auth.Database.Cache
 {
     class ServersCache
     {
-        public static List<Models.ServerModel> myServers = new List<Models.ServerModel>();
-        static bool AutoStarted = false;
-        static Timer AutoCache = new Timer();
+        public static List<Models.ServerModel> m_servers = new List<Models.ServerModel>();
+        static bool m_started = false;
+        static Timer m_cache = new Timer();
 
         public static void ReloadCache(object sender = null, EventArgs e = null)
         {
@@ -19,38 +19,38 @@ namespace auth.Database.Cache
 
             try
             {
-                lock (DatabaseHandler.myLocker)
+                lock (DatabaseHandler.m_locker)
                 {
-                    string Text = "SELECT * FROM servers";
-                    MySqlCommand Command = new MySqlCommand(Text, DatabaseHandler.myConnection);
-                    MySqlDataReader Reader = Command.ExecuteReader();
+                    string sqlText = "SELECT * FROM servers";
+                    MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                    MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                    while (Reader.Read())
+                    while (sqlReader.Read())
                     {
-                        Models.ServerModel newServer = new Models.ServerModel();
+                        var server = new Models.ServerModel();
 
-                        newServer.myID = Reader.GetInt16("Id");
-                        newServer.myIp = Reader.GetString("Ip");
-                        newServer.myPort = Reader.GetInt16("Port");
+                        server.m_id = sqlReader.GetInt16("Id");
+                        server.m_ip = sqlReader.GetString("Ip");
+                        server.m_port = sqlReader.GetInt16("Port");
 
-                        if (!myServers.Any(x => x.myID == newServer.myID))
-                            myServers.Add(newServer);
+                        if (!m_servers.Any(x => x.m_id == server.m_id))
+                            m_servers.Add(server);
                     }
 
-                    Reader.Close();
+                    sqlReader.Close();
                 }
 
-                if (!AutoStarted == true)
+                if (!m_started == true)
                 {
-                    AutoStarted = true;
-                    AutoCache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
-                    AutoCache.Enabled = true;
-                    AutoCache.Elapsed += new ElapsedEventHandler(ReloadCache);
+                    m_started = true;
+                    m_cache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
+                    m_cache.Enabled = true;
+                    m_cache.Elapsed += new ElapsedEventHandler(ReloadCache);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @servers@ ({0})", ex.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @servers@ ({0})", exception.ToString()));
             }
         }
     }

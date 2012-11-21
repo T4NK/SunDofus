@@ -3,105 +3,107 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SilverSock;
+using auth.Database.Models;
 
 namespace auth.Network.Sync
 {
     class SyncClient : SunDofus.Network.AbstractClient
     {
-        public State myState;
-        public Database.Models.ServerModel myServer = null;
+        public State m_state { get; set; }
+        public ServerModel m_server { get; set; }
 
-        object PacketLocker;
+        object m_packetLocker;
 
-        public SyncClient(SilverSocket Socket)
-            : base(Socket)
+        public SyncClient(SilverSocket _socket)
+            : base(_socket)
         {
             this.ReceivedDatas += new ReceiveDatasHandler(this.PacketsReceived);
             this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
 
-            myState = State.Auth;
-            PacketLocker = new object();
+            m_state = State.OnAuthentication;
+            m_server = null;
+            m_packetLocker = new object();
 
             Send("HCS");
         }
 
-        public void SendNewTicket(string myKey, Auth.AuthClient myClient)
+        public void SendTicket(string _key, Auth.AuthClient _client)
         {
-            StringBuilder Builder = new StringBuilder();
+            var Builder = new StringBuilder();
 
             Builder.Append("ANTS|");
-            Builder.Append(myKey).Append("|");
-            Builder.Append(myClient.m_account.myId).Append("|");
-            Builder.Append(myClient.m_account.myPseudo).Append("|");
-            Builder.Append(myClient.m_account.myQuestion).Append("|");
-            Builder.Append(myClient.m_account.myAnswer).Append("|");
-            Builder.Append(myClient.m_account.myLevel).Append("|");
-            Builder.Append(myClient.m_account.myBaseChar).Append("|");
-            Builder.Append(myClient.m_account.mySubscriptionTime()).Append("|");
-            Builder.Append(myClient.MyGifts());
+            Builder.Append(_key).Append("|");
+            Builder.Append(_client.m_account.m_id).Append("|");
+            Builder.Append(_client.m_account.m_pseudo).Append("|");
+            Builder.Append(_client.m_account.m_question).Append("|");
+            Builder.Append(_client.m_account.m_answer).Append("|");
+            Builder.Append(_client.m_account.m_level).Append("|");
+            Builder.Append(_client.m_account.m_charstr).Append("|");
+            Builder.Append(_client.m_account.GetSubscriptionTime()).Append("|");
+            Builder.Append(string.Join("+", Database.Cache.GiftsCache.m_gifts.Where(x => x.m_target == _client.m_account.m_id)));
 
             Send(Builder.ToString());
         }
 
-        public void Send(string Message)
+        public void Send(string _message)
         {
-            this.SendDatas(Message);
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), Message));
+            this.SendDatas(_message);
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), _message));
         }
 
-        void PacketsReceived(string Data)
+        void PacketsReceived(string _datas)
         {
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), Data));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), _datas));
 
-            lock (PacketLocker)
-                Parse(Data);
+            lock (m_packetLocker)
+                Parse(_datas);
         }
 
         void Disconnected()
         {
-            ChangeState(State.Disconnected);
+            ChangeState(State.OnDisconnected);
             Utilities.Loggers.m_infosLogger.Write(string.Format("New closed sync connection @<{0}>@ !", this.myIp()));
 
-            lock (ServersHandler.m_syncServer.myClients)
-                ServersHandler.m_syncServer.myClients.Remove(this);
+            lock (ServersHandler.m_syncServer.m_clients)
+                ServersHandler.m_syncServer.m_clients.Remove(this);
         }
 
-        void Parse(string Data)
+        void Parse(string _datas)
         {
             try
             {
-                string[] Packet = Data.Split('|');
+                var packet = _datas.Split('|');
 
-                switch (Packet[0])
+                switch (packet[0])
                 {
                     case "SAI":
                         //Sync Account Identification
-                        Authentication(int.Parse(Packet[1]), Packet[2], int.Parse(Packet[3]));
+                        Authentication(int.Parse(packet[1]), packet[2], int.Parse(packet[3]));
                         break;
 
                     case "SDAC":
                         //Sync Deleted Account Character
-                        SyncAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2], myServer.myID);  
+                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], m_server.m_id);  
                         break;
 
                     case "SNAC":
                         //Sync New Account Character
-                        SyncAction.UpdateCharacters(int.Parse(Packet[1]), Packet[2], myServer.myID);
+                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], m_server.m_id);
                         break;
 
                     case "SNC":
                         //Sync New Connected
-                        myServer.myClients.Add(Packet[1]);
+                        m_server.m_clients.Add(packet[1]);
                         break;
 
                     case "SND":
                         //Sync New Disconnected 
-                        myServer.myClients.Remove(Packet[1]);                     
+                        m_server.m_clients.Remove(packet[1]);                     
                         break;
 
                     case "SNDG":
                         //Sync New Deleted Gift  
-                        SyncAction.DeleteGift(int.Parse(Packet[1]), int.Parse(Packet[2]));
+                        SyncAction.DeleteGift(int.Parse(packet[1]), int.Parse(packet[2]));
                         break;
 
                     case "SNLC":
@@ -110,12 +112,12 @@ namespace auth.Network.Sync
 
                     case "SSM":
                         //Sync Start Maintenance
-                        ChangeState(State.Maintenance);
+                        ChangeState(State.OnMaintenance);
                         break;
 
                     case "STM":
                         //Sync Stop Maintenance
-                        ChangeState(State.Connected);
+                        ChangeState(State.OnConnected);
                         break;
                 }
             }
@@ -125,50 +127,50 @@ namespace auth.Network.Sync
             }
         }
 
-        void Authentication(int ServerId, string ServerIp, int ServerPort)
+        void Authentication(int _serverId, string _serverIp, int _serverPort)
         {
-            if (Database.Cache.ServersCache.myServers.Any(x => x.myID == ServerId && x.myIp == ServerIp && x.myPort == ServerPort && x.myState == 0))
+            if (Database.Cache.ServersCache.m_servers.Any(x => x.m_id == _serverId && x.m_ip == _serverIp && x.m_port == _serverPort && x.m_state == 0))
             {
-                var myServer2 = Database.Cache.ServersCache.myServers.First(x => x.myID == ServerId && x.myIp == ServerIp && x.myPort == ServerPort && x.myState == 0);
+                var requieredServer = Database.Cache.ServersCache.m_servers.First(x => x.m_id == _serverId && x.m_ip == _serverIp && x.m_port == _serverPort && x.m_state == 0);
 
-                if (!myIp().Contains(ServerIp))
+                if (!myIp().Contains(_serverIp))
                 {
                     Disconnect();
                     return;
                 }
 
-                myServer = myServer2;
+                m_server = requieredServer;
 
-                Send("HCSS");
-                
-                ChangeState(SyncClient.State.Connected);
+                Send("HCSS");                
+                ChangeState(SyncClient.State.OnConnected);
+
                 Utilities.Loggers.m_infosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
             }
             else
                 Disconnect();
         }
 
-        void ChangeState(State NewState)
+        void ChangeState(State _state)
         {
-            this.myState = NewState;
+            this.m_state = _state;
 
-            if (myServer == null) return;
-            switch (this.myState)
+            if (m_server == null) return;
+            switch (this.m_state)
             {
-                case State.Auth:
-                    myServer.myState = 0;
+                case State.OnAuthentication:
+                    m_server.m_state = 0;
                     break;
 
-                case State.Connected:
-                    myServer.myState = 1;
+                case State.OnConnected:
+                    m_server.m_state = 1;
                     break;
 
-                case State.Disconnected:
-                    myServer.myState = 0;
+                case State.OnDisconnected:
+                    m_server.m_state = 0;
                     break;
 
-                case State.Maintenance:
-                    myServer.myState = 2;
+                case State.OnMaintenance:
+                    m_server.m_state = 2;
                     break;
             }
 
@@ -177,10 +179,10 @@ namespace auth.Network.Sync
 
         public enum State
         {
-            Auth,
-            Connected,
-            Disconnected,
-            Maintenance,
+            OnAuthentication,
+            OnConnected,
+            OnDisconnected,
+            OnMaintenance,
         }
     }
 }

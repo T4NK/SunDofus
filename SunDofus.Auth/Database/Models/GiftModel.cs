@@ -7,7 +7,16 @@ namespace auth.Database.Models
 {
     class GiftModel
     {
-        public int myId = -1, myTarget = -1, myItemID = -1;
-        public string myTitle = "", myMessage = "";
+        public int m_id { get; set; }
+        public int m_target { get; set; }
+        public int m_itemID { get; set; }
+
+        public string m_title { get; set; }
+        public string m_message { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}~{1}~{2}~{3}", m_id, m_title, m_message, m_itemID);
+        }
     }
 }

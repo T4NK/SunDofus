@@ -9,9 +9,9 @@ namespace auth.Database.Cache
 {
     class GiftsCache
     {
-        public static List<Models.GiftModel> myGifts = new List<Models.GiftModel>();
-        static bool AutoStarted = false;
-        static Timer AutoCache = new Timer();
+        public static List<Models.GiftModel> m_gifts = new List<Models.GiftModel>();
+        static bool m_started = false;
+        static Timer m_cache = new Timer();
 
         public static void ReloadCache(object sender = null, EventArgs e = null)
         {
@@ -19,40 +19,40 @@ namespace auth.Database.Cache
 
             try
             {
-                lock (DatabaseHandler.myLocker)
+                lock (DatabaseHandler.m_locker)
                 {
-                    string Text = "SELECT * FROM gifts";
-                    MySqlCommand Command = new MySqlCommand(Text, DatabaseHandler.myConnection);
-                    MySqlDataReader Reader = Command.ExecuteReader();
+                    string sqlText = "SELECT * FROM gifts";
+                    MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                    MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                    while (Reader.Read())
+                    while (sqlReader.Read())
                     {
-                        Models.GiftModel newGifts = new Models.GiftModel();
+                        var gifts = new Models.GiftModel();
 
-                        newGifts.myId = Reader.GetInt16("Id");
-                        newGifts.myTarget = Reader.GetInt16("Target");
-                        newGifts.myItemID = Reader.GetInt16("ItemID");
-                        newGifts.myTitle = Reader.GetString("Title");
-                        newGifts.myMessage = Reader.GetString("Message");
+                        gifts.m_id = sqlReader.GetInt16("Id");
+                        gifts.m_target = sqlReader.GetInt16("Target");
+                        gifts.m_itemID = sqlReader.GetInt16("ItemID");
+                        gifts.m_title = sqlReader.GetString("Title");
+                        gifts.m_message = sqlReader.GetString("Message");
 
-                        if (!myGifts.Any(x => x.myId == newGifts.myId))
-                            myGifts.Add(newGifts);
+                        if (!m_gifts.Any(x => x.m_id == gifts.m_id))
+                            m_gifts.Add(gifts);
                     }
 
-                    Reader.Close();
+                    sqlReader.Close();
                 }
 
-                if (!AutoStarted == true)
+                if (!m_started == true)
                 {
-                    AutoStarted = true;
-                    AutoCache.Interval = Utilities.Config.m_config.GetIntElement("Time_Gifts_Reload");
-                    AutoCache.Enabled = true;
-                    AutoCache.Elapsed += new ElapsedEventHandler(ReloadCache);
+                    m_started = true;
+                    m_cache.Interval = Utilities.Config.m_config.GetIntElement("Time_Gifts_Reload");
+                    m_cache.Enabled = true;
+                    m_cache.Elapsed += new ElapsedEventHandler(ReloadCache);
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @gifts@ ({0})", ex.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @gifts@ ({0})", exception.ToString()));
             }
         }
     }

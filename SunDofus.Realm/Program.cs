@@ -33,6 +33,8 @@ namespace realm
 
             Network.ServersHandler.InitialiseServers();
 
+            Console.Clear();
+
             while(true)
                 Console.ReadLine();
         }

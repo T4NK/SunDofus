@@ -8,34 +8,35 @@ namespace auth.Network.Sync
 {
     class SyncServer : SunDofus.Network.AbstractServer
     {
-        public List<SyncClient> myClients;
+        public List<SyncClient> m_clients { get; set; }
 
         public SyncServer()
             : base(Utilities.Config.m_config.GetStringElement("Sync_Ip"), Utilities.Config.m_config.GetIntElement("Sync_Port"))
         {
-            myClients = new List<SyncClient>();
-            this.SocketClientAccepted += new AcceptSocketHandler(this.AcceptRealmClient);
-            this.ListeningServer += new ListeningServerHandler(this.OnListenRealm);
-            this.ListeningServerFailed += new ListeningServerFailedHandler(this.OnListenFailedRealm);
+            m_clients = new List<SyncClient>();
+
+            this.SocketClientAccepted += new AcceptSocketHandler(this.OnAcceptedClient);
+            this.ListeningServer += new ListeningServerHandler(this.OnListeningServer);
+            this.ListeningServerFailed += new ListeningServerFailedHandler(this.OnListeningFailedServer);
         }
 
-        public void AcceptRealmClient(SilverSocket newSocket)
+        void OnAcceptedClient(SilverSocket _socket)
         {
-            if (newSocket == null) return;
-            Utilities.Loggers.m_infosLogger.Write(string.Format("New inputted sync connection @<{0}>@ !", newSocket.IP));
+            if (_socket == null) return;
+            Utilities.Loggers.m_infosLogger.Write(string.Format("New inputted sync connection @<{0}>@ !", _socket.IP));
 
-            lock (myClients)
-                myClients.Add(new SyncClient(newSocket));
+            lock (m_clients)
+                m_clients.Add(new SyncClient(_socket));
         }
 
-        public void OnListenRealm(string Remote)
+        void OnListeningServer(string _remote)
         {
-            Utilities.Loggers.m_statusLogger.Write(string.Format("@SyncServer@ starded on <{0}> !", Remote));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("@SyncServer@ starded on <{0}> !", _remote));
         }
 
-        public void OnListenFailedRealm(Exception e)
+        void OnListeningFailedServer(Exception _exception)
         {
-            Utilities.Loggers.m_errorsLogger.Write(string.Format("@SyncServer@ can't start : {0}", e.ToString()));
+            Utilities.Loggers.m_errorsLogger.Write(string.Format("@SyncServer@ can't start : {0}", _exception.ToString()));
         }
     }
 }

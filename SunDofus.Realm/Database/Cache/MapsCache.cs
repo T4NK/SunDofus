@@ -23,7 +23,7 @@ namespace realm.Database.Cache
                 {
                     var myMap = new Models.Maps.MapModel();
 
-                    myMap.myId = SQLReader.GetInt16("id");
+                    myMap.myId = SQLReader.GetInt32("id");
                     myMap.myDate = SQLReader.GetInt32("date");
                     myMap.myWidth = SQLReader.GetInt16("width");
                     myMap.myHeight = SQLReader.GetInt16("heigth");

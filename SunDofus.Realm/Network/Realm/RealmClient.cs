@@ -54,6 +54,9 @@ namespace realm.Network.Realm
 
             foreach (var myGift in myInfos.myGifts)
             {
+                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.myID == myGift.myItemID) == false)
+                    return;
+
                 var Item = new realm.Realm.Character.Items.CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.myID == myGift.myItemID));
 
                 Item.ParseJet();

@@ -7,7 +7,7 @@ namespace auth.Utilities
 {
     class Basic
     {
-        public static Random m_randomizer = new Random();
+        static Random m_randomizer = new Random();
         public static object m_locker = new object();
 
         private static char[] HASH = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',

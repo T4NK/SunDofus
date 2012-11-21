@@ -8,24 +8,24 @@ namespace auth.Database
 {
     class DatabaseHandler
     {
-        public static MySqlConnection myConnection;
-        public static object myLocker;
+        public static MySqlConnection m_connection;
+        public static object m_locker;
 
         public static void InitialiseConnection()
         {
-            myConnection = new MySqlConnection();
-            myLocker = new object();
+            m_connection = new MySqlConnection();
+            m_locker = new object();
 
             try
             {
-                myConnection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}",
+                m_connection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}",
                     Utilities.Config.m_config.GetStringElement("Database_Server"),
                     Utilities.Config.m_config.GetStringElement("Database_User"),
                     Utilities.Config.m_config.GetStringElement("Database_Pass"),
                     Utilities.Config.m_config.GetStringElement("Database_Name"));
 
-                lock (myLocker)
-                    myConnection.Open();
+                lock (m_locker)
+                    m_connection.Open();
 
                 Utilities.Loggers.m_statusLogger.Write("Connected to the @database@ !");
             }

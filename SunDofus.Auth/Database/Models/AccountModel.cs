@@ -8,53 +8,63 @@ namespace auth.Database.Models
 {
     class AccountModel
     {
-        public int myId = -1, myLevel = -1, myCommunauty = -1;
-        public string myUsername = "", myPassword = "", myPseudo = "";
-        public string myQuestion = "", myAnswer = "";
-        public string myBaseChar = "";
+        public int m_id { get; set; }
+        public int m_level { get; set; }
+        public int m_communauty { get; set; }
 
-        public DateTime mySubscriptionDate;
-        public Dictionary<int, List<string>> myCharacters;
+        public string m_username { get; set; }
+        public string m_password { get; set; }
+        public string m_pseudo { get; set; }
+        public string m_question { get; set; }
+        public string m_answer { get; set; }
+        public string m_charstr { get; set; }
+
+        public DateTime m_subscriptionDate;
+        public Dictionary<int, List<string>> m_characters;
 
         public AccountModel()
         {
-            mySubscriptionDate = new DateTime();
-            myCharacters = new Dictionary<int, List<string>>();
+            m_subscriptionDate = new DateTime();
+            m_characters = new Dictionary<int, List<string>>();
         }
 
-        public void ParseCharacter(string BaseCharacters)
+        public void ParseCharacter(string _basestr)
         {
-            if (BaseCharacters == "")
+            if (_basestr == "")
             {
-                myCharacters = new Dictionary<int, List<string>>();
+                m_characters = new Dictionary<int, List<string>>();
                 return;
             }
 
-            myBaseChar = BaseCharacters;
-            Dictionary<int, List<string>> Dico = new Dictionary<int, List<string>>();
-            string[] AllData = BaseCharacters.Split(':');
-            foreach (string Data in AllData)
+            m_charstr = _basestr;
+            var dico = new Dictionary<int, List<string>>();
+            var datas = _basestr.Split(':');
+
+            foreach (var infos in datas)
             {
-                string[] CharData = Data.Split(',');
-                if (!Dico.ContainsKey(int.Parse(CharData[1]))) Dico.Add(int.Parse(CharData[1]), new List<string>());
-                Dico[int.Parse(CharData[1])].Add(CharData[0]);
+                var characterdatas = infos.Split(',');
+
+                if (!dico.ContainsKey(int.Parse(characterdatas[1]))) 
+                    dico.Add(int.Parse(characterdatas[1]), new List<string>());
+
+                dico[int.Parse(characterdatas[1])].Add(characterdatas[0]);
             }
 
-            myCharacters = Dico;
+            m_characters = dico;
         }
 
-        public long mySubscriptionTime()
+        public long GetSubscriptionTime()
         {
-            var Time = mySubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds;
+            var time = m_subscriptionDate.Subtract(DateTime.Now).TotalMilliseconds;
 
             if (Utilities.Config.m_config.GetBoolElement("Subscription_Time") == false)
                 return 31536000000;
-            else if (mySubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds <= 1)
+            else if (m_subscriptionDate.Subtract(DateTime.Now).TotalMilliseconds <= 1)
                 return 0;
-            else if (Time >= Utilities.Config.m_config.GetLongElement("Max_Subscription_Time"))
+            else if (time >= Utilities.Config.m_config.GetLongElement("Max_Subscription_Time"))
                 return 31536000000;
 
-            return (long)Time;
+            return (long)time;
         }
     }
 }

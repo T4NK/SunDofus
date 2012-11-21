@@ -9,9 +9,9 @@ namespace auth.Database.Cache
 {
     class AccountsCache
     {
-        public static List<Models.AccountModel> myAccounts = new List<Models.AccountModel>();
-        static bool AutoStarted = false;
-        static Timer AutoCache = new Timer();
+        public static List<Models.AccountModel> m_accounts = new List<Models.AccountModel>();
+        static bool m_started = false;
+        static Timer m_cache = new Timer();
 
         public static void ReloadCache(object sender = null, EventArgs e = null)
         {
@@ -19,50 +19,51 @@ namespace auth.Database.Cache
 
             try
             {
-                lock (DatabaseHandler.myLocker)
+                lock (DatabaseHandler.m_locker)
                 {
-                    string Text = "SELECT * FROM accounts";
-                    MySqlCommand Command = new MySqlCommand(Text, DatabaseHandler.myConnection);
-                    MySqlDataReader Reader = Command.ExecuteReader();
+                    string sqlText = "SELECT * FROM accounts";
+                    MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                    MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                    while (Reader.Read())
+                    while (sqlReader.Read())
                     {
-                        Models.AccountModel newAccount = new Models.AccountModel();
-                        newAccount.myId = Reader.GetInt16("id");
-                        newAccount.myUsername = Reader.GetString("username");
-                        newAccount.myPassword = Reader.GetString("password");
-                        newAccount.myPseudo = Reader.GetString("pseudo");
-                        newAccount.myCommunauty = Reader.GetInt16("communauty");
-                        newAccount.myLevel = Reader.GetInt16("gmLevel");
-                        newAccount.myQuestion = Reader.GetString("question");
-                        newAccount.myAnswer = Reader.GetString("answer");
-                        newAccount.ParseCharacter(Reader.GetString("characters"));
-                        newAccount.mySubscriptionDate = Reader.GetDateTime("subscription");
+                        var account = new Models.AccountModel();
 
-                        if (!myAccounts.Any(x => x.myId == newAccount.myId))
-                            myAccounts.Add(newAccount);
+                        account.m_id = sqlReader.GetInt16("id");
+                        account.m_username = sqlReader.GetString("username");
+                        account.m_password = sqlReader.GetString("password");
+                        account.m_pseudo = sqlReader.GetString("pseudo");
+                        account.m_communauty = sqlReader.GetInt16("communauty");
+                        account.m_level = sqlReader.GetInt16("gmLevel");
+                        account.m_question = sqlReader.GetString("question");
+                        account.m_answer = sqlReader.GetString("answer");
+                        account.ParseCharacter(sqlReader.GetString("characters"));
+                        account.m_subscriptionDate = sqlReader.GetDateTime("subscription");
+
+                        if (!m_accounts.Any(x => x.m_id == account.m_id))
+                            m_accounts.Add(account);
                     }
 
-                    Reader.Close();
+                    sqlReader.Close();
                 }
 
-                if (!AutoStarted == true)
+                if (!m_started == true)
                 {
-                    AutoStarted = true;
-                    AutoCache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
-                    AutoCache.Enabled = true;
-                    AutoCache.Elapsed += new ElapsedEventHandler(ReloadCache);
+                    m_started = true;
+                    m_cache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
+                    m_cache.Enabled = true;
+                    m_cache.Elapsed += new ElapsedEventHandler(ReloadCache);
                 }
 
-                foreach (var server in Network.ServersHandler.m_syncServer.myClients.Where(x => x.myState == Network.Sync.SyncClient.State.Connected))
+                foreach (var server in Network.ServersHandler.m_syncServer.m_clients.Where(x => x.m_state == Network.Sync.SyncClient.State.OnConnected))
                 {
-                    foreach (var acc in myAccounts.Where(x => x.myLevel > 0))
-                        server.Send(string.Format("ANAA|{0}|{1}", acc.myUsername, acc.myPassword));
+                    foreach (var account in m_accounts.Where(x => x.m_level > 0))
+                        server.Send(string.Format("ANAA|{0}|{1}", account.m_username, account.m_password));
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @accounts@ ({0})", ex.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot reload @accounts@ ({0})", exception.ToString()));
             }
         }
     }

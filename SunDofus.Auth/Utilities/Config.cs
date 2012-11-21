@@ -9,7 +9,7 @@ namespace auth.Utilities
 {
     class Config
     {
-        public static Configuration m_config;
+        public static Configuration m_config { get; set; }
 
         public static void LoadConfiguration()
         {

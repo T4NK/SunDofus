@@ -8,43 +8,43 @@ namespace auth.Network.Sync
 {
     class SyncAction
     {
-        public static void UpdateCharacters(int CompteID, string NewCharacters, int ServerID)
+        public static void UpdateCharacters(int _compteID, string _characters, int _serverID)
         {
             try
             {
-                Database.Models.AccountModel myAccount = Database.Cache.AccountsCache.myAccounts.First(x => x.myId == CompteID);
-                myAccount.ParseCharacter(NewCharacters);
+                var account = Database.Cache.AccountsCache.m_accounts.First(x => x.m_id == _compteID);
+                account.ParseCharacter(_characters);
 
-                var SQLText = "UPDATE accounts SET characters=@NewCharacters WHERE Id=@Me";
-                var SQLCommand = new MySqlCommand(SQLText, Database.DatabaseHandler.myConnection);
+                var sqlText = "UPDATE accounts SET characters=@Characters WHERE Id=@id";
+                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
 
-                SQLCommand.Parameters.Add(new MySqlParameter("@Me", CompteID));
-                SQLCommand.Parameters.Add(new MySqlParameter("@NewCharacters", NewCharacters));
+                sqlCommand.Parameters.Add(new MySqlParameter("@id", _compteID));
+                sqlCommand.Parameters.Add(new MySqlParameter("@Characters", _characters));
 
-                SQLCommand.ExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot update characters from the account {0} ({1})", CompteID, e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot update characters from the account {0} ({1})", _compteID, e.ToString()));
             }
         }
 
-        public static void DeleteGift(int GiftID, int CompteID)
+        public static void DeleteGift(int _giftID, int _compteID)
         {
             try
             {
-                Database.Cache.GiftsCache.myGifts.Remove(Database.Cache.GiftsCache.myGifts.First(x => x.myId == GiftID && x.myTarget == CompteID));
+                Database.Cache.GiftsCache.m_gifts.Remove(Database.Cache.GiftsCache.m_gifts.First(x => x.m_id == _giftID && x.m_target == _compteID));
 
-                var SQLText = "DELETE FROM gifts WHERE id=@ID";
-                var SQLCommand = new MySqlCommand(SQLText, Database.DatabaseHandler.myConnection);
+                var sqlText = "DELETE FROM gifts WHERE id=@id";
+                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
 
-                SQLCommand.Parameters.Add(new MySqlParameter("@ID", GiftID));
+                sqlCommand.Parameters.Add(new MySqlParameter("@id", _giftID));
 
-                SQLCommand.ExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot remove gift from the account {0} ({1})", CompteID, e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot remove gift from the account {0} ({1})", _compteID, e.ToString()));
             }
         }
     }

@@ -8,61 +8,64 @@ namespace auth.Network.Auth
 {
     class AuthQueue
     {
-        public static Dictionary<AuthClient, int> myClients;
-        public static Timer myRefreshTimer;
-        public static int Confirmed = 0;
+        public static Dictionary<AuthClient, int> m_clients { get; set; }
+        public static Timer m_timer { get; set; }
+        public static long m_confirmed { get; set; }
 
         public static void Start()
         {
-            myClients = new Dictionary<AuthClient, int>();
+            m_clients = new Dictionary<AuthClient, int>();
+            m_confirmed = 0;
 
-            myRefreshTimer = new Timer();
-            myRefreshTimer.Interval = Utilities.Config.m_config.GetIntElement("Time_Queue_Reload");
-            myRefreshTimer.Enabled = true;
-            myRefreshTimer.Elapsed += new ElapsedEventHandler(RefreshQueue);
-            myRefreshTimer.Start();
+            m_timer = new Timer();
+            m_timer.Interval = Utilities.Config.m_config.GetIntElement("Time_Queue_Reload");
+            m_timer.Enabled = true;
+            m_timer.Elapsed += new ElapsedEventHandler(RefreshQueue);
+            m_timer.Start();
 
             Utilities.Loggers.m_statusLogger.Write("@Queue@ for the servers' list started !");
         }
 
-        public static void AddinQueue(AuthClient myClient)
+        public static void AddinQueue(AuthClient _client)
         {
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Add @{0}@ in queue !", myClient.m_account.myPseudo));
-            myClients.Add(myClient, myClients.Count + 1);
-            myClient.m_waitPosition = (myClients.Count > 1 ? myClients.Count + 1 : 2);
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Add @{0}@ in queue !", _client.m_account.m_pseudo));
+            m_clients.Add(_client, m_clients.Count + 1);
+            _client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);
         }
 
         static void RefreshQueue(object sender, EventArgs e)
         {
-            if (myClients.Count <= 0)
+            if (m_clients.Count <= 0)
                 return;
 
-            var Count = 0;
-            var Rest = 0;
+            var count = 0;
+            var rest = 0;
 
-            foreach (AuthClient myClient in myClients.Keys)
+            foreach (var client in m_clients.Keys)
             {
-                if (myClient.m_state != AuthClient.State.Queue) 
+                if (client.m_state != AuthClient.State.OnQueue) 
                     return;
 
-                if (Count <= Utilities.Config.m_config.GetIntElement("Max_Clients_inQueue"))
+                if (count <= Utilities.Config.m_config.GetIntElement("Max_Clients_inQueue"))
                 {
-                    Count++;
-                    Confirmed++;
+                    count++;
+                    m_confirmed++;
 
-                    myClient.m_state = AuthClient.State.OnList;
-                    myClient.SendInformations();
+                    client.m_state = AuthClient.State.OnServerList;
+                    client.SendInformations();
                 }
-
                 else
                 {
-                    Rest++;
-                    myClient.m_waitPosition = (myClients.Count > 1 ? myClients.Count + 1 : 2);
+                    rest++;
+                    client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);
                 }
             }
 
-            if (Rest == 0)
-                myClients.Clear();
+            if (rest == 0)
+            {
+                m_clients.Clear();
+                m_confirmed = 0;
+            }
 
             Utilities.Loggers.m_infosLogger.Write("@Queue@ refreshed !");
         }

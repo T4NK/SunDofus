@@ -8,9 +8,9 @@ namespace auth.Utilities
 {
     class Loggers
     {
-        public static Logger m_statusLogger;
-        public static Logger m_infosLogger;
-        public static Logger m_errorsLogger;
+        public static Logger m_statusLogger { get; set; }
+        public static Logger m_infosLogger { get; set; }
+        public static Logger m_errorsLogger { get; set; }
 
         public static void InitialiseLoggers()
         {
@@ -18,6 +18,7 @@ namespace auth.Utilities
         
             if (Config.m_config.GetBoolElement("Status_inConsole"))
                 m_statusLogger.StartConsoleLogger();
+
             if (Config.m_config.GetBoolElement("Status_inFile"))
                 m_statusLogger.StartFileLogger();
 

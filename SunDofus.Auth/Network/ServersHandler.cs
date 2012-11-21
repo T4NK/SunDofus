@@ -7,8 +7,8 @@ namespace auth.Network
 {
     class ServersHandler
     {
-        public static Auth.AuthServer m_authServer;
-        public static Sync.SyncServer m_syncServer;
+        public static Auth.AuthServer m_authServer { get; set; }
+        public static Sync.SyncServer m_syncServer { get; set; }
 
         public static void InitialiseServers()
         {

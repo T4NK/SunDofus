@@ -75,7 +75,6 @@ namespace realm.Network.Realm
 
         public void ParseTicket(string Data)
         {
-            Data = Data.Replace("AT", "");
             if (Network.Authentication.AuthenticationKeys.myKeys.Any(x => x.myKey == Data))
             {
                 var Key = Network.Authentication.AuthenticationKeys.myKeys.First(x => x.myKey == Data);

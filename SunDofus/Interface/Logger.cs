@@ -34,7 +34,8 @@ namespace SunDofus.Interface
             if (!Directory.Exists("logs"))
                 Directory.CreateDirectory("logs");
 
-            m_writer = new StreamWriter(string.Format("logs/SunDofus {0} - {1}.log", m_name, DateTime.Now.ToString().Replace("/", ".")));
+            m_writer = new StreamWriter(string.Format("logs/SunDofus {0} - {1}.log", m_name, 
+                DateTime.Now.ToString().Replace("/", "_").Split(' ')[0]));
             m_writer.AutoFlush = true;
         }
 
