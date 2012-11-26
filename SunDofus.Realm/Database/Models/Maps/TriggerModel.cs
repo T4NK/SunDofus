@@ -2,19 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using realm.Realm.World.Conditions;
 
 namespace realm.Database.Models.Maps
 {
     class TriggerModel
     {
-        public int myMapID = -1, myCellID = -1, myActionID;
-        public string myArgs = "", myConditions = "";
+        public int m_mapID { get; set; }
+        public int m_cellID { get; set; }
+        public int m_actionID { get; set; }
+
+        public string m_args { get; set; }
+        public string m_conditions { get; set; }
+
+        public List<TriggerCondition> m_conds { get; set; }
+
+        public TriggerModel()
+        {
+            m_conditions = "";
+            m_mapID = -1;
+        }
 
         public void ParseConditions()
         {
-            myConds = new List<Realm.World.Conditions.TriggerCondition>();
+            m_conds = new List<Realm.World.Conditions.TriggerCondition>();
         }
-
-        public List<realm.Realm.World.Conditions.TriggerCondition> myConds;
     }
 }

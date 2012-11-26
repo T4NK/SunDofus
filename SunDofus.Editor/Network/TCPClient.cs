@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace SunDofus.Editor.Network
 {
-    class TCPClient : SunDofus.Network.AbstractClient
+    class TCPClient : SunDofus.Network.TCPClient
     {
         bool isLogged = false;
 

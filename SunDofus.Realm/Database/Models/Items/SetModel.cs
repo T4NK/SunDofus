@@ -2,46 +2,64 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm;
+using realm.Realm.Effects;
 
 namespace realm.Database.Models.Items
 {
     class SetModel
     {
-        public List<int> myItemsList = new List<int>();
-        public int myID = -1;
-        public Dictionary<int, List<Realm.Effect.EffectsItems>> myBonusList = new Dictionary<int, List<Realm.Effect.EffectsItems>>();
+        public int m_id { get; set; }
 
-        public void ParseItems(string Data)
+        public Dictionary<int, List<EffectItem>> m_bonusList { get; set; }
+        public List<int> m_itemsList { get; set; }
+
+        public SetModel()
         {
-            if (Data == "") return;
-            foreach (var Infos in Data.Split(','))
+            m_id = -1;
+            m_itemsList = new List<int>();
+            m_bonusList = new Dictionary<int, List<EffectItem>>();
+        }
+
+        public void ParseItems(string _datas)
+        {
+            if (_datas == "") 
+                return;
+
+            foreach (var infos in _datas.Split(','))
             {
-                var ID = int.Parse(Infos.Replace(" ", ""));
+                var id = int.Parse(infos.Trim());
 
-                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.myID == ID))
-                    Database.Cache.ItemsCache.ItemsList.First(x => x.myID == ID).mySet = this.myID;
+                if (Database.Cache.ItemsCache.m_itemsList.Any(x => x.m_id == id))
+                    Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == id).m_set = this.m_id;
 
-                myItemsList.Add(myID);
+                m_itemsList.Add(m_id);
             }
         }
 
-        public void ParseBonus(string Data)
+        public void ParseBonus(string _datas)
         {
-            var myNb = 1;
-            if (Data == "") return;
+            var num = 1;
 
-            foreach (var Infos in Data.Split(';'))
+            if (_datas == "") 
+                return;
+
+            foreach (var infos in _datas.Split(';'))
             {
-                if (Infos == "") continue;
-                myBonusList.Add(++myNb, new List<Realm.Effect.EffectsItems>());
-                foreach (var AllData in Infos.Split(','))
+                if (infos == "") 
+                    continue;
+
+                m_bonusList.Add(++num, new List<Realm.Effects.EffectItem>());
+
+                foreach (var datas in infos.Split(','))
                 {
-                    if (AllData == "") continue;
-                    var myBonus = new Realm.Effect.EffectsItems();
-                    myBonus.ID = int.Parse(AllData.Split(':')[0]);
-                    myBonus.Value = int.Parse(AllData.Split(':')[1]);
-                    myBonusList[myNb].Add(myBonus);
+                    if (datas == "") 
+                        continue;
+
+                    var bonus = new Realm.Effects.EffectItem();
+                    bonus.m_id = int.Parse(datas.Split(':')[0]);
+                    bonus.m_value = int.Parse(datas.Split(':')[1]);
+
+                    m_bonusList[num].Add(bonus);
                 }
             }
         }

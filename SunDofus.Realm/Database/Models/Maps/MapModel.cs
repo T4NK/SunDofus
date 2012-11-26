@@ -7,18 +7,38 @@ namespace realm.Database.Models.Maps
 {
     class MapModel
     {
-        public int myId = -1, myDate = -1, myWidth = -1, myHeight = -1;
-        public int myCapabilities = -1, myNumgroup = -1, myGroupmaxsize = -1;
-        public string myMapData = "", myKey = "", myCells = "", myMonsters = "", myMappos = "";
-        public int x = 0, y = 0;
+        public int m_id { get; set; }
+        public int m_date { get; set; }
+        public int m_width { get; set; }
+        public int m_height { get; set; }
+        public int m_capabilities { get; set; }
+        public int m_groupmaxsize { get; set; }
+        public int m_numgroup { get; set; }
+        public int m_PosX { get; set; }
+        public int m_PosY { get; set; }
+
+        public string m_mapData { get; set; }
+        public string m_key { get; set; }
+        public string m_cells { get; set; }
+        public string m_mappos { get; set; }
+        public string m_monsters { get; set; }
+
+        public MapModel()
+        {
+            m_mapData = "";
+            m_key = "";
+            m_cells = "";
+            m_monsters = "";
+            m_mappos = "";
+        }
 
         public void ParsePos()
         {
-            var datas = myMappos.Split(',');
+            var datas = m_mappos.Split(',');
             try
             {
-                x = int.Parse(datas[0]);
-                y = int.Parse(datas[1]);
+                m_PosX = int.Parse(datas[0]);
+                m_PosY = int.Parse(datas[1]);
             }
             catch { }
         }

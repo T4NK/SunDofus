@@ -13,7 +13,7 @@ namespace realm
             Utilities.Loggers.InitialiseLoggers();
 
             Console.Title = string.Format("SunDofus.Realm ~ {0} | Shaak [c]",
-                Utilities.Config.myConfig.GetIntElement("ServerId"));
+                Utilities.Config.m_config.GetIntElement("ServerId"));
 
             Database.DatabaseHandler.InitialiseConnection();
 
@@ -32,8 +32,6 @@ namespace realm
             Database.Cache.CharactersCache.LoadCharacters();
 
             Network.ServersHandler.InitialiseServers();
-
-            Console.Clear();
 
             while(true)
                 Console.ReadLine();

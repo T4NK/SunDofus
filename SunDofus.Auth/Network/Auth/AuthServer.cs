@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace auth.Network.Auth
 {
-    class AuthServer : SunDofus.Network.AbstractServer
+    class AuthServer : SunDofus.Network.TCPServer
     {
         public List<AuthClient> m_clients { get; set; }
 

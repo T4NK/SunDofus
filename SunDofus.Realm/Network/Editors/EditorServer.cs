@@ -6,36 +6,36 @@ using SilverSock;
 
 namespace realm.Network.Editors
 {
-    class EditorServer : SunDofus.Network.AbstractServer
+    class EditorServer : SunDofus.Network.TCPServer
     {
-        public List<EditorClient> myClients;
+        public List<EditorClient> m_clients;
         
         public EditorServer()
-            : base(Utilities.Config.myConfig.GetStringElement("EditorIp"), Utilities.Config.myConfig.GetIntElement("EditorPort"))
+            : base(Utilities.Config.m_config.GetStringElement("EditorIp"), Utilities.Config.m_config.GetIntElement("EditorPort"))
         {
-            myClients = new List<EditorClient>();
+            m_clients = new List<EditorClient>();
 
-            this.SocketClientAccepted += new AcceptSocketHandler(this.AcceptedClient);
-            this.ListeningServer += new ListeningServerHandler(this.Listening);
-            this.ListeningServerFailed += new ListeningServerFailedHandler(this.ListenFailed);
+            this.SocketClientAccepted += new AcceptSocketHandler(this.OnAcceptedClient);
+            this.ListeningServer += new ListeningServerHandler(this.OnListeningServer);
+            this.ListeningServerFailed += new ListeningServerFailedHandler(this.OnListeningFailedServer);
         }
 
-        void AcceptedClient(SilverSocket socket)
+        void OnAcceptedClient(SilverSocket _socket)
         {
-            if (socket == null) return;
+            if (_socket == null) return;
 
-            Utilities.Loggers.InfosLogger.Write("New inputted @editor@ connection !");
-            myClients.Add(new EditorClient(socket));
+            Utilities.Loggers.m_infosLogger.Write("New inputted @editor@ connection !");
+            m_clients.Add(new EditorClient(_socket));
         }
 
-        void Listening(string Remote)
+        void OnListeningServer(string _remote)
         {
-            Utilities.Loggers.StatusLogger.Write(string.Format("@EditorServer@ started on <{0}> !", Remote));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("@EditorServer@ started on <{0}> !", _remote));
         }
 
-        void ListenFailed(Exception e)
+        void OnListeningFailedServer(Exception _exception)
         {
-            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot start the @EditorServer@ because : {0}", e.ToString()));
+            Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot start the @EditorServer@ because : {0}", _exception.ToString()));
         }
     }
 }

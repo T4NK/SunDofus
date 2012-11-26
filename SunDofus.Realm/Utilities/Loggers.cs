@@ -8,36 +8,36 @@ namespace realm.Utilities
 {
     class Loggers
     {
-        public static Logger StatusLogger;
-        public static Logger InfosLogger;
-        public static Logger ErrorsLogger;
+        public static Logger m_statusLogger { get; set; }
+        public static Logger m_infosLogger { get; set; }
+        public static Logger m_errorsLogger { get; set; }
 
         public static void InitialiseLoggers()
         {
-            StatusLogger = new Logger("Status",Basic._Locker, ConsoleColor.Green);
+            m_statusLogger = new Logger("Status",Basic.m_locker, ConsoleColor.Green);
 
-            if (Config.myConfig.GetBoolElement("Status_inConsole") == true)
-                StatusLogger.StartConsoleLogger();
-            if (Config.myConfig.GetBoolElement("Status_inFile") == true)
-                StatusLogger.StartFileLogger();
+            if (Config.m_config.GetBoolElement("Status_inConsole") == true)
+                m_statusLogger.StartConsoleLogger();
+            if (Config.m_config.GetBoolElement("Status_inFile") == true)
+                m_statusLogger.StartFileLogger();
 
-            InfosLogger = new Logger("Infos", Basic._Locker, ConsoleColor.Magenta);
+            m_infosLogger = new Logger("Infos", Basic.m_locker, ConsoleColor.Magenta);
 
-            if (Config.myConfig.GetBoolElement("Infos_inFile") == true)
-                InfosLogger.StartFileLogger();
+            if (Config.m_config.GetBoolElement("Infos_inFile") == true)
+                m_infosLogger.StartFileLogger();
 
-            if (Config.myConfig.GetBoolElement("Infos_inConsole") == true)
-                InfosLogger.StartConsoleLogger();
+            if (Config.m_config.GetBoolElement("Infos_inConsole") == true)
+                m_infosLogger.StartConsoleLogger();
 
-            ErrorsLogger = new Logger("Errors", Basic._Locker, ConsoleColor.Yellow);
+            m_errorsLogger = new Logger("Errors", Basic.m_locker, ConsoleColor.Yellow);
 
-            if (Config.myConfig.GetBoolElement("Errors_inFile") == true)
-                ErrorsLogger.StartFileLogger();
+            if (Config.m_config.GetBoolElement("Errors_inFile") == true)
+                m_errorsLogger.StartFileLogger();
 
-            if (Config.myConfig.GetBoolElement("Errors_inConsole") == true)
-                ErrorsLogger.StartConsoleLogger();
+            if (Config.m_config.GetBoolElement("Errors_inConsole") == true)
+                m_errorsLogger.StartConsoleLogger();
 
-            StatusLogger.Write("@Loggers@ started !");
+            m_statusLogger.Write("@Loggers@ loaded and started !");
         }
     }
 }

@@ -10,145 +10,145 @@ namespace realm.Database.Cache
     {
         public static void LoadCharacters()
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "SELECT * FROM characters";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlText = "SELECT * FROM characters";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                MySqlDataReader SQLResult = SQLCommand.ExecuteReader();
+                MySqlDataReader sqlResult = sqlCommand.ExecuteReader();
 
-                while (SQLResult.Read())
+                while (sqlResult.Read())
                 {
-                    var myCharacter = new Realm.Character.Character();
+                    var character = new Realm.Characters.Character();
 
-                    myCharacter.ID = SQLResult.GetInt16("id");
-                    myCharacter.myName = SQLResult.GetString("name");
-                    myCharacter.Level = SQLResult.GetInt16("level");
-                    myCharacter.Class = SQLResult.GetInt16("class");
-                    myCharacter.Sex = SQLResult.GetInt16("sex");
-                    myCharacter.Skin = int.Parse(myCharacter.Class + "" + myCharacter.Sex);
-                    myCharacter.Size = 100;
-                    myCharacter.Color = SQLResult.GetInt32("color");
-                    myCharacter.Color2 = SQLResult.GetInt32("color2");
-                    myCharacter.Color3 = SQLResult.GetInt32("color3");
+                    character.m_id = sqlResult.GetInt16("id");
+                    character.m_name = sqlResult.GetString("name");
+                    character.m_level = sqlResult.GetInt16("level");
+                    character.m_class = sqlResult.GetInt16("class");
+                    character.m_sex = sqlResult.GetInt16("sex");
+                    character.m_skin = int.Parse(character.m_class + "" + character.m_sex);
+                    character.m_size = 100;
+                    character.m_color = sqlResult.GetInt32("color");
+                    character.m_color2 = sqlResult.GetInt32("color2");
+                    character.m_color3 = sqlResult.GetInt32("color3");
 
-                    myCharacter.MapCell = int.Parse(SQLResult.GetString("mappos").Split(',')[1]);
-                    myCharacter.MapID = int.Parse(SQLResult.GetString("mappos").Split(',')[0]);
-                    myCharacter.Dir = int.Parse(SQLResult.GetString("mappos").Split(',')[2]);
+                    character.m_mapCell = int.Parse(sqlResult.GetString("mappos").Split(',')[1]);
+                    character.m_mapID = int.Parse(sqlResult.GetString("mappos").Split(',')[0]);
+                    character.m_dir = int.Parse(sqlResult.GetString("mappos").Split(',')[2]);
 
-                    myCharacter.ParseStats(SQLResult.GetString("stats"));
+                    character.ParseStats(sqlResult.GetString("stats"));
 
-                    if (SQLResult.GetString("items") != "") 
-                        myCharacter.myInventary.ParseItems(SQLResult.GetString("items"));
+                    if (sqlResult.GetString("items") != "") 
+                        character.m_inventary.ParseItems(sqlResult.GetString("items"));
 
-                    if (SQLResult.GetString("spells") != "") 
-                        myCharacter.mySpellInventary.ParseSpells(SQLResult.GetString("spells"));
+                    if (sqlResult.GetString("spells") != "") 
+                        character.m_spellInventary.ParseSpells(sqlResult.GetString("spells"));
 
-                    myCharacter.NewCharacter = false;
+                    character.isNewCharacter = false;
 
-                    Realm.Character.CharactersManager.CharactersList.Add(myCharacter);
+                    Realm.Characters.CharactersManager.m_charactersList.Add(character);
                 }
 
-                SQLResult.Close();
+                sqlResult.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' characters@ from the database !",Realm.Character.CharactersManager.CharactersList.Count));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' characters@ from the database !",Realm.Characters.CharactersManager.m_charactersList.Count));
         }
 
-        public static void CreateCharacter(Realm.Character.Character myCharacter)
+        public static void CreateCharacter(Realm.Characters.Character _character)
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items, @spells)";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlText = "INSERT INTO characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items, @spells)";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                MySqlParameterCollection P = SQLCommand.Parameters;
+                MySqlParameterCollection P = sqlCommand.Parameters;
 
-                P.Add(new MySqlParameter("@id", myCharacter.ID));
-                P.Add(new MySqlParameter("@name", myCharacter.myName));
-                P.Add(new MySqlParameter("@level", myCharacter.Level));
-                P.Add(new MySqlParameter("@class", myCharacter.Class));
-                P.Add(new MySqlParameter("@sex", myCharacter.Sex));
-                P.Add(new MySqlParameter("@color", myCharacter.Color));
-                P.Add(new MySqlParameter("@color2", myCharacter.Color2));
-                P.Add(new MySqlParameter("@color3", myCharacter.Color3));
-                P.Add(new MySqlParameter("@mapinfos", myCharacter.MapID + "," + myCharacter.MapCell + "," + myCharacter.Dir));
-                P.Add(new MySqlParameter("@stats", myCharacter.SqlStats()));
+                P.Add(new MySqlParameter("@id", _character.m_id));
+                P.Add(new MySqlParameter("@name", _character.m_name));
+                P.Add(new MySqlParameter("@level", _character.m_level));
+                P.Add(new MySqlParameter("@class", _character.m_class));
+                P.Add(new MySqlParameter("@sex", _character.m_sex));
+                P.Add(new MySqlParameter("@color", _character.m_color));
+                P.Add(new MySqlParameter("@color2", _character.m_color2));
+                P.Add(new MySqlParameter("@color3", _character.m_color3));
+                P.Add(new MySqlParameter("@mapinfos", _character.m_mapID + "," + _character.m_mapCell + "," + _character.m_dir));
+                P.Add(new MySqlParameter("@stats", _character.SqlStats()));
                 P.Add(new MySqlParameter("@items", ""));
                 P.Add(new MySqlParameter("@spells", ""));
 
-                SQLCommand.ExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
 
-                myCharacter.NewCharacter = false;
+                _character.isNewCharacter = false;
             }
         }
 
-        public static void SaveCharacter(Realm.Character.Character myCharacter)
+        public static void SaveCharacter(Realm.Characters.Character _character)
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "UPDATE characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex," +
+                var sqlText = "UPDATE characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex," +
                     " color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats, items=@items, spells=@spells WHERE id=@id";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                MySqlParameterCollection P = SQLCommand.Parameters;
-                P.Add(new MySqlParameter("@id", myCharacter.ID));
-                P.Add(new MySqlParameter("@name", myCharacter.myName));
-                P.Add(new MySqlParameter("@level", myCharacter.Level));
-                P.Add(new MySqlParameter("@class", myCharacter.Class));
-                P.Add(new MySqlParameter("@sex", myCharacter.Sex));
-                P.Add(new MySqlParameter("@color", myCharacter.Color));
-                P.Add(new MySqlParameter("@color2", myCharacter.Color2));
-                P.Add(new MySqlParameter("@color3", myCharacter.Color3));
-                P.Add(new MySqlParameter("@mapinfos", myCharacter.MapID + "," + myCharacter.MapCell + "," + myCharacter.Dir));
-                P.Add(new MySqlParameter("@stats", myCharacter.SqlStats()));
-                P.Add(new MySqlParameter("@items", myCharacter.GetItemsToSave()));
-                P.Add(new MySqlParameter("@spells", myCharacter.mySpellInventary.SaveSpells()));
+                MySqlParameterCollection P = sqlCommand.Parameters;
+                P.Add(new MySqlParameter("@id", _character.m_id));
+                P.Add(new MySqlParameter("@name", _character.m_name));
+                P.Add(new MySqlParameter("@level", _character.m_level));
+                P.Add(new MySqlParameter("@class", _character.m_class));
+                P.Add(new MySqlParameter("@sex", _character.m_sex));
+                P.Add(new MySqlParameter("@color", _character.m_color));
+                P.Add(new MySqlParameter("@color2", _character.m_color2));
+                P.Add(new MySqlParameter("@color3", _character.m_color3));
+                P.Add(new MySqlParameter("@mapinfos", _character.m_mapID + "," + _character.m_mapCell + "," + _character.m_dir));
+                P.Add(new MySqlParameter("@stats", _character.SqlStats()));
+                P.Add(new MySqlParameter("@items", _character.GetItemsToSave()));
+                P.Add(new MySqlParameter("@spells", _character.m_spellInventary.SaveSpells()));
 
-                SQLCommand.ExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
         }
 
         public static void DeleteCharacter(string Name)
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "DELETE FROM characters WHERE name=@CharName";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlText = "DELETE FROM characters WHERE name=@CharName";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                SQLCommand.Parameters.Add(new MySqlParameter("@CharName", Name));
+                sqlCommand.Parameters.Add(new MySqlParameter("@CharName", Name));
 
-                SQLCommand.ExecuteNonQuery();
+                sqlCommand.ExecuteNonQuery();
             }
         }
 
-        public static int LastID = -1;
+        public static int m_lastID = -1;
 
         public static int GetNewID()
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                if (LastID == -1)
+                if (m_lastID == -1)
                 {
-                    var SQLText = "SELECT id FROM characters ORDER BY id DESC LIMIT 0,1";
-                    var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                    var sqlText = "SELECT id FROM characters ORDER BY id DESC LIMIT 0,1";
+                    var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                    MySqlDataReader SQLResult = SQLCommand.ExecuteReader();
+                    MySqlDataReader sqlResult = sqlCommand.ExecuteReader();
 
-                    LastID = 0;
+                    m_lastID = 0;
 
-                    if (SQLResult.Read())
+                    if (sqlResult.Read())
                     {
-                        LastID = SQLResult.GetInt32("id");
+                        m_lastID = sqlResult.GetInt32("id");
                     }
 
-                    SQLResult.Close();
+                    sqlResult.Close();
 
-                    return ++LastID;
+                    return ++m_lastID;
                 }
                 else
                 {
-                    return ++LastID;
+                    return ++m_lastID;
                 }
             }
         }

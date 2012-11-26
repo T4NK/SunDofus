@@ -7,19 +7,35 @@ namespace realm.Database.Models.Items
 {
     class ItemModel
     {
-        public int myID, myType, myLevel, myPods, myPrice = 0;
-        public int mySet = -1;
-        public string  myJet = "";
-        public bool meTwoHands = false;
-        public string myConditions = "";
-        public bool meUsable = false;
+        public int m_id { get; set; }
+        public int m_type { get; set; }
+        public int m_level { get; set; }
+        public int m_pods { get; set; }
+        public int m_price { get; set; }
+        public int m_set { get; set; }
 
-        public List<Realm.Effect.EffectsItems> myEffectsList = new List<Realm.Effect.EffectsItems>();
-        public List<Realm.World.Conditions.ItemCondition> myConds;
+        public bool isUsable { get; set; }
+        public bool isTwoHands { get; set; }
+
+        public string m_jet { get; set; }
+        public string m_conditions { get; set; }
+
+        public List<Realm.Effects.EffectItem> m_effectsList = new List<Realm.Effects.EffectItem>();
+        public List<Realm.World.Conditions.ItemCondition> m_conds;
+
+        public ItemModel()
+        {
+            m_price = 0;
+            m_set = -1;
+            m_jet = "";
+            isTwoHands = false;
+            m_conditions = "";
+            isUsable = false;
+        }
 
         public void ParseConditions()
         {
-            myConds = new List<Realm.World.Conditions.ItemCondition>();
+            m_conds = new List<Realm.World.Conditions.ItemCondition>();
         }
     }
 }

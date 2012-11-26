@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace auth.Network.Sync
 {
-    class SyncServer : SunDofus.Network.AbstractServer
+    class SyncServer : SunDofus.Network.TCPServer
     {
         public List<SyncClient> m_clients { get; set; }
 

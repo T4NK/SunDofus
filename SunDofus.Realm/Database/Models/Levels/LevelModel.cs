@@ -7,16 +7,21 @@ namespace realm.Database.Models.Levels
 {
     class LevelModel
     {
-        public int Id = 0;
-        public long Character = 0, Job = 0, Mount = 0, Alignment = 0, Guild = 0;
+        public int m_id { get; set; }
 
-        public LevelModel(long Max = 0)
+        public long m_character { get; set; }
+        public long m_job { get; set; }
+        public long m_alignment { get; set; }
+        public long m_guild { get; set; }
+        public long m_mount { get; set; }
+
+        public LevelModel(long _max = 0)
         {
-            Character = Max;
-            Job = Max;
-            Mount = Max;
-            Alignment = Max;
-            Guild = Max;
+            m_character = _max;
+            m_job = _max;
+            m_mount = _max;
+            m_alignment = _max;
+            m_guild = _max;
         }
     }
 }

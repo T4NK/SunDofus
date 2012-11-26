@@ -8,30 +8,30 @@ namespace realm.Database
 {
     class DatabaseHandler
     {
-        public static MySqlConnection myConnection;
-        public static object myLocker;
+        public static MySqlConnection m_connection;
+        public static object m_locker;
 
         public static void InitialiseConnection()
         {
-            myConnection = new MySqlConnection();
-            myLocker = new object();
+            m_connection = new MySqlConnection();
+            m_locker = new object();
 
             try
             {
-                myConnection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}", 
-                    Utilities.Config.myConfig.GetStringElement("Database_Server"), 
-                    Utilities.Config.myConfig.GetStringElement("Database_User"), 
-                    Utilities.Config.myConfig.GetStringElement("Database_Pass"), 
-                    Utilities.Config.myConfig.GetStringElement("Database_Name"));
+                m_connection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}", 
+                    Utilities.Config.m_config.GetStringElement("Database_Server"), 
+                    Utilities.Config.m_config.GetStringElement("Database_User"), 
+                    Utilities.Config.m_config.GetStringElement("Database_Pass"), 
+                    Utilities.Config.m_config.GetStringElement("Database_Name"));
 
-                lock (myLocker)
-                    myConnection.Open();
+                lock (m_locker)
+                    m_connection.Open();
 
-                Utilities.Loggers.StatusLogger.Write("Connected to the @database@ !");
+                Utilities.Loggers.m_statusLogger.Write("Connected to the @database@ !");
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Can't connect to the @database@ : {0}", e.ToString()));
+                Utilities.Loggers.m_errorsLogger.Write(string.Format("Can't connect to the @database@ : {0}", e.ToString()));
             }
         }
     }

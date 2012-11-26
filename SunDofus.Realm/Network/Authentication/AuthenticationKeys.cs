@@ -7,26 +7,29 @@ namespace realm.Network.Authentication
 {
     class AuthenticationKeys
     {
-        public static List<AuthenticationKeys> myKeys = new List<AuthenticationKeys>();
+        //Static
+        public static List<AuthenticationKeys> m_keys = new List<AuthenticationKeys>();
 
-        public string myKey;
-        public Database.Models.Clients.AccountModel myInfos;
+        //Object
+        public string m_key;
+        public Database.Models.Clients.AccountModel m_infos;
 
-        public AuthenticationKeys(string Packet)
+        public AuthenticationKeys(string _packet)
         {
-            myKey = "";
-            myInfos = new Database.Models.Clients.AccountModel();
+            m_key = "";
+            m_infos = new Database.Models.Clients.AccountModel();
 
-            string[] Data = Packet.Split('|');
-            myKey = Data[1];
-            myInfos.myId = int.Parse(Data[2]);
-            myInfos.mymPseudo = Data[3];
-            myInfos.myQuestion = Data[4];
-            myInfos.myAnswer = Data[5];
-            myInfos.myLevel = int.Parse(Data[6]);
-            myInfos.Characters = Data[7];
-            myInfos.mySubscription = long.Parse(Data[8]);
-            myInfos.Gifts = Data[9];
+            var _datas = _packet.Split('|');
+
+            m_key = _datas[1];
+            m_infos.m_id = int.Parse(_datas[2]);
+            m_infos.m_pseudo = _datas[3];
+            m_infos.m_question = _datas[4];
+            m_infos.m_answer = _datas[5];
+            m_infos.m_level = int.Parse(_datas[6]);
+            m_infos.m_strcharacters = _datas[7];
+            m_infos.m_subscription = long.Parse(_datas[8]);
+            m_infos.m_strgifts = _datas[9];
         }
     }
 }

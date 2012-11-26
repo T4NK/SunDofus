@@ -8,48 +8,48 @@ namespace realm.Database.Cache
 {
     class LevelsCache
     {
-        public static List<Models.Levels.LevelModel> LevelsList = new List<Models.Levels.LevelModel>();
+        public static List<Models.Levels.LevelModel> m_levelsList = new List<Models.Levels.LevelModel>();
 
         public static void LoadLevels()
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "SELECT * FROM levels";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlText = "SELECT * FROM levels";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
+                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                while (SQLReader.Read())
+                while (sqlReader.Read())
                 {
-                    var newLevel = new Models.Levels.LevelModel();
+                    var level = new Models.Levels.LevelModel();
 
-                    newLevel.Id = SQLReader.GetInt16("Level");
-                    newLevel.Character = SQLReader.GetInt64("Character");
-                    newLevel.Job = SQLReader.GetInt64("Job");
-                    newLevel.Mount = SQLReader.GetInt64("Mount");
-                    newLevel.Alignment = SQLReader.GetInt64("Pvp");
-                    newLevel.Guild = SQLReader.GetInt64("Guild");
+                    level.m_id = sqlReader.GetInt16("Level");
+                    level.m_character = sqlReader.GetInt64("Character");
+                    level.m_job = sqlReader.GetInt64("Job");
+                    level.m_mount = sqlReader.GetInt64("Mount");
+                    level.m_alignment = sqlReader.GetInt64("Pvp");
+                    level.m_guild = sqlReader.GetInt64("Guild");
 
-                    LevelsList.Add(newLevel);
+                    m_levelsList.Add(level);
                 }
 
-                SQLReader.Close();
+                sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' levels@ from the database !", LevelsList.Count));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' levels@ from the database !", m_levelsList.Count));
         }
 
-        public static Models.Levels.LevelModel ReturnLevel(int Level)
+        public static Models.Levels.LevelModel ReturnLevel(int _level)
         {
-            if (LevelsList.Any(x => x.Id == Level))
-                return LevelsList.First(x => x.Id == Level);
+            if (m_levelsList.Any(x => x.m_id == _level))
+                return m_levelsList.First(x => x.m_id == _level);
             else
                 return new Models.Levels.LevelModel(long.MaxValue);
         }
 
         public static int MaxLevel()
         {
-            return LevelsList.First(x => x.Id > 0 && LevelsList.Any(y => y.Id > x.Id) == false).Id - 1;
+            return m_levelsList.First(x => x.m_id > 0 && m_levelsList.Any(y => y.m_id > x.m_id) == false).m_id - 1;
         }
     }
 }

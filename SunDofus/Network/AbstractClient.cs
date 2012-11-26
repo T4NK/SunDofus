@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace SunDofus.Network
 {
-    public class AbstractClient
+    public class TCPClient
     {
         SilverSocket m_socket { get; set; }
         public bool isConnected = false;
@@ -41,7 +41,7 @@ namespace SunDofus.Network
                 evnt(_exception);
         }
 
-        public AbstractClient(SilverSocket _socket)
+        public TCPClient(SilverSocket _socket)
         {
             m_socket = _socket;
 

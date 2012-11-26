@@ -7,57 +7,57 @@ namespace realm.Utilities
 {
     class Basic
     {
-        public static Random _Rando = new Random();
-        public static object _Locker = new object();
+        public static Random m_rando = new Random();
+        public static object m_locker = new object();
 
-        public static string Vowels = "aeiouy";
-        public static string Consonants = "bcdfghjklmnpqrstvwxz";
+        public static string m_vowels = "aeiouy";
+        public static string m_consonants = "bcdfghjklmnpqrstvwxz";
 
-        public static int Rand(int Min, int Max)
+        public static int Rand(int _min, int _max)
         {
-            return _Rando.Next(Min, Max + 1);
+            return m_rando.Next(_min, _max + 1);
         }
 
         public static string GetVowels()
         {
-            return Vowels.Substring((Rand(0, Vowels.Length - 1)), 1);
+            return m_vowels.Substring((Rand(0, m_vowels.Length - 1)), 1);
         }
 
         public static string GetConsonants()
         {
-            return Consonants.Substring((Rand(0, Consonants.Length - 1)), 1);
+            return m_consonants.Substring((Rand(0, m_consonants.Length - 1)), 1);
         }
 
         public static string RandomName()
         {
-            var Name = "";
+            var name = "";
 
-            Name += GetConsonants();
-            Name += GetVowels();
-            Name += GetVowels();
-            Name += GetConsonants();
-            Name += GetConsonants();
-            Name += GetVowels();
+            name += GetConsonants();
+            name += GetVowels();
+            name += GetVowels();
+            name += GetConsonants();
+            name += GetConsonants();
+            name += GetVowels();
 
             if (Rand(0, 1) == 0)
             {
-                Name += GetConsonants();
-                Name += GetVowels();
+                name += GetConsonants();
+                name += GetVowels();
             }
 
-            return Name;
+            return name;
         }
 
-        public static string DeciToHex(int Deci)
+        public static string DeciToHex(int _deci)
         {
-            if (Deci == -1) return "-1";
-            else return Deci.ToString("x");
+            if (_deci == -1) return "-1";
+            else return _deci.ToString("x");
         }
 
-        public static int HexToDeci(string Hex)
+        public static int HexToDeci(string _hex)
         {
-            if (Hex == "-1" | Hex == "") return -1;
-            return Convert.ToInt32(Hex, 16);
+            if (_hex == "-1" | _hex == "") return -1;
+            return Convert.ToInt32(_hex, 16);
         }
 
         public static string GetActuelTime()
@@ -71,24 +71,24 @@ namespace realm.Utilities
             return string.Format("BD{0}|{1}|{2}", (DateTime.Now.Year - 1370).ToString(), (DateTime.Now.Month - 1), (DateTime.Now.Day));
         }
 
-        public static int GetRandomJet(string JetStr, int Jet = 3)
+        public static int GetRandomJet(string _jetStr, int _jet = 3)
         {
-            if (JetStr.Length > 3)
+            if (_jetStr.Length > 3)
             {
                 var Damage = 0;
-                var DS = int.Parse(JetStr.Split('d')[0]);
-                var Faces = int.Parse(JetStr.Split('d')[1].Split('+')[0]);
-                var Fixe = int.Parse(JetStr.Split('d')[1].Split('+')[1]);
+                var DS = int.Parse(_jetStr.Split('d')[0]);
+                var Faces = int.Parse(_jetStr.Split('d')[1].Split('+')[0]);
+                var Fixe = int.Parse(_jetStr.Split('d')[1].Split('+')[1]);
 
                 if (DS != 0)
                 {
                     for (var i = 1; i <= DS; i++)
                     {
-                        if (Jet == 1)
+                        if (_jet == 1)
                             Damage += Faces;
-                        else if (Jet == 2)
+                        else if (_jet == 2)
                             Damage += 1;
-                        else if (Jet == 3)
+                        else if (_jet == 3)
                             Damage += (int)Math.Ceiling((double)(Faces / 2));
                         else
                             Damage += Rand(1, Faces);

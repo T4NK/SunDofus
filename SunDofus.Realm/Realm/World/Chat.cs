@@ -2,60 +2,60 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm.Character;
+using realm.Realm.Characters;
 
 namespace realm.Realm.World
 {
     class Chat
     {
-        public static void SendGeneralMessage(Network.Realm.RealmClient Client, string Message)
+        public static void SendGeneralMessage(Network.Realms.RealmClient _client, string _message)
         {
-            if (Client.myPlayer.GetMap() == null) 
+            if (_client.m_player.GetMap() == null) 
                 return;
 
-            Client.myPlayer.GetMap().Send(string.Format("cMK|{0}|{1}|{2}", Client.myPlayer.ID, Client.myPlayer.myName, Message));
+            _client.m_player.GetMap().Send(string.Format("cMK|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
         }
 
-        public static void SendPrivateMessage(Network.Realm.RealmClient Client, string Receiver, string Message)
+        public static void SendPrivateMessage(Network.Realms.RealmClient _client, string _receiver, string _message)
         {
-            if(CharactersManager.CharactersList.Any(x => x.myName == Receiver))
+            if(CharactersManager.m_charactersList.Any(x => x.m_name == _receiver))
             {
-                var myCharacter = CharactersManager.CharactersList.First(x => x.myName == Receiver);
+                var character = CharactersManager.m_charactersList.First(x => x.m_name == _receiver);
 
-                if (myCharacter.isConnected == true)
+                if (character.isConnected == true)
                 {
-                    myCharacter.Client.Send(string.Format("cMKF|{0}|{1}|{2}", Client.myPlayer.ID, Client.myPlayer.myName, Message));
-                    Client.Send(string.Format("cMKT|{0}|{1}|{2}", Client.myPlayer.ID, myCharacter.myName, Message));
+                    character.m_networkClient.Send(string.Format("cMKF|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
+                    _client.Send(string.Format("cMKT|{0}|{1}|{2}", _client.m_player.m_id, character.m_name, _message));
                 }
                 else
-                    Client.Send(string.Format("cMEf{0}", Receiver));
+                    _client.Send(string.Format("cMEf{0}", _receiver));
             }
         }
 
-        public static void SendTradeMessage(Network.Realm.RealmClient myClient, string Message)
+        public static void SendTradeMessage(Network.Realms.RealmClient _client, string _message)
         {
-            if (myClient.myPlayer.CanSendinTrade() == true)
+            if (_client.m_player.CanSendinTrade() == true)
             {
-                foreach (var me in Network.ServersHandler.myRealmServer.myClients.Where(x => x.isAuth == true))
-                    me.Send(string.Format("cMK:|{0}|{1}|{2}", myClient.myPlayer.ID, myClient.myPlayer.myName, Message));
+                foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true))
+                    character.Send(string.Format("cMK:|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
 
-                myClient.myPlayer.RefreshTrade();
+                _client.m_player.RefreshTrade();
             }
             else
-                myClient.Send(string.Format("Im0115;{0}", myClient.myPlayer.TimeTrade()));
+                _client.Send(string.Format("Im0115;{0}", _client.m_player.TimeTrade()));
         }
 
-        public static void SendRecruitmentMessage(Network.Realm.RealmClient myClient, string Message)
+        public static void SendRecruitmentMessage(Network.Realms.RealmClient _client, string _message)
         {
-            if (myClient.myPlayer.CanSendinRecruitment() == true)
+            if (_client.m_player.CanSendinRecruitment() == true)
             {
-                foreach (var me in Network.ServersHandler.myRealmServer.myClients.Where(x => x.isAuth == true))
-                    me.Send(string.Format("cMK?|{0}|{1}|{2}", myClient.myPlayer.ID, myClient.myPlayer.myName, Message));
+                foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true))
+                    character.Send(string.Format("cMK?|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
 
-                myClient.myPlayer.RefreshRecruitment();
+                _client.m_player.RefreshRecruitment();
             }
             else
-                myClient.Send(string.Format("Im0115;{0}", myClient.myPlayer.TimeRecruitment()));
+                _client.Send(string.Format("Im0115;{0}", _client.m_player.TimeRecruitment()));
         }
     }
 }

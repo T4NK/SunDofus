@@ -7,12 +7,12 @@ namespace realm.Realm.World
 {
     class ConditionsHandler
     {
-        public static bool HasCondition(Network.Realm.RealmClient Client, List<Conditions.ItemCondition> myCond)
+        public static bool HasCondition(Network.Realms.RealmClient _client, List<Conditions.ItemCondition> _conds)
         {
             return true;
         }
 
-        public static bool HasCondition(Network.Realm.RealmClient Client, List<Conditions.TriggerCondition> myCond)
+        public static bool HasCondition(Network.Realms.RealmClient _client, List<Conditions.TriggerCondition> _conds)
         {
             return true;
         }

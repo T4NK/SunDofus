@@ -14,15 +14,15 @@ namespace realm.Realm.World
 
         public static void SaveChararacters()
         {
-            Network.ServersHandler.myAuthLink.Send("SSM");
+            Network.ServersHandler.m_authLink.Send("SSM");
 
-            foreach (var myCharacter in Character.CharactersManager.CharactersList)
+            foreach (var character in Characters.CharactersManager.m_charactersList)
             {
-                Database.Cache.CharactersCache.SaveCharacter(myCharacter);
+                Database.Cache.CharactersCache.SaveCharacter(character);
                 System.Threading.Thread.Sleep(100);
             }
 
-            Network.ServersHandler.myAuthLink.Send("STM");
+            Network.ServersHandler.m_authLink.Send("STM");
         }
     }
 }

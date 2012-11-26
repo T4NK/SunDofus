@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>realm</RootNamespace>
     <AssemblyName>SunDofus.Realm</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -57,48 +57,48 @@
     <Compile Include="Database\Models\Levels\LevelModel.cs" />
     <Compile Include="Network\Editors\EditorClient.cs" />
     <Compile Include="Network\Editors\EditorServer.cs" />
-    <Compile Include="Network\Realm\RealmClient.cs" />
-    <Compile Include="Network\Realm\RealmCommand.cs" />
+    <Compile Include="Network\Realms\RealmClient.cs" />
+    <Compile Include="Network\Realms\RealmCommand.cs" />
     <Compile Include="Database\Models\Clients\GiftModel.cs" />
     <Compile Include="Database\Models\Clients\AccountModel.cs" />
-    <Compile Include="Network\Realm\RealmParser.cs" />
+    <Compile Include="Network\Realms\RealmParser.cs" />
     <Compile Include="Database\Cache\CharactersCache.cs" />
     <Compile Include="Database\Cache\ItemsCache.cs" />
     <Compile Include="Database\Cache\MapsCache.cs" />
     <Compile Include="Database\Cache\SpellsCache.cs" />
     <Compile Include="Database\Cache\TriggersCache.cs" />
     <Compile Include="Database\DatabaseHandler.cs" />
-    <Compile Include="Network\Realm\RealmServer.cs" />
+    <Compile Include="Network\Realms\RealmServer.cs" />
     <Compile Include="Network\Authentication\AuthenticationKeys.cs" />
     <Compile Include="Network\Authentication\AuthenticationLink.cs" />
     <Compile Include="Network\ServersHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Realm\Character\Character.cs" />
-    <Compile Include="Realm\Character\CharactersManager.cs" />
-    <Compile Include="Realm\Character\CharacterState.cs" />
+    <Compile Include="Realm\Characters\Character.cs" />
+    <Compile Include="Realm\Characters\CharactersManager.cs" />
+    <Compile Include="Realm\Characters\CharacterState.cs" />
     <Compile Include="Database\Models\Items\ItemModel.cs" />
-    <Compile Include="Realm\Character\Items\InventaryItems.cs" />
-    <Compile Include="Realm\Character\Items\Char\CharacterItem.cs" />
-    <Compile Include="Realm\Character\Items\ItemsHandler.cs" />
+    <Compile Include="Realm\Characters\Items\InventaryItems.cs" />
+    <Compile Include="Realm\Characters\Items\Char\CharacterItem.cs" />
+    <Compile Include="Realm\Characters\Items\ItemsHandler.cs" />
     <Compile Include="Database\Models\Items\SetModel.cs" />
-    <Compile Include="Realm\Character\Items\Char\CharacterSet.cs" />
+    <Compile Include="Realm\Characters\Items\Char\CharacterSet.cs" />
     <Compile Include="Database\Models\Items\ItemUsableModel.cs" />
     <Compile Include="Database\Models\Spells\SpellModel.cs" />
     <Compile Include="Database\Models\Spells\SpellLevelModel.cs" />
-    <Compile Include="Realm\Character\Spells\Char\ChararcterSpell.cs" />
-    <Compile Include="Realm\Character\Spells\InventarySpells.cs" />
+    <Compile Include="Realm\Characters\Spells\Char\ChararcterSpell.cs" />
+    <Compile Include="Realm\Characters\Spells\InventarySpells.cs" />
     <Compile Include="Database\Models\Spells\SpellToLearn.cs" />
-    <Compile Include="Realm\Character\Spells\Target.cs" />
-    <Compile Include="Realm\Character\Stats\AbstractStats.cs" />
-    <Compile Include="Realm\Character\Stats\Stats.cs" />
-    <Compile Include="Realm\Effect\EffectsActions.cs" />
-    <Compile Include="Realm\Effect\EffectsItems.cs" />
-    <Compile Include="Realm\Effect\EffectsSpells.cs" />
-    <Compile Include="Realm\Map\Cells.cs" />
+    <Compile Include="Realm\Characters\Spells\Target.cs" />
+    <Compile Include="Realm\Characters\Stats\AbstractStats.cs" />
+    <Compile Include="Realm\Characters\Stats\Stats.cs" />
+    <Compile Include="Realm\Effects\EffectAction.cs" />
+    <Compile Include="Realm\Effects\EffectItem.cs" />
+    <Compile Include="Realm\Effects\EffectSpell.cs" />
+    <Compile Include="Realm\Maps\Cells.cs" />
     <Compile Include="Database\Models\Maps\MapModel.cs" />
-    <Compile Include="Realm\Map\Map.cs" />
-    <Compile Include="Realm\Map\Pathfinding.cs" />
+    <Compile Include="Realm\Maps\Map.cs" />
+    <Compile Include="Realm\Maps\Pathfinding.cs" />
     <Compile Include="Database\Models\Maps\TriggerModel.cs" />
     <Compile Include="Realm\World\Chat.cs" />
     <Compile Include="Realm\World\ConditionsHandler.cs" />

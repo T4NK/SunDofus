@@ -7,7 +7,7 @@ using auth.Database.Models;
 
 namespace auth.Network.Sync
 {
-    class SyncClient : SunDofus.Network.AbstractClient
+    class SyncClient : SunDofus.Network.TCPClient
     {
         public State m_state { get; set; }
         public ServerModel m_server { get; set; }

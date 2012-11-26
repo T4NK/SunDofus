@@ -3,30 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using realm.Realm;
-using realm.Realm.Character;
+using realm.Realm.Characters;
 
 namespace realm.Database.Models.Items
 {
     class ItemUsableModel
     {
-        public int myBaseItemID = -1;
-        public string myArgs = "";
-        public bool MustDelete = true;
+        public int m_base { get; set; }
+        public string m_args { get; set; }
+        public bool m_mustDelete { get; set; }
+
+        public ItemUsableModel()
+        {
+            m_base = -1;
+            m_args = "";
+            m_mustDelete = true;
+        }
 
         public void AttributeItem()
         {
-            if (Database.Cache.ItemsCache.ItemsList.Any(x => x.myID == myBaseItemID))
-                Database.Cache.ItemsCache.ItemsList.First(x => x.myID == myBaseItemID).meUsable = true;
+            if (Database.Cache.ItemsCache.m_itemsList.Any(x => x.m_id == m_base))
+                Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == m_base).isUsable = true;
         }
 
-        public void ParseEffect(Character Client)
+        public void ParseEffect(Character _client)
         {
-            string[] Data = myArgs.Split('|');
+            var datas = m_args.Split('|');
 
-            foreach (var AllData in Data)
+            foreach (var effect in datas)
             {
-                string[] Infos = AllData.Split(';');
-                Realm.Effect.EffectsActions.ParseEffect(Client, int.Parse(Infos[0]), Infos[1]);
+                var infos = effect.Split(';');
+                Realm.Effects.EffectAction.ParseEffect(_client, int.Parse(infos[0]), infos[1]);
             }
         }
     }

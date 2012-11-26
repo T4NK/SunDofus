@@ -7,7 +7,7 @@ using auth.Database.Models;
 
 namespace auth.Network.Auth
 {
-    class AuthClient : SunDofus.Network.AbstractClient
+    class AuthClient : SunDofus.Network.TCPClient
     {
         public string m_key { get; set; }
         public int m_waitPosition { get; set; }

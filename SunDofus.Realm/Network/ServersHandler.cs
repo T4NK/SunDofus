@@ -7,9 +7,9 @@ namespace realm.Network
 {
     class ServersHandler
     {
-        public static Realm.RealmServer myRealmServer;
-        public static Authentication.AuthenticationLink myAuthLink;
-        public static Editors.EditorServer myEditorServer;
+        public static Realms.RealmServer m_realmServer;
+        public static Authentication.AuthenticationLink m_authLink;
+        public static Editors.EditorServer m_editorServer;
 
         public static Dictionary<string, string> adminAccount;
 
@@ -17,14 +17,14 @@ namespace realm.Network
         {
             adminAccount = new Dictionary<string, string>();
 
-            myRealmServer = new Realm.RealmServer();
-            myRealmServer.Start();
+            m_realmServer = new Realms.RealmServer();
+            m_realmServer.Start();
 
-            myAuthLink = new Authentication.AuthenticationLink();
-            myAuthLink.Start();
+            m_authLink = new Authentication.AuthenticationLink();
+            m_authLink.Start();
 
-            myEditorServer = new Editors.EditorServer();
-            myEditorServer.Start();
+            m_editorServer = new Editors.EditorServer();
+            m_editorServer.Start();
         }
     }
 }

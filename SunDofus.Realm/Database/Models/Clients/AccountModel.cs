@@ -7,86 +7,92 @@ namespace realm.Database.Models.Clients
 {
     class AccountModel
     {
-        public string mymPseudo;
-        public string myQuestion;
-        public string myAnswer;
-        public int myId;
-        public int myLevel;
-        public long mySubscription;
-        public string Characters;
-        public string Gifts;
+        public int m_id { get; set; }
+        public int m_level { get; set; }
+        public string m_pseudo { get; set; }
+        public string m_question { get; set; }
+        public string m_answer { get; set; }
+        public long m_subscription { get; set; }
+        public string m_strcharacters { get; set; }
+        public string m_strgifts { get; set; }
 
-        public List<string> myCharacters;
-        public List<GiftModel> myGifts;
+        public List<string> m_characters { get; set; }
+        public List<GiftModel> m_gifts { get; set; }
 
         public AccountModel()
         {
-            myCharacters = new List<string>();
-            myGifts = new List<GiftModel>();
+            m_characters = new List<string>();
+            m_gifts = new List<GiftModel>();
 
-            mymPseudo = "";
-            myQuestion = "";
-            myAnswer = "";
-            myId = -1;
-            myLevel = -1;
-            Characters = "";
-            mySubscription = 0;
-            Gifts = "";
+            m_pseudo = "";
+            m_question = "";
+            m_answer = "";
+            m_id = -1;
+            m_level = -1;
+            m_strcharacters = "";
+            m_subscription = 0;
+            m_strgifts = "";
         }
 
         public void ParseCharacters()
         {
-            if (Characters == "") return;
-            string[] AllData = Characters.Split(':');
-            foreach (var Data in AllData)
+            if (m_strcharacters == "") 
+                return;
+
+            var infos = m_strcharacters.Split(':');
+            foreach (var datas in infos)
             {
-                string[] CharData = Data.Split(',');
-                if (!myCharacters.Contains(CharData[0]) && Utilities.Config.myConfig.GetIntElement("ServerId") == int.Parse(CharData[1]))
-                    myCharacters.Add(CharData[0]);
+                var characterDatas = datas.Split(',');
+
+                if (!m_characters.Contains(characterDatas[0]) && Utilities.Config.m_config.GetIntElement("ServerId") == int.Parse(characterDatas[1]))
+                    m_characters.Add(characterDatas[0]);
             }
         }
 
         public void ParseGifts()
         {
-            if (Gifts == "") return;
-            string[] AllData = Gifts.Split('+');
-            foreach (var Data in AllData)
-            {
-                string[] Infos = Data.Split('~');
-                var myGift = new GiftModel();
-                myGift.myId = int.Parse(Infos[0]);
-                myGift.myTitle = Infos[1];
-                myGift.myMessage = Infos[2];
-                myGift.myItemID = int.Parse(Infos[3]);
+            if (m_strgifts == "") 
+                return;
 
-                myGifts.Add(myGift);
+            var infos = m_strgifts.Split('+');
+            foreach (var datas in infos)
+            {
+                var giftDatas = datas.Split('~');
+                var gift = new GiftModel();
+
+                gift.m_id = int.Parse(giftDatas[0]);
+                gift.m_title = giftDatas[1];
+                gift.m_message = giftDatas[2];
+                gift.m_itemID = int.Parse(giftDatas[3]);
+
+                m_gifts.Add(gift);
             }
         }
 
-        public string AddNewCharacterToAccount(string Name)
+        public string AddNewCharacterToAccount(string _name)
         {
-            if (Characters == "")
-                Characters = string.Format("{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId"));
+            if (m_strcharacters == "")
+                m_strcharacters = string.Format("{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId"));
             else
-                Characters += string.Format(":{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId"));
+                m_strcharacters += string.Format(":{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId"));
 
-            myCharacters.Add(Name);
-            return Characters;
+            m_characters.Add(_name);
+            return m_strcharacters;
         }
 
-        public string RemoveCharacterToAccount(string Name)
+        public string RemoveCharacterToAccount(string _name)
         {
-            if (Characters == (string.Format("{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId"))))
-                Characters = Characters.Replace(string.Format("{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId")), "");
+            if (m_strcharacters == (string.Format("{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId"))))
+                m_strcharacters = m_strcharacters.Replace(string.Format("{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId")), "");
 
-            else if (Characters.StartsWith(string.Format("{0},{1}:", Name, Utilities.Config.myConfig.GetIntElement("ServerId"))))
-                Characters = Characters.Replace(string.Format("{0},{1}:", Name, Utilities.Config.myConfig.GetIntElement("ServerId")), "");
+            else if (m_strcharacters.StartsWith(string.Format("{0},{1}:", _name, Utilities.Config.m_config.GetIntElement("ServerId"))))
+                m_strcharacters = m_strcharacters.Replace(string.Format("{0},{1}:", _name, Utilities.Config.m_config.GetIntElement("ServerId")), "");
 
             else
-                Characters = Characters.Replace(string.Format(":{0},{1}", Name, Utilities.Config.myConfig.GetIntElement("ServerId")), "");
+                m_strcharacters = m_strcharacters.Replace(string.Format(":{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId")), "");
 
-            myCharacters.Remove(Name);
-            return Characters;
+            m_characters.Remove(_name);
+            return m_strcharacters;
         }
     }
 }

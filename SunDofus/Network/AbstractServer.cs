@@ -6,7 +6,7 @@ using SilverSock;
 
 namespace SunDofus.Network
 {
-    public class AbstractServer
+    public class TCPServer
     {
         SilverServer m_server { get; set; }
         string m_remote { get; set; }
@@ -41,7 +41,7 @@ namespace SunDofus.Network
                 evnt(_exception);
         }
 
-        public AbstractServer(string ip, int port)
+        public TCPServer(string ip, int port)
         {
             m_remote = string.Format("{0}:{1}", ip, port);
 

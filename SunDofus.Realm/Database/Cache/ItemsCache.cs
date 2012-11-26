@@ -8,98 +8,98 @@ namespace realm.Database.Cache
 {
     class ItemsCache
     {
-        public static List<Models.Items.ItemModel> ItemsList = new List<Models.Items.ItemModel>();
-        public static List<Models.Items.SetModel> SetsList = new List<Models.Items.SetModel>();
-        public static List<Models.Items.ItemUsableModel> UsablesList = new List<Models.Items.ItemUsableModel>();
+        public static List<Models.Items.ItemModel> m_itemsList = new List<Models.Items.ItemModel>();
+        public static List<Models.Items.SetModel> m_setsList = new List<Models.Items.SetModel>();
+        public static List<Models.Items.ItemUsableModel> m_usablesList = new List<Models.Items.ItemUsableModel>();
 
         public static void LoadItems()
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "SELECT * FROM items";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlText = "SELECT * FROM items";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
+                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                while (SQLReader.Read())
+                while (sqlReader.Read())
                 {
-                    var myItem = new Models.Items.ItemModel();
+                    var item = new Models.Items.ItemModel();
 
-                    myItem.myID = SQLReader.GetInt32("ID");
-                    myItem.myPods = SQLReader.GetInt16("Weight");
-                    myItem.myPrice = SQLReader.GetInt32("Price");
-                    myItem.myType = SQLReader.GetInt16("Type");
-                    myItem.myLevel = SQLReader.GetInt16("Level");
-                    myItem.myJet = SQLReader.GetString("Stats");
-                    myItem.myConditions = SQLReader.GetString("Conditions");
+                    item.m_id = sqlReader.GetInt32("ID");
+                    item.m_pods = sqlReader.GetInt16("Weight");
+                    item.m_price = sqlReader.GetInt32("Price");
+                    item.m_type = sqlReader.GetInt16("Type");
+                    item.m_level = sqlReader.GetInt16("Level");
+                    item.m_jet = sqlReader.GetString("Stats");
+                    item.m_conditions = sqlReader.GetString("Conditions");
 
-                    myItem.ParseConditions();
+                    item.ParseConditions();
 
-                    ItemsList.Add(myItem);
+                    m_itemsList.Add(item);
                 }
 
-                SQLReader.Close();
+                sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items@ from the database !", ItemsList.Count));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' items@ from the database !", m_itemsList.Count));
         }
 
         public static void LoadItemsSets()
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "SELECT * FROM items_sets";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlText = "SELECT * FROM items_sets";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
+                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                while (SQLReader.Read())
+                while (sqlReader.Read())
                 {
-                    var mySet = new Models.Items.SetModel();
+                    var set = new Models.Items.SetModel();
 
-                    mySet.myID = SQLReader.GetInt16("ID");
-                    mySet.ParseBonus(SQLReader.GetString("bonus"));
-                    mySet.ParseItems(SQLReader.GetString("items"));
+                    set.m_id = sqlReader.GetInt16("ID");
+                    set.ParseBonus(sqlReader.GetString("bonus"));
+                    set.ParseItems(sqlReader.GetString("items"));
 
-                    SetsList.Add(mySet);
+                    m_setsList.Add(set);
                 }
 
-                SQLReader.Close();
+                sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items sets@ from the database !", SetsList.Count));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' items sets@ from the database !", m_setsList.Count));
         }
 
         public static void LoadUsablesItems()
         {
-            lock (DatabaseHandler.myLocker)
+            lock (DatabaseHandler.m_locker)
             {
-                var SQLText = "SELECT * FROM items_usables";
-                var SQLCommand = new MySqlCommand(SQLText, DatabaseHandler.myConnection);
+                var sqlText = "SELECT * FROM items_usables";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
-                MySqlDataReader SQLReader = SQLCommand.ExecuteReader();
+                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                while (SQLReader.Read())
+                while (sqlReader.Read())
                 {
-                    var myUsable = new Models.Items.ItemUsableModel();
+                    var item = new Models.Items.ItemUsableModel();
 
-                    myUsable.myBaseItemID = SQLReader.GetInt16("ID");
-                    myUsable.myArgs = SQLReader.GetString("Args");
+                    item.m_base = sqlReader.GetInt16("ID");
+                    item.m_args = sqlReader.GetString("Args");
 
-                    if (SQLReader.GetInt16("MustDelete") == 1)
-                        myUsable.MustDelete = false;
-                    else if (SQLReader.GetInt16("MustDelete") == 0)
-                        myUsable.MustDelete = true;
+                    if (sqlReader.GetInt16("MustDelete") == 1)
+                        item.m_mustDelete = false;
+                    else if (sqlReader.GetInt16("MustDelete") == 0)
+                        item.m_mustDelete = true;
 
-                    myUsable.AttributeItem();
+                    item.AttributeItem();
 
-                    UsablesList.Add(myUsable);
+                    m_usablesList.Add(item);
                 }
 
-                SQLReader.Close();
+                sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items usables@ from the database !", UsablesList.Count));
+            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' items usables@ from the database !", m_usablesList.Count));
         }
     }
 }
