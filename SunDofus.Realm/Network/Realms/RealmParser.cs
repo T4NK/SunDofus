@@ -77,9 +77,9 @@ namespace realm.Network.Realms
 
         public void ParseTicket(string _datas)
         {
-            if (Network.Authentication.AuthenticationKeys.m_keys.Any(x => x.m_key == _datas))
+            if (Network.Authentication.AuthenticationsKeys.m_keys.Any(x => x.m_key == _datas))
             {
-                var key = Network.Authentication.AuthenticationKeys.m_keys.First(x => x.m_key == _datas);
+                var key = Network.Authentication.AuthenticationsKeys.m_keys.First(x => x.m_key == _datas);
 
                 m_client.m_infos = key.m_infos;
                 m_client.m_infos.ParseCharacters();
@@ -87,7 +87,9 @@ namespace realm.Network.Realms
 
                 m_client.isAuth = true;
 
-                Network.ServersHandler.m_authLink.Send(string.Format("SNC|{0}", m_client.m_infos.m_pseudo));
+                Network.ServersHandler.m_authLinks.Send(string.Format("SNC|{0}", m_client.m_infos.m_pseudo));
+                ServersHandler.m_realmServer.m_pseudoclients.Add(m_client.m_infos.m_pseudo);
+
                 m_client.Send("ATK0");
             }
             else
@@ -226,7 +228,7 @@ namespace realm.Network.Realms
                     CharactersManager.m_charactersList.Add(character);
                     m_client.m_characters.Add(character);
 
-                    Network.ServersHandler.m_authLink.Send(string.Format("SNAC|{0}|{1}", m_client.m_infos.m_id, m_client.m_infos.AddNewCharacterToAccount(character.m_name)));
+                    Network.ServersHandler.m_authLinks.Send(string.Format("SNAC|{0}|{1}", m_client.m_infos.m_id, m_client.m_infos.AddNewCharacterToAccount(character.m_name)));
 
                     m_client.Send("TB");
                     m_client.Send("AAK");
@@ -261,7 +263,7 @@ namespace realm.Network.Realms
             CharactersManager.m_charactersList.Remove(character);
             m_client.m_characters.Remove(character);
 
-            Network.ServersHandler.m_authLink.Send(string.Format("SDAC|{0}|{1}", m_client.m_infos.m_id, m_client.m_infos.RemoveCharacterToAccount(character.m_name)));
+            Network.ServersHandler.m_authLinks.Send(string.Format("SDAC|{0}|{1}", m_client.m_infos.m_id, m_client.m_infos.RemoveCharacterToAccount(character.m_name)));
             Database.Cache.CharactersCache.DeleteCharacter(character.m_name);
 
             SendCharacterList("");
@@ -313,7 +315,7 @@ namespace realm.Network.Realms
                         m_client.m_characters.First(x => x.m_id == int.Parse(infos[1])).m_inventary.AddItem(myGift.m_item, true);
 
                         m_client.Send("AG0");
-                        Network.ServersHandler.m_authLink.Send(string.Format("SNDG|{0}|{1}", myGift.m_id, m_client.m_infos.m_id));
+                        Network.ServersHandler.m_authLinks.Send(string.Format("SNDG|{0}|{1}", myGift.m_id, m_client.m_infos.m_id));
                         m_client.m_infos.m_gifts.Remove(myGift);
 
                     }

@@ -18,10 +18,9 @@ namespace realm.Database.Models.Items
         public bool isTwoHands { get; set; }
 
         public string m_jet { get; set; }
-        public string m_conditions { get; set; }
+        public string m_condistr { get; set; }
 
         public List<Realm.Effects.EffectItem> m_effectsList = new List<Realm.Effects.EffectItem>();
-        public List<Realm.World.Conditions.ItemCondition> m_conds;
 
         public ItemModel()
         {
@@ -29,13 +28,10 @@ namespace realm.Database.Models.Items
             m_set = -1;
             m_jet = "";
             isTwoHands = false;
-            m_conditions = "";
             isUsable = false;
         }
 
-        public void ParseConditions()
-        {
-            m_conds = new List<Realm.World.Conditions.ItemCondition>();
-        }
+        public void ParseWeaponInfos(string _datas)
+        { }
     }
 }

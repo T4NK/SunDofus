@@ -168,7 +168,7 @@ namespace realm.Realm.Characters.Items
                 return;
             }
 
-            if (ItemsHandler.ConditionsAvaliable(item.m_base, m_client) == false || !World.ConditionsHandler.HasCondition(m_client.m_networkClient, item.m_base.m_conds))
+            if (!ItemsHandler.ConditionsAvaliable(item.m_base, m_client))
             {
                 m_client.m_networkClient.Send("Im119|44");
                 return;
@@ -388,7 +388,7 @@ namespace realm.Realm.Characters.Items
             var usable = Database.Cache.ItemsCache.m_usablesList.First(x => x.m_base == item.m_base.m_id);
             var character = CharactersManager.m_charactersList.First(x => x.m_id == charID);
 
-            if (!World.ConditionsHandler.HasCondition(m_client.m_networkClient, item.m_base.m_conds))
+            if (!ItemsHandler.ConditionsAvaliable(item.m_base, m_client))
             {
                 m_client.m_networkClient.Send("Im119|44");
                 return;

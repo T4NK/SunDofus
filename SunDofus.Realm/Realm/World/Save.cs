@@ -14,7 +14,7 @@ namespace realm.Realm.World
 
         public static void SaveChararacters()
         {
-            Network.ServersHandler.m_authLink.Send("SSM");
+            Network.ServersHandler.m_authLinks.Send("SSM");
 
             foreach (var character in Characters.CharactersManager.m_charactersList)
             {
@@ -22,7 +22,7 @@ namespace realm.Realm.World
                 System.Threading.Thread.Sleep(100);
             }
 
-            Network.ServersHandler.m_authLink.Send("STM");
+            Network.ServersHandler.m_authLinks.Send("STM");
         }
     }
 }

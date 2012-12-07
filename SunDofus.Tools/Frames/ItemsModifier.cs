@@ -12,15 +12,22 @@ namespace SunDofus.Tools.Frames
 {
     public partial class ItemsModifier : Form
     {
-        public bool isTwoHands = false;
-        public bool isTargetable = false;
+        private bool isTwoHands = false;
+        private bool isInLine = false;
 
-        int value1 { get; set; }
-        int value2 { get; set; }
+        private List<string> m_jets;
+        private List<string> m_conditions;
+
+        Class.Item m_item;
+
+        #region base
 
         public ItemsModifier()
         {
             InitializeComponent();
+
+            m_jets = new List<string>();
+            m_conditions = new List<string>();
 
             treeView1.Nodes.Add("+ Life");
             treeView1.Nodes.Add("+ Life(2)");
@@ -59,11 +66,105 @@ namespace SunDofus.Tools.Frames
             treeView1.Nodes.Add("Damages (Agility)");
             treeView1.Nodes.Add("Damages (Intelligence)");
             treeView1.Nodes.Add("Damages (Neutral)");
+
+            treeView2.Nodes.Add("Character's base of Agility >");
+            treeView2.Nodes.Add("Character's base of Agility <");
+            treeView2.Nodes.Add("Character's base of Intelligence >");
+            treeView2.Nodes.Add("Character's base of Intelligence <");
+            treeView2.Nodes.Add("Character's base of Luck >");
+            treeView2.Nodes.Add("Character's base of Luck <");
+            treeView2.Nodes.Add("Character's base of Strenght >");
+            treeView2.Nodes.Add("Character's base of Strenght <");
+            treeView2.Nodes.Add("Character's base of Life >");
+            treeView2.Nodes.Add("Character's base of Life <");
+            treeView2.Nodes.Add("Character's base of Wisdom >");
+            treeView2.Nodes.Add("Character's base of Wisdom <");
+            treeView2.Nodes.Add("Character's total of Agility >");
+            treeView2.Nodes.Add("Character's total of Agility <");
+            treeView2.Nodes.Add("Character's total of Intelligence >");
+            treeView2.Nodes.Add("Character's total of Intelligence <");
+            treeView2.Nodes.Add("Character's total of Luck >");
+            treeView2.Nodes.Add("Character's total of Luck <");
+            treeView2.Nodes.Add("Character's total of Strenght >");
+            treeView2.Nodes.Add("Character's total of Strenght <");
+            treeView2.Nodes.Add("Character's total of Life >");
+            treeView2.Nodes.Add("Character's total of Life <");
+            treeView2.Nodes.Add("Character's total of Wisdom >");
+            treeView2.Nodes.Add("Character's total of Wisdom <");
+            treeView2.Nodes.Add("Character's Class =");
+            treeView2.Nodes.Add("Character's Level >");
+            treeView2.Nodes.Add("Character's Level <");
+            treeView2.Nodes.Add("Character's Kamas >");
+            treeView2.Nodes.Add("Character's Kamas <");
+
+            m_item = new Class.Item();
+        }
+
+        public void UpdateItem()
+        {
+            if (Program.willOpen == -1)
+                return;
+
+            m_item = Class.DatabaseHandler.GetItemDB(Program.willOpen);
+
+            if (m_item == null)
+            {
+                m_item = new Class.Item();
+                return;
+            }
+
+            textBox1.Text = m_item.m_id.ToString();
+            textBox2.Text = m_item.m_name;
+
+            textBox3.Text = m_item.m_type.ToString();
+            textBox4.Text = m_item.m_level.ToString();
+            textBox5.Text = m_item.m_weight.ToString();
+
+            textBox6.Text = m_item.m_price.ToString();
+
+            textBox10.Text = m_item.m_gfxid.ToString();
+
+            if (m_item.m_costAP != -1)
+                textBox11.Text = m_item.m_costAP.ToString();
+
+            if (m_item.m_minRP != -1)
+                textBox12.Text = m_item.m_minRP.ToString();
+
+            if (m_item.m_maxRP != -1)
+                textBox13.Text = m_item.m_maxRP.ToString();
+
+            if (m_item.m_critical != -1)
+                textBox14.Text = m_item.m_critical.ToString();
+
+            if (m_item.m_fail != -1)
+                textBox15.Text = m_item.m_fail.ToString();
+
+            if (m_item.isTwohands == true)
+                checkBox1.Checked = true;
+
+            if (m_item.isInline == true)
+                checkBox3.Checked = true;
+
+            treeView3.Nodes.Clear();
+            foreach (var datas in m_item.m_jets)
+                treeView3.Nodes.Add(datas);
+
+            treeView4.Nodes.Clear();
+            foreach (var datas in m_item.m_conditions)
+                treeView4.Nodes.Add(datas);
+
+            Program.willOpen = -1;
+        }
+
+        private void me_willClose(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
 
         private void ItemsModifier_Load(object sender, EventArgs e)
         {
-            Program.m_itemsmodifier.Show();
+            Program.m_itemsModifier.Show();
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -71,22 +172,9 @@ namespace SunDofus.Tools.Frames
             isTwoHands = !isTwoHands;
         }
 
-        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-            isTargetable = !isTargetable;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                value1 = int.Parse(textBox7.Text);
-                value2 = int.Parse(textBox8.Text);
-
-                treeView3.Nodes.Add(getType(treeView1.SelectedNode.Text) + 
-                    "#" + ToHexa(value1) + "#"  + ToHexa(value2) + "#0#1d" + ((value2 + 1) - value1) + "+" + (value1 - 1));
-            }
-            catch { }
+            isInLine = !isInLine;
         }
 
         string ToHexa(int _deci)
@@ -95,6 +183,106 @@ namespace SunDofus.Tools.Frames
                 return "-1";
 
             return _deci.ToString("x");
+        }
+
+        #endregion
+
+        #region getfunction
+
+        string getConditions(string _condi)
+        {
+            switch (_condi)
+            {
+                case "Character's base of Agility >":
+                    return "Ca>" ;
+
+                case "Character's base of Agility <":
+                    return "Ca<";
+
+                case "Character's base of Intelligence >":
+                    return "Ci>";
+
+                case "Character's base of Intelligence <":
+                    return "Ci<";
+
+                case "Character's base of Luck >":
+                    return "Cc>";
+
+                case "Character's base of Luck <":
+                    return "Cc<";
+
+                case "Character's base of Strenght >":
+                    return "Cs>";
+
+                case "Character's base of Strenght <":
+                    return "Cs<";
+
+                case "Character's base of Life >":
+                    return "Cv>";
+
+                case "Character's base of Life <":
+                    return "Cv<";
+
+                case "Character's base of Wisdom >":
+                    return "Cw>";
+
+                case "Character's base of Wisdom <":
+                    return "Cw<";
+
+                case "Character's total of Agility >":
+                    return "CA>";
+
+                case "Character's total of Agility <":
+                    return "CA<";
+
+                case "Character's total of Intelligence >":
+                    return "CI>";
+
+                case "Character's total of Intelligence <":
+                    return "CI<";
+
+                case "Character's total of Luck >":
+                    return "CC>";
+
+                case "Character's total of Luck <":
+                    return "CC<";
+
+                case "Character's total of Strenght >":
+                    return "CS>";
+
+                case "Character's total of Strenght <":
+                    return "CS<";
+
+                case "Character's total of Life >":
+                    return "CV>";
+
+                case "Character's total of Life <":
+                    return "CV<";
+
+                case "Character's total of Wisdom >":
+                    return "CW>";
+
+                case "Character's total of Wisdom <":
+                    return "CW<";
+
+                case "Character's Class =":
+                    return "PG=";
+
+                case "Character's Level >":
+                    return "PL>=";
+
+                case "Character's Level <":
+                    return "PL<";
+
+                case "Character's Kamas >":
+                    return "PK>";
+
+                case "Character's Kamas <":
+                    return "PK<";
+
+                default:
+                    return "";
+            }
         }
 
         object getType(string _path)
@@ -215,13 +403,141 @@ namespace SunDofus.Tools.Frames
             }
         }
 
+        #endregion
+
+        #region button
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Stats
+                var value1 = int.Parse(textBox7.Text);
+                var value2 = int.Parse(textBox8.Text);
+
+                var jet = getType(treeView1.SelectedNode.Text) +
+                    "#" + ToHexa(value1) + "#" + ToHexa(value2) + "#0#1d" + ((value2 + 1) - value1) + "+" + (value1 - 1);
+
+                treeView3.Nodes.Add(jet);
+            }
+            catch { }
+        }
+
         private void button5_Click(object sender, EventArgs e)
         {
             try
             {
+                //Stats
                 treeView3.Nodes.Remove(treeView3.SelectedNode);
             }
             catch { }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Condi
+                var value1 = int.Parse(textBox9.Text);
+
+                treeView4.Nodes.Add(getConditions(treeView2.SelectedNode.Text) + value1);
+            }
+            catch { }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Condi
+                treeView4.Nodes.Remove(treeView4.SelectedNode);
+            }
+            catch { }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                button3.Enabled = false;
+
+                m_item.m_conditions = new List<string>();
+                m_item.m_jets = new List<string>();
+
+                foreach (TreeNode name in treeView3.Nodes)
+                    m_item.m_jets.Add(name.Text);
+
+                foreach (TreeNode name in treeView4.Nodes)
+                    m_item.m_conditions.Add(name.Text);
+
+                m_item.m_id = int.Parse(textBox1.Text);
+                m_item.m_type = int.Parse(textBox3.Text);
+
+                m_item.m_name = textBox2.Text;
+                m_item.m_level = int.Parse(textBox4.Text);
+                m_item.m_weight = int.Parse(textBox5.Text);
+                m_item.m_price = int.Parse(textBox6.Text);
+                m_item.m_gfxid = int.Parse(textBox10.Text);
+
+                //If is a Weapon
+
+                if(textBox11.Text != "")
+                    m_item.m_costAP = int.Parse(textBox11.Text);
+
+                if (textBox12.Text != "")
+                    m_item.m_minRP = int.Parse(textBox12.Text);
+
+                if (textBox13.Text != "")
+                    m_item.m_maxRP = int.Parse(textBox13.Text);
+
+                if (textBox14.Text != "")
+                    m_item.m_critical = int.Parse(textBox14.Text);
+
+                if (textBox15.Text != "")
+                    m_item.m_fail = int.Parse(textBox15.Text);
+
+                m_item.isTwohands = isTwoHands;
+                m_item.isInline = isInLine;
+
+                if (Class.DatabaseHandler.isConnected)
+                {
+                    if (m_item.isCreated == false)
+                        Class.DatabaseHandler.CreateItemDB(m_item);
+                    else if (m_item.isCreated == true)
+                        Class.DatabaseHandler.UpdateItemDB(m_item);
+                }
+                else
+                    Class.DatabaseHandler.CreateItemSQLFile(m_item);
+
+                button3.Enabled = true;
+            }
+            catch (Exception test)
+            {
+                MessageBox.Show("Error Format : " + test.ToString());
+                button3.Enabled = true;
+            }
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            textBox4.Text = "";
+            textBox5.Text = "";
+            textBox6.Text = "";
+            textBox10.Text = "";
+            textBox11.Text = "";
+            textBox12.Text = "";
+            textBox13.Text = "";
+            textBox14.Text = "";
+            textBox15.Text = "";
+
+            treeView3.Nodes.Clear();
+
+            treeView4.Nodes.Clear();
+        }
+
+        #endregion
     }
 }

@@ -21,7 +21,7 @@ namespace auth.Database.Cache
             {
                 lock (DatabaseHandler.m_locker)
                 {
-                    string sqlText = "SELECT * FROM accounts";
+                    string sqlText = "SELECT * FROM dyn_accounts";
                     MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
                     MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
@@ -53,12 +53,6 @@ namespace auth.Database.Cache
                     m_cache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
                     m_cache.Enabled = true;
                     m_cache.Elapsed += new ElapsedEventHandler(ReloadCache);
-                }
-
-                foreach (var server in Network.ServersHandler.m_syncServer.m_clients.Where(x => x.m_state == Network.Sync.SyncClient.State.OnConnected))
-                {
-                    foreach (var account in m_accounts.Where(x => x.m_level > 0))
-                        server.Send(string.Format("ANAA|{0}|{1}", account.m_username, account.m_password));
                 }
             }
             catch (Exception exception)

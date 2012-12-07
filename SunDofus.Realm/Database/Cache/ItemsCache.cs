@@ -16,7 +16,7 @@ namespace realm.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "SELECT * FROM items";
+                var sqlText = "SELECT * FROM datas_items";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
@@ -31,9 +31,9 @@ namespace realm.Database.Cache
                     item.m_type = sqlReader.GetInt16("Type");
                     item.m_level = sqlReader.GetInt16("Level");
                     item.m_jet = sqlReader.GetString("Stats");
-                    item.m_conditions = sqlReader.GetString("Conditions");
+                    item.m_condistr = sqlReader.GetString("Conditions");
 
-                    item.ParseConditions();
+                    item.ParseWeaponInfos(sqlReader.GetString("WeaponInfo"));
 
                     m_itemsList.Add(item);
                 }
@@ -48,7 +48,7 @@ namespace realm.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "SELECT * FROM items_sets";
+                var sqlText = "SELECT * FROM datas_items_sets";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
@@ -74,7 +74,7 @@ namespace realm.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "SELECT * FROM items_usables";
+                var sqlText = "SELECT * FROM datas_items_usables";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
@@ -87,9 +87,9 @@ namespace realm.Database.Cache
                     item.m_args = sqlReader.GetString("Args");
 
                     if (sqlReader.GetInt16("MustDelete") == 1)
-                        item.m_mustDelete = false;
-                    else if (sqlReader.GetInt16("MustDelete") == 0)
                         item.m_mustDelete = true;
+                    else
+                        item.m_mustDelete = false;
 
                     item.AttributeItem();
 

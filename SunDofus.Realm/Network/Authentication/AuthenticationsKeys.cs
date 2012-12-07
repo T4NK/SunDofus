@@ -5,16 +5,16 @@ using System.Text;
 
 namespace realm.Network.Authentication
 {
-    class AuthenticationKeys
+    class AuthenticationsKeys
     {
         //Static
-        public static List<AuthenticationKeys> m_keys = new List<AuthenticationKeys>();
+        public static List<AuthenticationsKeys> m_keys = new List<AuthenticationsKeys>();
 
         //Object
         public string m_key;
         public Database.Models.Clients.AccountModel m_infos;
 
-        public AuthenticationKeys(string _packet)
+        public AuthenticationsKeys(string _packet)
         {
             m_key = "";
             m_infos = new Database.Models.Clients.AccountModel();

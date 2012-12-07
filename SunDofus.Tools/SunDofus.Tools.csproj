@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SunDofus.Tools</RootNamespace>
     <AssemblyName>SunDofus.Tools</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +36,9 @@
     <ApplicationIcon>client.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\..\Assemblies\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,12 +51,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\DatabaseHandler.cs" />
     <Compile Include="Class\Item.cs" />
+    <Compile Include="Frames\Database.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frames\Database.Designer.cs">
+      <DependentUpon>Database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frames\DeleteItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frames\DeleteItem.Designer.cs">
+      <DependentUpon>DeleteItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frames\ItemsModifier.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Frames\ItemsModifier.Designer.cs">
       <DependentUpon>ItemsModifier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Frames\OpenItem.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Frames\OpenItem.Designer.cs">
+      <DependentUpon>OpenItem.cs</DependentUpon>
     </Compile>
     <Compile Include="MainFrame.cs">
       <SubType>Form</SubType>
@@ -62,6 +85,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Frames\Database.resx">
+      <DependentUpon>Database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frames\DeleteItem.resx">
+      <DependentUpon>DeleteItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Frames\OpenItem.resx">
+      <DependentUpon>OpenItem.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainFrame.resx">
       <DependentUpon>MainFrame.cs</DependentUpon>
     </EmbeddedResource>
@@ -76,6 +108,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -92,6 +125,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="client.ico" />
+    <None Include="Resources\cancel24.png" />
+    <None Include="Resources\Accept24.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

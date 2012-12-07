@@ -53,10 +53,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\Cache\AuthsCache.cs" />
     <Compile Include="Database\Cache\LevelsCache.cs" />
+    <Compile Include="Database\Models\Clients\AuthClientModel.cs" />
     <Compile Include="Database\Models\Levels\LevelModel.cs" />
-    <Compile Include="Network\Editors\EditorClient.cs" />
-    <Compile Include="Network\Editors\EditorServer.cs" />
+    <Compile Include="Network\Authentication\AuthenticationClient.cs" />
     <Compile Include="Network\Realms\RealmClient.cs" />
     <Compile Include="Network\Realms\RealmCommand.cs" />
     <Compile Include="Database\Models\Clients\GiftModel.cs" />
@@ -69,8 +70,8 @@
     <Compile Include="Database\Cache\TriggersCache.cs" />
     <Compile Include="Database\DatabaseHandler.cs" />
     <Compile Include="Network\Realms\RealmServer.cs" />
-    <Compile Include="Network\Authentication\AuthenticationKeys.cs" />
-    <Compile Include="Network\Authentication\AuthenticationLink.cs" />
+    <Compile Include="Network\Authentication\AuthenticationsKeys.cs" />
+    <Compile Include="Network\Authentication\AuthenticationsLinks.cs" />
     <Compile Include="Network\ServersHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

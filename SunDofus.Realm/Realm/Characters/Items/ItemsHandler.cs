@@ -24,7 +24,7 @@ namespace realm.Realm.Characters.Items
 
         public static bool ConditionsAvaliable(ItemModel _item, Character _character)
         {
-            var condi = _item.m_conditions;
+            var condi = _item.m_condistr;
             var avaliable = false;
 
             if (condi == "")

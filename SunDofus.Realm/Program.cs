@@ -31,6 +31,8 @@ namespace realm
 
             Database.Cache.CharactersCache.LoadCharacters();
 
+            Database.Cache.AuthsCache.ReloadAuths();
+
             Network.ServersHandler.InitialiseServers();
 
             while(true)

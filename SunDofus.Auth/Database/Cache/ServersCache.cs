@@ -21,7 +21,7 @@ namespace auth.Database.Cache
             {
                 lock (DatabaseHandler.m_locker)
                 {
-                    string sqlText = "SELECT * FROM servers";
+                    string sqlText = "SELECT * FROM dyn_realms";
                     MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
                     MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 

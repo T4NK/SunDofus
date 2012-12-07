@@ -12,23 +12,17 @@ namespace realm.Database.Models.Maps
         public int m_width { get; set; }
         public int m_height { get; set; }
         public int m_capabilities { get; set; }
-        public int m_groupmaxsize { get; set; }
-        public int m_numgroup { get; set; }
         public int m_PosX { get; set; }
         public int m_PosY { get; set; }
 
         public string m_mapData { get; set; }
         public string m_key { get; set; }
-        public string m_cells { get; set; }
         public string m_mappos { get; set; }
-        public string m_monsters { get; set; }
 
         public MapModel()
         {
             m_mapData = "";
             m_key = "";
-            m_cells = "";
-            m_monsters = "";
             m_mappos = "";
         }
 

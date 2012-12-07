@@ -42,20 +42,21 @@ namespace realm.Utilities
             m_config.InsertElement("Database_Server", "localhost");
             m_config.InsertElement("Database_User", "root");
             m_config.InsertElement("Database_Pass", "");
-            m_config.InsertElement("Database_Name", "sundofus");
+            m_config.InsertElement("Database_Name", "realm_sundofus");
 
-            //AuthServer & RealmServer & EditorServer
+            //AuthServer & RealmServer
             m_config.InsertElement("AuthIp", "127.0.0.1");
             m_config.InsertElement("AuthPort", "486");
             m_config.InsertElement("ServerId", "6");
             m_config.InsertElement("ServerIp", "127.0.0.1");
             m_config.InsertElement("ServerPort", "5555");
-            m_config.InsertElement("EditorIp", "127.0.0.1");
-            m_config.InsertElement("EditorPort", "487");
 
             //ChatSpam
             m_config.InsertElement("AntiSpamTrade", "60000");
             m_config.InsertElement("AntiSpamRecruitment", "60000");
+
+            //Cache
+            m_config.InsertElement("TimeReloadAuths", "60000");
 
         #region Start
 

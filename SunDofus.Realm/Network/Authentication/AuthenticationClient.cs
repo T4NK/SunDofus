@@ -7,13 +7,10 @@ using System.Timers;
 
 namespace realm.Network.Authentication
 {
-    class AuthenticationLink : SunDofus.Network.TCPClient
+    class AuthenticationClient : SunDofus.Network.TCPClient
     {
-        Timer m_timer;
-        bool  isLogged = false;
-        object m_packetLocker;
-
-        public AuthenticationLink() : base (new SilverSocket())
+        public AuthenticationClient(Database.Models.Clients.AuthClientModel _model)
+            : base(new SilverSocket())
         {
             this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
             this.ReceivedDatas += new ReceiveDatasHandler(this.DatasArrival);
@@ -25,11 +22,17 @@ namespace realm.Network.Authentication
             m_timer.Elapsed += new ElapsedEventHandler(this.TimeElapsed);
 
             m_packetLocker = new object();
+            m_model = _model;
         }
+
+        public Database.Models.Clients.AuthClientModel m_model { get; set; }
+        Timer m_timer { get; set; }
+        bool  isLogged = false;
+        object m_packetLocker { get; set; }
 
         public void Start()
         {
-            this.ConnectTo(Utilities.Config.m_config.GetStringElement("AuthIp"), Utilities.Config.m_config.GetIntElement("AuthPort"));
+            this.ConnectTo(m_model.m_ip, m_model.m_port);
         }
 
         public void Send(string _message, bool _force = false)
@@ -74,17 +77,9 @@ namespace realm.Network.Authentication
             {
                 switch (infos[0])
                 {
-                    case "ANAA":
-
-                        if (!ServersHandler.adminAccount.ContainsKey(infos[1]))
-                            ServersHandler.adminAccount.Add(infos[1], infos[2]);
-                        else
-                            ServersHandler.adminAccount[infos[1]] = infos[2];
-                        break;
-
                     case "ANTS":
 
-                        AuthenticationKeys.m_keys.Add(new AuthenticationKeys(_datas));
+                        AuthenticationsKeys.m_keys.Add(new AuthenticationsKeys(_datas));
                         break;
 
                     case "HCS":
@@ -98,6 +93,11 @@ namespace realm.Network.Authentication
 
                         isLogged = true;
                         Utilities.Loggers.m_infosLogger.Write("Connected with the @AuthenticationServer@ !");
+
+                        if (ServersHandler.m_realmServer.m_pseudoclients.Count > 0)
+                        {
+                            Send(string.Format("SNLC|{0}", string.Join("|", ServersHandler.m_realmServer.m_pseudoclients)));
+                        }
                         break;
                 }
             }

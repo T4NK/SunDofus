@@ -52,7 +52,7 @@ namespace auth.Utilities
             m_config.InsertElement("Database_Server", "localhost");
             m_config.InsertElement("Database_User", "root");
             m_config.InsertElement("Database_Pass", "");
-            m_config.InsertElement("Database_Name", "sundofus");
+            m_config.InsertElement("Database_Name", "auth_sundofus");
 
             //Cache
             m_config.InsertElement("Time_Accounts_Reload", "60000");

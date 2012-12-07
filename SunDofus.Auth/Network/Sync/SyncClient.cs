@@ -93,12 +93,14 @@ namespace auth.Network.Sync
 
                     case "SNC":
                         //Sync New Connected
-                        m_server.m_clients.Add(packet[1]);
+                        if(!m_server.m_clients.Contains(packet[1]))
+                            m_server.m_clients.Add(packet[1]);
                         break;
 
                     case "SND":
                         //Sync New Disconnected 
-                        m_server.m_clients.Remove(packet[1]);                     
+                        if (m_server.m_clients.Contains(packet[1]))
+                            m_server.m_clients.Remove(packet[1]);                     
                         break;
 
                     case "SNDG":
@@ -108,6 +110,14 @@ namespace auth.Network.Sync
 
                     case "SNLC":
                         //Sync New List Connected
+                        foreach (var pseudo in packet)
+                        {
+                            if (pseudo == packet[0])
+                                continue;
+                            
+                            if (!m_server.m_clients.Contains(pseudo))
+                                m_server.m_clients.Add(pseudo);
+                        }
                         break;
 
                     case "SSM":

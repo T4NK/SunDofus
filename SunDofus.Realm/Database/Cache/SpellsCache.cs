@@ -15,7 +15,7 @@ namespace realm.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "SELECT * FROM spells";
+                var sqlText = "SELECT * FROM datas_spells";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
@@ -44,7 +44,7 @@ namespace realm.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "SELECT * FROM spells_learn";
+                var sqlText = "SELECT * FROM datas_spells_learn";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 MySqlDataReader sqlReader = sqlCommand.ExecuteReader();

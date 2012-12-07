@@ -8,8 +8,13 @@ namespace SunDofus.Tools
 {
     static class Program
     {
+        public static int willOpen = -1;
+
         private static MainFrame m_mainFrame;
-        public static Frames.ItemsModifier m_itemsmodifier;
+        public static Frames.ItemsModifier m_itemsModifier;
+        public static Frames.Database m_databaseHandler;
+        public static Frames.DeleteItem m_itemDeleter;
+        public static Frames.OpenItem m_itemOpener;
 
         [STAThread]
         static void Main()
@@ -18,7 +23,10 @@ namespace SunDofus.Tools
             Application.SetCompatibleTextRenderingDefault(false);
 
             m_mainFrame = new MainFrame();
-            m_itemsmodifier = new Frames.ItemsModifier();
+            m_itemsModifier = new Frames.ItemsModifier();
+            m_databaseHandler = new Frames.Database();
+            m_itemDeleter = new Frames.DeleteItem();
+            m_itemOpener = new Frames.OpenItem();
 
             Application.Run(m_mainFrame);
         }

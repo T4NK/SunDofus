@@ -100,7 +100,7 @@ namespace realm.Network.Realms
 
             if (isAuth == true)
             {
-                Network.ServersHandler.m_authLink.Send(string.Format("SND|{0}", m_infos.m_pseudo));
+                Network.ServersHandler.m_authLinks.Send(string.Format("SND|{0}", m_infos.m_pseudo));
 
                 if (m_player != null)
                 {
