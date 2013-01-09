@@ -48,7 +48,10 @@ namespace realm.Network.Realms
             foreach (var name in m_infos.m_characters)
             {
                 if (!realm.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_name == name))
+                {
+                    Network.ServersHandler.m_authLinks.Send(string.Format("SDAC|{0}|{1}", m_infos.m_id, name));
                     continue;
+                }
 
                 var character = realm.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_name == name);
                 m_characters.Add(character);

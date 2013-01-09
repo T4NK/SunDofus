@@ -8,13 +8,13 @@ namespace SunDofus.Network
 {
     public class TCPClient
     {
-        SilverSocket m_socket { get; set; }
+        private SilverSocket m_socket { get; set; }
         public bool isConnected = false;
 
         protected delegate void DisconnectedSocketHandler();
         protected DisconnectedSocketHandler DisconnectedSocket;
 
-        void OnDisconnectedSocket()
+        private void OnDisconnectedSocket()
         {
             var evnt = DisconnectedSocket;
             if (evnt != null)
@@ -24,7 +24,7 @@ namespace SunDofus.Network
         protected delegate void ReceiveDatasHandler(string _message);
         protected ReceiveDatasHandler ReceivedDatas;
 
-        void OnReceivedDatas(string _message)
+        private void OnReceivedDatas(string _message)
         {
             var evnt = ReceivedDatas;
             if (evnt != null)
@@ -34,7 +34,7 @@ namespace SunDofus.Network
         protected delegate void ConnectFailedHandler(Exception _exception);
         protected ConnectFailedHandler ConnectFailed;
 
-        void OnConnectFailed(Exception _exception)
+        private void OnConnectFailed(Exception _exception)
         {
             var evnt = ConnectFailed;
             if (evnt != null)
@@ -78,7 +78,7 @@ namespace SunDofus.Network
 
         #region toEvent
 
-        void DatasArrival(byte[] _datas)
+        private void DatasArrival(byte[] _datas)
         {
             var notParsed = Encoding.ASCII.GetString(_datas);
 
@@ -91,17 +91,17 @@ namespace SunDofus.Network
             }
         }
 
-        void Connected()
+        private void Connected()
         {
             isConnected = true;
         }
 
-        void FailedToConnect(Exception e)
+        private void FailedToConnect(Exception e)
         {
             OnConnectFailed(e);
         }
 
-        void Disconnected()
+        private void Disconnected()
         {
             isConnected = false;
 

@@ -28,6 +28,11 @@ namespace realm.Realm.Maps
             m_startDir = _startDir;
         }
 
+        public void UpdatePath(string _path)
+        {
+            m_strPath = _path;
+        }
+
         public string GetStartPath
         {
             get
@@ -144,13 +149,9 @@ namespace realm.Realm.Maps
             var lenght = 0;
 
             if (InLine(_lastCell, toCell))
-            {
                 lenght = GetEstimateDistanceBetween(_lastCell, toCell);
-            }
             else
-            {
                 lenght = int.Parse(Math.Truncate((GetEstimateDistanceBetween(_lastCell, toCell) / 1.4)).ToString());
-            }
 
             var backCell = _lastCell;
             var actuelCell = _lastCell;
@@ -175,8 +176,10 @@ namespace realm.Realm.Maps
                 var actualCell = m_strPath.Substring(i, 3);
                 var lineData = RemakeLine(lastCell, actualCell, newCell).Split(',');
                 newPath += lineData[0];
+
                 if (lineData[1] == null)
                     return newPath;
+
                 lastCell = GetCellNum(actualCell.Substring(1));
             }
 

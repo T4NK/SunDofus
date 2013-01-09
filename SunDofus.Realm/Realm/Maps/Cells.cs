@@ -19,12 +19,12 @@ namespace realm.Realm.Maps
 
         }
 
-        public static bool isValidCell(Characters.Character _character, string _path)
+        public static bool isValidCell(int _cell, string _path)
         {
             if (_path.Length == 0) return false;
             if ((_path.Length % 3) != 0) return false;
 
-            var lastCell = _character.m_mapCell;
+            var lastCell = _cell;
 
             for (var i = 0; i <= _path.Length - 1; i += 3)
             {

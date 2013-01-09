@@ -46,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Network\AbstractClient.cs" />
-    <Compile Include="Network\AbstractServer.cs" />
+    <Compile Include="Network\TCPClient.cs" />
+    <Compile Include="Network\TCPServer.cs" />
     <Compile Include="Settings\Configuration.cs" />
     <Compile Include="Interface\Logger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

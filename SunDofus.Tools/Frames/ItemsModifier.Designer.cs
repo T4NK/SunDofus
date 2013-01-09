@@ -80,6 +80,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label14 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBox16 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -104,6 +106,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.textBox16);
+            this.groupBox1.Controls.Add(this.label21);
             this.groupBox1.Controls.Add(this.groupBox4);
             this.groupBox1.Controls.Add(this.textBox10);
             this.groupBox1.Controls.Add(this.label15);
@@ -121,7 +125,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(374, 200);
+            this.groupBox1.Size = new System.Drawing.Size(374, 274);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General";
@@ -359,7 +363,7 @@
             this.groupBox2.Controls.Add(this.treeView1);
             this.groupBox2.Location = new System.Drawing.Point(392, 14);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(339, 381);
+            this.groupBox2.Size = new System.Drawing.Size(339, 455);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Stats";
@@ -387,7 +391,7 @@
             // 
             this.treeView3.Location = new System.Drawing.Point(9, 173);
             this.treeView3.Name = "treeView3";
-            this.treeView3.Size = new System.Drawing.Size(143, 200);
+            this.treeView3.Size = new System.Drawing.Size(143, 274);
             this.treeView3.TabIndex = 7;
             // 
             // label9
@@ -445,7 +449,7 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(158, 46);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(175, 327);
+            this.treeView1.Size = new System.Drawing.Size(175, 401);
             this.treeView1.TabIndex = 0;
             // 
             // groupBox3
@@ -458,7 +462,7 @@
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.treeView2);
-            this.groupBox3.Location = new System.Drawing.Point(12, 218);
+            this.groupBox3.Location = new System.Drawing.Point(12, 292);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(374, 177);
             this.groupBox3.TabIndex = 4;
@@ -535,7 +539,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 401);
+            this.button3.Location = new System.Drawing.Point(12, 475);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 29);
             this.button3.TabIndex = 5;
@@ -546,7 +550,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(564, 409);
+            this.label14.Location = new System.Drawing.Point(570, 491);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(167, 13);
             this.label14.TabIndex = 7;
@@ -554,7 +558,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(93, 401);
+            this.button4.Location = new System.Drawing.Point(93, 475);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(86, 29);
             this.button4.TabIndex = 8;
@@ -562,11 +566,28 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click_1);
             // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(20, 198);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(66, 13);
+            this.label21.TabIndex = 17;
+            this.label21.Text = "Description :";
+            // 
+            // textBox16
+            // 
+            this.textBox16.Location = new System.Drawing.Point(92, 195);
+            this.textBox16.Multiline = true;
+            this.textBox16.Name = "textBox16";
+            this.textBox16.Size = new System.Drawing.Size(260, 67);
+            this.textBox16.TabIndex = 18;
+            // 
             // ItemsModifier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(743, 436);
+            this.ClientSize = new System.Drawing.Size(749, 511);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.button3);
@@ -645,5 +666,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.TextBox textBox16;
+        private System.Windows.Forms.Label label21;
     }
 }

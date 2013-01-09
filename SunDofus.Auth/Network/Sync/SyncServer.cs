@@ -20,7 +20,7 @@ namespace auth.Network.Sync
             this.ListeningServerFailed += new ListeningServerFailedHandler(this.OnListeningFailedServer);
         }
 
-        void OnAcceptedClient(SilverSocket _socket)
+        private void OnAcceptedClient(SilverSocket _socket)
         {
             if (_socket == null) return;
             Utilities.Loggers.m_infosLogger.Write(string.Format("New inputted sync connection @<{0}>@ !", _socket.IP));
@@ -29,12 +29,12 @@ namespace auth.Network.Sync
                 m_clients.Add(new SyncClient(_socket));
         }
 
-        void OnListeningServer(string _remote)
+        private void OnListeningServer(string _remote)
         {
             Utilities.Loggers.m_statusLogger.Write(string.Format("@SyncServer@ starded on <{0}> !", _remote));
         }
 
-        void OnListeningFailedServer(Exception _exception)
+        private void OnListeningFailedServer(Exception _exception)
         {
             Utilities.Loggers.m_errorsLogger.Write(string.Format("@SyncServer@ can't start : {0}", _exception.ToString()));
         }

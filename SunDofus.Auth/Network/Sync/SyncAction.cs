@@ -8,20 +8,27 @@ namespace auth.Network.Sync
 {
     class SyncAction
     {
-        public static void UpdateCharacters(int _compteID, string _characters, int _serverID)
+        public static void UpdateCharacters(int _compteID, string _character, int _serverID, bool _add = true)
         {
             try
             {
-                var account = Database.Cache.AccountsCache.m_accounts.First(x => x.m_id == _compteID);
-                account.ParseCharacter(_characters);
+                lock(Database.DatabaseHandler.m_locker)
+                {
+                    var account = Database.Cache.AccountsCache.m_accounts.First(x => x.m_id == _compteID);
 
-                var sqlText = "UPDATE accounts SET characters=@Characters WHERE Id=@id";
-                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
+                    if(_add)
+                        account.m_characters[_serverID].Add(_character);
+                    else
+                        account.m_characters[_serverID].Remove(_character);
 
-                sqlCommand.Parameters.Add(new MySqlParameter("@id", _compteID));
-                sqlCommand.Parameters.Add(new MySqlParameter("@Characters", _characters));
+                    var sqlText = "UPDATE dyn_accounts SET characters=@Characters WHERE Id=@id";
+                    var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
 
-                sqlCommand.ExecuteNonQuery();
+                    sqlCommand.Parameters.Add(new MySqlParameter("@id", _compteID));
+                    sqlCommand.Parameters.Add(new MySqlParameter("@Characters", account.CharactersSaveString()));
+
+                    sqlCommand.ExecuteNonQuery();
+                }
             }
             catch (Exception e)
             {
@@ -33,14 +40,17 @@ namespace auth.Network.Sync
         {
             try
             {
-                Database.Cache.GiftsCache.m_gifts.Remove(Database.Cache.GiftsCache.m_gifts.First(x => x.m_id == _giftID && x.m_target == _compteID));
+                lock (Database.DatabaseHandler.m_locker)
+                {
+                    Database.Cache.GiftsCache.m_gifts.Remove(Database.Cache.GiftsCache.m_gifts.First(x => x.m_id == _giftID && x.m_target == _compteID));
 
-                var sqlText = "DELETE FROM gifts WHERE id=@id";
-                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
+                    var sqlText = "DELETE FROM dyn_gifts WHERE id=@id";
+                    var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
 
-                sqlCommand.Parameters.Add(new MySqlParameter("@id", _giftID));
+                    sqlCommand.Parameters.Add(new MySqlParameter("@id", _giftID));
 
-                sqlCommand.ExecuteNonQuery();
+                    sqlCommand.ExecuteNonQuery();
+                }
             }
             catch (Exception e)
             {

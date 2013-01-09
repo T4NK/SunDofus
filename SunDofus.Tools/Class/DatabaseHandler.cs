@@ -57,7 +57,7 @@ namespace SunDofus.Tools.Class
                     var weaponInfos = _item.m_costAP + ";" + _item.m_minRP + ";" + _item.m_maxRP + ";" + _item.m_critical + ";" + _item.m_fail + ";" +
                         (_item.isTwohands ? "true" : "false") + ";" + (_item.isInline ? "true" : "false") + ";" + (_item.isTwohands ? "true" : "false");
 
-                    var sqlText = "INSERT INTO datas_items VALUES(@id, @name, @type, @level, @weight, @infos, @price, @condi, @jet, @gfx)";
+                    var sqlText = "INSERT INTO datas_items VALUES(@id, @name, @type, @level, @weight, @infos, @price, @condi, @jet, @gfx, @descri)";
 
                     var sqlCommand = new MySqlCommand(sqlText, m_connection);
                     MySqlParameterCollection parametersCollec = sqlCommand.Parameters;
@@ -72,6 +72,7 @@ namespace SunDofus.Tools.Class
                     parametersCollec.Add(new MySqlParameter("@condi", condistr));
                     parametersCollec.Add(new MySqlParameter("@jet", jetstr));
                     parametersCollec.Add(new MySqlParameter("@gfx", _item.m_gfxid));
+                    parametersCollec.Add(new MySqlParameter("@descri", _item.m_description));
 
                     sqlCommand.ExecuteNonQuery();
 
@@ -133,6 +134,8 @@ namespace SunDofus.Tools.Class
                     item.m_weight = sqlResult.GetInt32("Weight");
 
                     item.m_gfxid = sqlResult.GetInt32("GfxID");
+
+                    item.m_description = sqlResult.GetString("Description");
 
                     var weaponDatas = sqlResult.GetString("WeaponInfo").Split(';');
                     if(weaponDatas.Length > 1)
@@ -204,8 +207,8 @@ namespace SunDofus.Tools.Class
                 (_item.isTwohands ? "true" : "false") + ";" + (_item.isInline ? "true" : "false") + ";" + (_item.isTwohands ? "true" : "false");
 
             m_writer.WriteLine("DELETE FROM datas_items WHERE ID='{0}';", _item.m_id);
-            m_writer.WriteLine("INSERT INTO datas_items VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');",
-                _item.m_id, _item.m_name, _item.m_type, _item.m_level, _item.m_weight, weaponInfos, _item.m_price, condistr, jetstr, _item.m_gfxid);
+            m_writer.WriteLine("INSERT INTO datas_items VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}');",
+                _item.m_id, _item.m_name, _item.m_type, _item.m_level, _item.m_weight, weaponInfos, _item.m_price, condistr, jetstr, _item.m_gfxid, _item.m_description);
         }
     }
 }

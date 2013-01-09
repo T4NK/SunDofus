@@ -124,6 +124,8 @@ namespace SunDofus.Tools.Frames
 
             textBox10.Text = m_item.m_gfxid.ToString();
 
+            textBox16.Text = m_item.m_description;
+
             if (m_item.m_costAP != -1)
                 textBox11.Text = m_item.m_costAP.ToString();
 
@@ -478,6 +480,8 @@ namespace SunDofus.Tools.Frames
                 m_item.m_weight = int.Parse(textBox5.Text);
                 m_item.m_price = int.Parse(textBox6.Text);
                 m_item.m_gfxid = int.Parse(textBox10.Text);
+
+                m_item.m_description = textBox16.Text;
 
                 //If is a Weapon
 

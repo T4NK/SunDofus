@@ -8,7 +8,7 @@ namespace SunDofus.Settings
 {
     public class Configuration
     {
-        Dictionary<string, string> m_elements;
+        private Dictionary<string, string> m_elements;
 
         public Configuration()
         {
@@ -23,13 +23,11 @@ namespace SunDofus.Settings
             {
                 var Line = reader.ReadLine();
 
-                if (Line.Contains("#")) 
-                    continue;
-                if (Line == "") 
+                if (!Line.Contains("$")) 
                     continue;
 
-                var lineInfos = Line.Split(' ');
-                m_elements.Add(lineInfos[0], lineInfos[1].Replace(";", ""));
+                var lineInfos = Line.Substring(1).Split(' ');
+                m_elements.Add(lineInfos[0], lineInfos[1].Substring(0, lineInfos[1].Length - 1));
             }
         }
 

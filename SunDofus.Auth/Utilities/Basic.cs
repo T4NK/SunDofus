@@ -7,8 +7,8 @@ namespace auth.Utilities
 {
     class Basic
     {
-        static Random m_randomizer = new Random();
-        public static object m_locker = new object();
+        private static Random m_randomizer = new Random();
+        public static object m_consoleLocker = new object();
 
         private static char[] HASH = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',

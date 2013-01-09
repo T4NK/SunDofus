@@ -87,8 +87,10 @@ namespace realm.Network.Realms
 
                 m_client.isAuth = true;
 
+                Network.Authentication.AuthenticationsKeys.m_keys.Remove(key);
+
                 Network.ServersHandler.m_authLinks.Send(string.Format("SNC|{0}", m_client.m_infos.m_pseudo));
-                ServersHandler.m_realmServer.m_pseudoclients.Add(m_client.m_infos.m_pseudo);
+                ServersHandler.m_realmServer.m_pseudoClients.Add(m_client.m_infos.m_pseudo);
 
                 m_client.Send("ATK0");
             }
@@ -228,7 +230,7 @@ namespace realm.Network.Realms
                     CharactersManager.m_charactersList.Add(character);
                     m_client.m_characters.Add(character);
 
-                    Network.ServersHandler.m_authLinks.Send(string.Format("SNAC|{0}|{1}", m_client.m_infos.m_id, m_client.m_infos.AddNewCharacterToAccount(character.m_name)));
+                    Network.ServersHandler.m_authLinks.Send(string.Format("SNAC|{0}|{1}", m_client.m_infos.m_id, character.m_name));
 
                     m_client.Send("TB");
                     m_client.Send("AAK");
@@ -263,7 +265,7 @@ namespace realm.Network.Realms
             CharactersManager.m_charactersList.Remove(character);
             m_client.m_characters.Remove(character);
 
-            Network.ServersHandler.m_authLinks.Send(string.Format("SDAC|{0}|{1}", m_client.m_infos.m_id, m_client.m_infos.RemoveCharacterToAccount(character.m_name)));
+            Network.ServersHandler.m_authLinks.Send(string.Format("SDAC|{0}|{1}", m_client.m_infos.m_id, character.m_name));
             Database.Cache.CharactersCache.DeleteCharacter(character.m_name);
 
             SendCharacterList("");
@@ -474,7 +476,7 @@ namespace realm.Network.Realms
         {
             var packet = _datas.Substring(3);
 
-            if (!Cells.isValidCell(m_client.m_player, packet) == true)
+            if (!Cells.isValidCell(m_client.m_player.m_mapCell, packet) == true)
             {
                 m_client.Send("GA;0");
                 return;

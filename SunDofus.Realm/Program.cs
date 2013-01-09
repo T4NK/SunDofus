@@ -28,6 +28,7 @@ namespace realm
 
             Database.Cache.MapsCache.LoadMaps();
             Database.Cache.TriggersCache.LoadTriggers();
+            Database.Cache.NoPlayerCharacterCache.LoadNPCs();
 
             Database.Cache.CharactersCache.LoadCharacters();
 

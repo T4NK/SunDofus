@@ -39,13 +39,10 @@ namespace realm.Database.Models.Clients
             if (m_strcharacters == "") 
                 return;
 
-            var infos = m_strcharacters.Split(':');
-            foreach (var datas in infos)
+            foreach (var datas in m_strcharacters.Split(','))
             {
-                var characterDatas = datas.Split(',');
-
-                if (!m_characters.Contains(characterDatas[0]) && Utilities.Config.m_config.GetIntElement("ServerId") == int.Parse(characterDatas[1]))
-                    m_characters.Add(characterDatas[0]);
+                if (!m_characters.Contains(datas))
+                    m_characters.Add(datas);
             }
         }
 
@@ -55,6 +52,7 @@ namespace realm.Database.Models.Clients
                 return;
 
             var infos = m_strgifts.Split('+');
+
             foreach (var datas in infos)
             {
                 var giftDatas = datas.Split('~');
@@ -67,32 +65,6 @@ namespace realm.Database.Models.Clients
 
                 m_gifts.Add(gift);
             }
-        }
-
-        public string AddNewCharacterToAccount(string _name)
-        {
-            if (m_strcharacters == "")
-                m_strcharacters = string.Format("{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId"));
-            else
-                m_strcharacters += string.Format(":{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId"));
-
-            m_characters.Add(_name);
-            return m_strcharacters;
-        }
-
-        public string RemoveCharacterToAccount(string _name)
-        {
-            if (m_strcharacters == (string.Format("{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId"))))
-                m_strcharacters = m_strcharacters.Replace(string.Format("{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId")), "");
-
-            else if (m_strcharacters.StartsWith(string.Format("{0},{1}:", _name, Utilities.Config.m_config.GetIntElement("ServerId"))))
-                m_strcharacters = m_strcharacters.Replace(string.Format("{0},{1}:", _name, Utilities.Config.m_config.GetIntElement("ServerId")), "");
-
-            else
-                m_strcharacters = m_strcharacters.Replace(string.Format(":{0},{1}", _name, Utilities.Config.m_config.GetIntElement("ServerId")), "");
-
-            m_characters.Remove(_name);
-            return m_strcharacters;
         }
     }
 }

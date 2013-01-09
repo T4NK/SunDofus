@@ -13,15 +13,13 @@ namespace auth.Utilities
 
         public static void LoadConfiguration()
         {
-            try
+            if (!File.Exists("SunAuth.conf"))
+                throw new Exception("Configuration file doesn't exist !");
+
+            m_config = new Configuration();
             {
-                m_config = new Configuration();
                 m_config.LoadConfiguration("SunAuth.conf");
                 AddDefaultsParameters();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
             }
         }
 
@@ -62,6 +60,7 @@ namespace auth.Utilities
 
             //Queue
             m_config.InsertElement("Max_Clients_inQueue", "50");
+            m_config.InsertElement("Client_Per_QueueRefresh", "10");
             m_config.InsertElement("Time_Queue_Reload", "2000");
 
             //Subscription

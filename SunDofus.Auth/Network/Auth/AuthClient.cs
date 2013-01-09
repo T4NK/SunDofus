@@ -14,7 +14,7 @@ namespace auth.Network.Auth
 
         public State m_state { get; set; }
         public AccountModel m_account { get; set; }
-        object m_packetLocker { get; set; }
+        private object m_packetLocker { get; set; }
 
         public AuthClient(SilverSocket _socket) : base(_socket)
         {
@@ -48,6 +48,7 @@ namespace auth.Network.Auth
         {
             var packet = string.Format("AH{0}",
                 string.Join("|", Database.Cache.ServersCache.m_servers));
+
             Send(packet);
         }
 
@@ -60,7 +61,7 @@ namespace auth.Network.Auth
             None,
         }
 
-        void Disconnected()
+        private void Disconnected()
         {
             Utilities.Loggers.m_infosLogger.Write(string.Format("New closed client connection @<{0}>@ !", this.myIp()));
 
@@ -68,7 +69,7 @@ namespace auth.Network.Auth
                 ServersHandler.m_authServer.m_clients.Remove(this);
         }
 
-        void PacketReceived(string _datas)
+        private void PacketReceived(string _datas)
         {
             Utilities.Loggers.m_infosLogger.Write(string.Format("Receive from client @<{0}>@ : [{1}]", this.myIp(), _datas));
 
@@ -76,7 +77,7 @@ namespace auth.Network.Auth
                 Parse(_datas);
         }
 
-        void Parse(string _datas)
+        private void Parse(string _datas)
         {
             try
             {
@@ -109,7 +110,7 @@ namespace auth.Network.Auth
             }
         }
 
-        void CheckVersion(string _datas)
+        private void CheckVersion(string _datas)
         {
             if (_datas.Contains(Utilities.Config.m_config.GetStringElement("Login_Version")))
                 m_state = State.OnCheckAccount;
@@ -122,7 +123,7 @@ namespace auth.Network.Auth
             }
         }
 
-        void CheckAccount(string _datas)
+        private void CheckAccount(string _datas)
         {
             if (!_datas.Contains("#1"))
                 return;
@@ -140,7 +141,7 @@ namespace auth.Network.Auth
 
                 SendInformations();
 
-                if (AuthQueue.m_clients.Count == 0)
+                if (!AuthQueue.MustAdd())
                 {
                     SendInformations();
                     m_state = State.OnServerList;
@@ -154,7 +155,6 @@ namespace auth.Network.Auth
                 else
                 {
                     AuthQueue.AddinQueue(this);
-                    Send(string.Format("Af{0}|{1}|0|1", (m_waitPosition - AuthQueue.m_confirmed), (AuthQueue.m_clients.Count >= 2 ? AuthQueue.m_clients.Count : 2)));
                     m_state = State.OnQueue;
                 }
             }
@@ -165,13 +165,13 @@ namespace auth.Network.Auth
             }
         }
 
-        void CheckQueue()
+        private void CheckQueue()
         {
             if(m_state == State.OnQueue)
                 Send(string.Format("Aq{0}|{1}|0|1", (m_waitPosition - AuthQueue.m_confirmed), (AuthQueue.m_clients.Count >= 2 ? AuthQueue.m_clients.Count : 2)));
         }
 
-        void CheckServerPacket(string _datas)
+        private void CheckServerPacket(string _datas)
         {
             var packet = "";
 
@@ -195,16 +195,16 @@ namespace auth.Network.Auth
 
                 case "X":
 
-                    var id = int.Parse(_datas.Replace("AX", ""));
+                    var id = int.Parse(_datas.Substring(2));
 
                     if (ServersHandler.m_syncServer.m_clients.Any(x => x.m_server.m_id == id))
                     {
                         var server = ServersHandler.m_syncServer.m_clients.First(x => x.m_server.m_id == id);
                         var key = Utilities.Basic.RandomString(16);
 
-                        packet = string.Format("AYK{0}:{1};{2}", server.m_server.m_ip, server.m_server.m_port, key);
-
                         server.SendTicket(key, this);
+                        
+                        packet = string.Format("AYK{0}:{1};{2}", server.m_server.m_ip, server.m_server.m_port, key);
                         Send(packet);
                     }
 
@@ -212,9 +212,7 @@ namespace auth.Network.Auth
 
                 case "F":
 
-                    var pseudo = _datas.Replace("AF", "");
-
-                    packet = string.Format("AF{0}", Database.Cache.ServersCache.m_servers.First(x => x.m_clients.Contains(pseudo)));
+                    packet = string.Format("AF{0}", Database.Cache.ServersCache.m_servers.First(x => x.m_clients.Contains(_datas.Substring(2))));
                     Send(packet);
 
                     return;

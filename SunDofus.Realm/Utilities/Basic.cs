@@ -31,7 +31,6 @@ namespace realm.Utilities
         public static string RandomName()
         {
             var name = "";
-
             name += GetConsonants();
             name += GetVowels();
             name += GetVowels();

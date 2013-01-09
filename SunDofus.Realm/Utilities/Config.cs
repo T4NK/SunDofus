@@ -15,8 +15,10 @@ namespace realm.Utilities
             try
             {
                 m_config = new Configuration();
-                m_config.LoadConfiguration("SunRealm.conf");
-                AddDefaultsParameters();
+                {
+                    m_config.LoadConfiguration("SunRealm.conf");
+                    AddDefaultsParameters();
+                }
             }
             catch (Exception e)
             {

@@ -22,13 +22,7 @@ namespace auth.Network.Auth
             AuthQueue.Start();
         }
 
-        public void RefreshAllHosts()
-        {
-            foreach (var client in m_clients)
-                client.RefreshHosts();
-        }
-
-        void OnAcceptedClient(SilverSocket _socket)
+        private void OnAcceptedClient(SilverSocket _socket)
         {
             if (_socket == null) 
                 return;
@@ -39,12 +33,12 @@ namespace auth.Network.Auth
                 m_clients.Add(new AuthClient(_socket));
         }
 
-        void OnListeningServer(string _remote)
+        private void OnListeningServer(string _remote)
         {
             Utilities.Loggers.m_statusLogger.Write(string.Format("@RealmServer@ starded on <{0}> !", _remote));
         }
 
-        void OnListeningFailedServer(Exception _exception)
+        private void OnListeningFailedServer(Exception _exception)
         {
             Utilities.Loggers.m_errorsLogger.Write(string.Format("@RealmServer@ can't start : {0}", _exception.ToString()));
         }

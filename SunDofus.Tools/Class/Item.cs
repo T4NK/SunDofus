@@ -16,6 +16,7 @@ namespace SunDofus.Tools.Class
         public int m_gfxid { get; set; }
 
         public string m_name { get; set; }
+        public string m_description { get; set; }
 
         public bool isCreated { get; set; }
 

@@ -8,13 +8,13 @@ namespace SunDofus.Network
 {
     public class TCPServer
     {
-        SilverServer m_server { get; set; }
-        string m_remote { get; set; }
+        private SilverServer m_server { get; set; }
+        private string m_remote { get; set; }
 
         protected delegate void AcceptSocketHandler(SilverSocket _socket);
         protected AcceptSocketHandler SocketClientAccepted;
 
-        void OnSocketClientAccepted(SilverSocket _socket)
+        private void OnSocketClientAccepted(SilverSocket _socket)
         {
             var evnt = SocketClientAccepted;
             if (evnt != null)
@@ -24,7 +24,7 @@ namespace SunDofus.Network
         protected delegate void ListeningServerHandler(string _remote);
         protected ListeningServerHandler ListeningServer;
 
-        void OnListeningServer(string _remote)
+        private void OnListeningServer(string _remote)
         {
             var evnt = ListeningServer;
             if (evnt != null)
@@ -34,7 +34,7 @@ namespace SunDofus.Network
         protected delegate void ListeningServerFailedHandler(Exception e);
         protected ListeningServerFailedHandler ListeningServerFailed;
 
-        void OnListeningServerFailed(Exception _exception)
+        private void OnListeningServerFailed(Exception _exception)
         {
             var evnt = ListeningServerFailed;
             if (evnt != null)
@@ -46,9 +46,11 @@ namespace SunDofus.Network
             m_remote = string.Format("{0}:{1}", ip, port);
 
             m_server = new SilverServer(ip, port);
-            m_server.OnAcceptSocketEvent += new SilverEvents.AcceptSocket(this.AcceptSocket);
-            m_server.OnListeningEvent += new SilverEvents.Listening(this.OnListen);
-            m_server.OnListeningFailedEvent += new SilverEvents.ListeningFailed(this.OnListenFailed);
+            {
+                m_server.OnAcceptSocketEvent += new SilverEvents.AcceptSocket(this.AcceptSocket);
+                m_server.OnListeningEvent += new SilverEvents.Listening(this.OnListen);
+                m_server.OnListeningFailedEvent += new SilverEvents.ListeningFailed(this.OnListenFailed);
+            }
         }
 
         public void Start()
@@ -56,17 +58,17 @@ namespace SunDofus.Network
             m_server.WaitConnection();
         }
 
-        void AcceptSocket(SilverSocket _socket)
+        private void AcceptSocket(SilverSocket _socket)
         {
             OnSocketClientAccepted(_socket);
         }
 
-        void OnListen()
+        private void OnListen()
         {
             OnListeningServer(m_remote);
         }
 
-        void OnListenFailed(Exception exception)
+        private void OnListenFailed(Exception exception)
         {
             OnListeningServerFailed(exception);
         }

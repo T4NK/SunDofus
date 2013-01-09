@@ -94,9 +94,9 @@ namespace realm.Network.Authentication
                         isLogged = true;
                         Utilities.Loggers.m_infosLogger.Write("Connected with the @AuthenticationServer@ !");
 
-                        if (ServersHandler.m_realmServer.m_pseudoclients.Count > 0)
+                        if (ServersHandler.m_realmServer.m_pseudoClients.Count > 0)
                         {
-                            Send(string.Format("SNLC|{0}", string.Join("|", ServersHandler.m_realmServer.m_pseudoclients)));
+                            Send(string.Format("SNLC|{0}", string.Join("|", ServersHandler.m_realmServer.m_pseudoClients)));
                         }
                         break;
                 }

@@ -17,7 +17,6 @@ namespace auth.Database.Models
         public string m_pseudo { get; set; }
         public string m_question { get; set; }
         public string m_answer { get; set; }
-        public string m_charstr { get; set; }
 
         public DateTime m_subscriptionDate;
         public Dictionary<int, List<string>> m_characters;
@@ -28,17 +27,16 @@ namespace auth.Database.Models
             m_characters = new Dictionary<int, List<string>>();
         }
 
-        public void ParseCharacter(string _basestr)
+        public void ParseCharacter(string m_charstr)
         {
-            if (_basestr == "")
+            if (m_charstr == "")
             {
                 m_characters = new Dictionary<int, List<string>>();
                 return;
             }
 
-            m_charstr = _basestr;
             var dico = new Dictionary<int, List<string>>();
-            var datas = _basestr.Split(':');
+            var datas = m_charstr.Split(':');
 
             foreach (var infos in datas)
             {
@@ -65,6 +63,22 @@ namespace auth.Database.Models
                 return 31536000000;
 
             return (long)time;
+        }
+
+        public string CharactersSaveString()
+        {
+            var str = "";
+
+            foreach (var i in m_characters.Keys)
+            {
+                if (m_characters[i].Count < 1)
+                    continue;
+
+                foreach (var character in m_characters[i])
+                    str += string.Format("{0},{1}:", character, i);
+            }
+
+            return (str == "" ? str : str.Substring(0, str.Length - 1));
         }
     }
 }

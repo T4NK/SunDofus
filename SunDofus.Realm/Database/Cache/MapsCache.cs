@@ -35,8 +35,6 @@ namespace realm.Database.Cache
                     map.ParsePos();
 
                     m_mapsList.Add(new Realm.Maps.Map(map));
-
-                    Utilities.Loggers.m_infosLogger.Write(string.Format("Loaded map @{0}@ !", map.m_id));
                 }
 
                 sqlReader.Close();

@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using auth.Utilities;
+using auth.Database;
+using auth.Database.Cache;
+using auth.Network;
 
 namespace auth
 {
@@ -11,19 +15,25 @@ namespace auth
         {
             Console.Title = "SunDofus.Auth | Shaak [c]";
 
-            Utilities.Config.LoadConfiguration();
-            Utilities.Loggers.InitialiseLoggers();
+            try
+            {
+                Config.LoadConfiguration();
+                Loggers.InitialiseLoggers();
 
-            Database.DatabaseHandler.InitialiseConnection();
-            Database.Cache.ServersCache.ReloadCache();
+                DatabaseHandler.InitialiseConnection();
 
-            Network.ServersHandler.InitialiseServers();
+                GiftsCache.ReloadCache();
+                AccountsCache.ReloadCache();
+                ServersCache.ReloadCache();
 
-            Database.Cache.GiftsCache.ReloadCache();
-            Database.Cache.AccountsCache.ReloadCache();
+                ServersHandler.InitialiseServers();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
 
-            while (true)
-                Console.ReadLine();
+            Console.ReadLine();
         }
     }
 }

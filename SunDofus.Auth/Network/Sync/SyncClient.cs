@@ -9,7 +9,7 @@ namespace auth.Network.Sync
 {
     class SyncClient : SunDofus.Network.TCPClient
     {
-        public State m_state { get; set; }
+        private State m_state { get; set; }
         public ServerModel m_server { get; set; }
 
         object m_packetLocker;
@@ -30,17 +30,18 @@ namespace auth.Network.Sync
         public void SendTicket(string _key, Auth.AuthClient _client)
         {
             var Builder = new StringBuilder();
-
-            Builder.Append("ANTS|");
-            Builder.Append(_key).Append("|");
-            Builder.Append(_client.m_account.m_id).Append("|");
-            Builder.Append(_client.m_account.m_pseudo).Append("|");
-            Builder.Append(_client.m_account.m_question).Append("|");
-            Builder.Append(_client.m_account.m_answer).Append("|");
-            Builder.Append(_client.m_account.m_level).Append("|");
-            Builder.Append(_client.m_account.m_charstr).Append("|");
-            Builder.Append(_client.m_account.GetSubscriptionTime()).Append("|");
-            Builder.Append(string.Join("+", Database.Cache.GiftsCache.m_gifts.Where(x => x.m_target == _client.m_account.m_id)));
+            {
+                Builder.Append("ANTS|");
+                Builder.Append(_key).Append("|");
+                Builder.Append(_client.m_account.m_id).Append("|");
+                Builder.Append(_client.m_account.m_pseudo).Append("|");
+                Builder.Append(_client.m_account.m_question).Append("|");
+                Builder.Append(_client.m_account.m_answer).Append("|");
+                Builder.Append(_client.m_account.m_level).Append("|");
+                Builder.Append(string.Join(",", _client.m_account.m_characters[m_server.m_id].ToArray())).Append("|");
+                Builder.Append(_client.m_account.GetSubscriptionTime()).Append("|");
+                Builder.Append(string.Join("+", Database.Cache.GiftsCache.m_gifts.Where(x => x.m_target == _client.m_account.m_id)));
+            }
 
             Send(Builder.ToString());
         }
@@ -51,7 +52,7 @@ namespace auth.Network.Sync
             Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), _message));
         }
 
-        void PacketsReceived(string _datas)
+        private void PacketsReceived(string _datas)
         {
             Utilities.Loggers.m_infosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), _datas));
 
@@ -59,7 +60,7 @@ namespace auth.Network.Sync
                 Parse(_datas);
         }
 
-        void Disconnected()
+        private void Disconnected()
         {
             ChangeState(State.OnDisconnected);
             Utilities.Loggers.m_infosLogger.Write(string.Format("New closed sync connection @<{0}>@ !", this.myIp()));
@@ -68,7 +69,7 @@ namespace auth.Network.Sync
                 ServersHandler.m_syncServer.m_clients.Remove(this);
         }
 
-        void Parse(string _datas)
+        private void Parse(string _datas)
         {
             try
             {
@@ -83,7 +84,7 @@ namespace auth.Network.Sync
 
                     case "SDAC":
                         //Sync Deleted Account Character
-                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], m_server.m_id);  
+                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], m_server.m_id, false);  
                         break;
 
                     case "SNAC":
@@ -110,14 +111,7 @@ namespace auth.Network.Sync
 
                     case "SNLC":
                         //Sync New List Connected
-                        foreach (var pseudo in packet)
-                        {
-                            if (pseudo == packet[0])
-                                continue;
-                            
-                            if (!m_server.m_clients.Contains(pseudo))
-                                m_server.m_clients.Add(pseudo);
-                        }
+                        ParseListConnected(_datas);
                         break;
 
                     case "SSM":
@@ -137,7 +131,7 @@ namespace auth.Network.Sync
             }
         }
 
-        void Authentication(int _serverId, string _serverIp, int _serverPort)
+        private void Authentication(int _serverId, string _serverIp, int _serverPort)
         {
             if (Database.Cache.ServersCache.m_servers.Any(x => x.m_id == _serverId && x.m_ip == _serverIp && x.m_port == _serverPort && x.m_state == 0))
             {
@@ -160,7 +154,7 @@ namespace auth.Network.Sync
                 Disconnect();
         }
 
-        void ChangeState(State _state)
+        private void ChangeState(State _state)
         {
             this.m_state = _state;
 
@@ -184,10 +178,21 @@ namespace auth.Network.Sync
                     break;
             }
 
-            ServersHandler.m_authServer.RefreshAllHosts();
+            ServersHandler.m_authServer.m_clients.ForEach(x => x.RefreshHosts());
         }
 
-        public enum State
+        private void ParseListConnected(string _datas)
+        {
+            var packet = _datas.Substring(5).Split('|');
+
+            foreach (var pseudo in packet)
+            {
+                if (!m_server.m_clients.Contains(pseudo))
+                    m_server.m_clients.Add(pseudo);
+            }
+        }
+
+        private enum State
         {
             OnAuthentication,
             OnConnected,
