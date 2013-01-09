@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Assemblies\SunDofus.Auth\</OutputPath>
+    <OutputPath>..\..\Assemblies\DofusOrigin.Auth\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -40,7 +40,10 @@
     <ApplicationIcon>System.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data, Version=6.3.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 6.3.7\Assemblies\v4.0\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="SilverSock">
       <HintPath>..\..\..\..\..\..\Library\SilverSock.dll</HintPath>
     </Reference>
@@ -77,18 +80,17 @@
     <Content Include="System.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SunDofus\DofusOrigin.Library.csproj">
-      <Project>{D4D38385-8752-40E3-A782-892227F5E7AC}</Project>
-      <Name>DofusOrigin.Library</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="SunAuth.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DofusOrigin.Library\DofusOrigin.Library.csproj">
+      <Project>{d4d38385-8752-40e3-a782-892227f5e7ac}</Project>
+      <Name>DofusOrigin.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
