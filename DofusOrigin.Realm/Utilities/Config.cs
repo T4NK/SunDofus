@@ -16,7 +16,7 @@ namespace realm.Utilities
             {
                 m_config = new Configuration();
                 {
-                    m_config.LoadConfiguration("SunRealm.conf");
+                    m_config.LoadConfiguration("DofusOrigin.conf");
                     AddDefaultsParameters();
                 }
             }
@@ -44,7 +44,7 @@ namespace realm.Utilities
             m_config.InsertElement("Database_Server", "localhost");
             m_config.InsertElement("Database_User", "root");
             m_config.InsertElement("Database_Pass", "");
-            m_config.InsertElement("Database_Name", "realm_sundofus");
+            m_config.InsertElement("Database_Name", "dofusorigin_realm");
 
             //AuthServer & RealmServer
             m_config.InsertElement("AuthIp", "127.0.0.1");

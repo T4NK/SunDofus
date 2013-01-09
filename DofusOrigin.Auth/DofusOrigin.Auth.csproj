@@ -37,7 +37,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>System.ico</ApplicationIcon>
+    <ApplicationIcon>origin-icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data, Version=6.3.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
@@ -77,11 +77,12 @@
     <Compile Include="Utilities\Loggers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="origin-icon.ico" />
     <Content Include="System.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="SunAuth.conf">
+    <None Include="DofusOrigin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

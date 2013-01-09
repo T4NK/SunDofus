@@ -13,12 +13,12 @@ namespace auth.Utilities
 
         public static void LoadConfiguration()
         {
-            if (!File.Exists("SunAuth.conf"))
+            if (!File.Exists("DofusOrigin.conf"))
                 throw new Exception("Configuration file doesn't exist !");
 
             m_config = new Configuration();
             {
-                m_config.LoadConfiguration("SunAuth.conf");
+                m_config.LoadConfiguration("DofusOrigin.conf");
                 AddDefaultsParameters();
             }
         }
@@ -50,7 +50,7 @@ namespace auth.Utilities
             m_config.InsertElement("Database_Server", "localhost");
             m_config.InsertElement("Database_User", "root");
             m_config.InsertElement("Database_Pass", "");
-            m_config.InsertElement("Database_Name", "auth_sundofus");
+            m_config.InsertElement("Database_Name", "dofusorigin_auth");
 
             //Cache
             m_config.InsertElement("Time_Accounts_Reload", "60000");

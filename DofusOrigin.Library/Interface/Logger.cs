@@ -34,7 +34,7 @@ namespace DofusOrigin.Interface
             if (!Directory.Exists("logs"))
                 Directory.CreateDirectory("logs");
 
-            m_writer = new StreamWriter(string.Format("logs/SunDofus {0} - {1}.log", m_name, 
+            m_writer = new StreamWriter(string.Format("logs/DofusOrigin {0} - {1}.log", m_name, 
                 DateTime.Now.ToString().Replace("/", "_").Split(' ')[0]));
             m_writer.AutoFlush = true;
         }
@@ -47,7 +47,7 @@ namespace DofusOrigin.Interface
                 {
                     Console.ForegroundColor = my_color;
 
-                    Console.Write(">> ");
+                    Console.Write("{0} >> ", DateTime.Now.ToString());
 
                     foreach (char c in _message)
                     {
