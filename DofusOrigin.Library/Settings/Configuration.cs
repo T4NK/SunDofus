@@ -29,6 +29,8 @@ namespace DofusOrigin.Settings
                 var lineInfos = Line.Substring(1).Split(' ');
                 m_elements.Add(lineInfos[0], lineInfos[1].Substring(0, lineInfos[1].Length - 1));
             }
+
+            reader.Close();
         }
 
         public void InsertElement(string _key, string _value)

@@ -42,26 +42,22 @@ namespace DofusOrigin.Network.Auth
                 return;
 
             var count = 0;
-            var rest = 0;
 
             foreach (var client in m_clients.Keys)
             {
-                if (count <= Utilities.Config.m_config.GetIntElement("Client_Per_QueueRefresh"))
+                if (count < Utilities.Config.m_config.GetIntElement("Client_Per_QueueRefresh"))
                 {
                     count++;
 
                     client.CheckAccount();
-                    client.SendInformations();
                     toDelete.Add(client);
-                }
-                else
-                {
-                    rest++;
-                    client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);
                 }
             }
 
             toDelete.ForEach(x => m_clients.Remove(x));
+
+            foreach (var client in m_clients.Keys)
+                client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);
 
             Utilities.Loggers.m_infosLogger.Write("@Queue@ refreshed !");
         }

@@ -27,6 +27,11 @@ namespace DofusOrigin.Utilities
             return str;
         }
 
+        public static long GetActualTime()
+        {
+            return (long)DateTime.Now.Subtract(DateTime.Now).TotalMilliseconds;
+        }
+
         public static string Encrypt(string _password, string _key)
         {
             var _Crypted = "1";

@@ -106,7 +106,7 @@ namespace DofusOrigin.Network.Auth
                     {
                         case "f":
 
-                            Send(string.Format("Af{0}|{1}|0|1", (m_waitPosition), (AuthQueue.m_clients.Count >= 2 ? AuthQueue.m_clients.Count : 2)));
+                            Send(string.Format("Af{0}|{1}|0|1", (m_waitPosition), (AuthQueue.m_clients.Count > 2 ? AuthQueue.m_clients.Count : 3)));
                             return;
 
                         case "F":
