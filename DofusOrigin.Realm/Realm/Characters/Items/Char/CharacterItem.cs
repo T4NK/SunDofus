@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Database.Models.Items;
+using DofusOrigin.Database.Models.Items;
 
-namespace realm.Realm.Characters.Items
+namespace DofusOrigin.Realm.Characters.Items
 {
     class CharacterItem
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Realm.Characters.Items
+namespace DofusOrigin.Realm.Characters.Items
 {
     class InventaryItems
     {

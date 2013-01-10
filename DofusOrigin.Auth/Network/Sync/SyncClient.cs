@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SilverSock;
-using auth.Database.Models;
+using DofusOrigin.Database.Models;
 
-namespace auth.Network.Sync
+namespace DofusOrigin.Network.Sync
 {
     class SyncClient : DofusOrigin.Network.TCPClient
     {

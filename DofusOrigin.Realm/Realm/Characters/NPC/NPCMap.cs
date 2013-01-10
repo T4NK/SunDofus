@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Timers;
 
-namespace realm.Realm.Characters.NPC
+namespace DofusOrigin.Realm.Characters.NPC
 {
     class NPCMap
     {

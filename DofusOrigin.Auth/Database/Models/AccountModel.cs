@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 
-namespace auth.Database.Models
+namespace DofusOrigin.Database.Models
 {
     class AccountModel
     {

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DofusOrigin.Tools
+namespace DofusOrigin
 {
     public partial class MainFrame : Form
     {
@@ -37,12 +37,12 @@ namespace DofusOrigin.Tools
         {
             if (Class.DatabaseHandler.isConnected == true)
             {
-                pictureBox2.BackgroundImage = DofusOrigin.Tools.Properties.Resources.Accept24;
+                pictureBox2.BackgroundImage = DofusOrigin.Properties.Resources.Accept24;
                 label2.Text = "Connected !";
             }
             else
             {
-                pictureBox2.BackgroundImage = DofusOrigin.Tools.Properties.Resources.cancel24;
+                pictureBox2.BackgroundImage = DofusOrigin.Properties.Resources.cancel24;
                 label2.Text = "Not connected !";
             }
         }

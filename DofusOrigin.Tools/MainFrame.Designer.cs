@@ -1,4 +1,4 @@
-﻿namespace DofusOrigin.Tools
+﻿namespace DofusOrigin
 {
     partial class MainFrame
     {

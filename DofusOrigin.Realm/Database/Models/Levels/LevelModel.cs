@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Database.Models.Levels
+namespace DofusOrigin.Database.Models.Levels
 {
     class LevelModel
     {

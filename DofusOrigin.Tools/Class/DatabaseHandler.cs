@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 
-namespace DofusOrigin.Tools.Class
+namespace DofusOrigin.Class
 {
     class DatabaseHandler
     {

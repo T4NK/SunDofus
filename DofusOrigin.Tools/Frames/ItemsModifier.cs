@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace DofusOrigin.Tools.Frames
+namespace DofusOrigin.Frames
 {
     public partial class ItemsModifier : Form
     {

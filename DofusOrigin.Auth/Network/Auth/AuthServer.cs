@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 
-namespace auth.Network.Auth
+namespace DofusOrigin.Network.Auth
 {
     class AuthServer : DofusOrigin.Network.TCPServer
     {

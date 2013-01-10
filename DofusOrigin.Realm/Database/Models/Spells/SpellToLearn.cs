@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Database.Models.Spells
+namespace DofusOrigin.Database.Models.Spells
 {
     class SpellToLearnModel
     {

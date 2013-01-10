@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm.Characters;
+using DofusOrigin.Realm.Characters;
 
-namespace realm.Realm.World
+namespace DofusOrigin.Realm.World
 {
     class Chat
     {

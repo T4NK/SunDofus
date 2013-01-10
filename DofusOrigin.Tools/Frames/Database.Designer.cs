@@ -1,4 +1,4 @@
-﻿namespace DofusOrigin.Tools.Frames
+﻿namespace DofusOrigin.Frames
 {
     partial class Database
     {

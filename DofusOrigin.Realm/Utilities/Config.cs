@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using DofusOrigin.Settings;
 
-namespace realm.Utilities
+namespace DofusOrigin.Utilities
 {
     class Config
     {

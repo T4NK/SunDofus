@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DofusOrigin;
-using realm.Realm.Characters.Stats;
-using realm.Realm.Characters.Spells;
-using realm.Realm.Characters.Items;
-using realm.Network.Realms;
+using DofusOrigin.Realm.Characters.Stats;
+using DofusOrigin.Realm.Characters.Spells;
+using DofusOrigin.Realm.Characters.Items;
+using DofusOrigin.Network.Realms;
 
-namespace realm.Realm.Characters
+namespace DofusOrigin.Realm.Characters
 {
     class Character
     {

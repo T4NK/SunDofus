@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm.Characters;
-using realm.Realm.Maps;
-using realm.Realm.Characters.Stats;
-using realm.Realm;
-using realm.Realm.World;
+using DofusOrigin.Realm.Characters;
+using DofusOrigin.Realm.Maps;
+using DofusOrigin.Realm.Characters.Stats;
+using DofusOrigin.Realm;
+using DofusOrigin.Realm.World;
 
-namespace realm.Network.Realms
+namespace DofusOrigin.Network.Realms
 {
     class RealmParser
     {
@@ -118,7 +118,7 @@ namespace realm.Network.Realms
 
             if (m_client.m_infos.m_characters.Count != 0)
             {
-                foreach (realm.Realm.Characters.Character m_C in m_client.m_characters)
+                foreach (DofusOrigin.Realm.Characters.Character m_C in m_client.m_characters)
                     packet += string.Format("|{0}", m_C.PatternList());
             }
 
@@ -511,8 +511,8 @@ namespace realm.Network.Realms
                         {
                             var trigger = m_client.m_player.GetMap().m_triggers.First(x => x.m_cellID == m_client.m_player.m_mapCell);
 
-                            if (realm.Realm.World.ConditionsHandler.HasCondition(m_client, trigger.m_conds))
-                                realm.Realm.Effects.EffectAction.ParseEffect(m_client.m_player,trigger.m_actionID, trigger.m_args);
+                            if (DofusOrigin.Realm.World.ConditionsHandler.HasCondition(m_client, trigger.m_conds))
+                                DofusOrigin.Realm.Effects.EffectAction.ParseEffect(m_client.m_player,trigger.m_actionID, trigger.m_args);
                             else
                                 m_client.SendMessage("Vous ne possédez pas les conditions nécessaires pour cette action !");
                         }

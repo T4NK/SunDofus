@@ -8,7 +8,7 @@
     <ProjectGuid>{E8C7EBFF-C6EB-429D-B299-E4D319324CC2}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>realm</RootNamespace>
+    <RootNamespace>DofusOrigin</RootNamespace>
     <AssemblyName>DofusOrigin.Realm</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -119,10 +119,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="2-Games.ico" />
+    <Content Include="CHANGELOG_REALM.txt" />
     <Content Include="origin.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="DofusOrigin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

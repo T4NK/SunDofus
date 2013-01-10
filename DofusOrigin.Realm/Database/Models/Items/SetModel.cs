@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm.Effects;
+using DofusOrigin.Realm.Effects;
 
-namespace realm.Database.Models.Items
+namespace DofusOrigin.Database.Models.Items
 {
     class SetModel
     {

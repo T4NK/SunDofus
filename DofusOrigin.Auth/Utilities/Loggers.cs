@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using DofusOrigin.Interface;
 
-namespace auth.Utilities
+namespace DofusOrigin.Utilities
 {
     class Loggers
     {

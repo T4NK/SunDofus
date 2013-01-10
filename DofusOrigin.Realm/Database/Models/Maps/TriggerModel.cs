@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm.World.Conditions;
+using DofusOrigin.Realm.World.Conditions;
 
-namespace realm.Database.Models.Maps
+namespace DofusOrigin.Database.Models.Maps
 {
     class TriggerModel
     {

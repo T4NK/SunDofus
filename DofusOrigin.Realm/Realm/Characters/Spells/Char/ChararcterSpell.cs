@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Realm.Characters.Spells
+namespace DofusOrigin.Realm.Characters.Spells
 {
     class CharacterSpell
     {

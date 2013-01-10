@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Realm.Characters
+namespace DofusOrigin.Realm.Characters
 {
     class CharacterState
     {

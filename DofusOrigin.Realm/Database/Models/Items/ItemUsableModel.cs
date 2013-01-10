@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm;
-using realm.Realm.Characters;
+using DofusOrigin.Realm;
+using DofusOrigin.Realm.Characters;
 
-namespace realm.Database.Models.Items
+namespace DofusOrigin.Database.Models.Items
 {
     class ItemUsableModel
     {

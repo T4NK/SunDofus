@@ -7,7 +7,7 @@
     <ProjectGuid>{EF7DA1BD-3667-4BCB-A62A-73EC4AC25BA1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DofusOrigin.Tools</RootNamespace>
+    <RootNamespace>DofusOrigin</RootNamespace>
     <AssemblyName>DofusOrigin.Tools</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -119,9 +119,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="client.ico" />

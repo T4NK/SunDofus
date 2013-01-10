@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Network.Realms
+namespace DofusOrigin.Network.Realms
 {
     class RealmCommand
     {
@@ -73,22 +73,22 @@ namespace realm.Network.Realms
             {
                 if (_datas.Length <= 1)
                 {
-                    realm.Realm.World.Save.SaveWorld();
+                    DofusOrigin.Realm.World.Save.SaveWorld();
                     return;
                 }
 
                 switch (_datas[1])
                 {
                     case "all":
-                        realm.Realm.World.Save.SaveWorld();
+                        DofusOrigin.Realm.World.Save.SaveWorld();
                         break;
 
                     case "char":
-                        realm.Realm.World.Save.SaveChararacters();
+                        DofusOrigin.Realm.World.Save.SaveChararacters();
                         break;
 
                     default:
-                        realm.Realm.World.Save.SaveWorld();
+                        DofusOrigin.Realm.World.Save.SaveWorld();
                         break;
                 }
             }

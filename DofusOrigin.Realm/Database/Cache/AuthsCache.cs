@@ -5,7 +5,7 @@ using System.Text;
 using System.Timers;
 using MySql.Data.MySqlClient;
 
-namespace realm.Database.Cache
+namespace DofusOrigin.Database.Cache
 {
     class AuthsCache
     {

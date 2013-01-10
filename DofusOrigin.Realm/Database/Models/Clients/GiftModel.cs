@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm.Characters.Items;
+using DofusOrigin.Realm.Characters.Items;
 
-namespace realm.Database.Models.Clients
+namespace DofusOrigin.Database.Models.Clients
 {
     class GiftModel
     {

@@ -5,7 +5,7 @@ using System.Text;
 using SilverSock;
 using System.Timers;
 
-namespace realm.Network.Authentication
+namespace DofusOrigin.Network.Authentication
 {
     class AuthenticationsLinks
     {

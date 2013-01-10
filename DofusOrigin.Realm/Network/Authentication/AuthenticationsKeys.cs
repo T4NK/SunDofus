@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Network.Authentication
+namespace DofusOrigin.Network.Authentication
 {
     class AuthenticationsKeys
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using realm.Realm.Characters.Spells;
+using DofusOrigin.Realm.Characters.Spells;
 
-namespace realm.Database.Models.Spells
+namespace DofusOrigin.Database.Models.Spells
 {
     class SpellLevelModel
     {

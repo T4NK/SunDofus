@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace auth.Database.Models
+namespace DofusOrigin.Database.Models
 {
     class GiftModel
     {

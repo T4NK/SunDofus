@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using DofusOrigin.Settings;
 
-namespace auth.Utilities
+namespace DofusOrigin.Utilities
 {
     class Config
     {

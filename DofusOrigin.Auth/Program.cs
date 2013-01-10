@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using auth.Utilities;
-using auth.Database;
-using auth.Database.Cache;
-using auth.Network;
+using DofusOrigin.Utilities;
+using DofusOrigin.Database;
+using DofusOrigin.Database.Cache;
+using DofusOrigin.Network;
 
-namespace auth
+namespace DofusOrigin
 {
     class Program
     {

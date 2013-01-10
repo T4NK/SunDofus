@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 
-namespace realm.Database.Cache
+namespace DofusOrigin.Database.Cache
 {
     class CharactersCache
     {

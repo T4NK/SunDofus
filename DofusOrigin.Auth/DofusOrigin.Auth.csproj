@@ -8,7 +8,7 @@
     <ProjectGuid>{C1DBF4D7-B4F3-4941-969C-3078F936954C}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>auth</RootNamespace>
+    <RootNamespace>DofusOrigin</RootNamespace>
     <AssemblyName>DofusOrigin.Auth</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -77,11 +77,11 @@
     <Compile Include="Utilities\Loggers.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CHANGELOG_AUTH.txt" />
     <Content Include="origin-icon.ico" />
     <Content Include="System.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="DofusOrigin.conf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

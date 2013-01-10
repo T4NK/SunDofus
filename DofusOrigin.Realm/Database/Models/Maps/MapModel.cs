@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace realm.Database.Models.Maps
+namespace DofusOrigin.Database.Models.Maps
 {
     class MapModel
     {
