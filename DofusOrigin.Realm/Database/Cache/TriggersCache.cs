@@ -33,8 +33,6 @@ namespace DofusOrigin.Database.Cache
 
                     m_triggersList.Add(trigger);
                     ParseTrigger(trigger);
-
-                    Utilities.Loggers.m_infosLogger.Write(string.Format("Loaded trigger @{0}:{1}@ !", trigger.m_mapID, trigger.m_cellID));
                 }
 
                 sqlReader.Close();

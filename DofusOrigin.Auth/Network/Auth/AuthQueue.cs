@@ -15,6 +15,7 @@ namespace DofusOrigin.Network.Auth
         public static void Start()
         {
             m_clients = new Dictionary<AuthClient, int>();
+            toDelete = new List<AuthClient>();
 
             m_timer = new Timer();
             {
@@ -29,7 +30,7 @@ namespace DofusOrigin.Network.Auth
 
         public static void AddinQueue(AuthClient _client)
         {
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Add @{0}@ in queue !", _client.m_account.m_pseudo));
+            Utilities.Loggers.m_infosLogger.Write(string.Format("Add @{0}@ in queue !", _client.myIp()));
 
             m_clients.Add(_client, m_clients.Count + 1);
             _client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);

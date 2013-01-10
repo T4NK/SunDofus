@@ -59,10 +59,13 @@ namespace DofusOrigin.Database.Cache
                         npc.m_dir = int.Parse(infosMap[2]);
                         npc.mustMove = bool.Parse(infosMap[3]);
 
-                        npc.m_idOnMap = MapsCache.m_mapsList.First(x => x.m_map.m_id == npc.m_mapid).NextNpcID();
-                        MapsCache.m_mapsList.First(x => x.m_map.m_id == npc.m_mapid).m_npcs.Add(npc);
+                        if (MapsCache.m_mapsList.Any(x => x.m_map.m_id == npc.m_mapid))
+                        {
+                            npc.m_idOnMap = MapsCache.m_mapsList.First(x => x.m_map.m_id == npc.m_mapid).NextNpcID();
+                            MapsCache.m_mapsList.First(x => x.m_map.m_id == npc.m_mapid).m_npcs.Add(npc);
 
-                        npc.StartMove();
+                            npc.StartMove();
+                        }
                     }
 
                     m_npcList.Add(npc);
