@@ -55,6 +55,7 @@ namespace DofusOrigin.Network.Auth
             }
 
             toDelete.ForEach(x => m_clients.Remove(x));
+            toDelete.Clear();
 
             foreach (var client in m_clients.Keys)
                 client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);

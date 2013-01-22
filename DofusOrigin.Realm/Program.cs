@@ -26,6 +26,9 @@ namespace DofusOrigin
             Database.Cache.SpellsCache.LoadSpells();
             Database.Cache.SpellsCache.LoadSpellsToLearn();
 
+            Database.Cache.MonstersCache.LoadMonsters();
+            Database.Cache.MonstersCache.LoadMonstersLevels();
+
             Database.Cache.MapsCache.LoadMaps();
             Database.Cache.TriggersCache.LoadTriggers();
             Database.Cache.NoPlayerCharacterCache.LoadNPCs();
