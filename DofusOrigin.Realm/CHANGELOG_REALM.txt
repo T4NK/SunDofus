@@ -1,2 +1,5 @@
 ﻿[10.01.2013] Suppression du mode débug des triggers
 [10.01.2013] Rectification d'une faille sur la map d'un NPC si elle n'éxitait pas
+[23.01.2013] Ajout de la file d'attente du serveur de jeu
+[23.01.2013] Ajout des monstres (affichage + déplacements auto)
+[23.01.2013] Rectification des PNJ et des monstres qui marchaient sur les cases non marchables

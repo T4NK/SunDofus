@@ -106,9 +106,9 @@
     <Compile Include="Realm\Effects\EffectAction.cs" />
     <Compile Include="Realm\Effects\EffectItem.cs" />
     <Compile Include="Realm\Effects\EffectSpell.cs" />
-    <Compile Include="Realm\Maps\Cells.cs" />
     <Compile Include="Database\Models\Maps\MapModel.cs" />
     <Compile Include="Realm\Maps\Map.cs" />
+    <Compile Include="Realm\Maps\Monsters\Monster.cs" />
     <Compile Include="Realm\Maps\Monsters\MonsterIA.cs" />
     <Compile Include="Realm\Maps\Monsters\MonstersGroup.cs" />
     <Compile Include="Realm\Maps\Pathfinding.cs" />

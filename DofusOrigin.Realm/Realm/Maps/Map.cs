@@ -11,6 +11,7 @@ namespace DofusOrigin.Realm.Maps
         public List<Database.Models.Maps.TriggerModel> m_triggers { get; set; }
         public List<Characters.NPC.NPCMap> m_npcs { get; set; }
         public List<Monsters.MonstersGroup> m_groups { get; set; }
+        public List<int> m_rushablesCells { get; set; }
 
         public Database.Models.Maps.MapModel m_map { get; set; }
 
@@ -18,10 +19,23 @@ namespace DofusOrigin.Realm.Maps
         {
             m_map = _map;
 
+            m_rushablesCells = UncompressDatas();
+
             m_characters = new List<Characters.Character>();
             m_triggers = new List<Database.Models.Maps.TriggerModel>();
             m_npcs = new List<Characters.NPC.NPCMap>();
             m_groups = new List<Monsters.MonstersGroup>();
+
+            if (m_map.m_monsters.Count == 0)
+                return;
+
+            RefreshAllMonsters();
+        }
+
+        private void RefreshAllMonsters()
+        {
+            for (int i = 1; i <= m_map.maxMonstersGroup; i++)
+                AddMonstersGroup();
         }
 
         public void AddMonstersGroup()
@@ -35,9 +49,7 @@ namespace DofusOrigin.Realm.Maps
         public void Send(string _message)
         {
             foreach (var character in m_characters)
-            {
                 character.m_networkClient.Send(_message);
-            }
         }
 
         public void AddPlayer(Characters.Character _character)
@@ -95,6 +107,46 @@ namespace DofusOrigin.Realm.Maps
             m_groups.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
 
             return packet;
+        }
+
+        private List<int> UncompressDatas()
+        {
+            List<int> newList = new List<int>();
+            var lengh = m_map.m_mapData.Length;
+            var cells = 0;
+            var id = 0;
+
+            while (cells < lengh)
+            {
+                if (isValidCell(m_map.m_mapData.Substring(cells, 10)))
+                    newList.Add(id);
+
+                cells += 10;
+                id++;
+            }
+
+            return newList;
+        }
+
+        private string hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+
+        private int hashCodes(char a)
+        {
+            return hash.IndexOf(a);
+        }
+
+        private bool isValidCell(string datas)
+        {
+            var lengh = datas.Length - 1;
+            var table = new int[5000];
+
+            while (lengh >= 0)
+            {
+                table[lengh] = hashCodes(datas[lengh]);
+                lengh -= 1;
+            }
+
+            return ((table[2] & 56) >> 3) != 0;
         }
     }
 }

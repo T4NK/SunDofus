@@ -71,7 +71,7 @@ namespace DofusOrigin.Realm.Characters.NPC
             var startpath = path.GetStartPath;
             var cellpath = path.RemakePath();
 
-            if(!Realm.Maps.Cells.isValidCell(m_cellid, cellpath))
+            if(!Realm.Maps.Pathfinding.isValidCell(m_cellid, cellpath) && !map.m_rushablesCells.Contains(newCell))
                 return;
 
             if (cellpath != "")

@@ -476,7 +476,7 @@ namespace DofusOrigin.Network.Realms
         {
             var packet = _datas.Substring(3);
 
-            if (!Cells.isValidCell(m_client.m_player.m_mapCell, packet) == true)
+            if (!Pathfinding.isValidCell(m_client.m_player.m_mapCell, packet))
             {
                 m_client.Send("GA;0");
                 return;
@@ -486,6 +486,12 @@ namespace DofusOrigin.Network.Realms
             var newPath = path.RemakePath();
 
             newPath = path.GetStartPath + newPath;
+
+            if (!m_client.m_player.GetMap().m_rushablesCells.Contains(path.m_destination))
+            {
+                m_client.Send("GA;0");
+                return;
+            }
 
             m_client.m_player.m_dir = path.m_newDirection;
             m_client.m_player.m_state.moveToCell = path.m_destination;

@@ -56,7 +56,7 @@ namespace DofusOrigin.Realm.Characters.Spells
             var packet = "";
 
             foreach (var spell in m_spells)
-                packet += string.Format("{0}~{1}~{2};", spell.m_id, spell.m_level, Maps.Cells.GetDirChar(spell.m_position));
+                packet += string.Format("{0}~{1}~{2};", spell.m_id, spell.m_level, Maps.Pathfinding.GetDirChar(spell.m_position));
 
             m_client.m_networkClient.Send(string.Format("SL{0}", packet));
         }

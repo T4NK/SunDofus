@@ -1,2 +1,3 @@
 ﻿[11.01.2013] Changement du parsage des packets
 [11.01.2013] Rectification et changement du système de la file d'attente
+[23.01.2013] Revue total de la file d'attente

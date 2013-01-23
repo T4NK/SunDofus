@@ -20,6 +20,7 @@ namespace DofusOrigin.Database.Models.Maps
         public string m_mappos { get; set; }
 
         public int maxMonstersGroup { get; set; }
+        public int maxGroupSize { get; set; }
 
         public Dictionary<int, List<int>> m_monsters { get; set; }
 
