@@ -59,7 +59,7 @@ namespace DofusOrigin.Realm.Characters.NPC
             var map = Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_id == m_mapid);
 
             var path = new Realm.Maps.Pathfinding("", map, m_cellid, m_dir);
-            var newDir = Utilities.Basic.Rand(0, 7);
+            var newDir = Utilities.Basic.Rand(0, 3) * 2 + 1;
             var newCell = path.NextCell(m_cellid, newDir);
 
             if (newCell <= 0)

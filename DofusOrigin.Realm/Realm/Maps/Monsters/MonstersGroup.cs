@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Timers;
 namespace DofusOrigin.Realm.Maps.Monsters
 {
     class MonstersGroup
@@ -17,6 +17,8 @@ namespace DofusOrigin.Realm.Maps.Monsters
         private int cell;
         private int dir;
 
+        private Timer m_movements { get; set; }
+
         public MonstersGroup(Dictionary<int, List<int>> monsters, Map map)
         {
 
@@ -29,9 +31,43 @@ namespace DofusOrigin.Realm.Maps.Monsters
             this.m_id = map.NextNpcID();
 
             RefreshMappos();
+            RefreshMonsters();
 
-            if(basemonsters.Count != 0)
-                RefreshMonsters();
+            m_movements = new Timer();
+            m_movements.Enabled = true;
+            m_movements.Interval = Utilities.Basic.Rand(10000, 15000);
+            m_movements.Elapsed += new ElapsedEventHandler(this.Move);
+        }
+
+        private void Move(object e, EventArgs e2)
+        {
+            m_movements.Interval = Utilities.Basic.Rand(10000, 15000);
+
+            var path = new Realm.Maps.Pathfinding("", m_map, cell, dir);
+            var newDir = Utilities.Basic.Rand(0, 3) * 2 + 1;
+            var newCell = path.NextCell(cell, newDir);
+
+            if (newCell <= 0)
+                return;
+
+            path.UpdatePath(Realm.Maps.Pathfinding.GetDirChar(dir) + Realm.Maps.Pathfinding.GetCellChars(cell) + Realm.Maps.Pathfinding.GetDirChar(newDir) +
+                Realm.Maps.Pathfinding.GetCellChars(newCell));
+
+            var startpath = path.GetStartPath;
+            var cellpath = path.RemakePath();
+
+            if (!Realm.Maps.Pathfinding.isValidCell(cell, cellpath) && !m_map.m_rushablesCells.Contains(newCell))
+                return;
+
+            if (cellpath != "")
+            {
+                cell = path.m_destination;
+                dir = path.m_newDirection;
+
+                var packet = string.Format("GA0;1;{0};{1}", m_id, startpath + cellpath);
+
+                m_map.Send(packet);
+            }
         }
 
         private void RefreshMonsters()

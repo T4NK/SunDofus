@@ -3,3 +3,4 @@
 [23.01.2013] Ajout de la file d'attente du serveur de jeu
 [23.01.2013] Ajout des monstres (affichage + déplacements auto)
 [23.01.2013] Rectification des PNJ et des monstres qui marchaient sur les cases non marchables
+[23.01.2013] Rectification des PNJ et des monstres qui pouvait se rendre invisible (faute de faces du skin)
