@@ -25,7 +25,6 @@ namespace DofusOrigin.Network.Realms
                     switch (datas[0])
                     {
                         case "save":
-
                             ParseCommanSave(datas);
                             break;
 
@@ -45,8 +44,8 @@ namespace DofusOrigin.Network.Realms
                             ParseCommandExp(datas);
                             break;
 
-                        case "help":
-                            ParseCommandHelp();
+                        case "map":
+                            ParseMapCommand(datas);
                             break;
 
                         default:
@@ -81,14 +80,36 @@ namespace DofusOrigin.Network.Realms
                 {
                     case "all":
                         DofusOrigin.Realm.World.Save.SaveWorld();
+                        m_client.SendConsoleMessage("World saved !", 0);
                         break;
 
                     case "char":
                         DofusOrigin.Realm.World.Save.SaveChararacters();
+                        m_client.SendConsoleMessage("Characters saved !", 0);
                         break;
 
                     default:
                         DofusOrigin.Realm.World.Save.SaveWorld();
+                        m_client.SendConsoleMessage("World saved !", 0);
+                        break;
+                }
+            }
+            catch
+            {
+                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+            }
+        }
+
+        void ParseMapCommand(string[] _datas)
+        {
+            try
+            {
+                switch (_datas[1])
+                {
+                    case "spawnmobs":
+
+                        m_client.m_player.GetMap().AddMonstersGroup();
                         break;
                 }
             }
@@ -106,17 +127,17 @@ namespace DofusOrigin.Network.Realms
                 if (_datas.Length == 2)
                 {
                     m_client.m_player.m_inventary.AddItem(int.Parse(_datas[1]), false);
-                    m_client.SendConsoleMessage("Item Added !");
+                    m_client.SendConsoleMessage("Item Added !", 0);
                 }
 
                 else if (_datas.Length == 3)
                 {
                     m_client.m_player.m_inventary.AddItem(int.Parse(_datas[1]), false, int.Parse(_datas[2]));
-                    m_client.SendConsoleMessage("Item Added !");
+                    m_client.SendConsoleMessage("Item Added !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !", 0);
+                    m_client.SendConsoleMessage("Invalid Syntax !");
             }
             catch
             {
@@ -132,11 +153,11 @@ namespace DofusOrigin.Network.Realms
                 if (_datas.Length == 2)
                 {
                     m_client.m_player.AddExp(long.Parse(_datas[1]));
-                    m_client.SendConsoleMessage("Exp Added !");
+                    m_client.SendConsoleMessage("Exp Added !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !", 0);
+                    m_client.SendConsoleMessage("Invalid Syntax !");
             }
             catch
             {
@@ -153,18 +174,18 @@ namespace DofusOrigin.Network.Realms
                 if (_datas.Length == 3)
                 {
                     m_client.m_player.TeleportNewMap(int.Parse(_datas[1]), int.Parse(_datas[2]));
-                    m_client.SendConsoleMessage("Character Teleported !");
+                    m_client.SendConsoleMessage("Character Teleported !", 0);
                 }
 
                 else if (_datas.Length == 4)
                 {
                     var myMap = Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_PosX == int.Parse(_datas[1]) && x.m_map.m_PosY == int.Parse(_datas[2]));
                     m_client.m_player.TeleportNewMap(myMap.m_map.m_id, int.Parse(_datas[3]));
-                    m_client.SendConsoleMessage("Character Teleported !");
+                    m_client.SendConsoleMessage("Character Teleported !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !", 0);
+                    m_client.SendConsoleMessage("Invalid Syntax !");
             }
             catch(Exception e)
             {
@@ -181,27 +202,17 @@ namespace DofusOrigin.Network.Realms
                 if (_datas.Length == 2)
                 {
                     m_client.m_player.ResetVita(_datas[1]);
-                    m_client.SendConsoleMessage("Vita Updated !");
+                    m_client.SendConsoleMessage("Vita Updated !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !", 0);
+                    m_client.SendConsoleMessage("Invalid Syntax !");
             }
             catch
             {
                 m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
                 m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
-        }
-
-        void ParseCommandHelp()
-        {
-            m_client.SendConsoleMessage("Commands avaliables :");
-            m_client.SendConsoleMessage("save : <Optional all|char>");
-            m_client.SendConsoleMessage("vita : <number>");
-            m_client.SendConsoleMessage("teleport : <x|y> <cell> || <mapid> <cell>");
-            m_client.SendConsoleMessage("exp : <number>");
-            m_client.SendConsoleMessage("item : <itemid> <Optional 1|2|3|4>");
         }
 
         #endregion

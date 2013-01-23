@@ -19,11 +19,17 @@ namespace DofusOrigin.Database.Models.Maps
         public string m_key { get; set; }
         public string m_mappos { get; set; }
 
+        public int maxMonstersGroup { get; set; }
+
+        public Dictionary<int, List<int>> m_monsters { get; set; }
+
         public MapModel()
         {
             m_mapData = "";
             m_key = "";
             m_mappos = "";
+
+            m_monsters = new Dictionary<int, List<int>>();
         }
 
         public void ParsePos()

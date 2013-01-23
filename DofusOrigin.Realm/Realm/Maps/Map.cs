@@ -10,6 +10,7 @@ namespace DofusOrigin.Realm.Maps
         public List<Characters.Character> m_characters { get; set; }
         public List<Database.Models.Maps.TriggerModel> m_triggers { get; set; }
         public List<Characters.NPC.NPCMap> m_npcs { get; set; }
+        public List<Monsters.MonstersGroup> m_groups { get; set; }
 
         public Database.Models.Maps.MapModel m_map { get; set; }
 
@@ -20,6 +21,15 @@ namespace DofusOrigin.Realm.Maps
             m_characters = new List<Characters.Character>();
             m_triggers = new List<Database.Models.Maps.TriggerModel>();
             m_npcs = new List<Characters.NPC.NPCMap>();
+            m_groups = new List<Monsters.MonstersGroup>();
+        }
+
+        public void AddMonstersGroup()
+        {
+            if (m_groups.Count >= m_map.maxMonstersGroup)
+                return;
+
+            m_groups.Add(new Monsters.MonstersGroup(m_map.m_monsters, this));
         }
 
         public void Send(string _message)
@@ -39,6 +49,9 @@ namespace DofusOrigin.Realm.Maps
 
             if(m_npcs.Count > 0)
                 _character.m_networkClient.Send(string.Format("GM{0}", NPCsPattern()));
+
+            if (m_groups.Count > 0)
+                _character.m_networkClient.Send(string.Format("GM{0}", MonstersGroupsPattern()));
         }
 
         public void DelPlayer(Characters.Character _character)
@@ -51,7 +64,7 @@ namespace DofusOrigin.Realm.Maps
         {
             var i = -1;
 
-            while (m_npcs.Any(x => x.m_idOnMap == i))
+            while (m_npcs.Any(x => x.m_idOnMap == i) || m_groups.Any(x => x.m_id == i))
                 i -= 1;
 
             return i;
@@ -61,8 +74,7 @@ namespace DofusOrigin.Realm.Maps
         {
             var packet = "";
 
-            foreach (var character in m_characters)
-                packet += string.Format("|+{0}", character.PatternDisplayChar());
+            m_characters.ForEach(x => packet += string.Format("|+{0}", x.PatternDisplayChar()));
 
             return packet;
         }
@@ -71,8 +83,16 @@ namespace DofusOrigin.Realm.Maps
         {
             var packet = "";
 
-            foreach (var npc in m_npcs)
-                packet += string.Format("|+{0}", npc.PatternOnMap());
+            m_npcs.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
+
+            return packet;
+        }
+
+        private string MonstersGroupsPattern()
+        {
+            var packet = "";
+
+            m_groups.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
 
             return packet;
         }

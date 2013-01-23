@@ -31,6 +31,20 @@ namespace DofusOrigin.Database.Cache
                     map.m_mappos = sqlReader.GetString("mappos");
                     map.m_mapData = sqlReader.GetString("mapData");
                     map.m_key = sqlReader.GetString("key");
+                    map.maxMonstersGroup = sqlReader.GetInt16("maxgroups");
+
+                    foreach (var newMonster in sqlReader.GetString("monsters").Split(';'))
+                    {
+                        if (newMonster == "")
+                            continue;
+
+                        var infos = newMonster.Split(',');
+
+                        if (!map.m_monsters.ContainsKey(int.Parse(infos[0])))
+                            map.m_monsters.Add(int.Parse(infos[0]), new List<int>());
+
+                        map.m_monsters[int.Parse(infos[0])].Add(int.Parse(infos[1]));
+                    }
 
                     map.ParsePos();
 
