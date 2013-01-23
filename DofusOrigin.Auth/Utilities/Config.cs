@@ -61,7 +61,7 @@ namespace DofusOrigin.Utilities
             //Queue
             m_config.InsertElement("Max_Clients_inQueue", "50");
             m_config.InsertElement("Client_Per_QueueRefresh", "10");
-            m_config.InsertElement("Time_Queue_Reload", "2000");
+            m_config.InsertElement("Time_Queue_Reload", "5000");
 
             //Subscription
             m_config.InsertElement("Max_Subscription_Time", "31536000000");

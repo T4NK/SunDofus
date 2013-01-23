@@ -94,7 +94,9 @@ namespace DofusOrigin.Network.Auth
                     }
                 }
                 else if (nbPacket == 2 && _datas.Length > 2)
+                {
                     m_actualInfos = _datas;
+                }
                 else
                 {
                     if (_datas.Substring(0, 1) != "A")
@@ -106,7 +108,7 @@ namespace DofusOrigin.Network.Auth
                     {
                         case "f":
 
-                            Send(string.Format("Af{0}|{1}|0|1", (m_waitPosition), (AuthQueue.m_clients.Count > 2 ? AuthQueue.m_clients.Count : 3)));
+                            Send(string.Format("Af{0}|{1}|0|2", (m_waitPosition), (AuthQueue.m_clients.Count > 2 ? AuthQueue.m_clients.Count : 3)));
                             return;
 
                         case "F":
@@ -140,7 +142,7 @@ namespace DofusOrigin.Network.Auth
                                 var key = Utilities.Basic.RandomString(16);
 
                                 server.SendTicket(key, this);
-                        
+
                                 packet = string.Format("AYK{0}:{1};{2}", server.m_server.m_ip, server.m_server.m_port, key);
                                 Send(packet);
                                 return;
