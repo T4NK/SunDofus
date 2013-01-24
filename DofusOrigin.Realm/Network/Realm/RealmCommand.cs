@@ -36,6 +36,10 @@ namespace DofusOrigin.Network.Realm
                             ParseCommandItem(datas);
                             break;
 
+                        case "kamas":
+                            ParseCommandKamas(datas);
+                            break;
+
                         case "teleport":
                             ParseCommandTeleport(datas);
                             break;
@@ -65,6 +69,21 @@ namespace DofusOrigin.Network.Realm
         }
 
         #region CommandInfos
+
+        void ParseCommandKamas(string[] _datas)
+        {
+            try
+            {                
+                m_client.m_player.m_kamas += int.Parse(_datas[1]);
+                m_client.SendConsoleMessage("Kamas Added", 0);
+                m_client.m_player.SendChararacterStats();
+            }
+            catch
+            {
+                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+            }
+        }
 
         void ParseCommanSave(string[] _datas)
         {

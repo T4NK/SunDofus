@@ -19,7 +19,9 @@ namespace DofusOrigin.Realm.Characters
 
         public bool onMove = false;
         public bool onExchange = false;
+
         public int moveToCell = -1;
+        public int actualNPC = -1;
 
         public bool Occuped
         {

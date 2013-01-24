@@ -41,7 +41,9 @@ namespace DofusOrigin.Network.Realm
             m_packets["BD"] = SendDate;
             m_packets["BM"] = ParseChatMessage;
             m_packets["cC"] = ChangeChannel;
+            m_packets["EB"] = BuyFromNPC;
             m_packets["ER"] = RequestExchange;
+            m_packets["EV"] = CancelExchange;
             m_packets["GA"] = GameAction;
             m_packets["GC"] = CreateGame;
             m_packets["GI"] = GameInformations;
@@ -921,7 +923,7 @@ namespace DofusOrigin.Network.Realm
 
                 switch (int.Parse(packet[0]))
                 {
-                    case 0://NPC
+                    case 0://NPC BUY/SELL
 
                         var NPC = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == int.Parse(packet[1]));
                         if (NPC.m_model.m_sellingList.Count == 0)
@@ -931,11 +933,61 @@ namespace DofusOrigin.Network.Realm
                         }
 
                         m_client.m_player.m_state.onExchange = true;
+                        m_client.m_player.m_state.actualNPC = NPC.m_idOnMap;
+
                         m_client.Send(string.Format("ECK0|{0}", NPC.m_idOnMap));
                         m_client.Send(string.Format("EL{0}|", string.Join("|", NPC.m_model.m_sellingList)));
 
                         break;
                 }
+            }
+            catch { }
+        }
+
+        private void CancelExchange(string t)
+        {
+            m_client.Send("EV");
+            m_client.m_player.m_state.onExchange = false;
+        }
+
+        private void BuyFromNPC(string packet)
+        {
+            try
+            {
+                if (!m_client.m_player.m_state.onExchange)
+                {
+                    m_client.Send("OBE");
+                    return;
+                }
+
+                var datas = packet.Split('|');
+                var itemID = int.Parse(datas[0]);
+                var quantity = int.Parse(datas[1]);
+
+                var item = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == itemID);
+                var NPC = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == m_client.m_player.m_state.actualNPC);
+
+                if (quantity <= 0 || !NPC.m_model.m_sellingList.Contains(itemID))
+                {
+                    m_client.Send("OBE");
+                    return;
+                }
+
+                var price = item.m_price * quantity;
+
+                if (m_client.m_player.m_kamas >= price)
+                {
+                    var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
+                    newItem.GeneratItem();
+                    newItem.m_quantity = quantity;
+
+
+                    m_client.m_player.m_kamas -= price;
+                    m_client.Send("EBK");
+                    m_client.m_player.m_inventary.AddItem(newItem, false);
+                }
+                else
+                    m_client.Send("OBE");
             }
             catch { }
         }
