@@ -6,7 +6,7 @@ using SilverSock;
 using DofusOrigin.Realm.Characters;
 using DofusOrigin.Database.Models.Clients;
 
-namespace DofusOrigin.Network.Realms
+namespace DofusOrigin.Network.Realm
 {
     class RealmClient : DofusOrigin.Network.TCPClient
     {

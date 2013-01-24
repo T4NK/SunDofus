@@ -8,7 +8,7 @@ namespace DofusOrigin.Realm.World
 {
     class Chat
     {
-        public static void SendGeneralMessage(Network.Realms.RealmClient _client, string _message)
+        public static void SendGeneralMessage(Network.Realm.RealmClient _client, string _message)
         {
             if (_client.m_player.GetMap() == null) 
                 return;
@@ -16,7 +16,7 @@ namespace DofusOrigin.Realm.World
             _client.m_player.GetMap().Send(string.Format("cMK|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
         }
 
-        public static void SendPrivateMessage(Network.Realms.RealmClient _client, string _receiver, string _message)
+        public static void SendPrivateMessage(Network.Realm.RealmClient _client, string _receiver, string _message)
         {
             if(CharactersManager.m_charactersList.Any(x => x.m_name == _receiver))
             {
@@ -32,7 +32,7 @@ namespace DofusOrigin.Realm.World
             }
         }
 
-        public static void SendTradeMessage(Network.Realms.RealmClient _client, string _message)
+        public static void SendTradeMessage(Network.Realm.RealmClient _client, string _message)
         {
             if (_client.m_player.CanSendinTrade() == true)
             {
@@ -45,7 +45,7 @@ namespace DofusOrigin.Realm.World
                 _client.Send(string.Format("Im0115;{0}", _client.m_player.TimeTrade()));
         }
 
-        public static void SendRecruitmentMessage(Network.Realms.RealmClient _client, string _message)
+        public static void SendRecruitmentMessage(Network.Realm.RealmClient _client, string _message)
         {
             if (_client.m_player.CanSendinRecruitment() == true)
             {

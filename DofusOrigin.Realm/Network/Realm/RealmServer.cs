@@ -5,7 +5,7 @@ using System.Text;
 using SilverSock;
 using DofusOrigin.Network;
 
-namespace DofusOrigin.Network.Realms
+namespace DofusOrigin.Network.Realm
 {
     class RealmServer : TCPServer
     {

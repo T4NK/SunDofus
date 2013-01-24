@@ -102,7 +102,6 @@ namespace DofusOrigin.Realm.Maps.Monsters
         {
             dir = Utilities.Basic.Rand(0, 3) * 2 + 1;
             cell = m_map.m_rushablesCells[Utilities.Basic.Rand(0, m_map.m_rushablesCells.Count - 1)];
-            //StartMove
         }
 
         public string PatternOnMap()

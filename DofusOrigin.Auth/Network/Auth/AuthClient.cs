@@ -94,9 +94,7 @@ namespace DofusOrigin.Network.Auth
                     }
                 }
                 else if (nbPacket == 2 && _datas.Length > 2)
-                {
                     m_actualInfos = _datas;
-                }
                 else
                 {
                     if (_datas.Substring(0, 1) != "A")

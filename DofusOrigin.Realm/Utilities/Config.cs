@@ -52,6 +52,7 @@ namespace DofusOrigin.Utilities
             m_config.InsertElement("ServerId", "6");
             m_config.InsertElement("ServerIp", "127.0.0.1");
             m_config.InsertElement("ServerPort", "5555");
+            m_config.InsertElement("ServerCom", "0");
 
             //ChatSpam
             m_config.InsertElement("AntiSpamTrade", "60000");

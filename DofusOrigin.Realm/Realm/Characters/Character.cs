@@ -6,7 +6,7 @@ using DofusOrigin;
 using DofusOrigin.Realm.Characters.Stats;
 using DofusOrigin.Realm.Characters.Spells;
 using DofusOrigin.Realm.Characters.Items;
-using DofusOrigin.Network.Realms;
+using DofusOrigin.Network.Realm;
 
 namespace DofusOrigin.Realm.Characters
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace DofusOrigin.Network.Realms
+namespace DofusOrigin.Network.Realm
 {
     class RealmCommand
     {

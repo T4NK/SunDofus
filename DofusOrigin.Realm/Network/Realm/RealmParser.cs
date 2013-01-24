@@ -8,7 +8,7 @@ using DofusOrigin.Realm.Characters.Stats;
 using DofusOrigin.Realm;
 using DofusOrigin.Realm.World;
 
-namespace DofusOrigin.Network.Realms
+namespace DofusOrigin.Network.Realm
 {
     class RealmParser
     {
@@ -36,11 +36,12 @@ namespace DofusOrigin.Network.Realms
             m_packets["AP"] = SendRandomName;
             m_packets["AS"] = SelectCharacter;
             m_packets["AT"] = ParseTicket;
-            m_packets["AV"] = AV_Packet;
+            m_packets["AV"] = SendCommunauty;
             m_packets["BA"] = ParseConsoleMessage;
             m_packets["BD"] = SendDate;
             m_packets["BM"] = ParseChatMessage;
             m_packets["cC"] = ChangeChannel;
+            m_packets["ER"] = RequestExchange;
             m_packets["GA"] = GameAction;
             m_packets["GC"] = CreateGame;
             m_packets["GI"] = GameInformations;
@@ -107,9 +108,9 @@ namespace DofusOrigin.Network.Realms
             m_client.Send(string.Format("APK{0}", Utilities.Basic.RandomName()));
         }
 
-        public void AV_Packet(string _datas)
+        public void SendCommunauty(string _datas)
         {
-            m_client.Send("AV0");
+            m_client.Send(string.Format("AV{0}", Utilities.Config.m_config.GetIntElement("ServerCom")));
         }
 
         public void SendCharacterList(string _datas)
@@ -898,6 +899,43 @@ namespace DofusOrigin.Network.Realms
                 }
                 else
                     m_client.m_player.m_spellInventary.m_spells.First(x => x.m_id == spellID).m_position = newPos;
+            }
+            catch { }
+        }
+
+        #endregion
+
+        #region Exchange
+
+        private void RequestExchange(string _datas)
+        {
+            try
+            {
+                if (m_client.m_player == null || m_client.m_player.m_state.Occuped)
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                var packet = _datas.Split('|');
+
+                switch (int.Parse(packet[0]))
+                {
+                    case 0://NPC
+
+                        var NPC = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == int.Parse(packet[1]));
+                        if (NPC.m_model.m_sellingList.Count == 0)
+                        {
+                            m_client.Send("BN");
+                            return;
+                        }
+
+                        m_client.m_player.m_state.onExchange = true;
+                        m_client.Send(string.Format("ECK0|{0}", NPC.m_idOnMap));
+                        m_client.Send(string.Format("EL{0}|", string.Join("|", NPC.m_model.m_sellingList)));
+
+                        break;
+                }
             }
             catch { }
         }

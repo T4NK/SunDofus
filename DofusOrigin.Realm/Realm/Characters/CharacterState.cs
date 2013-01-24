@@ -18,6 +18,15 @@ namespace DofusOrigin.Realm.Characters
         public bool created = false;
 
         public bool onMove = false;
+        public bool onExchange = false;
         public int moveToCell = -1;
+
+        public bool Occuped
+        {
+            get
+            {
+                return onMove || onExchange;
+            }
+        }
     }
 }
