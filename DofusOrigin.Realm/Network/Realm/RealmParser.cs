@@ -43,6 +43,7 @@ namespace DofusOrigin.Network.Realm
             m_packets["cC"] = ChangeChannel;
             m_packets["EB"] = BuyFromNPC;
             m_packets["ER"] = RequestExchange;
+            m_packets["ES"] = SellFromNPC;
             m_packets["EV"] = CancelExchange;
             m_packets["GA"] = GameAction;
             m_packets["GC"] = CreateGame;
@@ -988,6 +989,43 @@ namespace DofusOrigin.Network.Realm
                 }
                 else
                     m_client.Send("OBE");
+            }
+            catch { }
+        }
+
+        private void SellFromNPC(string _datas)
+        {
+            try
+            {
+                if (!m_client.m_player.m_state.Occuped)
+                {
+                    m_client.Send("OSE");
+                    return;
+                }
+
+                var packet = _datas.Split('|');
+                var itemID = int.Parse(packet[0]);
+                var quantity = int.Parse(packet[1]);
+
+                if (!m_client.m_player.m_inventary.m_itemsList.Any(x => x.m_id == itemID) || quantity <= 0)
+                {
+                    m_client.Send("OSE");
+                    return;
+                }
+
+                var item = m_client.m_player.m_inventary.m_itemsList.First(x => x.m_id == itemID);
+
+                if (item.m_quantity < quantity)
+                    quantity = item.m_quantity;
+
+                var price = Math.Floor((double)item.m_base.m_price / 10) * quantity;
+
+                if (price < 1)
+                    price = 1;
+
+                m_client.m_player.m_kamas += (int)price;
+                m_client.m_player.m_inventary.DeleteItem(item.m_id, quantity);
+                m_client.Send("ESK");
             }
             catch { }
         }
