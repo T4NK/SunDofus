@@ -18,33 +18,16 @@ namespace DofusOrigin.Realm.Characters.Items
         public CharacterItem(ItemModel _base)
         {
             m_base = _base;
+
             m_effectsList = new List<Effects.EffectItem>();
+            m_base.m_effectsList.ForEach(x => m_effectsList.Add(x));
+
             m_position = -1;
         }
 
         public string EffectsInfos()
         {
             return string.Join(",", m_effectsList);
-        }
-
-        public void ParseJet()
-        {
-            var jet = m_base.m_jet;
-
-            foreach (var m_jet in jet.Split(','))
-            {
-                if (m_jet == "") continue;
-                var infos = m_jet.Split('#');
-
-                var myEffect = new Effects.EffectItem();
-                myEffect.m_id = Utilities.Basic.HexToDeci(infos[0]);
-                if (infos.Length > 1) myEffect.m_value = Utilities.Basic.HexToDeci(infos[1]);
-                if (infos.Length > 2) myEffect.m_value2 = Utilities.Basic.HexToDeci(infos[2]);
-                if (infos.Length > 3) myEffect.m_value3 = Utilities.Basic.HexToDeci(infos[3]);
-                if (infos.Length > 4) myEffect.m_effect = infos[4];
-
-                m_effectsList.Add(myEffect);
-            }
         }
 
         public void GeneratItem(int _jet = 3)

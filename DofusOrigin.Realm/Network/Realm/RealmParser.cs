@@ -937,7 +937,17 @@ namespace DofusOrigin.Network.Realm
                         m_client.m_player.m_state.actualNPC = NPC.m_idOnMap;
 
                         m_client.Send(string.Format("ECK0|{0}", NPC.m_idOnMap));
-                        m_client.Send(string.Format("EL{0}|", string.Join("|", NPC.m_model.m_sellingList)));
+
+                        var newPacket = "EL";
+                        foreach (var i in NPC.m_model.m_sellingList)
+                        {
+                            var item = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == i);
+                            item.ParseRandomJet();
+
+                            newPacket += string.Format("{0};{1}|", i, item.EffectInfos());
+                        }
+
+                        m_client.Send(newPacket.Substring(0, newPacket.Length - 1));
 
                         break;
                 }

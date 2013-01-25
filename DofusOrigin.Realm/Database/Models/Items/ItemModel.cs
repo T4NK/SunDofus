@@ -33,5 +33,33 @@ namespace DofusOrigin.Database.Models.Items
 
         public void ParseWeaponInfos(string _datas)
         { }
+
+        public void ParseRandomJet()
+        {
+            if (m_effectsList.Count != 0)
+                return;
+
+            var jet = m_jet;
+
+            foreach (var _jet in jet.Split(','))
+            {
+                if (_jet == "") continue;
+                var infos = _jet.Split('#');
+
+                var myEffect = new Realm.Effects.EffectItem();
+                myEffect.m_id = Utilities.Basic.HexToDeci(infos[0]);
+                if (infos.Length > 1) myEffect.m_value = Utilities.Basic.HexToDeci(infos[1]);
+                if (infos.Length > 2) myEffect.m_value2 = Utilities.Basic.HexToDeci(infos[2]);
+                if (infos.Length > 3) myEffect.m_value3 = Utilities.Basic.HexToDeci(infos[3]);
+                if (infos.Length > 4) myEffect.m_effect = infos[4];
+
+                m_effectsList.Add(myEffect);
+            }
+        }
+
+        public string EffectInfos()
+        {
+            return string.Join(",", m_effectsList);
+        }
     }
 }

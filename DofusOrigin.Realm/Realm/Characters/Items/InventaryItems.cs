@@ -29,7 +29,6 @@ namespace DofusOrigin.Realm.Characters.Items
                 var baseItem = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == _id);
                 var item = new CharacterItem(baseItem);
 
-                item.ParseJet();
                 item.GeneratItem(_jet);
 
                 if (m_itemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.m_id == item.m_id && x.m_position == item.m_position))
@@ -55,7 +54,6 @@ namespace DofusOrigin.Realm.Characters.Items
                 var baseItem = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == _id);
                 var item = new CharacterItem(baseItem);
 
-                item.ParseJet();
                 item.GeneratItem(_jet);
 
                 if (m_itemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.m_id == item.m_id && x.m_position == item.m_position))
@@ -102,9 +100,9 @@ namespace DofusOrigin.Realm.Characters.Items
             }
             else if (_offline == false)
             {
-                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_id == _item.m_id && x.m_position == _item.m_position))
+                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position))
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_id == _item.m_id && x.m_position == _item.m_position);
+                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position);
 
                     item2.m_quantity += _item.m_quantity;
                     m_client.m_pods += (_item.m_base.m_pods * _item.m_quantity);

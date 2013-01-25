@@ -69,7 +69,6 @@ namespace DofusOrigin.Network.Realm
 
                 var item = new DofusOrigin.Realm.Characters.Items.CharacterItem(Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == gift.m_itemID));
 
-                item.ParseJet();
                 item.GeneratItem();
 
                 gift.m_item = item;
