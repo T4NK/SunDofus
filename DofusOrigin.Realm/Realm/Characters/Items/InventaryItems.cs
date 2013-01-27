@@ -83,9 +83,11 @@ namespace DofusOrigin.Realm.Characters.Items
         {
             if(_offline == true)
             {
-                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_id == _item.m_id && x.m_position == _item.m_position))
+                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position
+                    && x.m_id != _item.m_id))
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_id == _item.m_id && x.m_position == _item.m_position);
+                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position 
+                        && x.m_id != _item.m_id);
 
                     item2.m_quantity += _item.m_quantity;
                     m_client.m_pods += (_item.m_base.m_pods * _item.m_quantity);
@@ -100,9 +102,11 @@ namespace DofusOrigin.Realm.Characters.Items
             }
             else if (_offline == false)
             {
-                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position))
+                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position 
+                    && x.m_id != _item.m_id))
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position);
+                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position
+                        && x.m_id != _item.m_id);
 
                     item2.m_quantity += _item.m_quantity;
                     m_client.m_pods += (_item.m_base.m_pods * _item.m_quantity);
