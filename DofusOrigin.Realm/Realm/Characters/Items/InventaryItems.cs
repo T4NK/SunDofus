@@ -154,12 +154,12 @@ namespace DofusOrigin.Realm.Characters.Items
 
         public void MoveItem(int _id, int _pos, int _quantity)
         {
-            if (!m_itemsList.Any(x => x.m_id == _id)) 
+            if (!m_itemsList.Any(x => x.m_id == _id))
                 return;
 
             var item = m_itemsList.First(x => x.m_id == _id);
 
-            if (ItemsHandler.PositionAvaliable(item.m_base.m_type, item.m_base.isUsable, _pos) == false 
+            if (ItemsHandler.PositionAvaliable(item.m_base.m_type, item.m_base.isUsable, _pos) == false
                 || _pos == 1 && item.m_base.isTwoHands == true && isOccuptedPos(15) || _pos == 15 && isOccuptedPos(1))
             {
                 m_client.m_networkClient.Send("BN");
@@ -191,17 +191,18 @@ namespace DofusOrigin.Realm.Characters.Items
 
             if (item.m_position == -1)
             {
-                if (m_itemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.m_id == item.m_id && x.m_position == item.m_position))
+                if (m_itemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position &&
+                    x.m_id != item.m_id))
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.m_id == item.m_id && x.m_position == item.m_position);
+                    var item2 = m_itemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position &&
+                    x.m_id != item.m_id);
 
-                    item2.m_quantity += item.m_quantity;
-                    m_client.m_pods += (item.m_base.m_pods * item.m_quantity);
+                    item.m_quantity += item2.m_quantity;
+                    m_client.m_pods += (item2.m_base.m_pods * item2.m_quantity);
                     RefreshBonus();
 
-                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item2.m_id, item2.m_quantity));
-                    m_client.m_networkClient.Send(string.Format("OR{0}", item.m_id));
-                    m_itemsList.Remove(item);
+                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item.m_id, item.m_quantity));
+                    DeleteItem(item2.m_id, item2.m_quantity);
                 }
             }
             else
@@ -212,10 +213,10 @@ namespace DofusOrigin.Realm.Characters.Items
                         item.m_base.m_type == 33 || item.m_base.m_type == 37 || item.m_base.m_type == 42 || item.m_base.m_type == 49 ||
                         item.m_base.m_type == 69 || item.m_base.m_type == 87)
                     {
-                        if (_quantity <= 0) 
+                        if (_quantity <= 0)
                             return;
 
-                        var Copy = item;
+                        var Copy = item.Copy();
                         Copy.m_quantity -= _quantity;
 
                         if (item.m_quantity == _quantity)
@@ -228,7 +229,7 @@ namespace DofusOrigin.Realm.Characters.Items
                     }
                     else
                     {
-                        var Copy = item;
+                        var Copy = item.Copy();
 
                         Copy.m_quantity -= 1;
                         Copy.m_position = -1;

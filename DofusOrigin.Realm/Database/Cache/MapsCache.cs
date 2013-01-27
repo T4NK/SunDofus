@@ -34,12 +34,17 @@ namespace DofusOrigin.Database.Cache
                     map.maxMonstersGroup = sqlReader.GetInt16("maxgroups");
                     map.maxGroupSize = sqlReader.GetInt16("groupsize");
 
-                    foreach (var newMonster in sqlReader.GetString("monsters").Split(';'))
+                    foreach (var newMonster in sqlReader.GetString("monsters").Split('|'))
                     {
                         if (newMonster == "")
                             continue;
 
                         var infos = newMonster.Split(',');
+
+                        if (infos.Length < 2)
+                            continue;
+                        if (infos[1].Length < 1)
+                            continue;
 
                         if (!map.m_monsters.ContainsKey(int.Parse(infos[0])))
                             map.m_monsters.Add(int.Parse(infos[0]), new List<int>());

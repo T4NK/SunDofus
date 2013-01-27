@@ -26,10 +26,8 @@ namespace DofusOrigin.Realm.Maps
             m_npcs = new List<Characters.NPC.NPCMap>();
             m_groups = new List<Monsters.MonstersGroup>();
 
-            if (m_map.m_monsters.Count == 0)
-                return;
-
-            RefreshAllMonsters();
+            if (m_map.m_monsters.Count != 0 && m_rushablesCells.Count != 0)
+                RefreshAllMonsters();
         }
 
         private void RefreshAllMonsters()

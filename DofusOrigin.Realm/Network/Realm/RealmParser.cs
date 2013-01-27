@@ -989,7 +989,7 @@ namespace DofusOrigin.Network.Realm
                 if (m_client.m_player.m_kamas >= price)
                 {
                     var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
-                    newItem.GeneratItem();
+                    newItem.GeneratItem(4);
                     newItem.m_quantity = quantity;
 
 

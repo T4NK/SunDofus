@@ -130,7 +130,7 @@ namespace DofusOrigin.Realm.Maps.Monsters
                 var model = monster.m_model;
                 ids += model.m_id;
                 skins += model.m_gfx + "^100";
-                lvls += model.m_levels.First(x => x.m_creature == model.m_id).m_level;
+                lvls += monster.m_level;
 
                 colors += string.Format("{0},{1},{2};0,0,0,0", Utilities.Basic.DeciToHex(model.m_color),
                     Utilities.Basic.DeciToHex(model.m_color2), Utilities.Basic.DeciToHex(model.m_color3));

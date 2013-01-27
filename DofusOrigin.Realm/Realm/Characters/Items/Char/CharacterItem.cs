@@ -53,6 +53,17 @@ namespace DofusOrigin.Realm.Characters.Items
             }
         }
 
+        public CharacterItem Copy()
+        {
+            var newItem = new CharacterItem(m_base);
+            m_effectsList.ForEach(x => newItem.m_effectsList.Add(x));
+
+            newItem.m_position = m_position;
+            newItem.m_quantity = m_quantity;
+
+            return newItem;
+        }
+
         public string SaveString()
         {
             return string.Format("{0}~{1}~{2}~{3}", Utilities.Basic.DeciToHex(m_base.m_id), Utilities.Basic.DeciToHex(m_quantity),
