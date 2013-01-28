@@ -8,5 +8,4 @@
 [25.01.2013] Correction d'un bug sur les empilations d'items à même jets
 [27.01.2013] Correction du bug sur la disparition d'item lors d'un mouvement de positions
 
-/!\Bug génération d'item avec jet différent >> jet pareil sur 2 achat PNJ ou 2 commandes
-/!\Bug commande génération d'item
+/!\Bug commande génération d'item + achat  (jet en compte mais le client affiche pas)

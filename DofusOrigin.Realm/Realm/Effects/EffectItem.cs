@@ -26,6 +26,8 @@ namespace DofusOrigin.Realm.Effects
 
         public EffectItem(EffectItem x)
         {
+            m_id = x.m_id;
+
             m_value = x.m_value;
             m_value2 = x.m_value2;
             m_value3 = x.m_value3;
