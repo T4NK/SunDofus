@@ -579,6 +579,7 @@ namespace DofusOrigin.Realm.Characters
 
             builder.Append(m_charactPoint).Append("|");
             builder.Append(m_spellPoint).Append("|");
+            builder.Append(m_kamas).Append("|");
             builder.Append(m_stats.life.m_bases).Append("|");
             builder.Append(m_stats.wisdom.m_bases).Append("|");
             builder.Append(m_stats.strenght.m_bases).Append("|");
@@ -597,12 +598,13 @@ namespace DofusOrigin.Realm.Characters
             string[] Data = _args.Split('|');
             m_charactPoint = int.Parse(Data[0]);
             m_spellPoint = int.Parse(Data[1]);
-            m_stats.life.m_bases = int.Parse(Data[2]);
-            m_stats.wisdom.m_bases = int.Parse(Data[3]);
-            m_stats.strenght.m_bases = int.Parse(Data[4]);
-            m_stats.intelligence.m_bases = int.Parse(Data[5]);
-            m_stats.luck.m_bases = int.Parse(Data[6]);
-            m_stats.agility.m_bases = int.Parse(Data[7]);
+            m_kamas = long.Parse(Data[2]);
+            m_stats.life.m_bases = int.Parse(Data[3]);
+            m_stats.wisdom.m_bases = int.Parse(Data[4]);
+            m_stats.strenght.m_bases = int.Parse(Data[5]);
+            m_stats.intelligence.m_bases = int.Parse(Data[6]);
+            m_stats.luck.m_bases = int.Parse(Data[7]);
+            m_stats.agility.m_bases = int.Parse(Data[8]);
         }
 
         #endregion

@@ -24,6 +24,15 @@ namespace DofusOrigin.Realm.Effects
             m_effect = "0d0+0";
         }
 
+        public EffectItem(EffectItem x)
+        {
+            m_value = x.m_value;
+            m_value2 = x.m_value2;
+            m_value3 = x.m_value3;
+
+            m_effect = x.m_effect;
+        }
+
         public override string ToString()
         {
             return string.Format("{0}#{1}#{2}#{3}#{4}", Utilities.Basic.DeciToHex(m_id), (m_value <= 0 ? "" : Utilities.Basic.DeciToHex(m_value)),

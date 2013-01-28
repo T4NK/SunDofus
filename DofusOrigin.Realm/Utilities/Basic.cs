@@ -70,7 +70,7 @@ namespace DofusOrigin.Utilities
             return string.Format("BD{0}|{1}|{2}", (DateTime.Now.Year - 1370).ToString(), (DateTime.Now.Month - 1), (DateTime.Now.Day));
         }
 
-        public static int GetRandomJet(string _jetStr, int _jet = 3)
+        public static int GetRandomJet(string _jetStr, int _jet = 4)
         {
             if (_jetStr.Length > 3)
             {

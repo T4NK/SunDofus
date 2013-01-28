@@ -20,7 +20,7 @@ namespace DofusOrigin.Realm.Characters.Items
             m_base = _base;
 
             m_effectsList = new List<Effects.EffectItem>();
-            m_base.m_effectsList.ForEach(x => m_effectsList.Add(x));
+            m_base.m_effectsList.ForEach(x => m_effectsList.Add(new Effects.EffectItem(x)));
 
             m_position = -1;
         }
@@ -30,7 +30,7 @@ namespace DofusOrigin.Realm.Characters.Items
             return string.Join(",", m_effectsList);
         }
 
-        public void GeneratItem(int _jet = 3)
+        public void GeneratItem(int _jet = 4)
         {
             this.m_quantity = 1;
             this.m_position = -1;
