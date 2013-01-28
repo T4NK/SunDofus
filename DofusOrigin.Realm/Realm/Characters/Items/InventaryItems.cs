@@ -197,12 +197,13 @@ namespace DofusOrigin.Realm.Characters.Items
                     var item2 = m_itemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position &&
                     x.m_id != item.m_id);
 
-                    item.m_quantity += item2.m_quantity;
-                    m_client.m_pods += (item2.m_base.m_pods * item2.m_quantity);
+                    item2.m_quantity += item.m_quantity;
+                    m_client.m_pods += (item.m_base.m_pods * item.m_quantity);
                     RefreshBonus();
 
-                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item.m_id, item.m_quantity));
-                    DeleteItem(item2.m_id, item2.m_quantity);
+                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item2.m_id, item2.m_quantity));
+                    DeleteItem(item.m_id, item.m_quantity);
+                    return;
                 }
             }
             else

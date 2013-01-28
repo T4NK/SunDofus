@@ -942,7 +942,6 @@ namespace DofusOrigin.Network.Realm
                         foreach (var i in NPC.m_model.m_sellingList)
                         {
                             var item = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == i);
-                            item.ParseRandomJet();
 
                             newPacket += string.Format("{0};{1}|", i, item.EffectInfos());
                         }

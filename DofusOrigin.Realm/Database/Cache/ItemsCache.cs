@@ -35,6 +35,7 @@ namespace DofusOrigin.Database.Cache
 
                     item.ParseWeaponInfos(sqlReader.GetString("WeaponInfo"));
 
+                    item.ParseRandomJet();
                     m_itemsList.Add(item);
                 }
 

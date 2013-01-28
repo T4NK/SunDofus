@@ -143,15 +143,23 @@ namespace DofusOrigin.Network.Realm
         {
             try
             {
+                var item = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == int.Parse(_datas[1]));
+
                 if (_datas.Length == 2)
                 {
-                    m_client.m_player.m_inventary.AddItem(int.Parse(_datas[1]), false);
+                    var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
+                    newItem.GeneratItem();
+
+                    m_client.m_player.m_inventary.AddItem(newItem, false);
                     m_client.SendConsoleMessage("Item Added !", 0);
                 }
 
                 else if (_datas.Length == 3)
                 {
-                    m_client.m_player.m_inventary.AddItem(int.Parse(_datas[1]), false, int.Parse(_datas[2]));
+                    var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
+                    newItem.GeneratItem(int.Parse(_datas[2]));
+
+                    m_client.m_player.m_inventary.AddItem(newItem, false);
                     m_client.SendConsoleMessage("Item Added !", 0);
                 }
 
