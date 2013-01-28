@@ -7,5 +7,6 @@
 [25.01.2013] Correction du bug des affichages des jets des items en vente sur les PNJ
 [25.01.2013] Correction d'un bug sur les empilations d'items à même jets
 [27.01.2013] Correction du bug sur la disparition d'item lors d'un mouvement de positions
-
-/!\Bug commande génération d'item + achat  (jet en compte mais le client affiche pas)
+[28.01.2013] Correction de pas mal de failles et de bug concernant les items (sont désormais stables)
+[28.01.2013] Début des échanges (invitation)
+[28.01.2013] Annulation automatiquement d'une demande en echange si l'un des personnages se déconnecte

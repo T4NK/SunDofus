@@ -108,6 +108,9 @@ namespace DofusOrigin.Network.Realm
                 {
                     m_player.GetMap().DelPlayer(m_player);
                     m_player.isConnected = false;
+
+                    if (m_player.m_state.onExchange)
+                        DofusOrigin.Realm.Exchanges.ExchangesManager.LeaveExchange(m_player);
                 }
             }
             Network.ServersHandler.m_realmServer.m_clients.Remove(this);

@@ -41,9 +41,11 @@ namespace DofusOrigin.Network.Realm
             m_packets["BD"] = SendDate;
             m_packets["BM"] = ParseChatMessage;
             m_packets["cC"] = ChangeChannel;
-            m_packets["EB"] = BuyFromNPC;
-            m_packets["ER"] = RequestExchange;
-            m_packets["ES"] = SellFromNPC;
+            m_packets["EA"] = ExchangeAccept;
+            m_packets["EB"] = ExchangeBuy;
+            m_packets["EM"] = ExchangeMove;
+            m_packets["ER"] = ExchangeRequest;
+            m_packets["ES"] = ExchangeSell;
             m_packets["EV"] = CancelExchange;
             m_packets["GA"] = GameAction;
             m_packets["GC"] = CreateGame;
@@ -910,7 +912,7 @@ namespace DofusOrigin.Network.Realm
 
         #region Exchange
 
-        private void RequestExchange(string _datas)
+        private void ExchangeRequest(string _datas)
         {
             try
             {
@@ -942,11 +944,36 @@ namespace DofusOrigin.Network.Realm
                         foreach (var i in NPC.m_model.m_sellingList)
                         {
                             var item = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == i);
-
                             newPacket += string.Format("{0};{1}|", i, item.EffectInfos());
                         }
 
                         m_client.Send(newPacket.Substring(0, newPacket.Length - 1));
+
+                        break;
+
+                    case 1://Player
+
+                        var charID = int.Parse(packet[1]);
+
+                        if (DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_id == charID))
+                        {
+                            var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == charID);
+
+                            if (!character.isConnected == true && !character.m_state.Occuped)
+                            {
+                                m_client.Send("BN");
+                                return;
+                            }
+
+                            character.m_networkClient.Send(string.Format("ERK{0}|{1}|1", m_client.m_player.m_id, character.m_id));
+                            m_client.Send(string.Format("ERK{0}|{1}|1", m_client.m_player.m_id, character.m_id));
+
+                            character.m_state.actualTraider = m_client.m_player.m_id;
+                            character.m_state.onExchange = true;
+
+                            m_client.m_player.m_state.actualTraided = character.m_id;
+                            m_client.m_player.m_state.onExchange = true;
+                        }
 
                         break;
                 }
@@ -957,10 +984,12 @@ namespace DofusOrigin.Network.Realm
         private void CancelExchange(string t)
         {
             m_client.Send("EV");
-            m_client.m_player.m_state.onExchange = false;
+
+            if (m_client.m_player.m_state.onExchange)
+                DofusOrigin.Realm.Exchanges.ExchangesManager.LeaveExchange(m_client.m_player);
         }
 
-        private void BuyFromNPC(string packet)
+        private void ExchangeBuy(string packet)
         {
             try
             {
@@ -1002,7 +1031,7 @@ namespace DofusOrigin.Network.Realm
             catch { }
         }
 
-        private void SellFromNPC(string _datas)
+        private void ExchangeSell(string _datas)
         {
             try
             {
@@ -1037,6 +1066,25 @@ namespace DofusOrigin.Network.Realm
                 m_client.Send("ESK");
             }
             catch { }
+        }
+
+        private void ExchangeMove(string _datas)
+        {
+            switch (_datas.Substring(0, 1))
+            {
+                case "G": //kamas
+
+                    break;
+
+                case "O": //Items
+
+                    break;
+            }
+        }
+
+        private void ExchangeAccept(string _datas)
+        {
+            //If client putt "yes"
         }
 
         #endregion
