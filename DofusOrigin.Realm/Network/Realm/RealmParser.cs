@@ -43,6 +43,7 @@ namespace DofusOrigin.Network.Realm
             m_packets["cC"] = ChangeChannel;
             m_packets["EA"] = ExchangeAccept;
             m_packets["EB"] = ExchangeBuy;
+            m_packets["EK"] = ExchangeValidate;
             m_packets["EM"] = ExchangeMove;
             m_packets["ER"] = ExchangeRequest;
             m_packets["ES"] = ExchangeSell;
@@ -1070,21 +1071,113 @@ namespace DofusOrigin.Network.Realm
 
         private void ExchangeMove(string _datas)
         {
-            switch (_datas.Substring(0, 1))
+            try
             {
-                case "G": //kamas
+                switch (_datas.Substring(0, 1))
+                {
+                    case "G": //kamas
 
-                    break;
+                        var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
 
-                case "O": //Items
+                        if (!m_client.m_player.m_state.onExchangePanel || !character.m_state.onExchangePanel || character.m_state.actualPlayerExchange != m_client.m_player.m_id)
+                        {
+                            m_client.Send("EME");
+                            return;
+                        }
 
-                    break;
+                        var actualExchange = DofusOrigin.Realm.Exchanges.ExchangesManager.m_exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
+                            x.player2.m_id == character.m_id) || (x.player2.m_id == m_client.m_player.m_id && x.player1.m_id == character.m_id));
+
+                        var kamas = long.Parse(_datas.Substring(1));
+
+                        if (kamas > m_client.m_player.m_kamas)
+                            kamas = m_client.m_player.m_kamas;
+                        else if (kamas < 0)
+                            kamas = 0;
+
+                        actualExchange.MoveGold(m_client.m_player, kamas);
+
+                        break;
+
+                    case "O": //Items
+
+                        var character2 = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
+
+                        if (!m_client.m_player.m_state.onExchangePanel || !character2.m_state.onExchangePanel || character2.m_state.actualPlayerExchange != m_client.m_player.m_id)
+                        {
+                            m_client.Send("EME");
+                            return;
+                        }
+
+                        var actualExchange2 = DofusOrigin.Realm.Exchanges.ExchangesManager.m_exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
+                            x.player2.m_id == character2.m_id) || (x.player2.m_id == m_client.m_player.m_id && x.player1.m_id == character2.m_id));
+
+                        var add = ( _datas.Substring(1,1) == "+" ? true : false);
+                        var itemID = int.Parse(_datas.Substring(2).Split('|')[0]);
+                        var quantity = int.Parse(_datas.Substring(2).Split('|')[0]);
+
+                        var charItem = m_client.m_player.m_inventary.m_itemsList.First(x => x.m_id == itemID);
+                        if (charItem.m_quantity < quantity)
+                            quantity = charItem.m_quantity;
+                        if (quantity < 1)
+                            return;
+
+                        actualExchange2.MoveItem(m_client.m_player, charItem, quantity, add);
+
+                        break;
+                }
             }
+            catch { }
         }
 
         private void ExchangeAccept(string _datas)
         {
-            //If client putt "yes"
+            try
+            {
+                if (m_client.m_player.m_state.onExchange && m_client.m_player.m_state.actualTraider != -1)
+                {
+                    var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualTraider);
+                    if (character.m_state.actualTraided == m_client.m_player.m_id)
+                    {
+                        DofusOrigin.Realm.Exchanges.ExchangesManager.AddExchange(character, m_client.m_player);
+                        return;
+                    }
+                }
+                m_client.Send("BN");
+            }
+            catch { }
+        }
+
+        private void ExchangeValidate(string _datas)
+        {
+            try
+            {
+                if (!m_client.m_player.m_state.onExchange)
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                m_client.m_player.m_state.onExchangeAccepted = true;
+
+                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
+
+                if (!m_client.m_player.m_state.onExchangePanel || !character.m_state.onExchangePanel || character.m_state.actualPlayerExchange != m_client.m_player.m_id)
+                {
+                    m_client.Send("EME");
+                    return;
+                }
+
+                var actualExchange = DofusOrigin.Realm.Exchanges.ExchangesManager.m_exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
+                    x.player2.m_id == character.m_id) || (x.player2.m_id == m_client.m_player.m_id && x.player1.m_id == character.m_id));
+
+                m_client.Send(string.Format("EK1{0}", m_client.m_player.m_id));
+                character.m_networkClient.Send(string.Format("EK1{0}", m_client.m_player.m_id));
+
+                if (character.m_state.onExchangeAccepted)
+                    actualExchange.ValideExchange();
+            }
+            catch { }
         }
 
         #endregion
