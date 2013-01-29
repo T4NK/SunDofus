@@ -10,6 +10,6 @@
 [28.01.2013] Correction de pas mal de failles et de bug concernant les items (sont désormais stables)
 [28.01.2013] Début des échanges (invitation)
 [28.01.2013] Annulation automatiquement d'une demande en echange si l'un des personnages se déconnecte
+[28.01.2013] Correction du bug du jet qui redevenait aléatoire (ex: 20 à 30 au lieu de 24) après un échange
 
-/!\Bug quantité sur les échanges
 /!\Bug jet aprÈs un echange (redevient aléatoire)

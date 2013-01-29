@@ -1114,7 +1114,7 @@ namespace DofusOrigin.Network.Realm
 
                         var add = ( _datas.Substring(1,1) == "+" ? true : false);
                         var itemID = int.Parse(_datas.Substring(2).Split('|')[0]);
-                        var quantity = int.Parse(_datas.Substring(2).Split('|')[0]);
+                        var quantity = int.Parse(_datas.Substring(2).Split('|')[1]);
 
                         var charItem = m_client.m_player.m_inventary.m_itemsList.First(x => x.m_id == itemID);
                         if (charItem.m_quantity < quantity)

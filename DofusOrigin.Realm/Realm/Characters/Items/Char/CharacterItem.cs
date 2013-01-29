@@ -60,6 +60,7 @@ namespace DofusOrigin.Realm.Characters.Items
 
             m_effectsList.ForEach(x => newItem.m_effectsList.Add(new Effects.EffectItem(x)));
 
+            newItem.m_id = ItemsHandler.GetNewID();
             newItem.m_position = m_position;
             newItem.m_quantity = m_quantity;
 

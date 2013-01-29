@@ -2,27 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DofusOrigin.Realm.Characters.Items;
 
 namespace DofusOrigin.Realm.Exchanges
 {
     class ExchangeItem
     {
-        public int u_ID;
-        public int t_ID;
         public int quantity;
-
-        public string effects;
 
         public Characters.Items.CharacterItem myitem;
 
         public ExchangeItem(Characters.Items.CharacterItem item)
         {
-            u_ID = item.m_id;
-            t_ID = item.m_base.m_id;
-
-            effects = item.EffectsInfos();
-
             myitem = item;
+        }
+
+        public CharacterItem GetNewItem()
+        {
+            var newItem = new CharacterItem(myitem.m_base);
+            newItem.m_effectsList.Clear();
+
+            myitem.m_effectsList.ForEach(x => newItem.m_effectsList.Add(new Effects.EffectItem(x)));
+
+            newItem.m_id = ItemsHandler.GetNewID();
+            newItem.m_position = myitem.m_position;
+
+            newItem.m_quantity = quantity;
+
+            return newItem;
         }
     }
 }
