@@ -56,6 +56,7 @@ namespace DofusOrigin.Realm.Characters.Items
         public CharacterItem Copy()
         {
             var newItem = new CharacterItem(m_base);
+            newItem.m_effectsList.Clear();
 
             m_effectsList.ForEach(x => newItem.m_effectsList.Add(new Effects.EffectItem(x)));
 
