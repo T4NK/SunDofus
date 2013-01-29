@@ -262,6 +262,7 @@ namespace DofusOrigin.Realm.Characters.Items
             {
                 var allInfos = infos.Split('~');
                 var item = new CharacterItem(Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == Convert.ToInt32(allInfos[0], 16)));
+                item.m_effectsList.Clear();
 
                 item.m_id = ItemsHandler.GetNewID();
                 item.m_quantity = Convert.ToInt32(allInfos[1], 16);
