@@ -55,6 +55,10 @@ namespace DofusOrigin.Network.Realm
             m_packets["Od"] = DeleteItem;
             m_packets["OM"] = MoveItem;
             m_packets["OU"] = UseItem;
+            m_packets["PA"] = PartyAccept;
+            m_packets["PI"] = PartyInvite;
+            m_packets["PR"] = PartyRefuse;
+            m_packets["PV"] = PartyLeave;
             m_packets["SB"] = SpellBoost;
             m_packets["SM"] = SpellMove;
         }
@@ -1178,6 +1182,96 @@ namespace DofusOrigin.Network.Realm
                     actualExchange.ValideExchange();
             }
             catch { }
+        }
+
+        #endregion
+
+        #region Party
+
+        public void PartyInvite(string _datas)
+        {
+            try
+            {
+                if (DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_name == _datas && x.isConnected))
+                {
+                    var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_name == _datas);
+                    if (character.m_state.myParty != null || character.m_state.Occuped)
+                    {
+                        m_client.Send(string.Format("PIEa{0}", _datas));
+                        return;
+                    }
+
+                    if (m_client.m_player.m_state.myParty != null)
+                    {
+                        if (m_client.m_player.m_state.myParty.myMembers.Count < 8)
+                        {
+                            character.m_state.senderInviteParty = m_client.m_player.m_id;
+                            character.m_state.onWaitingParty = true;
+                            m_client.m_player.m_state.receiverInviteParty = character.m_id;
+                            m_client.m_player.m_state.onWaitingParty = true;
+
+                            m_client.Send(string.Format("PIK{0}|{1}", m_client.m_player.m_name, character.m_name));
+                            character.m_networkClient.Send(string.Format("PIK{0}|{1}", m_client.m_player.m_name, character.m_name));
+                        }
+                        else
+                        {
+                            m_client.Send(string.Format("PIEf{0}", _datas));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        character.m_state.senderInviteParty = m_client.m_player.m_id;
+                        character.m_state.onWaitingParty = true;
+                        m_client.m_player.m_state.receiverInviteParty = character.m_id;
+                        m_client.m_player.m_state.onWaitingParty = true;
+
+                        m_client.Send(string.Format("PIK{0}|{1}", m_client.m_player.m_name, character.m_name));
+                        character.m_networkClient.Send(string.Format("PIK{0}|{1}", m_client.m_player.m_name, character.m_name));
+                    }
+                }
+                else
+                    m_client.Send(string.Format("PIEn{0}", _datas));
+            }
+            catch { }
+        }
+
+        private void PartyRefuse(string _datas)
+        {
+            try
+            {
+                if (m_client.m_player.m_state.senderInviteParty == -1)
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First
+                    (x => x.m_id == m_client.m_player.m_state.senderInviteParty);
+
+                if (character.isConnected == false || character.m_state.receiverInviteParty != m_client.m_player.m_id)
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                character.m_state.receiverInviteParty = -1;
+                character.m_state.onWaitingParty = false;
+
+                m_client.m_player.m_state.senderInviteParty = -1;
+                m_client.m_player.m_state.onWaitingParty = false;
+
+                character.m_networkClient.Send("PR");
+            }
+            catch { }
+        }
+
+        private void PartyAccept(string _datas)
+        {
+        }
+
+        private void PartyLeave(string _datas)
+        {
         }
 
         #endregion

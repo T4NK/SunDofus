@@ -84,6 +84,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Realm\Characters\Character.cs" />
+    <Compile Include="Realm\Characters\CharacterParty.cs" />
     <Compile Include="Realm\Characters\CharactersManager.cs" />
     <Compile Include="Realm\Characters\CharacterState.cs" />
     <Compile Include="Database\Models\Items\ItemModel.cs" />

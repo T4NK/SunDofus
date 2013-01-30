@@ -111,6 +111,30 @@ namespace DofusOrigin.Network.Realm
 
                     if (m_player.m_state.onExchange)
                         DofusOrigin.Realm.Exchanges.ExchangesManager.LeaveExchange(m_player);
+
+                    if (m_player.m_state.onWaitingParty)
+                    {
+                        try
+                        {
+                            if (m_player.m_state.receiverInviteParty != -1 || m_player.m_state.senderInviteParty != -1)
+                            {
+                                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First
+                                    (x => x.m_id == m_player.m_state.receiverInviteParty);
+                                if (character.isConnected)
+                                {
+                                    character.m_state.senderInviteParty = -1;
+                                    character.m_state.receiverInviteParty = -1;
+                                    character.m_state.onWaitingParty = false;
+                                    character.m_networkClient.Send("PV");//Cancel party invite
+                                }
+
+                                m_player.m_state.receiverInviteParty = -1;
+                                m_player.m_state.senderInviteParty = -1;
+                                m_player.m_state.onWaitingParty = false;
+                            }
+                        }
+                        catch { }
+                    }
                 }
             }
             Network.ServersHandler.m_realmServer.m_clients.Remove(this);

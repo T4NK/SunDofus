@@ -28,11 +28,16 @@ namespace DofusOrigin.Realm.Characters
         public int actualTraider = -1;
         public int actualPlayerExchange = -1;
 
+        public bool onWaitingParty = false;
+        public CharacterParty myParty = null;
+        public int senderInviteParty = -1;
+        public int receiverInviteParty = -1;
+
         public bool Occuped
         {
             get
             {
-                return onMove || onExchange;
+                return onMove || onExchange || onWaitingParty;
             }
         }
     }
