@@ -202,6 +202,25 @@ namespace DofusOrigin.Realm.Characters
             return builder.ToString();
         }
 
+        public string PatternOnParty()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            builder.Append(m_id).Append(";");
+            builder.Append(m_name).Append(";");
+            builder.Append(m_skin).Append(";");
+            builder.Append(m_color).Append(";");
+            builder.Append(m_color2).Append(";");
+            builder.Append(m_color3).Append(";");
+            builder.Append(GetItemsPos()).Append(";");
+            builder.Append(m_life).Append(",").Append(m_maximumLife).Append(";");
+            builder.Append(m_level).Append(";");
+            builder.Append(m_stats.initiative).Append(";");
+            builder.Append(m_stats.prospection).Append(";0");
+
+            return builder.ToString();
+        }
+
         public string PatternSelect()
         {
             StringBuilder builder = new StringBuilder();

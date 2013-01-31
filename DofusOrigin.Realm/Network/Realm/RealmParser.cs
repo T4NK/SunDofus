@@ -1268,10 +1268,73 @@ namespace DofusOrigin.Network.Realm
 
         private void PartyAccept(string _datas)
         {
+            try
+            {
+                if (m_client.m_player.m_state.senderInviteParty != -1 && m_client.m_player.m_state.onWaitingParty)
+                {
+                    var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.senderInviteParty);
+
+                    if (character.isConnected == false || character.m_state.receiverInviteParty != m_client.m_player.m_id)
+                    {
+                        m_client.m_player.m_state.senderInviteParty = -1;
+                        m_client.m_player.m_state.onWaitingParty = false;
+                        m_client.Send("BN");
+                        return;
+                    }
+
+                    m_client.m_player.m_state.senderInviteParty = -1;
+                    m_client.m_player.m_state.onWaitingParty = false;
+
+                    character.m_state.receiverInviteParty = -1;
+                    character.m_state.onWaitingParty = false;
+
+                    if (character.m_state.myParty == null)
+                    {
+                        character.m_state.myParty = new CharacterParty(character);
+                        character.m_state.myParty.AddMember(m_client.m_player);
+                    }
+                    else
+                    {
+                        if (character.m_state.myParty.myMembers.Count > 7)
+                        {
+                            m_client.Send("BN");
+                            character.m_networkClient.Send("PR");
+                            return;
+                        }
+                        character.m_state.myParty.AddMember(m_client.m_player);
+                    }
+
+                    character.m_networkClient.Send("PR");
+                }
+                else
+                {
+                    m_client.m_player.m_state.senderInviteParty = -1;
+                    m_client.m_player.m_state.onWaitingParty = false;
+                    m_client.Send("BN");
+                }
+            }
+            catch { }
         }
 
         private void PartyLeave(string _datas)
         {
+            try
+            {
+                if (m_client.m_player.m_state.myParty == null || !m_client.m_player.m_state.myParty.myMembers.Keys.Contains(m_client.m_player))
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                if (_datas == "")
+                    m_client.m_player.m_state.myParty.LeaveParty(m_client.m_player.m_name);
+                else
+                {
+                    var character = m_client.m_player.m_state.myParty.myMembers.Keys.ToList().First(x => x.m_id == int.Parse(_datas));
+                    m_client.m_player.m_state.myParty.LeaveParty(character.m_name, m_client.m_player.m_id.ToString());
+                }
+            }
+            catch { }
         }
 
         #endregion

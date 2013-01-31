@@ -15,3 +15,10 @@
 [29.01.2013] Ajout de la validation d'échanges
 [29.01.2013] Correction du bug du jet qui redevenait aléatoire (ex: 20 à 30 au lieu de 24) après un échange
 [29.01.2013] Rectification du bug de quantité sur les objets en échange
+[30.01.2013] Ajout de l'invitation dans un groupe
+[30.01.2013] Ajout de la déclinaison d'ajout dans un groupe
+[30.01.2013] Ajout de l'annulation auto. lors d'une déconnexion de l'inviteur ou de l'invité avec comme sujet un groupe
+[31.01.2013] Ajout de la possibilité d'accepter une demande d'ajout au groupe
+[31.01.2013] Ajout des affichages des personnages dans le groupe
+[31.01.2013] Ajout de la fonction "Quitter un groupe"
+[31.01.2013] Possibilité de viré les membres d'un groupe par le meneur
