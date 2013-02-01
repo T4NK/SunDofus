@@ -273,6 +273,12 @@ namespace DofusOrigin.Realm.Characters
                 var map = Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_id == this.m_mapID);
 
                 m_networkClient.Send(string.Format("GDM|{0}|0{1}|{2}", map.m_map.m_id, map.m_map.m_date, map.m_map.m_key));
+
+                if (this.m_state.isFollow)
+                {
+                    foreach (var character in this.m_state.followers)
+                        character.m_networkClient.Send(string.Format("IC{0}|{1}", GetMap().m_map.m_PosX, GetMap().m_map.m_PosY));
+                }
             }
         }
 

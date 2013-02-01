@@ -33,6 +33,11 @@ namespace DofusOrigin.Realm.Characters
         public int senderInviteParty = -1;
         public int receiverInviteParty = -1;
 
+        public bool isFollow = false;
+        public bool isFollowing = false;
+        public int followingID = -1;
+        public List<Character> followers = new List<Character>();
+
         public bool Occuped
         {
             get

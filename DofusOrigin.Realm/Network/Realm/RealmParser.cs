@@ -56,6 +56,7 @@ namespace DofusOrigin.Network.Realm
             m_packets["OM"] = MoveItem;
             m_packets["OU"] = UseItem;
             m_packets["PA"] = PartyAccept;
+            m_packets["PF"] = PartyFollow;
             m_packets["PI"] = PartyInvite;
             m_packets["PR"] = PartyRefuse;
             m_packets["PV"] = PartyLeave;
@@ -1332,6 +1333,62 @@ namespace DofusOrigin.Network.Realm
                 {
                     var character = m_client.m_player.m_state.myParty.myMembers.Keys.ToList().First(x => x.m_id == int.Parse(_datas));
                     m_client.m_player.m_state.myParty.LeaveParty(character.m_name, m_client.m_player.m_id.ToString());
+                }
+            }
+            catch { }
+        }
+
+        private void PartyFollow(string _datas)
+        {
+            try
+            {
+                var add = (_datas.Substring(0, 1) == "+" ? true : false);
+                var charid = int.Parse(_datas.Substring(1, _datas.Length - 1));
+                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == charid);
+
+                if (add)
+                {
+                    if (!character.isConnected || m_client.m_player.m_state.isFollowing)
+                    {
+                        m_client.Send("BN");
+                        return;
+                    }
+
+                    if (character.m_state.myParty == null || !character.m_state.myParty.myMembers.ContainsKey(m_client.m_player)
+                        || character.m_state.followers.Contains(m_client.m_player))
+                    {
+                        m_client.Send("BN");
+                        return;
+                    }
+
+                    character.m_state.followers.Add(m_client.m_player);
+                    character.m_state.isFollow = true;
+                    //ImPacket se fait suivre
+
+                    m_client.m_player.m_state.followingID = character.m_id;
+                    m_client.m_player.m_state.isFollowing = true;
+
+                    m_client.Send(string.Format("IC{0}|{1}", character.GetMap().m_map.m_PosX, character.GetMap().m_map.m_PosY));
+                    m_client.Send(string.Format("PF+{0}", character.m_id));
+                }
+                else
+                {
+                    if (character.m_state.myParty == null || !character.m_state.myParty.myMembers.ContainsKey(m_client.m_player)
+                        || !character.m_state.followers.Contains(m_client.m_player) || character.m_id != m_client.m_player.m_state.followingID)
+                    {
+                        m_client.Send("BN");
+                        return;
+                    }
+
+                    character.m_state.followers.Remove(m_client.m_player);
+                    character.m_state.isFollow = false;
+                    //ImPacket ne se fait plus suivre
+
+                    m_client.m_player.m_state.followingID = -1;
+                    m_client.m_player.m_state.isFollowing = false;
+
+                    m_client.Send("IC|");
+                    m_client.Send("PF-");
                 }
             }
             catch { }

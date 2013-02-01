@@ -138,6 +138,18 @@ namespace DofusOrigin.Network.Realm
 
                     if (m_player.m_state.myParty != null)
                         m_player.m_state.myParty.LeaveParty(m_player.m_name);
+
+                    if (m_player.m_state.isFollowing)
+                    {
+                        if(DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_state.followers.Contains(m_player) && x.m_id == m_player.m_state.followingID))
+                            DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_player.m_state.followingID).m_state.followers.Remove(m_player);
+                    }
+
+                    if (m_player.m_state.isFollow)
+                    {
+                        m_player.m_state.followers.Clear();
+                        m_player.m_state.isFollow = false;
+                    }
                 }
             }
             Network.ServersHandler.m_realmServer.m_clients.Remove(this);
