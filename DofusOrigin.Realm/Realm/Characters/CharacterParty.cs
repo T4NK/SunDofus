@@ -50,6 +50,12 @@ namespace DofusOrigin.Realm.Characters
 
                 Send(string.Format("PM-{0}", character.m_id));
 
+                if (character.m_state.isFollow)
+                {
+                    character.m_state.followers.Clear();
+                    character.m_state.isFollow = false;
+                }
+
                 if(character.isConnected)
                     character.m_networkClient.Send(string.Format("PV{0}", kicker));
 
@@ -64,7 +70,7 @@ namespace DofusOrigin.Realm.Characters
                         last.m_networkClient.Send(string.Format("PV{0}", kicker));
                 }
                 else if (ownerID == character.m_id)
-                    GetRandomLeader();
+                    GetNewLeader();
             }
             catch { }
         }
@@ -79,7 +85,7 @@ namespace DofusOrigin.Realm.Characters
             catch { }
         }
 
-        private void GetRandomLeader()
+        private void GetNewLeader()
         {
             var character = myMembers.Keys.ToList()[0];
             myMembers[character] = 1;
