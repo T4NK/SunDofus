@@ -580,7 +580,10 @@ namespace DofusOrigin.Realm.Characters
             m_stats.dodgePM.m_items = (m_stats.wisdom.m_items / 4);
 
             m_stats.prospection.m_bases = (m_stats.luck.Total() / 10) + 100;
-            if (m_class == 3) m_stats.prospection.m_bases += 20;
+
+            if (m_class == 3)
+                m_stats.prospection.m_bases += 20;
+
             m_stats.initiative.m_bases = (m_maximumLife / 4 + m_stats.initiative.Total()) * (m_life / m_maximumLife);
         }
 

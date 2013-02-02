@@ -22,3 +22,6 @@
 [31.01.2013] Ajout des affichages des personnages dans le groupe
 [31.01.2013] Ajout de la fonction "Quitter un groupe"
 [31.01.2013] Possibilité de viré les membres d'un groupe par le meneur
+[01.02.2013] Ajout de la fonction "Suivre le personnage" et "Ne plus suivre le personnage"
+[01.02.2013] Ajout de l'annulation automatique de la suivie d'un personnage si il déconnecte
+[01.02.2013] Correction de la suivie par les maps, automatiquement mis à jour dès qu'il change de map

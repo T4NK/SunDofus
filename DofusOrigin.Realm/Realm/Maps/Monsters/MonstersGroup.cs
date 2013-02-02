@@ -33,10 +33,13 @@ namespace DofusOrigin.Realm.Maps.Monsters
             RefreshMappos();
             RefreshMonsters();
 
-            m_movements = new Timer();
-            m_movements.Enabled = true;
-            m_movements.Interval = Utilities.Basic.Rand(10000, 15000);
-            m_movements.Elapsed += new ElapsedEventHandler(this.Move);
+            if (Utilities.Config.m_config.GetBoolElement("MustMonstersMove"))
+            {
+                m_movements = new Timer();
+                m_movements.Enabled = true;
+                m_movements.Interval = Utilities.Basic.Rand(10000, 15000);
+                m_movements.Elapsed += new ElapsedEventHandler(this.Move);
+            }
         }
 
         private void Move(object e, EventArgs e2)

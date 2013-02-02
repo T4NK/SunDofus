@@ -61,6 +61,8 @@ namespace DofusOrigin.Utilities
             //Cache
             m_config.InsertElement("TimeReloadAuths", "60000");
 
+            m_config.InsertElement("MustMonstersMove", "false");
+
         #region Start
 
             m_config.InsertElement("StartLevel", "1");
