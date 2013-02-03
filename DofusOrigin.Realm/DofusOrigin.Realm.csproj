@@ -98,7 +98,6 @@
     <Compile Include="Database\Models\Items\ItemUsableModel.cs" />
     <Compile Include="Database\Models\Spells\SpellModel.cs" />
     <Compile Include="Database\Models\Spells\SpellLevelModel.cs" />
-    <Compile Include="Realm\Characters\NPC\DialogsHandler.cs" />
     <Compile Include="Realm\Characters\NPC\NPCMap.cs" />
     <Compile Include="Realm\Characters\Spells\Char\ChararcterSpell.cs" />
     <Compile Include="Realm\Characters\Spells\InventarySpells.cs" />

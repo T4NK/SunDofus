@@ -1463,7 +1463,36 @@ namespace DofusOrigin.Network.Realm
 
         private void DialogCreate(string _datas)
         {
+            try
+            {
+                var id = int.Parse(_datas);
 
+                if (!m_client.m_player.GetMap().m_npcs.Any(x => x.m_idOnMap == id) || m_client.m_player.m_state.Occuped)
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                var npc = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == id);
+
+                if (npc.m_model.m_question == null)
+                {
+                    m_client.Send("BN");
+                    m_client.SendMessage("Dialogue inexistant !");
+                    return;
+                }
+
+                m_client.m_player.m_state.onDialoging = true;
+                m_client.m_player.m_state.onDialogingWith = npc.m_idOnMap;
+
+                m_client.Send(string.Format("DCK{0}", npc.m_idOnMap));
+
+                if(npc.m_model.m_question.m_answers.Count(x => x.HasConditions(m_client.m_player)) == 0)
+                    m_client.Send(string.Format("DQ{0}", npc.m_model.m_question.m_questionID));
+                else
+                    m_client.Send(string.Format("DQ{0}|{1}", npc.m_model.m_question.m_questionID, string.Join(";", npc.m_model.m_question.m_answers)));
+            }
+            catch { }
         }
 
         private void DialogReply(string _datas)

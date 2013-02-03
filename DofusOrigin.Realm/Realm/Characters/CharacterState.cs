@@ -38,11 +38,14 @@ namespace DofusOrigin.Realm.Characters
         public int followingID = -1;
         public List<Character> followers = new List<Character>();
 
+        public bool onDialoging = false;
+        public int onDialogingWith = -1;
+
         public bool Occuped
         {
             get
             {
-                return onMove || onExchange || onWaitingParty;
+                return onMove || onExchange || onWaitingParty || onDialoging;
             }
         }
     }
