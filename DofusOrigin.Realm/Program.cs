@@ -36,6 +36,9 @@ namespace DofusOrigin
 
             Database.Cache.MapsCache.LoadMaps();
             Database.Cache.TriggersCache.LoadTriggers();
+
+            Database.Cache.NoPlayerCharacterCache.LoadNPCsAnswers();
+            Database.Cache.NoPlayerCharacterCache.LoadNPCsQuestions();
             Database.Cache.NoPlayerCharacterCache.LoadNPCs();
 
             Database.Cache.CharactersCache.LoadCharacters();

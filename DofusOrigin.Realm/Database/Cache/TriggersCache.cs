@@ -29,8 +29,6 @@ namespace DofusOrigin.Database.Cache
                     trigger.m_args = sqlReader.GetString("Args");
                     trigger.m_conditions = sqlReader.GetString("Conditions");
 
-                    trigger.ParseConditions();
-
                     m_triggersList.Add(trigger);
                     ParseTrigger(trigger);
                 }

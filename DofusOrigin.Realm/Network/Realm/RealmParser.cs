@@ -533,7 +533,7 @@ namespace DofusOrigin.Network.Realm
                         {
                             var trigger = m_client.m_player.GetMap().m_triggers.First(x => x.m_cellID == m_client.m_player.m_mapCell);
 
-                            if (DofusOrigin.Realm.World.ConditionsHandler.HasCondition(m_client, trigger.m_conds))
+                            if (DofusOrigin.Realm.World.Conditions.TriggerCondition.HasConditions(m_client.m_player, trigger.m_conditions))
                                 DofusOrigin.Realm.Effects.EffectAction.ParseEffect(m_client.m_player,trigger.m_actionID, trigger.m_args);
                             else
                                 m_client.SendMessage("Vous ne possédez pas les conditions nécessaires pour cette action !");

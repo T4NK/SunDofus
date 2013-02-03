@@ -18,7 +18,8 @@ namespace DofusOrigin.Database.Models.NPC
 
         public int m_artWork { get; set; }
         public int m_bonus { get; set; }
-        public int m_question { get; set; }
+
+        public NPCsQuestion m_question { get; set; }
 
         public string m_name { get; set; }
         public string m_items { get; set; }
@@ -28,6 +29,7 @@ namespace DofusOrigin.Database.Models.NPC
         public NoPlayerCharacterModel()
         {
             m_sellingList = new List<int>();
+            m_question = null;
         }
     }
 }

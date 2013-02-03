@@ -5,9 +5,12 @@ using System.Text;
 
 namespace DofusOrigin.Realm.World.Conditions
 {
-    class TriggerCondition
+    class NPCConditions
     {
-        public static bool HasConditions(Realm.Characters.Character character, string condi)
+        public int condiID { get; set; }
+        public string args { get; set; }
+
+        public bool HasCondition(Realm.Characters.Character character)
         {
             return true;
         }

@@ -15,17 +15,10 @@ namespace DofusOrigin.Database.Models.Maps
         public string m_args { get; set; }
         public string m_conditions { get; set; }
 
-        public List<TriggerCondition> m_conds { get; set; }
-
         public TriggerModel()
         {
             m_conditions = "";
             m_mapID = -1;
-        }
-
-        public void ParseConditions()
-        {
-            m_conds = new List<Realm.World.Conditions.TriggerCondition>();
         }
     }
 }
