@@ -57,5 +57,14 @@ namespace DofusOrigin.Realm.World
             else
                 _client.Send(string.Format("Im0115;{0}", _client.m_player.TimeRecruitment()));
         }
+
+        public static void SendPartyMessage(Network.Realm.RealmClient _client, string _message)
+        {
+            if (_client.m_player.m_state.myParty != null)
+            {
+                foreach (var character in _client.m_player.m_state.myParty.myMembers.Keys)
+                    character.m_networkClient.Send(string.Format("cMK$|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
+            }
+        }
     }
 }

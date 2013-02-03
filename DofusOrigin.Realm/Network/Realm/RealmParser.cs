@@ -424,7 +424,7 @@ namespace DofusOrigin.Network.Realm
                         break;
 
                     case "$":
-                        //PartyMessage
+                        Chat.SendPartyMessage(m_client, message);
                         break;
 
                     case "%":
