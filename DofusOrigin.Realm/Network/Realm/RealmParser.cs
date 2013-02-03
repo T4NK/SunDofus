@@ -1502,7 +1502,10 @@ namespace DofusOrigin.Network.Realm
 
         private void DialogExit(string _datas)
         {
+            m_client.Send("DV");
 
+            m_client.m_player.m_state.onDialogingWith = -1;
+            m_client.m_player.m_state.onDialoging = false;
         }
 
         #endregion
