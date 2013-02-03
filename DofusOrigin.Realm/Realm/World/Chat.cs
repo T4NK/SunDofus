@@ -66,5 +66,14 @@ namespace DofusOrigin.Realm.World
                     character.m_networkClient.Send(string.Format("cMK$|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
             }
         }
+
+        public static void SendAdminMessage(Network.Realm.RealmClient _client, string _message)
+        {
+            if (_client.m_infos.m_level > 0)
+            {
+                foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true && x.m_infos.m_level > 0))
+                    character.Send(string.Format("cMK@|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
+            }
+        }
     }
 }

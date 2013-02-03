@@ -448,7 +448,7 @@ namespace DofusOrigin.Network.Realm
                         break;
 
                     case "@":
-                        //AdminMessage
+                        Chat.SendAdminMessage(m_client, message);
                         break;
 
                     case "¤":
