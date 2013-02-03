@@ -12,7 +12,7 @@ namespace DofusOrigin.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "SELECT * FROM datas_characters";
+                var sqlText = "SELECT * FROM dyn_characters";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 MySqlDataReader sqlResult = sqlCommand.ExecuteReader();
@@ -59,7 +59,7 @@ namespace DofusOrigin.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "INSERT INTO datas_characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items, @spells)";
+                var sqlText = "INSERT INTO dyn_characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items, @spells)";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 MySqlParameterCollection P = sqlCommand.Parameters;
@@ -87,7 +87,7 @@ namespace DofusOrigin.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "UPDATE datas_characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex," +
+                var sqlText = "UPDATE dyn_characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex," +
                     " color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats, items=@items, spells=@spells WHERE id=@id";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
@@ -113,7 +113,7 @@ namespace DofusOrigin.Database.Cache
         {
             lock (DatabaseHandler.m_locker)
             {
-                var sqlText = "DELETE FROM datas_characters WHERE name=@CharName";
+                var sqlText = "DELETE FROM dyn_characters WHERE name=@CharName";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                 sqlCommand.Parameters.Add(new MySqlParameter("@CharName", Name));
@@ -130,7 +130,7 @@ namespace DofusOrigin.Database.Cache
             {
                 if (m_lastID == -1)
                 {
-                    var sqlText = "SELECT id FROM datas_characters ORDER BY id DESC LIMIT 0,1";
+                    var sqlText = "SELECT id FROM dyn_characters ORDER BY id DESC LIMIT 0,1";
                     var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
 
                     MySqlDataReader sqlResult = sqlCommand.ExecuteReader();

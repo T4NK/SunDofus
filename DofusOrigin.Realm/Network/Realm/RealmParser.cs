@@ -41,6 +41,9 @@ namespace DofusOrigin.Network.Realm
             m_packets["BD"] = SendDate;
             m_packets["BM"] = ParseChatMessage;
             m_packets["cC"] = ChangeChannel;
+            m_packets["DC"] = DialogCreate;
+            m_packets["DR"] = DialogReply;
+            m_packets["DV"] = DialogExit;
             m_packets["EA"] = ExchangeAccept;
             m_packets["EB"] = ExchangeBuy;
             m_packets["EK"] = ExchangeValidate;
@@ -1364,7 +1367,7 @@ namespace DofusOrigin.Network.Realm
 
                     character.m_state.followers.Add(m_client.m_player);
                     character.m_state.isFollow = true;
-                    //ImPacket se fait suivre
+                    character.m_networkClient.Send(string.Format("Im052;{0}", m_client.m_player.m_name));
 
                     m_client.m_player.m_state.followingID = character.m_id;
                     m_client.m_player.m_state.isFollowing = true;
@@ -1383,7 +1386,7 @@ namespace DofusOrigin.Network.Realm
 
                     character.m_state.followers.Remove(m_client.m_player);
                     character.m_state.isFollow = false;
-                    //ImPacket ne se fait plus suivre
+                    character.m_networkClient.Send(string.Format("Im053;{0}", m_client.m_player.m_name));
 
                     m_client.m_player.m_state.followingID = -1;
                     m_client.m_player.m_state.isFollowing = false;
@@ -1417,7 +1420,7 @@ namespace DofusOrigin.Network.Realm
                             charinparty.m_networkClient.Send("PF-");
 
                         character.m_state.followers.Add(m_client.m_player);
-                        //ImPacket se fait suivre
+                        character.m_networkClient.Send(string.Format("Im052;{0}", m_client.m_player.m_name));
 
                         charinparty.m_state.followingID = character.m_id;
                         charinparty.m_state.isFollowing = true;
@@ -1439,7 +1442,7 @@ namespace DofusOrigin.Network.Realm
                     foreach (var charinparty in character.m_state.myParty.myMembers.Keys.Where(x => x != character))
                     {
                         character.m_state.followers.Remove(m_client.m_player);
-                        //ImPacket ne se fait plus suivre
+                        character.m_networkClient.Send(string.Format("Im053;{0}", m_client.m_player.m_name));
 
                         charinparty.m_state.followingID = -1;
                         charinparty.m_state.isFollowing = false;
@@ -1452,6 +1455,25 @@ namespace DofusOrigin.Network.Realm
                 }
             }
             catch { }
+        }
+
+        #endregion
+
+        #region Dialogs
+
+        private void DialogCreate(string _datas)
+        {
+
+        }
+
+        private void DialogReply(string _datas)
+        {
+
+        }
+
+        private void DialogExit(string _datas)
+        {
+
         }
 
         #endregion

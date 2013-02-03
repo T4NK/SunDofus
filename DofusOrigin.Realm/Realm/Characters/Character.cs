@@ -158,8 +158,6 @@ namespace DofusOrigin.Realm.Characters
             if (m_inventary.m_itemsList.Any(x => x.m_position == 15))
                 packet += Utilities.Basic.DeciToHex(m_inventary.m_itemsList.First(x => x.m_position == 15).m_base.m_id);
 
-            packet += ",";
-
             return packet;
         }
 

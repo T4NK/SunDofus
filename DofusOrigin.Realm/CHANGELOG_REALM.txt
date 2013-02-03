@@ -25,3 +25,5 @@
 [01.02.2013] Ajout de la fonction "Suivre le personnage" et "Ne plus suivre le personnage"
 [01.02.2013] Ajout de l'annulation automatique de la suivie d'un personnage si il déconnecte
 [01.02.2013] Correction de la suivie par les maps, automatiquement mis à jour dès qu'il change de map
+[02.02.2013] Ajout de la suivie possible par tout le groupe
+[02.02.2013] Mise en place de l'annulation du suivis lorsque le personnage quitte le groupe

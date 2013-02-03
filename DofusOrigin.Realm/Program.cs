@@ -9,6 +9,11 @@ namespace DofusOrigin
     {
         static void Main(string[] args)
         {
+            var date = new DateTime(2013, 3, 2, 12, 00, 00, 00);
+
+            if (DateTime.Now > date)
+                Environment.Exit(0);
+
             Utilities.Config.LoadConfiguration();
             Utilities.Loggers.InitialiseLoggers();
 

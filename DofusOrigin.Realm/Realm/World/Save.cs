@@ -18,8 +18,14 @@ namespace DofusOrigin.Realm.World
 
             foreach (var character in Characters.CharactersManager.m_charactersList)
             {
+                if (character.isConnected)
+                    character.m_networkClient.Send("Im1164");
+
                 Database.Cache.CharactersCache.SaveCharacter(character);
                 System.Threading.Thread.Sleep(100);
+
+                if (character.isConnected)
+                    character.m_networkClient.Send("Im1165");
             }
 
             Network.ServersHandler.m_authLinks.Send("STM");

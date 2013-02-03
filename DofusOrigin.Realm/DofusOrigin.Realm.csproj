@@ -65,6 +65,8 @@
     <Compile Include="Database\Models\Monsters\MonsterLevelModel.cs" />
     <Compile Include="Database\Models\Monsters\MonsterModel.cs" />
     <Compile Include="Database\Models\NPC\NoPlayerCharacterModel.cs" />
+    <Compile Include="Database\Models\NPC\NPCsAnswer.cs" />
+    <Compile Include="Database\Models\NPC\NPCsQuestion.cs" />
     <Compile Include="Network\Authentication\AuthenticationClient.cs" />
     <Compile Include="Network\Realm\RealmClient.cs" />
     <Compile Include="Network\Realm\RealmCommand.cs" />

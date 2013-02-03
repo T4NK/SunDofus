@@ -28,7 +28,7 @@ namespace DofusOrigin.Realm.Characters.NPC
 
         public void StartMove()
         {
-            if (mustMove == false)
+            if (mustMove == false || !Utilities.Config.m_config.GetBoolElement("MustNPCsMove"))
                 return;
 
             m_movements = new Timer();

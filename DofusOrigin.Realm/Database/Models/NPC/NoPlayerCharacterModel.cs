@@ -18,17 +18,16 @@ namespace DofusOrigin.Database.Models.NPC
 
         public int m_artWork { get; set; }
         public int m_bonus { get; set; }
+        public int m_question { get; set; }
 
         public string m_name { get; set; }
         public string m_items { get; set; }
 
         public List<int> m_sellingList { get; set; }
-        public List<int> m_questions { get; set; }
 
         public NoPlayerCharacterModel()
         {
             m_sellingList = new List<int>();
-            m_questions = new List<int>();
         }
     }
 }

@@ -30,6 +30,7 @@ namespace DofusOrigin.Database.Cache
                         npcModel.m_color = sqlReader.GetInt32("Color1");
                         npcModel.m_color2 = sqlReader.GetInt32("Color2");
                         npcModel.m_color3 = sqlReader.GetInt32("Color3");
+                        npcModel.m_question = sqlReader.GetInt32("initQuestion");
 
                         npcModel.m_name = sqlReader.GetString("Name");
                         npcModel.m_items = sqlReader.GetString("Items");
@@ -41,14 +42,6 @@ namespace DofusOrigin.Database.Cache
                             continue;
 
                         npcModel.m_sellingList.Add(int.Parse(itemToSell));
-                    }
-
-                    foreach (var question in sqlReader.GetString("initQuestions").Split(','))
-                    {
-                        if (question == "")
-                            continue;
-
-                        npcModel.m_questions.Add(int.Parse(question));
                     }
 
                     var npc = new Realm.Characters.NPC.NPCMap(npcModel);
