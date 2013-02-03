@@ -1490,14 +1490,53 @@ namespace DofusOrigin.Network.Realm
                 if(npc.m_model.m_question.m_answers.Count(x => x.HasConditions(m_client.m_player)) == 0)
                     m_client.Send(string.Format("DQ{0}", npc.m_model.m_question.m_questionID));
                 else
-                    m_client.Send(string.Format("DQ{0}|{1}", npc.m_model.m_question.m_questionID, string.Join(";", npc.m_model.m_question.m_answers)));
+                {
+                    var packet = string.Format("DQ{0}|", npc.m_model.m_question.m_questionID);
+
+                    foreach(var answer in npc.m_model.m_question.m_answers)
+                    {
+                        if(answer.HasConditions(m_client.m_player))
+                            packet += string.Format("{0};", answer.m_answerID);
+                    }
+
+                    m_client.Send(packet.Substring(0, packet.Length - 1));
+                }
             }
             catch { }
         }
 
         private void DialogReply(string _datas)
         {
+            try
+            {
+                var id = int.Parse(_datas.Split('|')[1]);
 
+                if (!m_client.m_player.GetMap().m_npcs.Any(x => x.m_idOnMap == m_client.m_player.m_state.onDialogingWith))
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                var npc = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == m_client.m_player.m_state.onDialogingWith);
+
+                if(!npc.m_model.m_question.m_answers.Any(x => x.m_answerID == id))
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                var answer = npc.m_model.m_question.m_answers.First(x => x.m_answerID == id);
+
+                if (!answer.HasConditions(m_client.m_player))
+                {
+                    m_client.Send("BN");
+                    return;
+                }
+
+                answer.ApplyEffects(m_client.m_player);
+                DialogExit("");
+            }
+            catch { }
         }
 
         private void DialogExit(string _datas)
