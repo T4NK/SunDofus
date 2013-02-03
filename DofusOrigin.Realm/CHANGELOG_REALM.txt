@@ -27,3 +27,6 @@
 [01.02.2013] Correction de la suivie par les maps, automatiquement mis à jour dès qu'il change de map
 [02.02.2013] Ajout de la suivie possible par tout le groupe
 [02.02.2013] Mise en place de l'annulation du suivis lorsque le personnage quitte le groupe
+[03.02.2013] Ajout des ImPacket lors d'un suivis ou de l'arrêt d'un suivis
+[03.02.2013] Ajout des ImPacket lors du début et une fin de sauvegarde
+[03.02.2013] Rectification de l'enpacktage en UTF8 (message avec accent etc)

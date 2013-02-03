@@ -70,7 +70,7 @@ namespace DofusOrigin.Network
         {
             try
             {
-                var P = Encoding.ASCII.GetBytes(string.Format("{0}\x00", _message));
+                var P = Encoding.UTF8.GetBytes(string.Format("{0}\x00", _message));
                 m_socket.Send(P);
             }
             catch { }
@@ -80,7 +80,7 @@ namespace DofusOrigin.Network
 
         private void DatasArrival(byte[] _datas)
         {
-            var notParsed = Encoding.ASCII.GetString(_datas);
+            var notParsed = Encoding.UTF8.GetString(_datas);
 
             foreach (var Packet in notParsed.Replace("\x0a", "").Split('\x00'))
             {
