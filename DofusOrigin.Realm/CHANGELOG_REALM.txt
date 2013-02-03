@@ -31,3 +31,6 @@
 [03.02.2013] Ajout des ImPacket lors du début et une fin de sauvegarde
 [03.02.2013] Rectification de l'enpacktage en UTF8 (message avec accent etc)
 [03.02.2013] Ajout des cannaux de discussions "Groupe" "Admin"
+[03.02.2013] Ajout des dialogues avec les NPC
+[03.02.2013] Seules les réponses avec les conditions atteintes sont désormais affichées
+[03.02.2013] Mise en place d'une question de secours lorsque le client n'atteind pas les conditions demandées
