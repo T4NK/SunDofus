@@ -41,8 +41,8 @@ namespace DofusOrigin.Network.Auth
 
             Utilities.Loggers.InfosLogger.Write(string.Format("New inputted realm connection @<{0}>@ !", socket.IP));
 
-            lock (_clients)
-                _clients.Add(new AuthClient(socket));
+            lock (GetClients)
+                GetClients.Add(new AuthClient(socket));
         }
 
         private void OnListeningServer(string remote)

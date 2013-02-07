@@ -36,7 +36,8 @@ namespace DofusOrigin.Network.Sync
         {
             lock (Database.DatabaseHandler.ConnectionLocker)
             {
-                Database.Cache.GiftsCache.Cache.Remove(Database.Cache.GiftsCache.Cache.First(x => x.ID == giftID && x.Target == accountID));
+                lock(Database.Cache.GiftsCache.Cache)
+                    Database.Cache.GiftsCache.Cache.Remove(Database.Cache.GiftsCache.Cache.First(x => x.ID == giftID && x.Target == accountID));
 
                 var sqlText = "DELETE FROM dyn_gifts WHERE id=@id";
                 var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.Connection);

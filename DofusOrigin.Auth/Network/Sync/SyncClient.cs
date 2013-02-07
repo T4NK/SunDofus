@@ -81,49 +81,64 @@ namespace DofusOrigin.Network.Sync
                     case "SAI":
 
                         Authentication(int.Parse(packet[1]), packet[2], int.Parse(packet[3]));
-                        break;
+
+                        return;
 
                     case "SDAC":
 
-                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID, false);  
-                        break;
+                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID, false);
+
+                        return;
 
                     case "SNAC":
 
                         SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID);
-                        break;
+
+                        return;
 
                     case "SNC":
 
-                        if(!Server.GetClients.Contains(packet[1]))
-                            Server.GetClients.Add(packet[1]);
-                        break;
+                        lock (Server.GetClients)
+                        {
+                            if (!Server.GetClients.Contains(packet[1]))
+                                Server.GetClients.Add(packet[1]);
+                        }
+
+                        return;
 
                     case "SND":
 
-                        if (Server.GetClients.Contains(packet[1]))
-                            Server.GetClients.Remove(packet[1]);                     
-                        break;
+                        lock (Server.GetClients)
+                        {
+                            if (Server.GetClients.Contains(packet[1]))
+                                Server.GetClients.Remove(packet[1]);
+                        }
+
+                        return;
 
                     case "SNDG":
 
                         SyncAction.DeleteGift(int.Parse(packet[1]), int.Parse(packet[2]));
-                        break;
+
+                        return;
 
                     case "SNLC":
 
                         ParseListConnected(datas);
-                        break;
+
+                        return;
 
                     case "SSM":
 
                         ChangeState(State.OnMaintenance);
-                        break;
+
+                        return;
 
                     case "STM":
 
                         ChangeState(State.OnConnected);
-                        break;
+
+                        return;
                 }
             }
             catch (Exception e)
@@ -134,25 +149,28 @@ namespace DofusOrigin.Network.Sync
 
         private void Authentication(int serverId, string serverIp, int serverPort)
         {
-            if (Database.Cache.ServersCache.Cache.Any(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0))
+            lock (Database.Cache.ServersCache.Cache)
             {
-                var requieredServer = Database.Cache.ServersCache.Cache.First(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0);
-
-                if (!myIp().Contains(serverIp))
+                if (Database.Cache.ServersCache.Cache.Any(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0))
                 {
-                    Disconnect();
-                    return;
+                    var requieredServer = Database.Cache.ServersCache.Cache.First(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0);
+
+                    if (!myIp().Contains(serverIp))
+                    {
+                        Disconnect();
+                        return;
+                    }
+
+                    Server = requieredServer;
+
+                    Send("HCSS");
+                    ChangeState(SyncClient.State.OnConnected);
+
+                    Utilities.Loggers.InfosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
                 }
-
-                Server = requieredServer;
-
-                Send("HCSS");                
-                ChangeState(SyncClient.State.OnConnected);
-
-                Utilities.Loggers.InfosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
+                else
+                    Disconnect();
             }
-            else
-                Disconnect();
         }
 
         private void ChangeState(State state)
@@ -181,17 +199,21 @@ namespace DofusOrigin.Network.Sync
                     break;
             }
 
-            ServersHandler.AuthServer.GetClients.ForEach(x => x.RefreshHosts());
+            lock(ServersHandler.AuthServer.GetClients)
+                ServersHandler.AuthServer.GetClients.ForEach(x => x.RefreshHosts());
         }
 
         private void ParseListConnected(string _datas)
         {
-            var packet = _datas.Substring(5).Split('|');
-
-            foreach (var pseudo in packet)
+            lock (Server.GetClients)
             {
-                if (!Server.GetClients.Contains(pseudo))
-                    Server.GetClients.Add(pseudo);
+                var packet = _datas.Substring(5).Split('|');
+
+                foreach (var pseudo in packet)
+                {
+                    if (!Server.GetClients.Contains(pseudo))
+                        Server.GetClients.Add(pseudo);
+                }
             }
         }
 

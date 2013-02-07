@@ -41,8 +41,11 @@ namespace DofusOrigin.Database.Cache
                         server.Port = sqlReader.GetInt16("Port");
                     }
 
-                    if (!_servers.Any(x => x.ID == server.ID))
-                        _servers.Add(server);
+                    lock (Cache)
+                    {
+                        if (!_servers.Any(x => x.ID == server.ID))
+                            _servers.Add(server);
+                    }
                 }
 
                 sqlReader.Close();

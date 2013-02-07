@@ -39,8 +39,8 @@ namespace DofusOrigin.Network.Sync
 
             Utilities.Loggers.InfosLogger.Write(string.Format("New inputted sync connection @<{0}>@ !", socket.IP));
 
-            lock (_clients)
-                _clients.Add(new SyncClient(socket));
+            lock (GetClients)
+                GetClients.Add(new SyncClient(socket));
         }
 
         private void OnListeningServer(string remote)

@@ -159,8 +159,10 @@ namespace DofusOrigin.Database.Models
 
             if (Utilities.Config.GetConfig.GetBoolElement("Subscription_Time") == false)
                 return 31536000000;
+
             else if (SubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds <= 1)
                 return 0;
+
             else if (time >= Utilities.Config.GetConfig.GetLongElement("Max_Subscription_Time"))
                 return 31536000000;
 

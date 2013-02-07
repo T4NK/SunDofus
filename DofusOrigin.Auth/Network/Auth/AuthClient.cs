@@ -61,10 +61,13 @@ namespace DofusOrigin.Network.Auth
 
         public void RefreshHosts()
         {
-            var packet = string.Format("AH{0}",
-                string.Join("|", Database.Cache.ServersCache.Cache));
+            lock (Database.Cache.ServersCache.Cache)
+            {
+                var packet = string.Format("AH{0}",
+                    string.Join("|", Database.Cache.ServersCache.Cache));
 
-            Send(packet);
+                Send(packet);
+            }
         }
 
         public void CheckAccount()
@@ -145,12 +148,15 @@ namespace DofusOrigin.Network.Auth
 
                 case AccountState.OnCheckingQueue:
 
-                    Send(string.Format("Af{0}|{1}|0|2", (WaitPosition), (AuthQueue.GetClients.Count > 2 ? AuthQueue.GetClients.Count : 3)));
+                    lock(AuthQueue.GetClients)
+                        Send(string.Format("Af{0}|{1}|0|2", (WaitPosition), (AuthQueue.GetClients.Count > 2 ? AuthQueue.GetClients.Count : 3)));
+
                     return;
 
                 case AccountState.OnServersList:
 
                     ParseListPacket(datas);
+
                     return;
             }
         }
@@ -166,47 +172,59 @@ namespace DofusOrigin.Network.Auth
             {
                 case 'F':
 
-                    packet = string.Format("AF{0}", Database.Cache.ServersCache.Cache.First(x => x.GetClients.Contains(initialPacket.Substring(2))).ID);
-                    Send(packet);
+                    lock (Database.Cache.ServersCache.Cache)
+                    {
+                        packet = string.Format("AF{0}", Database.Cache.ServersCache.Cache.First(x => x.GetClients.Contains(initialPacket.Substring(2))).ID);
+                        Send(packet);
+                    }
+
                     return;
 
                 case 'x':
 
-                    packet = string.Format("AxK{0}", Account.SubscriptionTime());
-
-                    foreach (var server in Database.Cache.ServersCache.Cache)
+                    lock (Database.Cache.ServersCache.Cache)
                     {
-                        if (!Account.Characters.ContainsKey(server.ID))
-                            Account.Characters.Add(server.ID, new List<string>());
+                        packet = string.Format("AxK{0}", Account.SubscriptionTime());
 
-                        packet += string.Format("|{0},{1}", server.ID, Account.Characters[server.ID].Count);
+                        foreach (var server in Database.Cache.ServersCache.Cache)
+                        {
+                            if (!Account.Characters.ContainsKey(server.ID))
+                                Account.Characters.Add(server.ID, new List<string>());
+
+                            packet += string.Format("|{0},{1}", server.ID, Account.Characters[server.ID].Count);
+                        }
+
+                        Send(packet);
                     }
 
-                    Send(packet);
                     return;
 
                 case 'X':
 
-                    var id = 0;
-                    try
+                    lock (Database.Cache.ServersCache.Cache)
                     {
-                        id = int.Parse(initialPacket.Substring(2));
+                        var id = 0;
+                        try
+                        {
+                            id = int.Parse(initialPacket.Substring(2));
+                        }
+                        catch { return; }
+
+                        if (ServersHandler.SyncServer.GetClients.Any(x => x.Server.ID == id))
+                        {
+                            var server = ServersHandler.SyncServer.GetClients.First(x => x.Server.ID == id);
+                            var key = Utilities.Basic.RandomString(16);
+
+                            server.SendTicket(key, this);
+
+                            packet = string.Format("AYK{0}:{1};{2}", server.Server.IP, server.Server.Port, key);
+                            Send(packet);
+                            return;
+                        }
+
+                        Send("BN");
                     }
-                    catch { return; }
 
-                    if (ServersHandler.SyncServer.GetClients.Any(x => x.Server.ID == id))
-                    {
-                        var server = ServersHandler.SyncServer.GetClients.First(x => x.Server.ID == id);
-                        var key = Utilities.Basic.RandomString(16);
-
-                        server.SendTicket(key, this);
-
-                        packet = string.Format("AYK{0}:{1};{2}", server.Server.IP, server.Server.Port, key);
-                        Send(packet);
-                        return;
-                    }
-
-                    Send("BN");
                     return;
             }
         }

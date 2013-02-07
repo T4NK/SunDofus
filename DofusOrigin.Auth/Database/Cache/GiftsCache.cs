@@ -47,8 +47,11 @@ namespace DofusOrigin.Database.Cache
                         gifts.Message = sqlReader.GetString("Message");
                     }
 
-                    if (!_gifts.Any(x => x.ID == gifts.ID))
-                        _gifts.Add(gifts);
+                    lock (Cache)
+                    {
+                        if (!_gifts.Any(x => x.ID == gifts.ID))
+                            _gifts.Add(gifts);
+                    }
                 }
 
                 sqlReader.Close();
