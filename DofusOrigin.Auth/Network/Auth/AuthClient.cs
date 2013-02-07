@@ -174,8 +174,12 @@ namespace DofusOrigin.Network.Auth
 
                     lock (Database.Cache.ServersCache.Cache)
                     {
-                        packet = string.Format("AF{0}", Database.Cache.ServersCache.Cache.First(x => x.GetClients.Contains(initialPacket.Substring(2))).ID);
-                        Send(packet);
+                        if (Database.Cache.ServersCache.Cache.Any(x => x.GetClients.Contains(initialPacket.Substring(2))))
+                        {
+                            packet = string.Format("AF{0}", Database.Cache.ServersCache.Cache.First(x => x.GetClients.Contains(initialPacket.Substring(2))).ID);
+                            Send(packet);
+                        }
+                        Send("AF");
                     }
 
                     return;
