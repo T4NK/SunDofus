@@ -9,43 +9,51 @@ namespace DofusOrigin.Database.Cache
 {
     class ServersCache
     {
-        public static List<Models.ServerModel> m_servers = new List<Models.ServerModel>();
+        private static List<Models.ServerModel> _servers = new List<Models.ServerModel>();
 
-        private static bool m_started = false;
-        private static Timer m_cache = new Timer();
+        public static List<Models.ServerModel> Cache
+        {
+            get
+            {
+                return _servers;
+            }
+        }
+
+        private static bool _started = false;
+        private static Timer _cache = new Timer();
 
         public static void ReloadCache(object sender = null, EventArgs e = null)
         {
-            Utilities.Loggers.m_infosLogger.Write("Reloading of @Servers' Cache@ ...");
+            Utilities.Loggers.InfosLogger.Write("Reloading of @Servers' Cache@ ...");
 
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
-                string sqlText = "SELECT * FROM dyn_realms";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlText = "SELECT * FROM dyn_realms";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
                     var server = new Models.ServerModel();
                     {
-                        server.m_id = sqlReader.GetInt16("Id");
-                        server.m_ip = sqlReader.GetString("Ip");
-                        server.m_port = sqlReader.GetInt16("Port");
+                        server.ID = sqlReader.GetInt16("Id");
+                        server.IP = sqlReader.GetString("Ip");
+                        server.Port = sqlReader.GetInt16("Port");
                     }
 
-                    if (!m_servers.Any(x => x.m_id == server.m_id))
-                        m_servers.Add(server);
+                    if (!_servers.Any(x => x.ID == server.ID))
+                        _servers.Add(server);
                 }
 
                 sqlReader.Close();
             }
 
-            if (!m_started == true)
+            if (!_started == true)
             {
-                m_started = true;
-                m_cache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
-                m_cache.Enabled = true;
-                m_cache.Elapsed += new ElapsedEventHandler(ReloadCache);
+                _started = true;
+                _cache.Interval = Utilities.Config.GetConfig.GetIntElement("Time_Accounts_Reload");
+                _cache.Enabled = true;
+                _cache.Elapsed += new ElapsedEventHandler(ReloadCache);
             }
         }
     }

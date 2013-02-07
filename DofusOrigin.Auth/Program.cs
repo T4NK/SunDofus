@@ -18,12 +18,11 @@ namespace DofusOrigin
             try
             {
                 Config.LoadConfiguration();
-                Loggers.InitialiseLoggers();
+                Loggers.InitializeLoggers();
 
-                DatabaseHandler.InitialiseConnection();
+                DatabaseHandler.InitializeConnection();
 
                 GiftsCache.ReloadCache();
-                AccountsCache.ReloadCache();
                 ServersCache.ReloadCache();
 
                 ServersHandler.InitialiseServers();

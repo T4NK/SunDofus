@@ -8,59 +8,68 @@ namespace DofusOrigin.Network.Auth
 {
     class AuthQueue
     {
-        public static Dictionary<AuthClient, int> m_clients { get; set; }
-        public static List<AuthClient> toDelete { get; set; }
-        private static Timer m_timer { get; set; }
+        private static Dictionary<AuthClient, int> _clients;
+
+        public static Dictionary<AuthClient, int> GetClients
+        {
+            get
+            {
+                return _clients;
+            }
+        }
+
+        private static List<AuthClient> MustDelete;
+        private static Timer _reloadTimer;
 
         public static void Start()
         {
-            m_clients = new Dictionary<AuthClient, int>();
-            toDelete = new List<AuthClient>();
+            _clients = new Dictionary<AuthClient, int>();
+            MustDelete = new List<AuthClient>();
 
-            m_timer = new Timer();
+            _reloadTimer = new Timer();
             {
-                m_timer.Interval = Utilities.Config.m_config.GetIntElement("Time_Queue_Reload");
-                m_timer.Enabled = true;
-                m_timer.Elapsed += new ElapsedEventHandler(RefreshQueue);
-                m_timer.Start();
+                _reloadTimer.Interval = Utilities.Config.GetConfig.GetIntElement("Time_Queue_Reload");
+                _reloadTimer.Enabled = true;
+                _reloadTimer.Elapsed += new ElapsedEventHandler(RefreshQueue);
+                _reloadTimer.Start();
             }
 
-            Utilities.Loggers.m_statusLogger.Write("@Queue@ for the servers' list started !");
+            Utilities.Loggers.StatusLogger.Write("@Queue@ for the servers' list started !");
         }
 
-        public static void AddinQueue(AuthClient _client)
+        public static void AddinQueue(AuthClient client)
         {
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Add @{0}@ in queue !", _client.myIp()));
+            Utilities.Loggers.InfosLogger.Write(string.Format("Add @{0}@ in queue !", client.myIp()));
 
-            m_clients.Add(_client, m_clients.Count + 1);
-            _client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);
+            _clients.Add(client, _clients.Count + 1);
+            client.WaitPosition = (_clients.Count > 1 ? _clients.Count + 1 : 2);
         }
 
         private static void RefreshQueue(object sender, EventArgs e)
         {
-            if (m_clients.Count <= 0)
+            if (_clients.Count <= 0)
                 return;
 
             var count = 0;
 
-            foreach (var client in m_clients.Keys)
+            foreach (var client in _clients.Keys.OrderBy(x => x.WaitPosition))
             {
-                if (count < Utilities.Config.m_config.GetIntElement("Client_Per_QueueRefresh"))
+                if (count < Utilities.Config.GetConfig.GetIntElement("Client_Per_QueueRefresh"))
                 {
                     count++;
 
                     client.CheckAccount();
-                    toDelete.Add(client);
+                    MustDelete.Add(client);
                 }
             }
 
-            toDelete.ForEach(x => m_clients.Remove(x));
-            toDelete.Clear();
+            MustDelete.ForEach(x => _clients.Remove(x));
+            MustDelete.Clear();
 
-            foreach (var client in m_clients.Keys)
-                client.m_waitPosition = (m_clients.Count > 1 ? m_clients.Count + 1 : 2);
+            foreach (var client in _clients.Keys)
+                client.WaitPosition = (_clients.Count > 1 ? _clients.Count + 1 : 2);
 
-            Utilities.Loggers.m_infosLogger.Write("@Queue@ refreshed !");
+            Utilities.Loggers.InfosLogger.Write("@Queue@ refreshed !");
         }
     }
 }

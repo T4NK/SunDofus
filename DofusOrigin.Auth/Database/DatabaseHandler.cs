@@ -8,24 +8,24 @@ namespace DofusOrigin.Database
 {
     class DatabaseHandler
     {
-        public static MySqlConnection m_connection;
-        public static object m_locker;
+        public static MySqlConnection Connection;
+        public static object ConnectionLocker;
 
-        public static void InitialiseConnection()
+        public static void InitializeConnection()
         {
-            m_connection = new MySqlConnection();
-            m_locker = new object();
+            Connection = new MySqlConnection();
+            ConnectionLocker = new object();
 
-            m_connection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}",
-                    Utilities.Config.m_config.GetStringElement("Database_Server"),
-                    Utilities.Config.m_config.GetStringElement("Database_User"),
-                    Utilities.Config.m_config.GetStringElement("Database_Pass"),
-                    Utilities.Config.m_config.GetStringElement("Database_Name"));
+            Connection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}",
+                    Utilities.Config.GetConfig.GetStringElement("Database_Server"),
+                    Utilities.Config.GetConfig.GetStringElement("Database_User"),
+                    Utilities.Config.GetConfig.GetStringElement("Database_Pass"),
+                    Utilities.Config.GetConfig.GetStringElement("Database_Name"));
 
-            lock (m_locker)
-                m_connection.Open();
+            lock (ConnectionLocker)
+                Connection.Open();
 
-            Utilities.Loggers.m_statusLogger.Write("Connected to the @database@ !");
+            Utilities.Loggers.StatusLogger.Write("Connected to the @database@ !");
         }
     }
 }

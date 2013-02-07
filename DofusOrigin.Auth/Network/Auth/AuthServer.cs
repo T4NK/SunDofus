@@ -8,12 +8,24 @@ namespace DofusOrigin.Network.Auth
 {
     class AuthServer : DofusOrigin.Network.TCPServer
     {
-        public List<AuthClient> m_clients { get; set; }
+        private List<AuthClient> _clients;
+
+        public List<AuthClient> GetClients
+        {
+            get
+            {
+                return _clients;
+            }
+            set
+            {
+                _clients = value;
+            }
+        }
 
         public AuthServer()
-            : base(Utilities.Config.m_config.GetStringElement("Auth_Ip"), Utilities.Config.m_config.GetIntElement("Auth_Port"))
+            : base(Utilities.Config.GetConfig.GetStringElement("Auth_Ip"), Utilities.Config.GetConfig.GetIntElement("Auth_Port"))
         {
-            m_clients = new List<AuthClient>();
+            _clients = new List<AuthClient>();
 
             this.SocketClientAccepted += new AcceptSocketHandler(this.OnAcceptedClient);
             this.ListeningServer += new ListeningServerHandler(this.OnListeningServer);
@@ -22,25 +34,25 @@ namespace DofusOrigin.Network.Auth
             AuthQueue.Start();
         }
 
-        private void OnAcceptedClient(SilverSocket _socket)
+        private void OnAcceptedClient(SilverSocket socket)
         {
-            if (_socket == null) 
+            if (socket == null) 
                 return;
 
-            Utilities.Loggers.m_infosLogger.Write(string.Format("New inputted realm connection @<{0}>@ !", _socket.IP));
+            Utilities.Loggers.InfosLogger.Write(string.Format("New inputted realm connection @<{0}>@ !", socket.IP));
 
-            lock (m_clients)
-                m_clients.Add(new AuthClient(_socket));
+            lock (_clients)
+                _clients.Add(new AuthClient(socket));
         }
 
-        private void OnListeningServer(string _remote)
+        private void OnListeningServer(string remote)
         {
-            Utilities.Loggers.m_statusLogger.Write(string.Format("@RealmServer@ starded on <{0}> !", _remote));
+            Utilities.Loggers.StatusLogger.Write(string.Format("@RealmServer@ starded on <{0}> !", remote));
         }
 
-        private void OnListeningFailedServer(Exception _exception)
+        private void OnListeningFailedServer(Exception exception)
         {
-            Utilities.Loggers.m_errorsLogger.Write(string.Format("@RealmServer@ can't start : {0}", _exception.ToString()));
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("@RealmServer@ can't start : {0}", exception.ToString()));
         }
     }
 }

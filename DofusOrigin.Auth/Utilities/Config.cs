@@ -9,64 +9,71 @@ namespace DofusOrigin.Utilities
 {
     class Config
     {
-        public static Configuration m_config { get; set; }
+        private static Configuration _config;
+
+        public static Configuration GetConfig
+        {
+            get
+            {
+                return _config;
+            }
+        }
 
         public static void LoadConfiguration()
         {
             if (!File.Exists("DofusOrigin.conf"))
                 throw new Exception("Configuration file doesn't exist !");
 
-            m_config = new Configuration();
+            _config = new Configuration();
             {
-                m_config.LoadConfiguration("DofusOrigin.conf");
-                AddDefaultsParameters();
+                _config.LoadConfiguration("DofusOrigin.conf");
+                AddParameters();
             }
         }
 
-        static void AddDefaultsParameters()
+        private static void AddParameters()
         {
             //Status
-            m_config.InsertElement("Status_inConsole", "true");
-            m_config.InsertElement("Status_inFile", "false");
+            _config.InsertElement("Status_inConsole", "true");
+            _config.InsertElement("Status_inFile", "false");
 
             //Infos
-            m_config.InsertElement("Infos_inFile", "false");
-            m_config.InsertElement("Infos_inConsole", "true");
+            _config.InsertElement("Infos_inFile", "false");
+            _config.InsertElement("Infos_inConsole", "true");
 
             //Errors
-            m_config.InsertElement("Errors_inFile", "true");
-            m_config.InsertElement("Errors_inConsole", "true");
+            _config.InsertElement("Errors_inFile", "true");
+            _config.InsertElement("Errors_inConsole", "true");
 
             //Auth & Sync
-            m_config.InsertElement("Auth_Ip", "127.0.0.1");
-            m_config.InsertElement("Auth_Port", "485");
-            m_config.InsertElement("Sync_Ip", "127.0.0.1");
-            m_config.InsertElement("Sync_Port", "486");
+            _config.InsertElement("Auth_Ip", "127.0.0.1");
+            _config.InsertElement("Auth_Port", "485");
+            _config.InsertElement("Sync_Ip", "127.0.0.1");
+            _config.InsertElement("Sync_Port", "486");
 
             //Client
-            m_config.InsertElement("Login_Version", "1.29.1");
+            _config.InsertElement("Login_Version", "1.29.1");
 
             //Database
-            m_config.InsertElement("Database_Server", "localhost");
-            m_config.InsertElement("Database_User", "root");
-            m_config.InsertElement("Database_Pass", "");
-            m_config.InsertElement("Database_Name", "dofusorigin_auth");
+            _config.InsertElement("Database_Server", "localhost");
+            _config.InsertElement("Database_User", "root");
+            _config.InsertElement("Database_Pass", "");
+            _config.InsertElement("Database_Name", "dofusorigin_auth");
 
             //Cache
-            m_config.InsertElement("Time_Accounts_Reload", "60000");
-            m_config.InsertElement("Time_Servers_Reload", "60000");
-            m_config.InsertElement("Time_Gifts_Reload", "60000");
+            _config.InsertElement("Time_Accounts_Reload", "60000");
+            _config.InsertElement("Time_Servers_Reload", "60000");
+            _config.InsertElement("Time_Gifts_Reload", "60000");
 
 
             //Queue
-            m_config.InsertElement("Max_Clients_inQueue", "50");
-            m_config.InsertElement("Client_Per_QueueRefresh", "10");
-            m_config.InsertElement("Time_Queue_Reload", "5000");
+            _config.InsertElement("Max_Clients_inQueue", "50");
+            _config.InsertElement("Client_Per_QueueRefresh", "10");
+            _config.InsertElement("Time_Queue_Reload", "5000");
 
             //Subscription
-            m_config.InsertElement("Max_Subscription_Time", "31536000000");
-            m_config.InsertElement("Subscription_Time", "true");
-
+            _config.InsertElement("Max_Subscription_Time", "31536000000");
+            _config.InsertElement("Subscription_Time", "true");
         }
     }
 }

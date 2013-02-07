@@ -8,21 +8,84 @@ namespace DofusOrigin.Database.Models
 {
     class ServerModel
     {
-        public int m_id { get; set; }
-        public int m_port { get; set; }
-        public int m_state { get; set; }
+        private int _ID;
 
-        public string m_ip { get; set; }
-        public List<string> m_clients { get; set; }
+        public int ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                _ID = value;
+            }
+        }
+
+        private int _port;
+
+        public int Port
+        {
+            get
+            {
+                return _port;
+            }
+            set
+            {
+                _port = value;
+            }
+        }
+
+        private int _state;
+
+        public int State
+        {
+            get
+            {
+                return _state;
+            }
+            set
+            {
+                _state = value;
+            }
+        }
+
+        private string _IP;
+
+        public string IP
+        {
+            get
+            {
+                return _IP;
+            }
+            set
+            {
+                _IP = value;
+            }
+        }
+
+        private List<string> _clients;
+
+        public List<string> GetClients
+        {
+            get 
+            {
+                return _clients;
+            }
+            set 
+            {
+                _clients = value;
+            }
+        }
 
         public ServerModel()
         {
-            m_clients = new List<string>();
+            _clients = new List<string>();
         }
 
         public override string ToString()
         {
-            return this.m_id + ";" + m_state + ";" + (75 * this.m_id) + ";1";
+            return this._ID + ";" + _state + ";" + (75 * this._ID) + ";1";
         }
     }
 }

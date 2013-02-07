@@ -7,16 +7,79 @@ namespace DofusOrigin.Database.Models
 {
     class GiftModel
     {
-        public int m_id { get; set; }
-        public int m_target { get; set; }
-        public int m_itemID { get; set; }
+        private int _ID;
 
-        public string m_title { get; set; }
-        public string m_message { get; set; }
+        public int ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                _ID = value;
+            }
+        }
+
+        private int _target;
+
+        public int Target
+        {
+            get
+            {
+                return _target;
+            }
+            set
+            {
+                _target = value;
+            }
+        }
+
+        private int _itemID;
+
+        public int ItemID
+        {
+            get
+            {
+                return _itemID;
+            }
+            set
+            {
+                _itemID = value;
+            }
+        }
+
+        private string _title;
+
+        public string Title
+        {
+            get
+            {
+                return _title;
+            }
+            set
+            {
+                _title = value;
+            }
+        }
+
+        private string _message;
+
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message = value;
+            }
+        }
 
         public override string ToString()
         {
-            return string.Format("{0}~{1}~{2}~{3}", m_id, m_title, m_message, m_itemID);
+            return string.Format("{0}~{1}~{2}~{3}", _ID, _title, _message, _itemID);
         }
     }
 }

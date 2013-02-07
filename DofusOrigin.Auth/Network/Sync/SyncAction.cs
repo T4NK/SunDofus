@@ -8,53 +8,42 @@ namespace DofusOrigin.Network.Sync
 {
     class SyncAction
     {
-        public static void UpdateCharacters(int _compteID, string _character, int _serverID, bool _add = true)
+        public static void UpdateCharacters(int accountID, string character, int serverID, bool add = true)
         {
-            try
+            lock (Database.DatabaseHandler.ConnectionLocker)
             {
-                lock(Database.DatabaseHandler.m_locker)
-                {
-                    var account = Database.Cache.AccountsCache.m_accounts.First(x => x.m_id == _compteID);
+                var account = Database.Cache.AccountsCache.LoadAccount(accountID);
 
-                    if(_add)
-                        account.m_characters[_serverID].Add(_character);
-                    else
-                        account.m_characters[_serverID].Remove(_character);
+                if (account == null)
+                    return;
 
-                    var sqlText = "UPDATE dyn_accounts SET characters=@Characters WHERE Id=@id";
-                    var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
+                if (add)
+                    account.Characters[serverID].Add(character);
+                else
+                    account.Characters[serverID].Remove(character);
 
-                    sqlCommand.Parameters.Add(new MySqlParameter("@id", _compteID));
-                    sqlCommand.Parameters.Add(new MySqlParameter("@Characters", account.CharactersSaveString()));
+                var sqlText = "UPDATE dyn_accounts SET characters=@Characters WHERE Id=@id";
+                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.Connection);
 
-                    sqlCommand.ExecuteNonQuery();
-                }
-            }
-            catch (Exception e)
-            {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot update characters from the account {0} ({1})", _compteID, e.ToString()));
+                sqlCommand.Parameters.Add(new MySqlParameter("@id", accountID));
+                sqlCommand.Parameters.Add(new MySqlParameter("@Characters", account.CharactersString()));
+
+                sqlCommand.ExecuteNonQuery();
             }
         }
 
-        public static void DeleteGift(int _giftID, int _compteID)
+        public static void DeleteGift(int giftID, int accountID)
         {
-            try
+            lock (Database.DatabaseHandler.ConnectionLocker)
             {
-                lock (Database.DatabaseHandler.m_locker)
-                {
-                    Database.Cache.GiftsCache.m_gifts.Remove(Database.Cache.GiftsCache.m_gifts.First(x => x.m_id == _giftID && x.m_target == _compteID));
+                Database.Cache.GiftsCache.Cache.Remove(Database.Cache.GiftsCache.Cache.First(x => x.ID == giftID && x.Target == accountID));
 
-                    var sqlText = "DELETE FROM dyn_gifts WHERE id=@id";
-                    var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.m_connection);
+                var sqlText = "DELETE FROM dyn_gifts WHERE id=@id";
+                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.Connection);
 
-                    sqlCommand.Parameters.Add(new MySqlParameter("@id", _giftID));
+                sqlCommand.Parameters.Add(new MySqlParameter("@id", giftID));
 
-                    sqlCommand.ExecuteNonQuery();
-                }
-            }
-            catch (Exception e)
-            {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot remove gift from the account {0} ({1})", _compteID, e.ToString()));
+                sqlCommand.ExecuteNonQuery();
             }
         }
     }

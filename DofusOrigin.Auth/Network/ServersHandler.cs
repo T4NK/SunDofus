@@ -7,16 +7,16 @@ namespace DofusOrigin.Network
 {
     class ServersHandler
     {
-        public static Auth.AuthServer m_authServer { get; set; }
-        public static Sync.SyncServer m_syncServer { get; set; }
+        public static Auth.AuthServer AuthServer;
+        public static Sync.SyncServer SyncServer;
 
         public static void InitialiseServers()
         {
-            m_authServer = new Auth.AuthServer();
-            m_authServer.Start();
+            AuthServer = new Auth.AuthServer();
+            AuthServer.Start();
 
-            m_syncServer = new Sync.SyncServer();
-            m_syncServer.Start();
+            SyncServer = new Sync.SyncServer();
+            SyncServer.Start();
         }
     }
 }

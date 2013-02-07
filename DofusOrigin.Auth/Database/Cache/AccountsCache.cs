@@ -9,50 +9,73 @@ namespace DofusOrigin.Database.Cache
 {
     class AccountsCache
     {
-        public static List<Models.AccountModel> m_accounts = new List<Models.AccountModel>();
-
-        private static bool m_started = false;
-        private static Timer m_cache = new Timer();
-
-        public static void ReloadCache(object sender = null, EventArgs e = null)
+        public static Models.AccountModel LoadAccount(string username)
         {
-            Utilities.Loggers.m_infosLogger.Write("Reloading of @Accounts' Cache@ ...");
-
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
-                string sqlText = "SELECT * FROM dyn_accounts";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var account = new Models.AccountModel();
+
+                var sqlText = "SELECT * FROM dyn_accounts WHERE username=@username";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+                sqlCommand.Parameters.Add(new MySqlParameter("@username", username));
+
                 MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                while (sqlReader.Read())
+                if (sqlReader.Read())
                 {
-                    var account = new Models.AccountModel();
-                    {
-                        account.m_id = sqlReader.GetInt16("id");
-                        account.m_username = sqlReader.GetString("username");
-                        account.m_password = sqlReader.GetString("password");
-                        account.m_pseudo = sqlReader.GetString("pseudo");
-                        account.m_communauty = sqlReader.GetInt16("communauty");
-                        account.m_level = sqlReader.GetInt16("gmLevel");
-                        account.m_question = sqlReader.GetString("question");
-                        account.m_answer = sqlReader.GetString("answer");
-                        account.ParseCharacter(sqlReader.GetString("characters"));
-                        account.m_subscriptionDate = sqlReader.GetDateTime("subscription");
-                    }
 
-                    if (!m_accounts.Any(x => x.m_id == account.m_id))
-                        m_accounts.Add(account);
+                    account.ID = sqlReader.GetInt16("id");
+                    account.Username = sqlReader.GetString("username");
+                    account.Password = sqlReader.GetString("password");
+                    account.Pseudo = sqlReader.GetString("pseudo");
+                    account.Communauty = sqlReader.GetInt16("communauty");
+                    account.Level = sqlReader.GetInt16("gmLevel");
+                    account.Question = sqlReader.GetString("question");
+                    account.Answer = sqlReader.GetString("answer");
+
+                    account.ParseCharacters(sqlReader.GetString("characters"));
+                    account.SubscriptionDate = sqlReader.GetDateTime("subscription");
+
                 }
 
                 sqlReader.Close();
-            }
 
-            if (!m_started == true)
+                return account;
+            }
+        }
+
+        public static Models.AccountModel LoadAccount(int accountID)
+        {
+            lock (DatabaseHandler.ConnectionLocker)
             {
-                m_started = true;
-                m_cache.Interval = Utilities.Config.m_config.GetIntElement("Time_Accounts_Reload");
-                m_cache.Enabled = true;
-                m_cache.Elapsed += new ElapsedEventHandler(ReloadCache);
+                var account = new Models.AccountModel();
+
+                var sqlText = "SELECT * FROM dyn_accounts WHERE id=@id";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+                sqlCommand.Parameters.Add(new MySqlParameter("@id", accountID));
+
+                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+
+                if (sqlReader.Read())
+                {
+
+                    account.ID = sqlReader.GetInt16("id");
+                    account.Username = sqlReader.GetString("username");
+                    account.Password = sqlReader.GetString("password");
+                    account.Pseudo = sqlReader.GetString("pseudo");
+                    account.Communauty = sqlReader.GetInt16("communauty");
+                    account.Level = sqlReader.GetInt16("gmLevel");
+                    account.Question = sqlReader.GetString("question");
+                    account.Answer = sqlReader.GetString("answer");
+
+                    account.ParseCharacters(sqlReader.GetString("characters"));
+                    account.SubscriptionDate = sqlReader.GetDateTime("subscription");
+
+                }
+
+                sqlReader.Close();
+
+                return account;
             }
         }
     }

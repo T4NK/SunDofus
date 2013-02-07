@@ -8,35 +8,49 @@ namespace DofusOrigin.Network.Sync
 {
     class SyncServer : DofusOrigin.Network.TCPServer
     {
-        public List<SyncClient> m_clients { get; set; }
+        private List<SyncClient> _clients;
+
+        public List<SyncClient> GetClients
+        {
+            get
+            {
+                return _clients;
+            }
+            set
+            {
+                _clients = value;
+            }
+        }
 
         public SyncServer()
-            : base(Utilities.Config.m_config.GetStringElement("Sync_Ip"), Utilities.Config.m_config.GetIntElement("Sync_Port"))
+            : base(Utilities.Config.GetConfig.GetStringElement("Sync_Ip"), Utilities.Config.GetConfig.GetIntElement("Sync_Port"))
         {
-            m_clients = new List<SyncClient>();
+            _clients = new List<SyncClient>();
 
             this.SocketClientAccepted += new AcceptSocketHandler(this.OnAcceptedClient);
             this.ListeningServer += new ListeningServerHandler(this.OnListeningServer);
             this.ListeningServerFailed += new ListeningServerFailedHandler(this.OnListeningFailedServer);
         }
 
-        private void OnAcceptedClient(SilverSocket _socket)
+        private void OnAcceptedClient(SilverSocket socket)
         {
-            if (_socket == null) return;
-            Utilities.Loggers.m_infosLogger.Write(string.Format("New inputted sync connection @<{0}>@ !", _socket.IP));
+            if (socket == null) 
+                return;
 
-            lock (m_clients)
-                m_clients.Add(new SyncClient(_socket));
+            Utilities.Loggers.InfosLogger.Write(string.Format("New inputted sync connection @<{0}>@ !", socket.IP));
+
+            lock (_clients)
+                _clients.Add(new SyncClient(socket));
         }
 
-        private void OnListeningServer(string _remote)
+        private void OnListeningServer(string remote)
         {
-            Utilities.Loggers.m_statusLogger.Write(string.Format("@SyncServer@ starded on <{0}> !", _remote));
+            Utilities.Loggers.StatusLogger.Write(string.Format("@SyncServer@ starded on <{0}> !", remote));
         }
 
-        private void OnListeningFailedServer(Exception _exception)
+        private void OnListeningFailedServer(Exception exception)
         {
-            Utilities.Loggers.m_errorsLogger.Write(string.Format("@SyncServer@ can't start : {0}", _exception.ToString()));
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("@SyncServer@ can't start : {0}", exception.ToString()));
         }
     }
 }

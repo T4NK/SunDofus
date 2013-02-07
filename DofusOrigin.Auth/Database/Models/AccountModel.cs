@@ -8,35 +8,137 @@ namespace DofusOrigin.Database.Models
 {
     class AccountModel
     {
-        public int m_id { get; set; }
-        public int m_level { get; set; }
-        public int m_communauty { get; set; }
+        private int _ID;
 
-        public string m_username { get; set; }
-        public string m_password { get; set; }
-        public string m_pseudo { get; set; }
-        public string m_question { get; set; }
-        public string m_answer { get; set; }
+        public int ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                _ID = value;
+            }
+        }
 
-        public DateTime m_subscriptionDate;
-        public Dictionary<int, List<string>> m_characters;
+        private int _level;
+
+        public int Level
+        {
+            get
+            {
+                return _level;
+            }
+            set
+            {
+                _level = value;
+            }
+        }
+
+        private int _communauty;
+
+        public int Communauty
+        {
+            get
+            {
+                return _communauty;
+            }
+            set
+            {
+                _communauty = value;
+            }
+        }
+
+        private string _username;
+
+        public string Username
+        {
+            get
+            {
+                return _username;
+            }
+            set
+            {
+                _username = value;
+            }
+        }
+
+        private string _password;
+
+        public string Password
+        {
+            get
+            {
+                return _password;
+            }
+            set
+            {
+                _password = value;
+            }
+        }
+
+        private string _pseudo;
+
+        public string Pseudo
+        {
+            get
+            {
+                return _pseudo;
+            }
+            set
+            {
+                _pseudo = value;
+            }
+        }
+
+        private string _question;
+
+        public string Question
+        {
+            get
+            {
+                return _question;
+            }
+            set
+            {
+                _question = value;
+            }
+        }
+
+        public string _answer;
+
+        public string Answer
+        {
+            get
+            {
+                return _answer;
+            }
+            set
+            {
+                _answer = value;
+            }
+        }
+
+        public DateTime SubscriptionDate;
+        public Dictionary<int, List<string>> Characters;
 
         public AccountModel()
         {
-            m_subscriptionDate = new DateTime();
-            m_characters = new Dictionary<int, List<string>>();
+            SubscriptionDate = new DateTime();
+            Characters = new Dictionary<int, List<string>>();
         }
 
-        public void ParseCharacter(string m_charstr)
+        public void ParseCharacters(string charstr)
         {
-            if (m_charstr == "")
+            if (charstr == "")
             {
-                m_characters = new Dictionary<int, List<string>>();
+                Characters = new Dictionary<int, List<string>>();
                 return;
             }
 
             var dico = new Dictionary<int, List<string>>();
-            var datas = m_charstr.Split(':');
+            var datas = charstr.Split(':');
 
             foreach (var infos in datas)
             {
@@ -48,33 +150,33 @@ namespace DofusOrigin.Database.Models
                 dico[int.Parse(characterdatas[1])].Add(characterdatas[0]);
             }
 
-            m_characters = dico;
+            Characters = dico;
         }
 
-        public long GetSubscriptionTime()
+        public long SubscriptionTime()
         {
-            var time = m_subscriptionDate.Subtract(DateTime.Now).TotalMilliseconds;
+            var time = SubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds;
 
-            if (Utilities.Config.m_config.GetBoolElement("Subscription_Time") == false)
+            if (Utilities.Config.GetConfig.GetBoolElement("Subscription_Time") == false)
                 return 31536000000;
-            else if (m_subscriptionDate.Subtract(DateTime.Now).TotalMilliseconds <= 1)
+            else if (SubscriptionDate.Subtract(DateTime.Now).TotalMilliseconds <= 1)
                 return 0;
-            else if (time >= Utilities.Config.m_config.GetLongElement("Max_Subscription_Time"))
+            else if (time >= Utilities.Config.GetConfig.GetLongElement("Max_Subscription_Time"))
                 return 31536000000;
 
             return (long)time;
         }
 
-        public string CharactersSaveString()
+        public string CharactersString()
         {
             var str = "";
 
-            foreach (var i in m_characters.Keys)
+            foreach (var i in Characters.Keys)
             {
-                if (m_characters[i].Count < 1)
+                if (Characters[i].Count < 1)
                     continue;
 
-                foreach (var character in m_characters[i])
+                foreach (var character in Characters[i])
                     str += string.Format("{0},{1}:", character, i);
             }
 

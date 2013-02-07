@@ -9,45 +9,57 @@ namespace DofusOrigin.Database.Cache
 {
     class GiftsCache
     {
-        public static List<Models.GiftModel> m_gifts = new List<Models.GiftModel>();
+        public static List<Models.GiftModel> _gifts = new List<Models.GiftModel>();
 
-        private static bool m_started = false;
-        private static Timer m_cache = new Timer();
+        public static List<Models.GiftModel> Cache
+        {
+            get
+            {
+                return _gifts;
+            }
+            set
+            {
+                _gifts = value;
+            }
+        }
+
+        private static bool _started = false;
+        private static Timer _cache = new Timer();
 
         public static void ReloadCache(object sender = null, EventArgs e = null)
         {
-            Utilities.Loggers.m_infosLogger.Write("Reloading of @Gifts' Cache@ ...");
+            Utilities.Loggers.InfosLogger.Write("Reloading of @Gifts' Cache@ ...");
 
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
-                string sqlText = "SELECT * FROM dyn_gifts";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlText = "SELECT * FROM dyn_gifts";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
                     var gifts = new Models.GiftModel();
                     {
-                        gifts.m_id = sqlReader.GetInt16("Id");
-                        gifts.m_target = sqlReader.GetInt16("Target");
-                        gifts.m_itemID = sqlReader.GetInt16("ItemID");
-                        gifts.m_title = sqlReader.GetString("Title");
-                        gifts.m_message = sqlReader.GetString("Message");
+                        gifts.ID = sqlReader.GetInt16("Id");
+                        gifts.Target = sqlReader.GetInt16("Target");
+                        gifts.ItemID = sqlReader.GetInt16("ItemID");
+                        gifts.Title = sqlReader.GetString("Title");
+                        gifts.Message = sqlReader.GetString("Message");
                     }
 
-                    if (!m_gifts.Any(x => x.m_id == gifts.m_id))
-                        m_gifts.Add(gifts);
+                    if (!_gifts.Any(x => x.ID == gifts.ID))
+                        _gifts.Add(gifts);
                 }
 
                 sqlReader.Close();
             }
 
-            if (!m_started == true)
+            if (!_started == true)
             {
-                m_started = true;
-                m_cache.Interval = Utilities.Config.m_config.GetIntElement("Time_Gifts_Reload");
-                m_cache.Enabled = true;
-                m_cache.Elapsed += new ElapsedEventHandler(ReloadCache);
+                _started = true;
+                _cache.Interval = Utilities.Config.GetConfig.GetIntElement("Time_Gifts_Reload");
+                _cache.Enabled = true;
+                _cache.Elapsed += new ElapsedEventHandler(ReloadCache);
             }
         }
     }

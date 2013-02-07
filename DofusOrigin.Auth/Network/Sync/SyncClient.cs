@@ -9,176 +9,179 @@ namespace DofusOrigin.Network.Sync
 {
     class SyncClient : DofusOrigin.Network.TCPClient
     {
-        private State m_state { get; set; }
-        public ServerModel m_server { get; set; }
+        public ServerModel Server;
 
-        object m_packetLocker;
+        private State _state;
+        private object _packetLocker;
 
-        public SyncClient(SilverSocket _socket)
-            : base(_socket)
+        public SyncClient(SilverSocket socket)
+            : base(socket)
         {
             this.ReceivedDatas += new ReceiveDatasHandler(this.PacketsReceived);
             this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
 
-            m_state = State.OnAuthentication;
-            m_server = null;
-            m_packetLocker = new object();
+            _state = State.OnAuthentication;
+            _packetLocker = new object();
+
+            Server = null;
 
             Send("HCS");
         }
 
-        public void SendTicket(string _key, Auth.AuthClient _client)
+        public void SendTicket(string key, Auth.AuthClient client)
         {
             var Builder = new StringBuilder();
             {
                 Builder.Append("ANTS|");
-                Builder.Append(_key).Append("|");
-                Builder.Append(_client.m_account.m_id).Append("|");
-                Builder.Append(_client.m_account.m_pseudo).Append("|");
-                Builder.Append(_client.m_account.m_question).Append("|");
-                Builder.Append(_client.m_account.m_answer).Append("|");
-                Builder.Append(_client.m_account.m_level).Append("|");
-                Builder.Append(string.Join(",", _client.m_account.m_characters[m_server.m_id].ToArray())).Append("|");
-                Builder.Append(_client.m_account.GetSubscriptionTime()).Append("|");
-                Builder.Append(string.Join("+", Database.Cache.GiftsCache.m_gifts.Where(x => x.m_target == _client.m_account.m_id)));
+                Builder.Append(key).Append("|");
+                Builder.Append(client.Account.ID).Append("|");
+                Builder.Append(client.Account.Pseudo).Append("|");
+                Builder.Append(client.Account.Question).Append("|");
+                Builder.Append(client.Account.Answer).Append("|");
+                Builder.Append(client.Account.Level).Append("|");
+                Builder.Append(string.Join(",", client.Account.Characters[Server.ID].ToArray())).Append("|");
+                Builder.Append(client.Account.SubscriptionTime()).Append("|");
+                Builder.Append(string.Join("+", Database.Cache.GiftsCache.Cache.Where(x => x.Target == client.Account.ID)));
             }
 
             Send(Builder.ToString());
         }
 
-        public void Send(string _message)
+        public void Send(string message)
         {
-            this.SendDatas(_message);
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), _message));
+            this.SendDatas(message);
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), message));
         }
 
-        private void PacketsReceived(string _datas)
+        private void PacketsReceived(string datas)
         {
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), _datas));
+            Utilities.Loggers.InfosLogger.Write(string.Format("Receive from sync @<{0}>@ : [{1}]", myIp(), datas));
 
-            lock (m_packetLocker)
-                Parse(_datas);
+            lock (_packetLocker)
+                Parse(datas);
         }
 
         private void Disconnected()
         {
             ChangeState(State.OnDisconnected);
-            Utilities.Loggers.m_infosLogger.Write(string.Format("New closed sync connection @<{0}>@ !", this.myIp()));
+            Utilities.Loggers.InfosLogger.Write(string.Format("New closed sync connection @<{0}>@ !", this.myIp()));
 
-            lock (ServersHandler.m_syncServer.m_clients)
-                ServersHandler.m_syncServer.m_clients.Remove(this);
+            lock (ServersHandler.SyncServer.GetClients)
+                ServersHandler.SyncServer.GetClients.Remove(this);
         }
 
-        private void Parse(string _datas)
+        private void Parse(string datas)
         {
             try
             {
-                var packet = _datas.Split('|');
+                var packet = datas.Split('|');
 
                 switch (packet[0])
                 {
                     case "SAI":
-                        //Sync Account Identification
+
                         Authentication(int.Parse(packet[1]), packet[2], int.Parse(packet[3]));
                         break;
 
                     case "SDAC":
-                        //Sync Deleted Account Character
-                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], m_server.m_id, false);  
+
+                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID, false);  
                         break;
 
                     case "SNAC":
-                        //Sync New Account Character
-                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], m_server.m_id);
+
+                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID);
                         break;
 
                     case "SNC":
-                        //Sync New Connected
-                        if(!m_server.m_clients.Contains(packet[1]))
-                            m_server.m_clients.Add(packet[1]);
+
+                        if(!Server.GetClients.Contains(packet[1]))
+                            Server.GetClients.Add(packet[1]);
                         break;
 
                     case "SND":
-                        //Sync New Disconnected 
-                        if (m_server.m_clients.Contains(packet[1]))
-                            m_server.m_clients.Remove(packet[1]);                     
+
+                        if (Server.GetClients.Contains(packet[1]))
+                            Server.GetClients.Remove(packet[1]);                     
                         break;
 
                     case "SNDG":
-                        //Sync New Deleted Gift  
+
                         SyncAction.DeleteGift(int.Parse(packet[1]), int.Parse(packet[2]));
                         break;
 
                     case "SNLC":
-                        //Sync New List Connected
-                        ParseListConnected(_datas);
+
+                        ParseListConnected(datas);
                         break;
 
                     case "SSM":
-                        //Sync Start Maintenance
+
                         ChangeState(State.OnMaintenance);
                         break;
 
                     case "STM":
-                        //Sync Stop Maintenance
+
                         ChangeState(State.OnConnected);
                         break;
                 }
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot parse sync packet : {0}", e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse sync packet : {0}", e.ToString()));
             }
         }
 
-        private void Authentication(int _serverId, string _serverIp, int _serverPort)
+        private void Authentication(int serverId, string serverIp, int serverPort)
         {
-            if (Database.Cache.ServersCache.m_servers.Any(x => x.m_id == _serverId && x.m_ip == _serverIp && x.m_port == _serverPort && x.m_state == 0))
+            if (Database.Cache.ServersCache.Cache.Any(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0))
             {
-                var requieredServer = Database.Cache.ServersCache.m_servers.First(x => x.m_id == _serverId && x.m_ip == _serverIp && x.m_port == _serverPort && x.m_state == 0);
+                var requieredServer = Database.Cache.ServersCache.Cache.First(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0);
 
-                if (!myIp().Contains(_serverIp))
+                if (!myIp().Contains(serverIp))
                 {
                     Disconnect();
                     return;
                 }
 
-                m_server = requieredServer;
+                Server = requieredServer;
 
                 Send("HCSS");                
                 ChangeState(SyncClient.State.OnConnected);
 
-                Utilities.Loggers.m_infosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
+                Utilities.Loggers.InfosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
             }
             else
                 Disconnect();
         }
 
-        private void ChangeState(State _state)
+        private void ChangeState(State state)
         {
-            this.m_state = _state;
+            this._state = state;
 
-            if (m_server == null) return;
-            switch (this.m_state)
+            if (Server == null) 
+                return;
+
+            switch (this._state)
             {
                 case State.OnAuthentication:
-                    m_server.m_state = 0;
+                    Server.State = 0;
                     break;
 
                 case State.OnConnected:
-                    m_server.m_state = 1;
+                    Server.State = 1;
                     break;
 
                 case State.OnDisconnected:
-                    m_server.m_state = 0;
+                    Server.State = 0;
                     break;
 
                 case State.OnMaintenance:
-                    m_server.m_state = 2;
+                    Server.State = 2;
                     break;
             }
 
-            ServersHandler.m_authServer.m_clients.ForEach(x => x.RefreshHosts());
+            ServersHandler.AuthServer.GetClients.ForEach(x => x.RefreshHosts());
         }
 
         private void ParseListConnected(string _datas)
@@ -187,8 +190,8 @@ namespace DofusOrigin.Network.Sync
 
             foreach (var pseudo in packet)
             {
-                if (!m_server.m_clients.Contains(pseudo))
-                    m_server.m_clients.Add(pseudo);
+                if (!Server.GetClients.Contains(pseudo))
+                    Server.GetClients.Add(pseudo);
             }
         }
 
