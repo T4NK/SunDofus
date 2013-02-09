@@ -8,11 +8,11 @@ namespace DofusOrigin.Settings
 {
     public class Configuration
     {
-        private Dictionary<string, string> m_elements;
+        private Dictionary<string, string> _elements;
 
         public Configuration()
         {
-            m_elements = new Dictionary<string, string>();
+            _elements = new Dictionary<string, string>();
         } 
 
         public void LoadConfiguration(string path)
@@ -27,7 +27,7 @@ namespace DofusOrigin.Settings
                     continue;
 
                 var lineInfos = Line.Substring(1).Split(' ');
-                m_elements.Add(lineInfos[0], lineInfos[1].Substring(0, lineInfos[1].Length - 1));
+                _elements.Add(lineInfos[0], lineInfos[1].Substring(0, lineInfos[1].Length - 1));
             }
 
             reader.Close();
@@ -35,40 +35,40 @@ namespace DofusOrigin.Settings
 
         public void InsertElement(string _key, string _value)
         {
-            if(!m_elements.ContainsKey(_key))
-                m_elements.Add(_key, _value);
+            if(!_elements.ContainsKey(_key))
+                _elements.Add(_key, _value);
         }
 
         public string GetStringElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element))
+            if (!_elements.ContainsKey(_element))
                 throw new Exception("Invalid key");
 
-            return m_elements[_element];
+            return _elements[_element];
         }
 
         public int GetIntElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element))
+            if (!_elements.ContainsKey(_element))
                 throw new Exception("Invalid key");
 
-            return int.Parse(m_elements[_element]);
+            return int.Parse(_elements[_element]);
         }
 
         public bool GetBoolElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element))
+            if (!_elements.ContainsKey(_element))
                 throw new Exception("Invalid key");
 
-            return bool.Parse(m_elements[_element]);
+            return bool.Parse(_elements[_element]);
         }
 
         public long GetLongElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element))
+            if (!_elements.ContainsKey(_element))
                 throw new Exception("Invalid key");
 
-            return long.Parse(m_elements[_element]);
+            return long.Parse(_elements[_element]);
         }
     }
 }
