@@ -99,5 +99,18 @@ namespace DofusOrigin.Database.Cache
                 return accountID;
             }
         }
+
+        public static void ResetConnectedValue()
+        {
+            lock (Database.DatabaseHandler.ConnectionLocker)
+            {
+                var sqlText = "UPDATE dyn_accounts SET connected=@connected";
+                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.Connection);
+
+                sqlCommand.Parameters.Add(new MySqlParameter("@connected", 0));
+
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
     }
 }

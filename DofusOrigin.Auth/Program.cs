@@ -22,6 +22,7 @@ namespace DofusOrigin
 
                 DatabaseHandler.InitializeConnection();
 
+                AccountsCache.ResetConnectedValue();
                 GiftsCache.ReloadCache();
                 ServersCache.ReloadCache();
 
