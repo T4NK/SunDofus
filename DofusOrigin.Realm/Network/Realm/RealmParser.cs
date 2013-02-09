@@ -106,7 +106,7 @@ namespace DofusOrigin.Network.Realm
                 Network.Authentication.AuthenticationsKeys.m_keys.Remove(key);
 
                 Network.ServersHandler.m_authLinks.Send(string.Format("SNC|{0}", m_client.m_infos.m_pseudo));
-                ServersHandler.m_realmServer.m_pseudoClients.Add(m_client.m_infos.m_pseudo);
+                ServersHandler.m_realmServer.m_pseudoClients.Add(m_client.m_infos.m_pseudo, m_client.m_infos.m_id);
 
                 m_client.Send("ATK0");
             }

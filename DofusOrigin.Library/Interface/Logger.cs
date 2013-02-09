@@ -35,7 +35,7 @@ namespace DofusOrigin.Interface
                 Directory.CreateDirectory("logs");
 
             _writer = new StreamWriter(string.Format("logs/DofusOrigin {0} - {1}.log", _name, 
-                DateTime.Now.ToString().Replace("/", "_")));
+                DateTime.Now.ToString().Replace("/", "_").Split(' ')[0]));
             _writer.AutoFlush = true;
         }
 

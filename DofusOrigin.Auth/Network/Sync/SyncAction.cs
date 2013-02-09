@@ -34,6 +34,9 @@ namespace DofusOrigin.Network.Sync
 
         public static void UpdateConnectedValue(int accountID, bool isConnected)
         {
+            if (accountID == -1)
+                return;
+
             lock (Database.DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "UPDATE dyn_accounts SET connected=@connected WHERE Id=@id";

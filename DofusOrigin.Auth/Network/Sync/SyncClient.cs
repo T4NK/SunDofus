@@ -109,7 +109,10 @@ namespace DofusOrigin.Network.Sync
                             lock (Server.GetClients)
                             {
                                 if (!Server.GetClients.Contains(packet[1]))
+                                {
                                     Server.GetClients.Add(packet[1]);
+                                    SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(packet[1]), true);
+                                }
                             }
                         }
 
@@ -122,7 +125,10 @@ namespace DofusOrigin.Network.Sync
                             lock (Server.GetClients)
                             {
                                 if (Server.GetClients.Contains(packet[1]))
+                                {
                                     Server.GetClients.Remove(packet[1]);
+                                    SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(packet[1]), false);
+                                }
                             }
                         }
 
@@ -228,7 +234,10 @@ namespace DofusOrigin.Network.Sync
                 foreach (var pseudo in packet)
                 {
                     if (!Server.GetClients.Contains(pseudo))
+                    {
                         Server.GetClients.Add(pseudo);
+                        SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(pseudo), true);
+                    }
                 }
             }
         }

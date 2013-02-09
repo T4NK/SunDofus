@@ -78,5 +78,26 @@ namespace DofusOrigin.Database.Cache
                 return account;
             }
         }
+
+        public static int GetAccountID(string pseudo)
+        {
+            lock (DatabaseHandler.ConnectionLocker)
+            {
+                var accountID = -1;
+
+                var sqlText = "SELECT id FROM dyn_accounts WHERE pseudo=@pseudo";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+                sqlCommand.Parameters.Add(new MySqlParameter("@pseudo", pseudo));
+
+                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+
+                if (sqlReader.Read())
+                    accountID = sqlReader.GetInt32("id");
+
+                sqlReader.Close();
+
+                return accountID;
+            }
+        }
     }
 }

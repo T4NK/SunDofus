@@ -7,10 +7,8 @@ namespace DofusOrigin.Network.Authentication
 {
     class AuthenticationsKeys
     {
-        //Static
         public static List<AuthenticationsKeys> m_keys = new List<AuthenticationsKeys>();
 
-        //Object
         public string m_key;
         public Database.Models.Clients.AccountModel m_infos;
 

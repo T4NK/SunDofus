@@ -10,13 +10,13 @@ namespace DofusOrigin.Network.Realm
     class RealmServer : TCPServer
     {
         public List<RealmClient> m_clients;
-        public List<string> m_pseudoClients;
+        public Dictionary<string, int> m_pseudoClients;
 
         public RealmServer()
             : base(Utilities.Config.m_config.GetStringElement("ServerIp"), Utilities.Config.m_config.GetIntElement("ServerPort"))
         {
             m_clients = new List<RealmClient>();
-            m_pseudoClients = new List<string>();
+            m_pseudoClients = new Dictionary<string,int>();
 
             this.SocketClientAccepted += new AcceptSocketHandler(this.OnAcceptedClient);
             this.ListeningServer += new ListeningServerHandler(this.OnListeningServer);
