@@ -5,3 +5,4 @@
 [07.02.2013] Optimisation de la sécurité, des performances
 [07.02.2013] Suppression du cache des comptes qui sont chargés maintenant par rapport à la file d'attente
 [07.02.2013] Normalisation du code et suppression des séquences inutiles
+[09.02.2013] Ajout de la possibilité de changé l'image lors de l'affichage des cadeaux

@@ -8,44 +8,44 @@ namespace DofusOrigin.Interface
 {
     public class Logger
     {
-        ConsoleColor my_color;
-        StreamWriter m_writer;
+        ConsoleColor _color;
+        StreamWriter _writer;
 
-        bool inConsole = false, inFile = false;
-        string m_name = "";
-        object m_locker;
+        bool _inConsole = false, _inFile = false;
+        string _name = "";
+        object _locker;
 
-        public Logger(string _name,object _locker, ConsoleColor _color = ConsoleColor.Gray)
+        public Logger(string name,object locker, ConsoleColor color = ConsoleColor.Gray)
         {
-            m_locker = _locker;
-            m_name = _name;
-            my_color = _color;
+            _locker = locker;
+            _name = name;
+            _color = color;
         }
 
         public void StartConsoleLogger()
         {
-            inConsole = true;
+            _inConsole = true;
         }
 
         public void StartFileLogger()
         {
-            inFile = true;
+            _inFile = true;
 
             if (!Directory.Exists("logs"))
                 Directory.CreateDirectory("logs");
 
-            m_writer = new StreamWriter(string.Format("logs/DofusOrigin {0} - {1}.log", m_name, 
-                DateTime.Now.ToString().Replace("/", "_").Split(' ')[0]));
-            m_writer.AutoFlush = true;
+            _writer = new StreamWriter(string.Format("logs/DofusOrigin {0} - {1}.log", _name, 
+                DateTime.Now.ToString().Replace("/", "_")));
+            _writer.AutoFlush = true;
         }
 
         public void Write(string _message, bool _line = true)
         {
-            if (inConsole == true)
+            if (_inConsole == true)
             {
-                lock (m_locker)
+                lock (_locker)
                 {
-                    Console.ForegroundColor = my_color;
+                    Console.ForegroundColor = _color;
 
                     Console.Write("{0} >> ", DateTime.Now.ToString());
 
@@ -54,7 +54,7 @@ namespace DofusOrigin.Interface
                         if (c == '@')
                         {
                             if (Console.ForegroundColor == ConsoleColor.White)
-                                Console.ForegroundColor = my_color;
+                                Console.ForegroundColor = _color;
                             else
                                 Console.ForegroundColor = ConsoleColor.White;
                         }
@@ -71,10 +71,10 @@ namespace DofusOrigin.Interface
                 }
             }
 
-            if (inFile == true)
+            if (_inFile == true)
             {
                 _message = _message.Replace("@", "");
-                m_writer.WriteLine("[{0}] ({1}) : {2}", m_name, DateTime.Now.ToString(), _message);
+                _writer.WriteLine("[{0}] ({1}) : {2}", _name, DateTime.Now.ToString(), _message);
             }
         }
     }

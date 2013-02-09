@@ -15,15 +15,15 @@ namespace DofusOrigin.Settings
             m_elements = new Dictionary<string, string>();
         } 
 
-        public void LoadConfiguration(string _path)
+        public void LoadConfiguration(string path)
         {
-            var reader = new StreamReader(_path);
+            var reader = new StreamReader(path);
 
             while (!reader.EndOfStream)
             {
                 var Line = reader.ReadLine();
 
-                if (!Line.Contains("$")) 
+                if (!Line.StartsWith("$")) 
                     continue;
 
                 var lineInfos = Line.Substring(1).Split(' ');
@@ -41,32 +41,32 @@ namespace DofusOrigin.Settings
 
         public string GetStringElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element)) 
-                return "";
+            if (!m_elements.ContainsKey(_element))
+                throw new Exception("Invalid key");
 
             return m_elements[_element];
         }
 
         public int GetIntElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element)) 
-                return -1;
+            if (!m_elements.ContainsKey(_element))
+                throw new Exception("Invalid key");
 
             return int.Parse(m_elements[_element]);
         }
 
         public bool GetBoolElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element)) 
-                return false;
+            if (!m_elements.ContainsKey(_element))
+                throw new Exception("Invalid key");
 
             return bool.Parse(m_elements[_element]);
         }
 
         public long GetLongElement(string _element)
         {
-            if (!m_elements.ContainsKey(_element)) 
-                return -1;
+            if (!m_elements.ContainsKey(_element))
+                throw new Exception("Invalid key");
 
             return long.Parse(m_elements[_element]);
         }

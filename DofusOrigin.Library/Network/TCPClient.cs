@@ -8,7 +8,7 @@ namespace DofusOrigin.Network
 {
     public class TCPClient
     {
-        private SilverSocket m_socket { get; set; }
+        private SilverSocket _socket;
         public bool isConnected = false;
 
         protected delegate void DisconnectedSocketHandler();
@@ -41,46 +41,46 @@ namespace DofusOrigin.Network
                 evnt(_exception);
         }
 
-        public TCPClient(SilverSocket _socket)
+        public TCPClient(SilverSocket socket)
         {
-            m_socket = _socket;
+            _socket = socket;
 
-            m_socket.OnConnected += new SilverEvents.Connected(this.Connected);
-            m_socket.OnSocketClosedEvent += new SilverEvents.SocketClosed(this.Disconnected);
-            m_socket.OnDataArrivalEvent += new SilverEvents.DataArrival(this.DatasArrival);
-            m_socket.OnFailedToConnect += new SilverEvents.FailedToConnect(this.FailedToConnect);
+            _socket.OnConnected += new SilverEvents.Connected(this.Connected);
+            _socket.OnSocketClosedEvent += new SilverEvents.SocketClosed(this.Disconnected);
+            _socket.OnDataArrivalEvent += new SilverEvents.DataArrival(this.DatasArrival);
+            _socket.OnFailedToConnect += new SilverEvents.FailedToConnect(this.FailedToConnect);
         }
 
-        public void ConnectTo(string _ip, int _port)
+        public void ConnectTo(string ip, int port)
         {
-            m_socket.ConnectTo(_ip, _port);
+            _socket.ConnectTo(ip, port);
         }
 
         public string myIp()
         {
-            return m_socket.IP;
+            return _socket.IP;
         }
 
         public void Disconnect()
         {
-            m_socket.CloseSocket();
+            _socket.CloseSocket();
         }
 
-        protected void SendDatas(string _message)
+        protected void SendDatas(string message)
         {
             try
             {
-                var P = Encoding.UTF8.GetBytes(string.Format("{0}\x00", _message));
-                m_socket.Send(P);
+                var P = Encoding.UTF8.GetBytes(string.Format("{0}\x00", message));
+                _socket.Send(P);
             }
             catch { }
         }
 
         #region toEvent
 
-        private void DatasArrival(byte[] _datas)
+        private void DatasArrival(byte[] datas)
         {
-            var notParsed = Encoding.UTF8.GetString(_datas);
+            var notParsed = Encoding.UTF8.GetString(datas);
 
             foreach (var Packet in notParsed.Replace("\x0a", "").Split('\x00'))
             {

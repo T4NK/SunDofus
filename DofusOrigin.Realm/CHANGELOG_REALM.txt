@@ -34,3 +34,4 @@
 [03.02.2013] Ajout des dialogues avec les NPC
 [03.02.2013] Seules les réponses avec les conditions atteintes sont désormais affichées
 [03.02.2013] Mise en place d'une question de secours lorsque le client n'atteind pas les conditions demandées
+[09.02.2013] Ajout de la possibilité de changé l'image lors de l'affichage des cadeaux
