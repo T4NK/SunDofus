@@ -12,6 +12,7 @@ namespace DofusOrigin.Database.Models.Clients
         public int m_itemID { get; set; }
         public string m_title { get; set; }
         public string m_message { get; set; }
+        public string m_image { get; set; }
         public CharacterItem m_item { get; set; }
     }
 }

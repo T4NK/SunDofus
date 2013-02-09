@@ -62,6 +62,7 @@ namespace DofusOrigin.Database.Models.Clients
                 gift.m_title = giftDatas[1];
                 gift.m_message = giftDatas[2];
                 gift.m_itemID = int.Parse(giftDatas[3]);
+                gift.m_image = giftDatas[4];
 
                 m_gifts.Add(gift);
             }

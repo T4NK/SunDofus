@@ -73,7 +73,7 @@ namespace DofusOrigin.Network.Realm
 
                 gift.m_item = item;
 
-                this.Send(string.Format("Ag1|{0}|{1}|{2}|{3}|{4}~{5}~{6}~~{7};", gift.m_id, gift.m_title, gift.m_message, "http://s2.e-monsite.com/2009/12/26/04/167wpr7.png",
+                this.Send(string.Format("Ag1|{0}|{1}|{2}|{3}|{4}~{5}~{6}~~{7};", gift.m_id, gift.m_title, gift.m_message, (gift.m_image != "" ? gift.m_image : "http://s2.e-monsite.com/2009/12/26/04/167wpr7.png"),
                    Utilities.Basic.DeciToHex(item.m_base.m_id), Utilities.Basic.DeciToHex(item.m_base.m_id), Utilities.Basic.DeciToHex(item.m_quantity), item.EffectsInfos()));
             }
         }
