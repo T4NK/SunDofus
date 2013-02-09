@@ -21,24 +21,24 @@ namespace DofusOrigin.Network
                 evnt();
         }
 
-        protected delegate void ReceiveDatasHandler(string _message);
+        protected delegate void ReceiveDatasHandler(string message);
         protected ReceiveDatasHandler ReceivedDatas;
 
-        private void OnReceivedDatas(string _message)
+        private void OnReceivedDatas(string message)
         {
             var evnt = ReceivedDatas;
             if (evnt != null)
-                evnt(_message);
+                evnt(message);
         }
 
-        protected delegate void ConnectFailedHandler(Exception _exception);
+        protected delegate void ConnectFailedHandler(Exception exception);
         protected ConnectFailedHandler ConnectFailed;
 
-        private void OnConnectFailed(Exception _exception)
+        private void OnConnectFailed(Exception exception)
         {
             var evnt = ConnectFailed;
             if (evnt != null)
-                evnt(_exception);
+                evnt(exception);
         }
 
         public TCPClient(SilverSocket socket)
