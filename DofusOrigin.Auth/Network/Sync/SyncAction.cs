@@ -32,6 +32,20 @@ namespace DofusOrigin.Network.Sync
             }
         }
 
+        public static void UpdateConnectedValue(int accountID, bool isConnected)
+        {
+            lock (Database.DatabaseHandler.ConnectionLocker)
+            {
+                var sqlText = "UPDATE dyn_accounts SET connected=@connected WHERE Id=@id";
+                var sqlCommand = new MySqlCommand(sqlText, Database.DatabaseHandler.Connection);
+
+                sqlCommand.Parameters.Add(new MySqlParameter("@id", accountID));
+                sqlCommand.Parameters.Add(new MySqlParameter("@connected", (isConnected ? 1 : 0)));
+
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+
         public static void DeleteGift(int giftID, int accountID)
         {
             lock (Database.DatabaseHandler.ConnectionLocker)

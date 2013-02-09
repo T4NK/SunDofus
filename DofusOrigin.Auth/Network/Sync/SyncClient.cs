@@ -90,57 +90,69 @@ namespace DofusOrigin.Network.Sync
 
                     case "SDAC":
 
-                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID, false);
+                        if(_state == State.OnConnected)
+                            SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID, false);
 
                         return;
 
                     case "SNAC":
 
-                        SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID);
+                        if (_state == State.OnConnected)
+                            SyncAction.UpdateCharacters(int.Parse(packet[1]), packet[2], Server.ID);
 
                         return;
 
                     case "SNC":
 
-                        lock (Server.GetClients)
+                        if (_state == State.OnConnected)
                         {
-                            if (!Server.GetClients.Contains(packet[1]))
-                                Server.GetClients.Add(packet[1]);
+                            lock (Server.GetClients)
+                            {
+                                if (!Server.GetClients.Contains(packet[1]))
+                                    Server.GetClients.Add(packet[1]);
+                            }
                         }
 
                         return;
 
                     case "SND":
 
-                        lock (Server.GetClients)
+                        if (_state == State.OnConnected)
                         {
-                            if (Server.GetClients.Contains(packet[1]))
-                                Server.GetClients.Remove(packet[1]);
+                            lock (Server.GetClients)
+                            {
+                                if (Server.GetClients.Contains(packet[1]))
+                                    Server.GetClients.Remove(packet[1]);
+                            }
                         }
 
                         return;
 
                     case "SNDG":
 
-                        SyncAction.DeleteGift(int.Parse(packet[1]), int.Parse(packet[2]));
+                        if (_state == State.OnConnected)
+                            SyncAction.DeleteGift(int.Parse(packet[1]), int.Parse(packet[2]));
 
                         return;
 
                     case "SNLC":
 
-                        ParseListConnected(datas);
+                        if (_state == State.OnConnected)
+                            ParseListConnected(datas);
 
                         return;
 
                     case "SSM":
 
-                        ChangeState(State.OnMaintenance);
+                        if (_state == State.OnConnected)
+                            ChangeState(State.OnMaintenance);
 
                         return;
 
                     case "STM":
 
-                        ChangeState(State.OnConnected);
+                        if (_state == State.OnMaintenance)
+                            ChangeState(State.OnConnected);
 
                         return;
                 }
