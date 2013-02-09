@@ -4,4 +4,4 @@
 [07.02.2013] Revue presque totale du code
 [07.02.2013] Optimisation de la sécurité, des performances
 [07.02.2013] Suppression du cache des comptes qui sont chargés maintenant par rapport à la file d'attente
-[07.02.2013] Normalisation du code et suppression de séquence inutile
+[07.02.2013] Normalisation du code et suppression des séquences inutiles

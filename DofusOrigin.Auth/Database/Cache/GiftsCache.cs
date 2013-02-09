@@ -45,6 +45,7 @@ namespace DofusOrigin.Database.Cache
                         gifts.ItemID = sqlReader.GetInt16("ItemID");
                         gifts.Title = sqlReader.GetString("Title");
                         gifts.Message = sqlReader.GetString("Message");
+                        gifts.Image = sqlReader.GetString("Image");
                     }
 
                     lock (Cache)

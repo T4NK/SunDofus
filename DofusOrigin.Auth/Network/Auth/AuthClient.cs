@@ -28,7 +28,6 @@ namespace DofusOrigin.Network.Auth
 
         private object _packetLocker;
         private string _actualInfos;
-        private int _packetNB;
         private string _key;
 
         public AuthClient(SilverSocket socket) : base(socket)
@@ -39,14 +38,15 @@ namespace DofusOrigin.Network.Auth
             this.ReceivedDatas += new ReceiveDatasHandler(this.PacketReceived);
 
             _key = Utilities.Basic.RandomString(32);
-            _packetNB = 0;
 
             Send(string.Format("HC{0}", _key));
         }
 
         public void Send(string message)
         {
-            this.SendDatas(message);
+            lock(_packetLocker)
+                this.SendDatas(message);
+
             Utilities.Loggers.InfosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), message));
         }
 
@@ -107,7 +107,6 @@ namespace DofusOrigin.Network.Auth
         private void PacketReceived(string datas)
         {
             Utilities.Loggers.InfosLogger.Write(string.Format("Receive from client @<{0}>@ : [{1}]", this.myIp(), datas));
-            _packetNB++;
 
             lock (_packetLocker)
                 Parse(datas);
@@ -115,7 +114,7 @@ namespace DofusOrigin.Network.Auth
 
         private void Parse(string datas)
         {
-            if (_packetNB == 2)
+            if (datas.Contains("#1"))
             {
                 _actualInfos = datas;
                 return;

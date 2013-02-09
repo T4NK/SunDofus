@@ -77,9 +77,23 @@ namespace DofusOrigin.Database.Models
             }
         }
 
+        private string _image;
+
+        public string Image
+        {
+            get
+            {
+                return _image;
+            }
+            set
+            {
+                _image = value;
+            }
+        }
+
         public override string ToString()
         {
-            return string.Format("{0}~{1}~{2}~{3}", _ID, _title, _message, _itemID);
+            return string.Format("{0}~{1}~{2}~{3}~{4}", _ID, _title, _message, _itemID, _image);
         }
     }
 }

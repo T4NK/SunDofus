@@ -41,7 +41,9 @@ namespace DofusOrigin.Network.Sync
                 Builder.Append(client.Account.Level).Append("|");
                 Builder.Append(string.Join(",", client.Account.Characters[Server.ID].ToArray())).Append("|");
                 Builder.Append(client.Account.SubscriptionTime()).Append("|");
-                Builder.Append(string.Join("+", Database.Cache.GiftsCache.Cache.Where(x => x.Target == client.Account.ID)));
+
+                lock(Database.Cache.GiftsCache.Cache)
+                    Builder.Append(string.Join("+", Database.Cache.GiftsCache.Cache.Where(x => x.Target == client.Account.ID)));
             }
 
             Send(Builder.ToString());
@@ -49,7 +51,9 @@ namespace DofusOrigin.Network.Sync
 
         public void Send(string message)
         {
-            this.SendDatas(message);
+            lock(_packetLocker)
+                this.SendDatas(message);
+
             Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), message));
         }
 
