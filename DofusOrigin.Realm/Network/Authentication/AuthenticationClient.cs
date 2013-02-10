@@ -40,7 +40,7 @@ namespace DofusOrigin.Network.Authentication
             if (isLogged == false && _force == false)
                 return;
 
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), _message));
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), _message));
             this.SendDatas(_message);
         }
 
@@ -54,7 +54,7 @@ namespace DofusOrigin.Network.Authentication
 
         void FailedToConnect(Exception _exception)
         {
-            Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot connect to @AuthServer@ because {0}", _exception.ToString()));
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot connect to @AuthServer@ because {0}", _exception.ToString()));
         }
 
         void DatasArrival(string _datas)
@@ -65,7 +65,7 @@ namespace DofusOrigin.Network.Authentication
 
         void Disconnected()
         {
-            Utilities.Loggers.m_statusLogger.Write("Connection with the @AuthServer@ closed !");
+            Utilities.Loggers.StatusLogger.Write("Connection with the @AuthServer@ closed !");
             m_timer.Start();
         }
 
@@ -84,15 +84,15 @@ namespace DofusOrigin.Network.Authentication
 
                     case "HCS":
 
-                        Send(string.Format("SAI|{0}|{1}|{2}", Utilities.Config.m_config.GetIntElement("ServerId"),
-                            Utilities.Config.m_config.GetStringElement("ServerIp"),
-                            Utilities.Config.m_config.GetIntElement("ServerPort")), true);
+                        Send(string.Format("SAI|{0}|{1}|{2}", Utilities.Config.GetConfig.GetIntElement("ServerId"),
+                            Utilities.Config.GetConfig.GetStringElement("ServerIp"),
+                            Utilities.Config.GetConfig.GetIntElement("ServerPort")), true);
                         break;
 
                     case "HCSS":
 
                         isLogged = true;
-                        Utilities.Loggers.m_infosLogger.Write("Connected with the @AuthenticationServer@ !");
+                        Utilities.Loggers.InfosLogger.Write("Connected with the @AuthenticationServer@ !");
 
                         if (ServersHandler.m_realmServer.m_pseudoClients.Count > 0)
                             Send(string.Format("SNLC|{0}", string.Join("|", ServersHandler.m_realmServer.m_pseudoClients.Values)));
@@ -102,7 +102,7 @@ namespace DofusOrigin.Network.Authentication
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot parse @AuthServer's packet@ ({0}) because : {1}", _datas, e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse @AuthServer's packet@ ({0}) because : {1}", _datas, e.ToString()));
             }
         }
     }

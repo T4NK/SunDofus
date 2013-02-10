@@ -28,7 +28,7 @@ namespace DofusOrigin.Realm.Characters.NPC
 
         public void StartMove()
         {
-            if (mustMove == false || !Utilities.Config.m_config.GetBoolElement("MustNPCsMove"))
+            if (mustMove == false || !Utilities.Config.GetConfig.GetBoolElement("MustNPCsMove"))
                 return;
 
             m_movements = new Timer();
@@ -56,7 +56,7 @@ namespace DofusOrigin.Realm.Characters.NPC
         private void Move(object e, EventArgs e2)
         {
             m_movements.Interval = Utilities.Basic.Rand(1000, 5000);
-            var map = Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_id == m_mapid);
+            var map = Database.Cache.MapsCache.m_mapsList.First(x => x.GetModel.m_id == m_mapid);
 
             var path = new Realm.Maps.Pathfinding("", map, m_cellid, m_dir);
             var newDir = Utilities.Basic.Rand(0, 3) * 2 + 1;
@@ -71,13 +71,13 @@ namespace DofusOrigin.Realm.Characters.NPC
             var startpath = path.GetStartPath;
             var cellpath = path.RemakePath();
 
-            if(!Realm.Maps.Pathfinding.isValidCell(m_cellid, cellpath) && !map.m_rushablesCells.Contains(newCell))
+            if(!Realm.Maps.Pathfinding.isValidCell(m_cellid, cellpath) && !map.RushablesCells.Contains(newCell))
                 return;
 
             if (cellpath != "")
             {
-                m_cellid = path.m_destination;
-                m_dir = path.m_newDirection;
+                m_cellid = path.Destination;
+                m_dir = path.Direction;
 
                 var packet = string.Format("GA0;1;{0};{1}", m_idOnMap, startpath + cellpath);
 

@@ -7,51 +7,115 @@ namespace DofusOrigin.Realm.Effects
 {
     class EffectItem
     {
-        public int m_id { get; set; }
-        public int m_value { get; set; }
-        public int m_value2 { get; set; }
-        public int m_value3 { get; set; }
+        private int _ID;
 
-        public string m_effect { get; set; }
-        public Characters.Character m_client { get; set; }
+        public int ID
+        {
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                _ID = value;
+            }
+        }
+
+        private int _value;
+
+        public int Value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                _value = value;
+            }
+        }
+
+        private int _value2;
+
+        public int Value2
+        {
+            get
+            {
+                return _value2;
+            }
+            set
+            {
+                _value2 = value;
+            }
+        }
+
+        private int _value3;
+
+        public int Value3
+        {
+            get
+            {
+                return _value3;
+            }
+            set
+            {
+                _value3 = value;
+            }
+        }
+
+        private string _effect;
+
+        public string Effect
+        {
+            get
+            {
+                return _effect;
+            }
+            set
+            {
+                _effect = value;
+            }
+        }
+
+        public Characters.Character Client;
 
         public EffectItem()
         {
-            m_value = 0;
-            m_value2 = 0;
-            m_value3 = 0;
+            _value = 0;
+            _value2 = 0;
+            _value3 = 0;
 
-            m_effect = "0d0+0";
+            _effect = "0d0+0";
         }
 
         public EffectItem(EffectItem x)
         {
-            m_id = x.m_id;
+            _ID = x.ID;
 
-            m_value = x.m_value;
-            m_value2 = x.m_value2;
-            m_value3 = x.m_value3;
+            _value = x.Value;
+            _value2 = x.Value2;
+            _value3 = x.Value3;
 
-            m_effect = x.m_effect;
+            _effect = x.Effect;
         }
 
         public override string ToString()
         {
-            return string.Format("{0}#{1}#{2}#{3}#{4}", Utilities.Basic.DeciToHex(m_id), (m_value <= 0 ? "" : Utilities.Basic.DeciToHex(m_value)),
-                (m_value2 <= 0 ? "" : Utilities.Basic.DeciToHex(m_value2)), (m_value3 <= 0 ? "0" : Utilities.Basic.DeciToHex(m_value3)), m_effect);
+            return string.Format("{0}#{1}#{2}#{3}#{4}", Utilities.Basic.DeciToHex(_ID), (_value <= 0 ? "" : Utilities.Basic.DeciToHex(_value)),
+                (_value2 <= 0 ? "" : Utilities.Basic.DeciToHex(_value2)), (_value3 <= 0 ? "0" : Utilities.Basic.DeciToHex(_value3)), _effect);
         }
 
         public string SetString()
         {
-            return string.Format("{0}#{1}#{2}", Utilities.Basic.DeciToHex(m_id), (m_value <= 0 ? "" : Utilities.Basic.DeciToHex(m_value)),
-                (m_value2 <= 0 ? "" : Utilities.Basic.DeciToHex(m_value2)));
+            return string.Format("{0}#{1}#{2}", Utilities.Basic.DeciToHex(_ID), (_value <= 0 ? "" : Utilities.Basic.DeciToHex(_value)),
+                (_value2 <= 0 ? "" : Utilities.Basic.DeciToHex(_value2)));
         }
 
-        public void ParseEffect(Characters.Character _client)
+        public void ParseEffect(Characters.Character client)
         {
-            m_client = _client;
+            Client = client;
 
-            switch (m_id)
+            switch (_ID)
             {
                 case 110: // + Vie
                     AddLife();
@@ -375,397 +439,397 @@ namespace DofusOrigin.Realm.Effects
 
         private void AddLife()
         {
-            m_client.m_stats.life.m_items += m_value;
+            Client.m_stats.life.m_items += Value;
         }
 
         private void SubLife()
         {
-            m_client.m_stats.life.m_items -= m_value;
+            Client.m_stats.life.m_items -= Value;
         }
 
         private void AddPA()
         {
-            m_client.m_stats.PA.m_items += m_value;
+            Client.m_stats.PA.m_items += Value;
         }
 
         private void AddPM()
         {
-            m_client.m_stats.PM.m_items += m_value;
+            Client.m_stats.PM.m_items += Value;
         }
 
         private void AddPO()
         {
-            m_client.m_stats.PO.m_items += m_value;
+            Client.m_stats.PO.m_items += Value;
         }
 
         private void AddWisdom()
         {
-            m_client.m_stats.wisdom.m_items += m_value;
+            Client.m_stats.wisdom.m_items += Value;
         }
 
         private void AddStrenght()
         {
-            m_client.m_stats.strenght.m_items += m_value;
+            Client.m_stats.strenght.m_items += Value;
         }
 
         private void AddIntel()
         {
-            m_client.m_stats.intelligence.m_items += m_value;
+            Client.m_stats.intelligence.m_items += Value;
         }
 
         private void AddLuck()
         {
-            m_client.m_stats.luck.m_items += m_value;
+            Client.m_stats.luck.m_items += Value;
         }
 
         private void AddAgility()
         {
-            m_client.m_stats.agility.m_items += m_value;
+            Client.m_stats.agility.m_items += Value;
         }
 
         private void AddInitiative()
         {
-            m_client.m_stats.initiative.m_items += m_value;
+            Client.m_stats.initiative.m_items += Value;
         }
 
         private void AddProspection()
         {
-            m_client.m_stats.prospection.m_items += m_value;
+            Client.m_stats.prospection.m_items += Value;
         }
 
         private void AddPercentDamage()
         {
-            m_client.m_stats.bonusDamagePercent.m_items += m_value;
+            Client.m_stats.bonusDamagePercent.m_items += Value;
         }
 
         private void AddCritic()
         {
-            m_client.m_stats.bonusCritical.m_items += m_value;
+            Client.m_stats.bonusCritical.m_items += Value;
         }
 
         private void AddMagicDamage()
         {
-            m_client.m_stats.bonusDamageMagic.m_items += m_value;
+            Client.m_stats.bonusDamageMagic.m_items += Value;
         }
 
         private void AddPhysicDamage()
         {
-            m_client.m_stats.bonusDamagePhysic.m_items += m_value;
+            Client.m_stats.bonusDamagePhysic.m_items += Value;
         }
 
         private void AddTrapDamage()
         {
-            m_client.m_stats.bonusDamageTrap.m_items += m_value;
+            Client.m_stats.bonusDamageTrap.m_items += Value;
         }
 
         private void AddTrapPercentDamage()
         {
-            m_client.m_stats.bonusDamageTrapPercent.m_items += m_value;
+            Client.m_stats.bonusDamageTrapPercent.m_items += Value;
         }
 
         private void AddFail()
         {
-            m_client.m_stats.bonusFail.m_items += m_value;
+            Client.m_stats.bonusFail.m_items += Value;
         }
 
         private void AddDodgePA()
         {
-            m_client.m_stats.dodgePA.m_items += m_value;
+            Client.m_stats.dodgePA.m_items += Value;
         }
 
         private void AddDodgePM()
         {
-            m_client.m_stats.dodgePM.m_items += m_value;
+            Client.m_stats.dodgePM.m_items += Value;
         }
 
         private void AddMonster()
         {
-            m_client.m_stats.maxMonsters.m_items += m_value;
+            Client.m_stats.maxMonsters.m_items += Value;
         }
 
         private void AddPods()
         {
-            m_client.m_stats.maxPods.m_items += m_value;
+            Client.m_stats.maxPods.m_items += Value;
         }
 
         private void AddHeal()
         {
-            m_client.m_stats.bonusHeal.m_items += m_value;
+            Client.m_stats.bonusHeal.m_items += Value;
         }
 
         private void AddDamage()
         {
-            m_client.m_stats.bonusDamage.m_items += m_value;
+            Client.m_stats.bonusDamage.m_items += Value;
         }
 
         private void SubAgility()
         {
-            m_client.m_stats.agility.m_items -= m_value;
+            Client.m_stats.agility.m_items -= Value;
         }
 
         private void SubLuck()
         {
-            m_client.m_stats.luck.m_items -= m_value;
+            Client.m_stats.luck.m_items -= Value;
         }
 
         private void SubDamage()
         {
-            m_client.m_stats.bonusDamage.m_items -= m_value;
+            Client.m_stats.bonusDamage.m_items -= Value;
         }
 
         private void SubCritic()
         {
-            m_client.m_stats.bonusCritical.m_items -= m_value;
+            Client.m_stats.bonusCritical.m_items -= Value;
         }
 
         private void SubMagic()
         {
-            m_client.m_stats.bonusDamageMagic.m_items -= m_value;
+            Client.m_stats.bonusDamageMagic.m_items -= Value;
         }
 
         private void SubPhysic()
         {
-            m_client.m_stats.bonusDamagePhysic.m_items -= m_value;
+            Client.m_stats.bonusDamagePhysic.m_items -= Value;
         }
 
         private void SubDodgePA()
         {
-            m_client.m_stats.dodgePA.m_items -= m_value;
+            Client.m_stats.dodgePA.m_items -= Value;
         }
 
         private void SubDodgePM()
         {
-            m_client.m_stats.dodgePM.m_items -= m_value;
+            Client.m_stats.dodgePM.m_items -= Value;
         }
 
         private void SubStrenght()
         {
-            m_client.m_stats.strenght.m_items -= m_value;
+            Client.m_stats.strenght.m_items -= Value;
         }
 
         private void SubInitiative()
         {
-            m_client.m_stats.initiative.m_items -= m_value;
+            Client.m_stats.initiative.m_items -= Value;
         }
 
         private void SubIntelligence()
         {
-            m_client.m_stats.intelligence.m_items -= m_value;
+            Client.m_stats.intelligence.m_items -= Value;
         }
 
         private void SubPA()
         {
-            m_client.m_stats.PA.m_items -= m_value;
+            Client.m_stats.PA.m_items -= Value;
         }
 
         private void SubPM()
         {
-            m_client.m_stats.PM.m_items -= m_value;
+            Client.m_stats.PM.m_items -= Value;
         }
 
         private void SubPO()
         {
-            m_client.m_stats.PO.m_items -= m_value;
+            Client.m_stats.PO.m_items -= Value;
         }
 
         private void SubPods()
         {
-            m_client.m_stats.maxPods.m_items -= m_value;
+            Client.m_stats.maxPods.m_items -= Value;
         }
 
         private void SubProspection()
         {
-            m_client.m_stats.prospection.m_items -= m_value;
+            Client.m_stats.prospection.m_items -= Value;
         }
 
         private void SubWisdom()
         {
-            m_client.m_stats.wisdom.m_items -= m_value;
+            Client.m_stats.wisdom.m_items -= Value;
         }
 
         private void SubHeal()
         {
-            m_client.m_stats.bonusHeal.m_items -= m_value;
+            Client.m_stats.bonusHeal.m_items -= Value;
         }
 
         private void SubVitality()
         {
-            m_client.m_stats.life.m_items -= m_value;
+            Client.m_stats.life.m_items -= Value;
         }
 
         private void AddArmorStrenght()
         {
-            m_client.m_stats.armorStrenght.m_items += m_value;
+            Client.m_stats.armorStrenght.m_items += Value;
         }
 
         private void AddArmorNeutral()
         {
-            m_client.m_stats.armorNeutral.m_items += m_value;
+            Client.m_stats.armorNeutral.m_items += Value;
         }
 
         private void AddArmorLuck()
         {
-            m_client.m_stats.armorLuck.m_items += m_value;
+            Client.m_stats.armorLuck.m_items += Value;
         }
 
         private void AddArmorAgility()
         {
-            m_client.m_stats.armorAgility.m_items += m_value;
+            Client.m_stats.armorAgility.m_items += Value;
         }
 
         private void AddArmorIntelligence()
         {
-            m_client.m_stats.armorIntelligence.m_items += m_value;
+            Client.m_stats.armorIntelligence.m_items += Value;
         }
 
         private void AddArmorPercentStrenght()
         {
-            m_client.m_stats.armorPercentStrenght.m_items += m_value;
+            Client.m_stats.armorPercentStrenght.m_items += Value;
         }
 
         private void AddArmorPercentIntelligence()
         {
-            m_client.m_stats.armorPercentIntelligence.m_items += m_value;
+            Client.m_stats.armorPercentIntelligence.m_items += Value;
         }
 
         private void AddArmorPercentAgility()
         {
-            m_client.m_stats.armorPercentAgility.m_items += m_value;
+            Client.m_stats.armorPercentAgility.m_items += Value;
         }
 
         private void AddArmorPercentLuck()
         {
-            m_client.m_stats.armorPercentLuck.m_items += m_value;
+            Client.m_stats.armorPercentLuck.m_items += Value;
         }
 
         private void AddArmorPercentNeutral()
         {
-            m_client.m_stats.armorPercentNeutral.m_items += m_value;
+            Client.m_stats.armorPercentNeutral.m_items += Value;
         }
 
         private void AddArmorPvpStrenght()
         {
-            m_client.m_stats.armorPvpStrenght.m_items += m_value;
+            Client.m_stats.armorPvpStrenght.m_items += Value;
         }
 
         private void AddArmorPvpNeutral()
         {
-            m_client.m_stats.armorPvpNeutral.m_items += m_value;
+            Client.m_stats.armorPvpNeutral.m_items += Value;
         }
 
         private void AddArmorPvpLuck()
         {
-            m_client.m_stats.armorPvpLuck.m_items += m_value;
+            Client.m_stats.armorPvpLuck.m_items += Value;
         }
 
         private void AddArmorPvpAgility()
         {
-            m_client.m_stats.armorPvpAgility.m_items += m_value;
+            Client.m_stats.armorPvpAgility.m_items += Value;
         }
 
         private void AddArmorPvpIntelligence()
         {
-            m_client.m_stats.armorPvpIntelligence.m_items += m_value;
+            Client.m_stats.armorPvpIntelligence.m_items += Value;
         }
 
         private void AddArmorPvpStrenghtPercent()
         {
-            m_client.m_stats.armorPvpPercentStrenght.m_items += m_value;
+            Client.m_stats.armorPvpPercentStrenght.m_items += Value;
         }
 
         private void AddArmorPvpIntelligencePercent()
         {
-            m_client.m_stats.armorPvpPercentIntelligence.m_items += m_value;
+            Client.m_stats.armorPvpPercentIntelligence.m_items += Value;
         }
 
         private void AddArmorPvpAgilityPercent()
         {
-            m_client.m_stats.armorPvpPercentAgility.m_items += m_value;
+            Client.m_stats.armorPvpPercentAgility.m_items += Value;
         }
 
         private void AddArmorPvpLuckPercent()
         {
-            m_client.m_stats.armorPvpPercentLuck.m_items += m_value;
+            Client.m_stats.armorPvpPercentLuck.m_items += Value;
         }
 
         private void AddArmorPvpNeutralPercent()
         {
-            m_client.m_stats.armorPvpPercentNeutral.m_items += m_value;
+            Client.m_stats.armorPvpPercentNeutral.m_items += Value;
         }
 
         private void SubArmorPercentStrenght()
         {
-            m_client.m_stats.armorPercentStrenght.m_items -= m_value;
+            Client.m_stats.armorPercentStrenght.m_items -= Value;
         }
 
         private void SubArmorPercentLuck()
         {
-            m_client.m_stats.armorPercentLuck.m_items -= m_value;
+            Client.m_stats.armorPercentLuck.m_items -= Value;
         }
 
         private void SubArmorPercentAgility()
         {
-            m_client.m_stats.armorPercentAgility.m_items -= m_value;
+            Client.m_stats.armorPercentAgility.m_items -= Value;
         }
 
         private void SubArmorPercentNeutral()
         {
-            m_client.m_stats.armorPercentNeutral.m_items -= m_value;
+            Client.m_stats.armorPercentNeutral.m_items -= Value;
         }
 
         private void SubArmorPercentIntelligence()
         {
-            m_client.m_stats.armorPercentIntelligence.m_items -= m_value;
+            Client.m_stats.armorPercentIntelligence.m_items -= Value;
         }
 
         private void SubArmorStrenght()
         {
-            m_client.m_stats.armorStrenght.m_items -= m_value;
+            Client.m_stats.armorStrenght.m_items -= Value;
         }
 
         private void SubArmorIntelligence()
         {
-            m_client.m_stats.armorIntelligence.m_items -= m_value;
+            Client.m_stats.armorIntelligence.m_items -= Value;
         }
 
         private void SubArmorAgility()
         {
-            m_client.m_stats.armorAgility.m_items -= m_value;
+            Client.m_stats.armorAgility.m_items -= Value;
         }
 
         private void SubArmorLuck()
         {
-            m_client.m_stats.armorLuck.m_items -= m_value;
+            Client.m_stats.armorLuck.m_items -= Value;
         }
 
         private void SubArmorNeutral()
         {
-            m_client.m_stats.armorNeutral.m_items -= m_value;
+            Client.m_stats.armorNeutral.m_items -= Value;
         }
 
         private void SubArmorPvpStrenghtPercent()
         {
-            m_client.m_stats.armorPvpPercentStrenght.m_items -= m_value;
+            Client.m_stats.armorPvpPercentStrenght.m_items -= Value;
         }
 
         private void SubArmorPvpNeutralPercent()
         {
-            m_client.m_stats.armorPvpPercentNeutral.m_items -= m_value;
+            Client.m_stats.armorPvpPercentNeutral.m_items -= Value;
         }
 
         private void SubArmorPvpLuckPercent()
         {
-            m_client.m_stats.armorPvpPercentLuck.m_items -= m_value;
+            Client.m_stats.armorPvpPercentLuck.m_items -= Value;
         }
 
         private void SubArmorPvpAgilityPercent()
         {
-            m_client.m_stats.armorPvpPercentAgility.m_items -= m_value;
+            Client.m_stats.armorPvpPercentAgility.m_items -= Value;
         }
 
         private void SubArmorPvpIntelligencePercent()
         {
-            m_client.m_stats.armorPvpPercentIntelligence.m_items -= m_value;
+            Client.m_stats.armorPvpPercentIntelligence.m_items -= Value;
         }
 
         #endregion

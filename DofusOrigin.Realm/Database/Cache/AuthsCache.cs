@@ -40,7 +40,7 @@ namespace DofusOrigin.Database.Cache
             if (!is_started)
             {
                 m_timer = new Timer();
-                m_timer.Interval = Utilities.Config.m_config.GetIntElement("TimeReloadAuths");
+                m_timer.Interval = Utilities.Config.GetConfig.GetIntElement("TimeReloadAuths");
                 m_timer.Enabled = true;
                 m_timer.Elapsed += new ElapsedEventHandler(ReloadAuths);
             }

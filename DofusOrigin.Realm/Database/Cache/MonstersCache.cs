@@ -62,7 +62,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' monsters@ from the database !", m_monsters.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' monsters@ from the database !", m_monsters.Count));
         }
 
         public static void LoadMonstersLevels()

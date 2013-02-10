@@ -36,7 +36,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' levels@ from the database !", m_levelsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' levels@ from the database !", m_levelsList.Count));
         }
 
         public static Models.Levels.LevelModel ReturnLevel(int _level)

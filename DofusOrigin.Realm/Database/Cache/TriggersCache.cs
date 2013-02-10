@@ -36,13 +36,13 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' triggers@ from the database !", m_triggersList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' triggers@ from the database !", m_triggersList.Count));
         }
 
         public static void ParseTrigger(Database.Models.Maps.TriggerModel _trigger)
         {
-            if (MapsCache.m_mapsList.Any(x => x.m_map.m_id == _trigger.m_mapID))
-                MapsCache.m_mapsList.First(x => x.m_map.m_id == _trigger.m_mapID).m_triggers.Add(_trigger);
+            if (MapsCache.m_mapsList.Any(x => x.GetModel.m_id == _trigger.m_mapID))
+                MapsCache.m_mapsList.First(x => x.GetModel.m_id == _trigger.m_mapID).Triggers.Add(_trigger);
         }
     }
 }

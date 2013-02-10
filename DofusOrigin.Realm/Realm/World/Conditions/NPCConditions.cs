@@ -7,8 +7,33 @@ namespace DofusOrigin.Realm.World.Conditions
 {
     class NPCConditions
     {
-        public int condiID { get; set; }
-        public string args { get; set; }
+        private int _condiID;
+
+        public int CondiID
+        {
+            get
+            {
+                return _condiID;
+            }
+            set
+            {
+                _condiID = value;
+            }
+        }
+
+        private string _args;
+
+        public string Args
+        {
+            get
+            {
+                return _args;
+            }
+            set
+            {
+                _args = value;
+            }
+        }
 
         public bool HasCondition(Realm.Characters.Character character)
         {

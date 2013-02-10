@@ -11,150 +11,168 @@ namespace DofusOrigin.Realm.Maps
 {
     class Pathfinding
     {
-        private string m_strPath;
-        private int m_startCell;
-        private int m_startDir;
+        private string _strPath;
+        private int _startCell;
+        private int _startDir;
 
-        public int m_destination;
-        public int m_newDirection;
+        private int _destination;
 
-        private Map m_map;
-
-        public Pathfinding(string _path, Map _map, int _startCell, int _startDir)
+        public int Destination
         {
-            m_strPath = _path;
-            m_map = _map;
-            m_startCell = _startCell;
-            m_startDir = _startDir;
+            get
+            {
+                return _destination;
+            }
         }
 
-        public void UpdatePath(string _path)
+        private int _direction;
+
+        public int Direction
         {
-            m_strPath = _path;
+            get
+            {
+                return _direction;
+            }
+        }
+
+        private Map _map;
+
+        public Pathfinding(string path, Map map, int startCell, int startDir)
+        {
+            _strPath = path;
+            _map = map;
+            _startCell = startCell;
+            _startDir = startDir;
+        }
+
+        public void UpdatePath(string path)
+        {
+            _strPath = path;
         }
 
         public string GetStartPath
         {
             get
             {
-                return GetDirChar(m_startDir) + GetCellChars(m_startCell);
+                return GetDirChar(_startDir) + GetCellChars(_startCell);
             }
         }
 
-        public int GetCaseIDFromDirection(int _caseID, char _direction, bool _fight)
+        public int GetCaseIDFromDirection(int caseID, char direction, bool fight)
         {
-            switch (_direction)
+            switch (direction)
             {
                 case 'a':
-                    return _fight ? -1 : _caseID + 1;
+                    return fight ? -1 : caseID + 1;
                 case 'b':
-                    return _caseID + m_map.m_map.m_width;
+                    return caseID + _map.GetModel.m_width;
                 case 'c':
-                    return _fight ? -1 : _caseID + (m_map.m_map.m_width * 2 - 1);
+                    return fight ? -1 : caseID + (_map.GetModel.m_width * 2 - 1);
                 case 'd':
-                    return _caseID + (m_map.m_map.m_width - 1);
+                    return caseID + (_map.GetModel.m_width - 1);
                 case 'e':
-                    return _fight ? -1 : _caseID - 1;
+                    return fight ? -1 : caseID - 1;
                 case 'f':
-                    return _caseID - m_map.m_map.m_width;
+                    return caseID - _map.GetModel.m_width;
                 case 'g':
-                    return _fight ? -1 : _caseID - (m_map.m_map.m_width * 2 - 1);
+                    return fight ? -1 : caseID - (_map.GetModel.m_width * 2 - 1);
                 case 'h':
-                    return _caseID - m_map.m_map.m_width + 1;
+                    return caseID - _map.GetModel.m_width + 1;
             }
 
             return -1; 
         }
 
-        public static int GetCellNum(string _cellChars)
+        public static int GetCellNum(string cellChars)
         {
             var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
 
-            var numChar1 = hash.IndexOf(_cellChars[0]) * hash.Length;
-            var numChar2 = hash.IndexOf(_cellChars[1]);
+            var numChar1 = hash.IndexOf(cellChars[0]) * hash.Length;
+            var numChar2 = hash.IndexOf(cellChars[1]);
 
             return numChar1 + numChar2;
         }
 
-        public static string GetCellChars(int _cellNum)
+        public static string GetCellChars(int cellNum)
         {
             var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
 
-            var charCode2 = (_cellNum % hash.Length);
-            var charCode1 = (_cellNum - charCode2) / hash.Length;
+            var charCode2 = (cellNum % hash.Length);
+            var charCode1 = (cellNum - charCode2) / hash.Length;
 
             return hash[charCode1].ToString() + hash[charCode2].ToString();
         }
 
-        public static string GetDirChar(int _dirNum)
+        public static string GetDirChar(int dirNum)
         {
             var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
-            if (_dirNum >= hash.Length)
+
+            if (dirNum >= hash.Length)
                 return "";
 
-            return hash[_dirNum].ToString();
+            return hash[dirNum].ToString();
         }
 
-        public static int GetDirNum(string _dirChar)
+        public static int GetDirNum(string dirChar)
         {
             var hash = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
-            return hash.IndexOf(_dirChar);
+            return hash.IndexOf(dirChar);
         }
 
-        public bool InLine(int _cell1, int _cell2)
+        public bool InLine(int cell1, int cell2)
         {
-            var isX = GetCellXCoord(_cell1) == GetCellXCoord(_cell2);
-            var isY = GetCellYCoord(_cell1) == GetCellYCoord(_cell2);
+            var isX = GetCellXCoord(cell1) == GetCellXCoord(cell2);
+            var isY = GetCellYCoord(cell1) == GetCellYCoord(cell2);
 
             return isX || isY;
         }
 
-        public int NextCell(int _cell, int _dir)
+        public int NextCell(int cell, int dir)
         {
-            switch (_dir)
+            switch (dir)
             {
                 case 0:
-                    return _cell + 1;
+                    return cell + 1;
 
                 case 1:
-                    return _cell + m_map.m_map.m_width;
+                    return cell + _map.GetModel.m_width;
 
                 case 2:
-                    return _cell + (m_map.m_map.m_width * 2) - 1;
+                    return cell + (_map.GetModel.m_width * 2) - 1;
 
                 case 3:
-                    return _cell + m_map.m_map.m_width - 1;
+                    return cell + _map.GetModel.m_width - 1;
 
                 case 4:
-                    return _cell - 1;
+                    return cell - 1;
 
                 case 5:
-                    return _cell - m_map.m_map.m_width;
+                    return cell - _map.GetModel.m_width;
 
                 case 6:
-                    return _cell - (m_map.m_map.m_width * 2) + 1;
+                    return cell - (_map.GetModel.m_width * 2) + 1;
 
                 case 7:
-                    return _cell - m_map.m_map.m_width + 1;
+                    return cell - _map.GetModel.m_width + 1;
 
             }
 
             return -1;
         }
 
-        public string RemakeLine(int _lastCell, string _cell, int _finalCell)
+        public string RemakeLine(int lastCell, string cell, int finalCell)
         {
-            var direction = GetDirNum(_cell[0].ToString());
-            var toCell = GetCellNum(_cell.Substring(1));
+            var direction = GetDirNum(cell[0].ToString());
+            var toCell = GetCellNum(cell.Substring(1));
             var lenght = 0;
 
-            if (InLine(_lastCell, toCell))
-                lenght = GetEstimateDistanceBetween(_lastCell, toCell);
+            if (InLine(lastCell, toCell))
+                lenght = GetEstimateDistanceBetween(lastCell, toCell);
             else
-                lenght = int.Parse(Math.Truncate((GetEstimateDistanceBetween(_lastCell, toCell) / 1.4)).ToString());
+                lenght = int.Parse(Math.Truncate((GetEstimateDistanceBetween(lastCell, toCell) / 1.4)).ToString());
 
-            var backCell = _lastCell;
-            var actuelCell = _lastCell;
+            var backCell = lastCell;
+            var actuelCell = lastCell;
 
             for (var i = 1; i <= lenght; i++)
             {
@@ -162,18 +180,18 @@ namespace DofusOrigin.Realm.Maps
                 backCell = actuelCell;
             }
 
-            return _cell + ",1";
+            return cell + ",1";
         }
 
         public string RemakePath()
         {
             var newPath = "";
-            var newCell = GetCellNum(m_strPath.Substring(m_strPath.Length - 2, 2));
-            var lastCell = m_startCell;
+            var newCell = GetCellNum(_strPath.Substring(_strPath.Length - 2, 2));
+            var lastCell = _startCell;
 
-            for (var i = 0; i <= m_strPath.Length - 1; i += 3)
+            for (var i = 0; i <= _strPath.Length - 1; i += 3)
             {
-                var actualCell = m_strPath.Substring(i, 3);
+                var actualCell = _strPath.Substring(i, 3);
                 var lineData = RemakeLine(lastCell, actualCell, newCell).Split(',');
                 newPath += lineData[0];
 
@@ -183,60 +201,60 @@ namespace DofusOrigin.Realm.Maps
                 lastCell = GetCellNum(actualCell.Substring(1));
             }
 
-            m_destination = GetCellNum(m_strPath.Substring(m_strPath.Length - 2, 2));
-            m_newDirection = GetDirNum(m_strPath.Substring(m_strPath.Length - 3, 1));
-
+            _destination = GetCellNum(_strPath.Substring(_strPath.Length - 2, 2));
+            _direction = GetDirNum(_strPath.Substring(_strPath.Length - 3, 1));
+ 
             return newPath;
         }
 
-        public int GetDistanceBetween(int _id1, int _id2)
+        public int GetDistanceBetween(int id1, int id2)
         {
-            if (_id1 == _id2) return 0;
-            if (m_map == null) return 0;
-
-            var diffX = Math.Abs(GetCellXCoord(_id1) - GetCellXCoord(_id2));
-            var diffY = Math.Abs(GetCellYCoord(_id1) - GetCellYCoord(_id2));
+            if (id1 == id2 || _map == null) 
+                return 0;
+            
+            var diffX = Math.Abs(GetCellXCoord(id1) - GetCellXCoord(id2));
+            var diffY = Math.Abs(GetCellYCoord(id1) - GetCellYCoord(id2));
 
             return (diffX + diffY);
         }
 
-        public int GetEstimateDistanceBetween(int _id1, int _id2)
+        public int GetEstimateDistanceBetween(int id1, int id2)
         {
-            if (_id1 == _id2) return 0;
-            if (m_map == null) return 0;
+            if (id1 == id2 || _map == null)
+                return 0;
 
-            var diffX = Math.Abs(GetCellXCoord(_id1) - GetCellXCoord(_id2));
-            var diffY = Math.Abs(GetCellYCoord(_id1) - GetCellYCoord(_id2));
+            var diffX = Math.Abs(GetCellXCoord(id1) - GetCellXCoord(id2));
+            var diffY = Math.Abs(GetCellYCoord(id1) - GetCellYCoord(id2));
 
             return int.Parse(Math.Truncate(Math.Sqrt(Math.Pow(diffX, 2) + Math.Pow(diffY, 2))).ToString());
         }
 
-        public int GetCellXCoord(int _cellid)
+        public int GetCellXCoord(int cellid)
         {
-            var width = m_map.m_map.m_width;
-            return ((_cellid - (width - 1) * GetCellYCoord(_cellid)) / width);
+            var width = _map.GetModel.m_width;
+            return ((cellid - (width - 1) * GetCellYCoord(cellid)) / width);
         }
 
-        public int GetCellYCoord(int _cellid)
+        public int GetCellYCoord(int cellid)
         {
-            var width = m_map.m_map.m_width;
-            var loc5 = (int)(_cellid / ((width * 2) - 1));
-            var loc6 = _cellid - loc5 * ((width * 2) - 1);
+            var width = _map.GetModel.m_width;
+            var loc5 = (int)(cellid / ((width * 2) - 1));
+            var loc6 = cellid - loc5 * ((width * 2) - 1);
             var loc7 = loc6 % width;
 
             return (loc5 - loc7);
         }
 
-        public static bool isValidCell(int _cell, string _path)
+        public static bool isValidCell(int cell, string path)
         {
-            if (_path.Length == 0) return false;
-            if ((_path.Length % 3) != 0) return false;
+            if (path.Length == 0 || (path.Length % 3) != 0) 
+                return false;
 
-            var lastCell = _cell;
+            var lastCell = cell;
 
-            for (var i = 0; i <= _path.Length - 1; i += 3)
+            for (var i = 0; i <= path.Length - 1; i += 3)
             {
-                var actualCell = _path.Substring(i, 3);
+                var actualCell = path.Substring(i, 3);
                 lastCell = GetCellNum(actualCell.Substring(1));
 
             }

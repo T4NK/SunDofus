@@ -281,18 +281,18 @@ namespace DofusOrigin.Realm.Characters.Items
                         var NewEffect = new Effects.EffectItem();
                         string[] EffectInfos = effect.Split('#');
 
-                        NewEffect.m_id = Convert.ToInt32(EffectInfos[0], 16);
+                        NewEffect.ID = Convert.ToInt32(EffectInfos[0], 16);
 
                         if (EffectInfos[1] != "")
-                            NewEffect.m_value = Convert.ToInt32(EffectInfos[1], 16);
+                            NewEffect.Value = Convert.ToInt32(EffectInfos[1], 16);
 
                         if (EffectInfos[2] != "")
-                            NewEffect.m_value2 = Convert.ToInt32(EffectInfos[2], 16);
+                            NewEffect.Value2 = Convert.ToInt32(EffectInfos[2], 16);
 
                         if (EffectInfos[3] != "")
-                            NewEffect.m_value3 = Convert.ToInt32(EffectInfos[3], 16);
+                            NewEffect.Value3 = Convert.ToInt32(EffectInfos[3], 16);
 
-                        NewEffect.m_effect = EffectInfos[4];
+                        NewEffect.Effect = EffectInfos[4];
 
                         item.m_effectsList.Add(NewEffect);
                     }
@@ -387,7 +387,7 @@ namespace DofusOrigin.Realm.Characters.Items
             }
 
             var usable = Database.Cache.ItemsCache.m_usablesList.First(x => x.m_base == item.m_base.m_id);
-            var character = CharactersManager.m_charactersList.First(x => x.m_id == charID);
+            var character = CharactersManager.CharactersList.First(x => x.m_id == charID);
 
             if (!ItemsHandler.ConditionsAvaliable(item.m_base, m_client))
             {

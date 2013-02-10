@@ -37,7 +37,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' spells@ from the database !", m_spellsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells@ from the database !", m_spellsList.Count));
         }
 
         public static void LoadSpellsToLearn()
@@ -64,7 +64,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' spells to learn@ from the database !", m_spellsToLearn.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells to learn@ from the database !", m_spellsToLearn.Count));
         }
     }
 }

@@ -46,13 +46,13 @@ namespace DofusOrigin.Database.Cache
 
                     character.isNewCharacter = false;
 
-                    Realm.Characters.CharactersManager.m_charactersList.Add(character);
+                    Realm.Characters.CharactersManager.CharactersList.Add(character);
                 }
 
                 sqlResult.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' characters@ from the database !",Realm.Characters.CharactersManager.m_charactersList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' characters@ from the database !",Realm.Characters.CharactersManager.CharactersList.Count));
         }
 
         public static void CreateCharacter(Realm.Characters.Character _character)

@@ -7,18 +7,18 @@ namespace DofusOrigin.Realm.Effects
 {
     class EffectAction
     {
-        public static void ParseEffect(Characters.Character _client, int _type, string _args)
+        public static void ParseEffect(Characters.Character client, int type, string args)
         {
-            var datas = _args.Split(',');
+            var datas = args.Split(',');
 
-            switch (_type)
+            switch (type)
             {
                 case 0: //Telep
-                    _client.TeleportNewMap(int.Parse(datas[0]), int.Parse(datas[1]));
+                    client.TeleportNewMap(int.Parse(datas[0]), int.Parse(datas[1]));
                     break;
 
                 case 1: //Life
-                    _client.AddLife(int.Parse(datas[0]));
+                    client.AddLife(int.Parse(datas[0]));
                     break;
             }
         }

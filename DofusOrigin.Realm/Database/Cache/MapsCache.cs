@@ -60,7 +60,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' maps@ from the database !", m_mapsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' maps@ from the database !", m_mapsList.Count));
         }
     }
 }

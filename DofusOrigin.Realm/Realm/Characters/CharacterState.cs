@@ -7,12 +7,15 @@ namespace DofusOrigin.Realm.Characters
 {
     class CharacterState
     {
-        Character m_client;
+        Character Character;
 
-        public CharacterState(Character _character)
+        public CharacterState(Character character)
         {
-            m_client = _character;
+            Character = character;
             created = false;
+
+            Party = null;
+            Followers = new List<Character>();
         }
 
         public bool created = false;
@@ -29,17 +32,18 @@ namespace DofusOrigin.Realm.Characters
         public int actualPlayerExchange = -1;
 
         public bool onWaitingParty = false;
-        public CharacterParty myParty = null;
         public int senderInviteParty = -1;
         public int receiverInviteParty = -1;
 
         public bool isFollow = false;
         public bool isFollowing = false;
         public int followingID = -1;
-        public List<Character> followers = new List<Character>();
 
         public bool onDialoging = false;
         public int onDialogingWith = -1;
+
+        public CharacterParty Party;
+        public List<Character> Followers;
 
         public bool Occuped
         {

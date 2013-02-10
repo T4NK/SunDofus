@@ -8,28 +8,40 @@ namespace DofusOrigin.Realm.Exchanges
 {
     class ExchangeItem
     {
-        public int quantity;
+        public CharacterItem Item;
 
-        public Characters.Items.CharacterItem myitem;
+        private int _quantity;
 
-        public ExchangeItem(Characters.Items.CharacterItem item)
+        public int Quantity
         {
-            myitem = item;
+            get
+            {
+                return _quantity;
+            }
+            set
+            {
+                _quantity = value;
+            }
+        }
+
+        public ExchangeItem(CharacterItem item)
+        {
+            Item = item;
         }
 
         public CharacterItem GetNewItem()
         {
-            var newItem = new CharacterItem(myitem.m_base);
-            newItem.m_effectsList.Clear();
+            var item = new CharacterItem(Item.m_base);
 
-            myitem.m_effectsList.ForEach(x => newItem.m_effectsList.Add(new Effects.EffectItem(x)));
+            item.m_effectsList.Clear();
+            Item.m_effectsList.ForEach(x => item.m_effectsList.Add(new Effects.EffectItem(x)));
 
-            newItem.m_id = ItemsHandler.GetNewID();
-            newItem.m_position = myitem.m_position;
+            item.m_id = ItemsHandler.GetNewID();
+            item.m_position = Item.m_position;
 
-            newItem.m_quantity = quantity;
+            item.m_quantity = Quantity;
 
-            return newItem;
+            return item;
         }
     }
 }

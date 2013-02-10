@@ -8,71 +8,86 @@ namespace DofusOrigin.Realm.World
 {
     class Chat
     {
-        public static void SendGeneralMessage(Network.Realm.RealmClient _client, string _message)
+        public static void SendGeneralMessage(Network.Realm.RealmClient client, string message)
         {
-            if (_client.m_player.GetMap() == null) 
+            if (client.m_player.GetMap() == null) 
                 return;
 
-            _client.m_player.GetMap().Send(string.Format("cMK|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
+            client.m_player.GetMap().Send(string.Format("cMK|{0}|{1}|{2}", client.m_player.m_id, client.m_player.m_name, message));
         }
 
-        public static void SendPrivateMessage(Network.Realm.RealmClient _client, string _receiver, string _message)
+        public static void SendPrivateMessage(Network.Realm.RealmClient client, string receiver, string message)
         {
-            if(CharactersManager.m_charactersList.Any(x => x.m_name == _receiver))
+            lock (CharactersManager.CharactersList)
             {
-                var character = CharactersManager.m_charactersList.First(x => x.m_name == _receiver);
-
-                if (character.isConnected == true)
+                if (CharactersManager.CharactersList.Any(x => x.m_name == receiver))
                 {
-                    character.m_networkClient.Send(string.Format("cMKF|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
-                    _client.Send(string.Format("cMKT|{0}|{1}|{2}", _client.m_player.m_id, character.m_name, _message));
+                    var character = CharactersManager.CharactersList.First(x => x.m_name == receiver);
+
+                    if (character.isConnected == true)
+                    {
+                        character.m_networkClient.Send(string.Format("cMKF|{0}|{1}|{2}", client.m_player.m_id, client.m_player.m_name, message));
+                        client.Send(string.Format("cMKT|{0}|{1}|{2}", client.m_player.m_id, character.m_name, message));
+                    }
+                    else
+                        client.Send(string.Format("cMEf{0}", receiver));
                 }
-                else
-                    _client.Send(string.Format("cMEf{0}", _receiver));
             }
         }
 
-        public static void SendTradeMessage(Network.Realm.RealmClient _client, string _message)
+        public static void SendTradeMessage(Network.Realm.RealmClient client, string message)
         {
-            if (_client.m_player.CanSendinTrade() == true)
+            if (client.m_player.CanSendinTrade() == true)
             {
-                foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true))
-                    character.Send(string.Format("cMK:|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
+                lock (Network.ServersHandler.m_realmServer.m_clients)
+                {
+                    foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true))
+                        character.Send(string.Format("cMK:|{0}|{1}|{2}", client.m_player.m_id, client.m_player.m_name, message));
+                }
 
-                _client.m_player.RefreshTrade();
-            }
-            else
-                _client.Send(string.Format("Im0115;{0}", _client.m_player.TimeTrade()));
-        }
-
-        public static void SendRecruitmentMessage(Network.Realm.RealmClient _client, string _message)
-        {
-            if (_client.m_player.CanSendinRecruitment() == true)
-            {
-                foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true))
-                    character.Send(string.Format("cMK?|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
-
-                _client.m_player.RefreshRecruitment();
+                client.m_player.RefreshTrade();
             }
             else
-                _client.Send(string.Format("Im0115;{0}", _client.m_player.TimeRecruitment()));
+                client.Send(string.Format("Im0115;{0}", client.m_player.TimeTrade()));
         }
 
-        public static void SendPartyMessage(Network.Realm.RealmClient _client, string _message)
+        public static void SendRecruitmentMessage(Network.Realm.RealmClient client, string message)
         {
-            if (_client.m_player.m_state.myParty != null)
+            if (client.m_player.CanSendinRecruitment() == true)
             {
-                foreach (var character in _client.m_player.m_state.myParty.myMembers.Keys)
-                    character.m_networkClient.Send(string.Format("cMK$|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
+                lock (Network.ServersHandler.m_realmServer.m_clients)
+                {
+                    foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true))
+                        character.Send(string.Format("cMK?|{0}|{1}|{2}", client.m_player.m_id, client.m_player.m_name, message));
+                }
+
+                client.m_player.RefreshRecruitment();
+            }
+            else
+                client.Send(string.Format("Im0115;{0}", client.m_player.TimeRecruitment()));
+        }
+
+        public static void SendPartyMessage(Network.Realm.RealmClient client, string message)
+        {
+            if (client.m_player.m_state.Party != null)
+            {
+                lock (client.m_player.m_state.Party.Members)
+                {
+                    foreach (var character in client.m_player.m_state.Party.Members.Keys)
+                        character.m_networkClient.Send(string.Format("cMK$|{0}|{1}|{2}", client.m_player.m_id, client.m_player.m_name, message));
+                }
             }
         }
 
-        public static void SendAdminMessage(Network.Realm.RealmClient _client, string _message)
+        public static void SendAdminMessage(Network.Realm.RealmClient client, string message)
         {
-            if (_client.m_infos.m_level > 0)
+            if (client.m_infos.m_level > 0)
             {
-                foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true && x.m_infos.m_level > 0))
-                    character.Send(string.Format("cMK@|{0}|{1}|{2}", _client.m_player.m_id, _client.m_player.m_name, _message));
+                lock (Network.ServersHandler.m_realmServer.m_clients)
+                {
+                    foreach (var character in Network.ServersHandler.m_realmServer.m_clients.Where(x => x.isAuth == true && x.m_infos.m_level > 0))
+                        character.Send(string.Format("cMK@|{0}|{1}|{2}", client.m_player.m_id, client.m_player.m_name, message));
+                }
             }
         }
     }

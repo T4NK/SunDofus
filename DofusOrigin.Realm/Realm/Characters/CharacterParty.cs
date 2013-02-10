@@ -7,35 +7,39 @@ namespace DofusOrigin.Realm.Characters
 {
     class CharacterParty
     {
-        public Dictionary<Character, int> myMembers;
-        private string ownerName = "";
-        private int ownerID = -1;
+        public Dictionary<Character, int> Members;
 
-        public CharacterParty(Character mener)
+        private string _ownerName = "";
+        private int _ownerID = -1;
+
+        public CharacterParty(Character leader)
         {
-            myMembers = new Dictionary<Character, int>();
-            myMembers.Add(mener, 1);
+            Members = new Dictionary<Character, int>();
+            Members.Add(leader, 1);
+
+            _ownerID = leader.m_id;
+            _ownerName = leader.m_name;
         }
 
-        public void AddMember(Character newMember)
+        public void AddMember(Character member)
         {
-            myMembers.Add(newMember, 0);
-            newMember.m_state.myParty = this;
+            Members.Add(member, 0);
+            member.m_state.Party = this;
 
-            if (myMembers.Count == 2)
+            if (Members.Count == 2)
             {
-                Send(string.Format("PCK{0}", ownerName));
-                Send(string.Format("PL{0}", ownerID));
+                Send(string.Format("PCK{0}", _ownerName));
+                Send(string.Format("PL{0}", _ownerID));
                 Send(string.Format("PM{0}", PartyPattern()));
             }
             else
             {
-                newMember.m_networkClient.Send(string.Format("PCK{0}", ownerName));
-                newMember.m_networkClient.Send(string.Format("PL{0}", ownerID));
-                newMember.m_networkClient.Send(string.Format("PM{0}", PartyPattern()));
+                member.m_networkClient.Send(string.Format("PCK{0}", _ownerName));
+                member.m_networkClient.Send(string.Format("PL{0}", _ownerID));
+                member.m_networkClient.Send(string.Format("PM{0}", PartyPattern()));
 
-                foreach (var character in myMembers.Keys.ToList().Where(x => x != newMember))
-                    character.m_networkClient.Send(string.Format("PM+{0}", character.PatternOnParty()));
+                foreach (var character in Members.Keys.ToList().Where(x => x != member))
+                    character.m_networkClient.Send(string.Format("PM{0}", character.PatternOnParty()));
             }
         }
 
@@ -43,33 +47,33 @@ namespace DofusOrigin.Realm.Characters
         {
             try
             {
-                var character = myMembers.Keys.ToList().First(x => x.m_name == name);
-                character.m_state.myParty = null;
+                var character = Members.Keys.ToList().First(x => x.m_name == name);
+                character.m_state.Party = null;
 
-                myMembers.Remove(character);
+                Members.Remove(character);
 
                 Send(string.Format("PM-{0}", character.m_id));
 
                 if (character.m_state.isFollow)
                 {
-                    character.m_state.followers.Clear();
+                    character.m_state.Followers.Clear();
                     character.m_state.isFollow = false;
                 }
 
                 if(character.isConnected)
                     character.m_networkClient.Send(string.Format("PV{0}", kicker));
 
-                if (myMembers.Count == 1)
+                if (Members.Count == 1)
                 {
-                    var last = myMembers.Keys.ToList()[0];
-                    last.m_state.myParty = null;
+                    var last = Members.Keys.ToList()[0];
+                    last.m_state.Party = null;
 
-                    myMembers.Remove(last);
+                    Members.Remove(last);
 
                     if (last.isConnected)
                         last.m_networkClient.Send(string.Format("PV{0}", kicker));
                 }
-                else if (ownerID == character.m_id)
+                else if (_ownerID == character.m_id)
                     GetNewLeader();
             }
             catch { }
@@ -79,7 +83,7 @@ namespace DofusOrigin.Realm.Characters
         {
             try
             {
-                foreach (var character in myMembers.Keys)
+                foreach (var character in Members.Keys)
                     character.m_networkClient.Send(text);
             }
             catch { }
@@ -87,19 +91,19 @@ namespace DofusOrigin.Realm.Characters
 
         private void GetNewLeader()
         {
-            var character = myMembers.Keys.ToList()[0];
-            myMembers[character] = 1;
+            var character = Members.Keys.ToList()[0];
+            Members[character] = 1;
 
-            ownerID = character.m_id;
-            ownerName = character.m_name;
+            _ownerID = character.m_id;
+            _ownerName = character.m_name;
 
-            Send(string.Format("PL{0}", ownerID));
+            Send(string.Format("PL{0}", _ownerID));
         }
 
         private string PartyPattern()
         {
             var packet = "+";
-            myMembers.Keys.ToList().ForEach(x => packet += string.Format("{0}|", x.PatternOnParty()));
+            Members.Keys.ToList().ForEach(x => packet += string.Format("{0}|", x.PatternOnParty()));
             return packet.Substring(0, packet.Length -1);
         }
     }

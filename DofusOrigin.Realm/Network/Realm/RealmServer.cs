@@ -13,7 +13,7 @@ namespace DofusOrigin.Network.Realm
         public Dictionary<string, int> m_pseudoClients;
 
         public RealmServer()
-            : base(Utilities.Config.m_config.GetStringElement("ServerIp"), Utilities.Config.m_config.GetIntElement("ServerPort"))
+            : base(Utilities.Config.GetConfig.GetStringElement("ServerIp"), Utilities.Config.GetConfig.GetIntElement("ServerPort"))
         {
             m_clients = new List<RealmClient>();
             m_pseudoClients = new Dictionary<string,int>();
@@ -28,18 +28,18 @@ namespace DofusOrigin.Network.Realm
             if (_socket == null) 
                 return;
 
-            Utilities.Loggers.m_infosLogger.Write("New inputted @client@ connection !");
+            Utilities.Loggers.InfosLogger.Write("New inputted @client@ connection !");
             m_clients.Add(new RealmClient(_socket));
         }
 
         public void OnListeningServer(string _remote)
         {
-            Utilities.Loggers.m_statusLogger.Write(string.Format("@RealmServer@ started on <{0}> !", _remote));
+            Utilities.Loggers.StatusLogger.Write(string.Format("@RealmServer@ started on <{0}> !", _remote));
         }
 
         public void OnListeningFailedServer(Exception _exception)
         {
-            Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot start the @RealmServer@ because : {0}", _exception.ToString()));
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot start the @RealmServer@ because : {0}", _exception.ToString()));
         }
     }
 }

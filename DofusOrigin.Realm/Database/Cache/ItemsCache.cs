@@ -42,7 +42,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' items@ from the database !", m_itemsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items@ from the database !", m_itemsList.Count));
         }
 
         public static void LoadItemsSets()
@@ -68,7 +68,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' items sets@ from the database !", m_setsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items sets@ from the database !", m_setsList.Count));
         }
 
         public static void LoadUsablesItems()
@@ -100,7 +100,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' items usables@ from the database !", m_usablesList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' items usables@ from the database !", m_usablesList.Count));
         }
     }
 }

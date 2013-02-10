@@ -56,8 +56,8 @@ namespace DofusOrigin.Database.Models.Items
                         continue;
 
                     var bonus = new Realm.Effects.EffectItem();
-                    bonus.m_id = int.Parse(datas.Split(':')[0]);
-                    bonus.m_value = int.Parse(datas.Split(':')[1]);
+                    bonus.ID = int.Parse(datas.Split(':')[0]);
+                    bonus.Value = int.Parse(datas.Split(':')[1]);
 
                     m_bonusList[num].Add(bonus);
                 }

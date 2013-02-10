@@ -7,75 +7,92 @@ namespace DofusOrigin.Realm.Maps.Monsters
 {
     class MonstersGroup
     {
-        public List<Monster> m_monsters;
-        private Dictionary<int, List<int>> basemonsters;
+        public List<Monster> Monsters;
 
-        public int m_id;
-        public int maxSize = 8;
+        private int _id;
 
-        private Map m_map;
-        private int cell;
-        private int dir;
+        public int ID
+        {
+            get
+            {
+                return _id;
+            }
+        }
 
-        private Timer m_movements { get; set; }
+        private int _maxSize;
+
+        public int MaxSize
+        {
+            get
+            {
+                return _maxSize;
+            }
+        }
+
+        private Map _map;
+        private int _cell;
+        private int _dir;
+
+        private Timer _movements;
+        private Dictionary<int, List<int>> _base;
 
         public MonstersGroup(Dictionary<int, List<int>> monsters, Map map)
         {
 
-            m_monsters = new List<Monster>();
-            basemonsters = monsters;
+            Monsters = new List<Monster>();
+            _base = monsters;
 
-            m_map = map;
-            maxSize = map.m_map.maxGroupSize;
+            _map = map;
+            _maxSize = map.GetModel.maxGroupSize;
 
-            this.m_id = map.NextNpcID();
+            _id = map.NextNpcID();
 
             RefreshMappos();
             RefreshMonsters();
 
-            if (Utilities.Config.m_config.GetBoolElement("MustMonstersMove"))
+            if (Utilities.Config.GetConfig.GetBoolElement("MustMonstersMove"))
             {
-                m_movements = new Timer();
-                m_movements.Enabled = true;
-                m_movements.Interval = Utilities.Basic.Rand(10000, 15000);
-                m_movements.Elapsed += new ElapsedEventHandler(this.Move);
+                _movements = new Timer();
+                _movements.Enabled = true;
+                _movements.Interval = Utilities.Basic.Rand(10000, 15000);
+                _movements.Elapsed += new ElapsedEventHandler(this.Move);
             }
         }
 
         private void Move(object e, EventArgs e2)
         {
-            m_movements.Interval = Utilities.Basic.Rand(10000, 15000);
+            _movements.Interval = Utilities.Basic.Rand(10000, 15000);
 
-            var path = new Realm.Maps.Pathfinding("", m_map, cell, dir);
+            var path = new Realm.Maps.Pathfinding("", _map, _cell, _dir);
             var newDir = Utilities.Basic.Rand(0, 3) * 2 + 1;
-            var newCell = path.NextCell(cell, newDir);
+            var newCell = path.NextCell(_cell, newDir);
 
             if (newCell <= 0)
                 return;
 
-            path.UpdatePath(Realm.Maps.Pathfinding.GetDirChar(dir) + Realm.Maps.Pathfinding.GetCellChars(cell) + Realm.Maps.Pathfinding.GetDirChar(newDir) +
+            path.UpdatePath(Realm.Maps.Pathfinding.GetDirChar(_dir) + Realm.Maps.Pathfinding.GetCellChars(_cell) + Realm.Maps.Pathfinding.GetDirChar(newDir) +
                 Realm.Maps.Pathfinding.GetCellChars(newCell));
 
             var startpath = path.GetStartPath;
             var cellpath = path.RemakePath();
 
-            if (!Realm.Maps.Pathfinding.isValidCell(cell, cellpath) && !m_map.m_rushablesCells.Contains(newCell))
+            if (!Realm.Maps.Pathfinding.isValidCell(_cell, cellpath) && !_map.RushablesCells.Contains(newCell))
                 return;
 
             if (cellpath != "")
             {
-                cell = path.m_destination;
-                dir = path.m_newDirection;
+                _cell = path.Destination;
+                _dir = path.Direction;
 
-                var packet = string.Format("GA0;1;{0};{1}", m_id, startpath + cellpath);
+                var packet = string.Format("GA0;1;{0};{1}", ID, startpath + cellpath);
 
-                m_map.Send(packet);
+                _map.Send(packet);
             }
         }
 
         private void RefreshMonsters()
         {
-            var i = Utilities.Basic.Rand(1, maxSize);
+            var i = Utilities.Basic.Rand(1, MaxSize);
             for (int size = 1; size <= i; size++)
             {
                 var mob = ReturnNewMonster();
@@ -83,65 +100,71 @@ namespace DofusOrigin.Realm.Maps.Monsters
                 if (mob == null)
                     continue;
 
-                m_monsters.Add(mob);
+                lock(Monsters)
+                    Monsters.Add(mob);
             }
         }
 
         private Monster ReturnNewMonster()
         {
-            //Monster ID
-            var key = basemonsters.Keys.ToList()[Utilities.Basic.Rand(0, basemonsters.Count - 1)];
+            lock (Database.Cache.MonstersCache.m_monsters)
+            {
+                var key = _base.Keys.ToList()[Utilities.Basic.Rand(0, _base.Count - 1)];
+                var value = _base[key][Utilities.Basic.Rand(0, _base[key].Count - 1)];
 
-            //Monster Grade
-            var value = basemonsters[key][Utilities.Basic.Rand(0, basemonsters[key].Count - 1)];
+                if (!Database.Cache.MonstersCache.m_monsters.Any(x => x.m_id == key))
+                    return null;
 
-            if (!Database.Cache.MonstersCache.m_monsters.Any(x => x.m_id == key))
-                return null;
-
-            return new Monster(Database.Cache.MonstersCache.m_monsters.First(x => x.m_id == key), value);
+                return new Monster(Database.Cache.MonstersCache.m_monsters.First(x => x.m_id == key), value);
+            }
         }
 
         private void RefreshMappos()
         {
-            dir = Utilities.Basic.Rand(0, 3) * 2 + 1;
-            cell = m_map.m_rushablesCells[Utilities.Basic.Rand(0, m_map.m_rushablesCells.Count - 1)];
+            _dir = Utilities.Basic.Rand(0, 3) * 2 + 1;
+
+            lock(_map.RushablesCells)
+                _cell = _map.RushablesCells[Utilities.Basic.Rand(0, _map.RushablesCells.Count - 1)];
         }
 
         public string PatternOnMap()
         {
-            var packet = string.Format("|+{0};{1};0;{2};", cell, dir, m_id);
-
-            var ids ="";
-            var skins = "";
-            var lvls = "";
-            var colors = "";
-
-            var first = true;
-            foreach (var monster in m_monsters)
+            lock (Monsters)
             {
-                if (first)
-                    first = false;
+                var packet = string.Format("|+{0};{1};0;{2};", _cell, _dir, ID);
 
-                else
+                var ids = "";
+                var skins = "";
+                var lvls = "";
+                var colors = "";
+
+                var first = true;
+                foreach (var monster in Monsters)
                 {
-                    ids += ",";
-                    skins += ",";
-                    lvls += ",";
-                    colors += ",";
+                    if (first)
+                        first = false;
+
+                    else
+                    {
+                        ids += ",";
+                        skins += ",";
+                        lvls += ",";
+                        colors += ",";
+                    }
+
+                    var model = monster.Model;
+                    ids += model.m_id;
+                    skins += model.m_gfx + "^100";
+                    lvls += monster.Level;
+
+                    colors += string.Format("{0},{1},{2};0,0,0,0", Utilities.Basic.DeciToHex(model.m_color),
+                        Utilities.Basic.DeciToHex(model.m_color2), Utilities.Basic.DeciToHex(model.m_color3));
                 }
 
-                var model = monster.m_model;
-                ids += model.m_id;
-                skins += model.m_gfx + "^100";
-                lvls += monster.m_level;
+                packet += string.Format("{0};-3;{1};{2};{3}", ids, skins, lvls, colors);
 
-                colors += string.Format("{0},{1},{2};0,0,0,0", Utilities.Basic.DeciToHex(model.m_color),
-                    Utilities.Basic.DeciToHex(model.m_color2), Utilities.Basic.DeciToHex(model.m_color3));
+                return packet;
             }
-
-            packet += string.Format("{0};-3;{1};{2};{3}", ids, skins, lvls, colors);
-
-            return packet;
         }
     }
 }

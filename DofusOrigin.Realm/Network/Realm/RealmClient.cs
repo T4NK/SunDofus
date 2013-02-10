@@ -40,20 +40,20 @@ namespace DofusOrigin.Network.Realm
         public void Send(string _message)
         {
             this.SendDatas(_message);
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), _message));
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to @<{0}>@ : {1}", myIp(), _message));
         }
 
         public void ParseCharacters()
         {
             foreach (var name in m_infos.m_characters)
             {
-                if (!DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_name == name))
+                if (!DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any(x => x.m_name == name))
                 {
                     Network.ServersHandler.m_authLinks.Send(string.Format("SDAC|{0}|{1}", m_infos.m_id, name));
                     continue;
                 }
 
-                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_name == name);
+                var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_name == name);
                 m_characters.Add(character);
             }
         }
@@ -90,7 +90,7 @@ namespace DofusOrigin.Network.Realm
 
         void ReceivedPackets(string _datas)
         {
-            Utilities.Loggers.m_infosLogger.Write(string.Format("Receive datas from @<{0}>@ : {1}", myIp(), _datas));
+            Utilities.Loggers.InfosLogger.Write(string.Format("Receive datas from @<{0}>@ : {1}", myIp(), _datas));
 
             lock (m_packetLocker)
                 m_parser.Parse(_datas);
@@ -98,7 +98,7 @@ namespace DofusOrigin.Network.Realm
 
         void Disconnected()
         {
-            Utilities.Loggers.m_infosLogger.Write(string.Format("New closed client @<{0}>@ connection !", myIp()));
+            Utilities.Loggers.InfosLogger.Write(string.Format("New closed client @<{0}>@ connection !", myIp()));
 
             if (isAuth == true)
             {
@@ -118,7 +118,7 @@ namespace DofusOrigin.Network.Realm
                         {
                             if (m_player.m_state.receiverInviteParty != -1 || m_player.m_state.senderInviteParty != -1)
                             {
-                                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First
+                                var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First
                                     (x => x.m_id == (m_player.m_state.receiverInviteParty != -1 ? m_player.m_state.receiverInviteParty : m_player.m_state.senderInviteParty));
                                 if (character.isConnected)
                                 {
@@ -136,18 +136,18 @@ namespace DofusOrigin.Network.Realm
                         catch { }
                     }
 
-                    if (m_player.m_state.myParty != null)
-                        m_player.m_state.myParty.LeaveParty(m_player.m_name);
+                    if (m_player.m_state.Party != null)
+                        m_player.m_state.Party.LeaveParty(m_player.m_name);
 
                     if (m_player.m_state.isFollowing)
                     {
-                        if(DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_state.followers.Contains(m_player) && x.m_id == m_player.m_state.followingID))
-                            DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_player.m_state.followingID).m_state.followers.Remove(m_player);
+                        if(DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any(x => x.m_state.Followers.Contains(m_player) && x.m_id == m_player.m_state.followingID))
+                            DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == m_player.m_state.followingID).m_state.Followers.Remove(m_player);
                     }
 
                     if (m_player.m_state.isFollow)
                     {
-                        m_player.m_state.followers.Clear();
+                        m_player.m_state.Followers.Clear();
                         m_player.m_state.isFollow = false;
                     }
                 }

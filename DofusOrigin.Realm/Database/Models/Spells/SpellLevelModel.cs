@@ -62,45 +62,45 @@ namespace DofusOrigin.Database.Models.Spells
                 var effect = new Realm.Effects.EffectSpell();
                 var infos = actualEffect.Split(';');
 
-                effect.m_id = int.Parse(infos[0]);
-                effect.m_value = int.Parse(infos[1]);
-                effect.m_value2 = int.Parse(infos[2]);
-                effect.m_value3 = int.Parse(infos[3]);
+                effect.ID = int.Parse(infos[0]);
+                effect.Value = int.Parse(infos[1]);
+                effect.Value2 = int.Parse(infos[2]);
+                effect.Value3 = int.Parse(infos[3]);
 
                 if (infos.Length >= 8)
                 {
-                    effect.m_tour = int.Parse(infos[4]);
-                    effect.m_chance = int.Parse(infos[5]);
-                    effect.m_effect = infos[6];
-                    effect.m_target = new Target(int.Parse(infos[7]));
+                    effect.Round = int.Parse(infos[4]);
+                    effect.Chance = int.Parse(infos[5]);
+                    effect.Effect = infos[6];
+                    effect.Target = new Target(int.Parse(infos[7]));
                 }
                 else if (infos.Length >= 7)
                 {
-                    effect.m_tour = int.Parse(infos[4]);
-                    effect.m_chance = int.Parse(infos[5]);
-                    effect.m_effect = infos[6];
-                    effect.m_target = new Target(23);
+                    effect.Round = int.Parse(infos[4]);
+                    effect.Chance = int.Parse(infos[5]);
+                    effect.Effect = infos[6];
+                    effect.Target = new Target(23);
                 }
                 else if (infos.Length >= 6)
                 {
-                    effect.m_tour = int.Parse(infos[4]);
-                    effect.m_chance = int.Parse(infos[5]);
-                    effect.m_effect = "0d0+0";
-                    effect.m_target = new Target(23);
+                    effect.Round = int.Parse(infos[4]);
+                    effect.Chance = int.Parse(infos[5]);
+                    effect.Effect = "0d0+0";
+                    effect.Target = new Target(23);
                 }
                 else if (infos.Length >= 5)
                 {
-                    effect.m_tour = int.Parse(infos[4]);
-                    effect.m_chance = -1;
-                    effect.m_effect = "0d0+0";
-                    effect.m_target = new Target(23);
+                    effect.Round = int.Parse(infos[4]);
+                    effect.Chance = -1;
+                    effect.Effect = "0d0+0";
+                    effect.Target = new Target(23);
                 }
                 else
                 {
-                    effect.m_tour = 0;
-                    effect.m_chance = -1;
-                    effect.m_effect = "0d0+0";
-                    effect.m_target = new Target(23);
+                    effect.Round = 0;
+                    effect.Chance = -1;
+                    effect.Effect = "0d0+0";
+                    effect.Target = new Target(23);
                 }
 
                 if (_CC == true)

@@ -19,19 +19,19 @@ namespace DofusOrigin.Database
             try
             {
                 m_connection.ConnectionString = string.Format("server={0};uid={1};pwd='{2}';database={3}", 
-                    Utilities.Config.m_config.GetStringElement("Database_Server"), 
-                    Utilities.Config.m_config.GetStringElement("Database_User"), 
-                    Utilities.Config.m_config.GetStringElement("Database_Pass"), 
-                    Utilities.Config.m_config.GetStringElement("Database_Name"));
+                    Utilities.Config.GetConfig.GetStringElement("Database_Server"), 
+                    Utilities.Config.GetConfig.GetStringElement("Database_User"), 
+                    Utilities.Config.GetConfig.GetStringElement("Database_Pass"), 
+                    Utilities.Config.GetConfig.GetStringElement("Database_Name"));
 
                 lock (m_locker)
                     m_connection.Open();
 
-                Utilities.Loggers.m_statusLogger.Write("Connected to the @database@ !");
+                Utilities.Loggers.StatusLogger.Write("Connected to the @database@ !");
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Can't connect to the @database@ : {0}", e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Can't connect to the @database@ : {0}", e.ToString()));
             }
         }
     }

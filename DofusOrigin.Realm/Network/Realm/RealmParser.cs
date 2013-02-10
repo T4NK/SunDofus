@@ -125,7 +125,7 @@ namespace DofusOrigin.Network.Realm
 
         public void SendCommunauty(string _datas)
         {
-            m_client.Send(string.Format("AV{0}", Utilities.Config.m_config.GetIntElement("ServerCom")));
+            m_client.Send(string.Format("AV{0}", Utilities.Config.GetConfig.GetIntElement("ServerCom")));
         }
 
         public void SendCharacterList(string _datas)
@@ -153,7 +153,7 @@ namespace DofusOrigin.Network.Realm
 
                     character.m_id = Database.Cache.CharactersCache.GetNewID();
                     character.m_name = characterDatas[0];
-                    character.m_level = Utilities.Config.m_config.GetIntElement("StartLevel");
+                    character.m_level = Utilities.Config.GetConfig.GetIntElement("StartLevel");
                     character.m_class = int.Parse(characterDatas[1]);
                     character.m_sex = int.Parse(characterDatas[2]);
                     character.m_skin = int.Parse(character.m_class + "" + character.m_sex);
@@ -165,71 +165,71 @@ namespace DofusOrigin.Network.Realm
                     switch (character.m_class)
                     {
                         case 1:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Feca");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Feca");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Feca");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Feca");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Feca");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Feca");
                             break;
                         case 2:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Osa");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Osa");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Osa");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Osa");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Osa");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Osa");
                             break;
                         case 3:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Enu");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Enu");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Enu");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Enu");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Enu");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Enu");
                             break;
                         case 4:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Sram");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Sram");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Sram");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Sram");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Sram");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Sram");
                             break;
                         case 5:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Xel");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Xel");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Xel");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Xel");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Xel");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Xel");
                             break;
                         case 6:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Eca");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Eca");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Eca");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Eca");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Eca");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Eca");
                             break;
                         case 7:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Eni");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Eni");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Eni");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Eni");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Eni");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Eni");
                             break;
                         case 8:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Iop");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Iop");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Iop");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Iop");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Iop");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Iop");
                             break;
                         case 9:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Cra");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Cra");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Cra");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Cra");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Cra");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Cra");
                             break;
                         case 10:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Sadi");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Sadi");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Sadi");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Sadi");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Sadi");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Sadi");
                             break;
                         case 11:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Sacri");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Sacri");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Sacri");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Sacri");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Sacri");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Sacri");
                             break;
                         case 12:
-                            character.m_mapID = Utilities.Config.m_config.GetIntElement("StartMap_Panda");
-                            character.m_mapCell = Utilities.Config.m_config.GetIntElement("StartCell_Panda");
-                            character.m_dir = Utilities.Config.m_config.GetIntElement("StartDir_Panda");
+                            character.m_mapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Panda");
+                            character.m_mapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Panda");
+                            character.m_dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Panda");
                             break;
                     }
 
                     character.m_charactPoint = (character.m_level - 1) * 5;
                     character.m_spellPoint = (character.m_level - 1);
                     character.m_exp = Database.Cache.LevelsCache.ReturnLevel(character.m_level).m_character;
-                    character.m_kamas = (long)Utilities.Config.m_config.GetIntElement("StartKamas");
+                    character.m_kamas = (long)Utilities.Config.GetConfig.GetIntElement("StartKamas");
 
 
                     character.isNewCharacter = true;
@@ -243,7 +243,7 @@ namespace DofusOrigin.Network.Realm
                     character.m_spellInventary.LearnSpells();
 
                     Database.Cache.CharactersCache.CreateCharacter(character);
-                    CharactersManager.m_charactersList.Add(character);
+                    CharactersManager.CharactersList.Add(character);
                     m_client.m_characters.Add(character);
 
                     Network.ServersHandler.m_authLinks.Send(string.Format("SNAC|{0}|{1}", m_client.m_infos.m_id, character.m_name));
@@ -259,7 +259,7 @@ namespace DofusOrigin.Network.Realm
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(e.ToString());
+                Utilities.Loggers.ErrorsLogger.Write(e.ToString());
             }
         }
 
@@ -267,10 +267,10 @@ namespace DofusOrigin.Network.Realm
         {
             var id = int.Parse(_datas.Split('|')[0]);
 
-            if (!CharactersManager.m_charactersList.Any(x => x.m_id == id))
+            if (!CharactersManager.CharactersList.Any(x => x.m_id == id))
                 return;
 
-            var character = CharactersManager.m_charactersList.First(x => x.m_id == id);
+            var character = CharactersManager.CharactersList.First(x => x.m_id == id);
 
             if (_datas.Split('|')[1] != m_client.m_infos.m_answer && character.m_level >= 20)
             {
@@ -278,7 +278,7 @@ namespace DofusOrigin.Network.Realm
                 return;
             }
 
-            CharactersManager.m_charactersList.Remove(character);
+            CharactersManager.CharactersList.Remove(character);
             m_client.m_characters.Remove(character);
 
             Network.ServersHandler.m_authLinks.Send(string.Format("SDAC|{0}|{1}", m_client.m_infos.m_id, character.m_name));
@@ -291,10 +291,10 @@ namespace DofusOrigin.Network.Realm
         {
             var id = int.Parse(_datas);
 
-            if (!CharactersManager.m_charactersList.Any(x => x.m_id == id))
+            if (!CharactersManager.CharactersList.Any(x => x.m_id == id))
                 return;
 
-            var character = CharactersManager.m_charactersList.First(x => x.m_id == id);
+            var character = CharactersManager.CharactersList.First(x => x.m_id == id);
 
             if (m_client.m_characters.Contains(character))
             {
@@ -345,7 +345,7 @@ namespace DofusOrigin.Network.Realm
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(e.ToString());
+                Utilities.Loggers.ErrorsLogger.Write(e.ToString());
             }
         }
 
@@ -503,14 +503,14 @@ namespace DofusOrigin.Network.Realm
 
             newPath = path.GetStartPath + newPath;
 
-            if (!m_client.m_player.GetMap().m_rushablesCells.Contains(path.m_destination))
+            if (!m_client.m_player.GetMap().RushablesCells.Contains(path.Destination))
             {
                 m_client.Send("GA;0");
                 return;
             }
 
-            m_client.m_player.m_dir = path.m_newDirection;
-            m_client.m_player.m_state.moveToCell = path.m_destination;
+            m_client.m_player.m_dir = path.Direction;
+            m_client.m_player.m_state.moveToCell = path.Destination;
             m_client.m_player.m_state.onMove = true;
 
             m_client.m_player.GetMap().Send(string.Format("GA0;1;{0};{1}", m_client.m_player.m_id, newPath));
@@ -529,9 +529,9 @@ namespace DofusOrigin.Network.Realm
                         m_client.m_player.m_state.moveToCell = -1;
                         m_client.Send("BN");
 
-                        if (m_client.m_player.GetMap().m_triggers.Any(x => x.m_cellID == m_client.m_player.m_mapCell))
+                        if (m_client.m_player.GetMap().Triggers.Any(x => x.m_cellID == m_client.m_player.m_mapCell))
                         {
-                            var trigger = m_client.m_player.GetMap().m_triggers.First(x => x.m_cellID == m_client.m_player.m_mapCell);
+                            var trigger = m_client.m_player.GetMap().Triggers.First(x => x.m_cellID == m_client.m_player.m_mapCell);
 
                             if (DofusOrigin.Realm.World.Conditions.TriggerCondition.HasConditions(m_client.m_player, trigger.m_conditions))
                                 DofusOrigin.Realm.Effects.EffectAction.ParseEffect(m_client.m_player,trigger.m_actionID, trigger.m_args);
@@ -567,7 +567,7 @@ namespace DofusOrigin.Network.Realm
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot delete item from <{0}> because : {1}", m_client.myIp(), e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot delete item from <{0}> because : {1}", m_client.myIp(), e.ToString()));
             }
         }
 
@@ -580,7 +580,7 @@ namespace DofusOrigin.Network.Realm
             }
             catch (Exception e)
             {
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot move item from <{0}> because : {1}", m_client.myIp(), e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot move item from <{0}> because : {1}", m_client.myIp(), e.ToString()));
             }
         }
 
@@ -938,7 +938,7 @@ namespace DofusOrigin.Network.Realm
                 {
                     case 0://NPC BUY/SELL
 
-                        var NPC = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == int.Parse(packet[1]));
+                        var NPC = m_client.m_player.GetMap().Npcs.First(x => x.m_idOnMap == int.Parse(packet[1]));
                         if (NPC.m_model.m_sellingList.Count == 0)
                         {
                             m_client.Send("BN");
@@ -965,9 +965,9 @@ namespace DofusOrigin.Network.Realm
 
                         var charID = int.Parse(packet[1]);
 
-                        if (DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_id == charID))
+                        if (DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any(x => x.m_id == charID))
                         {
-                            var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == charID);
+                            var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == charID);
 
                             if (!character.isConnected == true && !character.m_state.Occuped)
                             {
@@ -1014,7 +1014,7 @@ namespace DofusOrigin.Network.Realm
                 var quantity = int.Parse(datas[1]);
 
                 var item = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == itemID);
-                var NPC = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == m_client.m_player.m_state.actualNPC);
+                var NPC = m_client.m_player.GetMap().Npcs.First(x => x.m_idOnMap == m_client.m_player.m_state.actualNPC);
 
                 if (quantity <= 0 || !NPC.m_model.m_sellingList.Contains(itemID))
                 {
@@ -1086,7 +1086,7 @@ namespace DofusOrigin.Network.Realm
                 {
                     case "G": //kamas
 
-                        var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
+                        var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
 
                         if (!m_client.m_player.m_state.onExchangePanel || !character.m_state.onExchangePanel || character.m_state.actualPlayerExchange != m_client.m_player.m_id)
                         {
@@ -1094,7 +1094,7 @@ namespace DofusOrigin.Network.Realm
                             return;
                         }
 
-                        var actualExchange = DofusOrigin.Realm.Exchanges.ExchangesManager.m_exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
+                        var actualExchange = DofusOrigin.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
                             x.player2.m_id == character.m_id) || (x.player2.m_id == m_client.m_player.m_id && x.player1.m_id == character.m_id));
 
                         var kamas = long.Parse(_datas.Substring(1));
@@ -1110,7 +1110,7 @@ namespace DofusOrigin.Network.Realm
 
                     case "O": //Items
 
-                        var character2 = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
+                        var character2 = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
 
                         if (!m_client.m_player.m_state.onExchangePanel || !character2.m_state.onExchangePanel || character2.m_state.actualPlayerExchange != m_client.m_player.m_id)
                         {
@@ -1118,7 +1118,7 @@ namespace DofusOrigin.Network.Realm
                             return;
                         }
 
-                        var actualExchange2 = DofusOrigin.Realm.Exchanges.ExchangesManager.m_exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
+                        var actualExchange2 = DofusOrigin.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
                             x.player2.m_id == character2.m_id) || (x.player2.m_id == m_client.m_player.m_id && x.player1.m_id == character2.m_id));
 
                         var add = ( _datas.Substring(1,1) == "+" ? true : false);
@@ -1145,7 +1145,7 @@ namespace DofusOrigin.Network.Realm
             {
                 if (m_client.m_player.m_state.onExchange && m_client.m_player.m_state.actualTraider != -1)
                 {
-                    var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualTraider);
+                    var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == m_client.m_player.m_state.actualTraider);
                     if (character.m_state.actualTraided == m_client.m_player.m_id)
                     {
                         DofusOrigin.Realm.Exchanges.ExchangesManager.AddExchange(character, m_client.m_player);
@@ -1169,7 +1169,7 @@ namespace DofusOrigin.Network.Realm
 
                 m_client.m_player.m_state.onExchangeAccepted = true;
 
-                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
+                var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == m_client.m_player.m_state.actualPlayerExchange);
 
                 if (!m_client.m_player.m_state.onExchangePanel || !character.m_state.onExchangePanel || character.m_state.actualPlayerExchange != m_client.m_player.m_id)
                 {
@@ -1177,7 +1177,7 @@ namespace DofusOrigin.Network.Realm
                     return;
                 }
 
-                var actualExchange = DofusOrigin.Realm.Exchanges.ExchangesManager.m_exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
+                var actualExchange = DofusOrigin.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.m_id == m_client.m_player.m_id &&
                     x.player2.m_id == character.m_id) || (x.player2.m_id == m_client.m_player.m_id && x.player1.m_id == character.m_id));
 
                 m_client.Send(string.Format("EK1{0}", m_client.m_player.m_id));
@@ -1197,18 +1197,18 @@ namespace DofusOrigin.Network.Realm
         {
             try
             {
-                if (DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.Any(x => x.m_name == _datas && x.isConnected))
+                if (DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any(x => x.m_name == _datas && x.isConnected))
                 {
-                    var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_name == _datas);
-                    if (character.m_state.myParty != null || character.m_state.Occuped)
+                    var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_name == _datas);
+                    if (character.m_state.Party != null || character.m_state.Occuped)
                     {
                         m_client.Send(string.Format("PIEa{0}", _datas));
                         return;
                     }
 
-                    if (m_client.m_player.m_state.myParty != null)
+                    if (m_client.m_player.m_state.Party != null)
                     {
-                        if (m_client.m_player.m_state.myParty.myMembers.Count < 8)
+                        if (m_client.m_player.m_state.Party.Members.Count < 8)
                         {
                             character.m_state.senderInviteParty = m_client.m_player.m_id;
                             character.m_state.onWaitingParty = true;
@@ -1251,7 +1251,7 @@ namespace DofusOrigin.Network.Realm
                     return;
                 }
 
-                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First
+                var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First
                     (x => x.m_id == m_client.m_player.m_state.senderInviteParty);
 
                 if (character.isConnected == false || character.m_state.receiverInviteParty != m_client.m_player.m_id)
@@ -1277,7 +1277,7 @@ namespace DofusOrigin.Network.Realm
             {
                 if (m_client.m_player.m_state.senderInviteParty != -1 && m_client.m_player.m_state.onWaitingParty)
                 {
-                    var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == m_client.m_player.m_state.senderInviteParty);
+                    var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == m_client.m_player.m_state.senderInviteParty);
 
                     if (character.isConnected == false || character.m_state.receiverInviteParty != m_client.m_player.m_id)
                     {
@@ -1293,20 +1293,20 @@ namespace DofusOrigin.Network.Realm
                     character.m_state.receiverInviteParty = -1;
                     character.m_state.onWaitingParty = false;
 
-                    if (character.m_state.myParty == null)
+                    if (character.m_state.Party == null)
                     {
-                        character.m_state.myParty = new CharacterParty(character);
-                        character.m_state.myParty.AddMember(m_client.m_player);
+                        character.m_state.Party = new CharacterParty(character);
+                        character.m_state.Party.AddMember(m_client.m_player);
                     }
                     else
                     {
-                        if (character.m_state.myParty.myMembers.Count > 7)
+                        if (character.m_state.Party.Members.Count > 7)
                         {
                             m_client.Send("BN");
                             character.m_networkClient.Send("PR");
                             return;
                         }
-                        character.m_state.myParty.AddMember(m_client.m_player);
+                        character.m_state.Party.AddMember(m_client.m_player);
                     }
 
                     character.m_networkClient.Send("PR");
@@ -1325,18 +1325,18 @@ namespace DofusOrigin.Network.Realm
         {
             try
             {
-                if (m_client.m_player.m_state.myParty == null || !m_client.m_player.m_state.myParty.myMembers.Keys.Contains(m_client.m_player))
+                if (m_client.m_player.m_state.Party == null || !m_client.m_player.m_state.Party.Members.Keys.Contains(m_client.m_player))
                 {
                     m_client.Send("BN");
                     return;
                 }
 
                 if (_datas == "")
-                    m_client.m_player.m_state.myParty.LeaveParty(m_client.m_player.m_name);
+                    m_client.m_player.m_state.Party.LeaveParty(m_client.m_player.m_name);
                 else
                 {
-                    var character = m_client.m_player.m_state.myParty.myMembers.Keys.ToList().First(x => x.m_id == int.Parse(_datas));
-                    m_client.m_player.m_state.myParty.LeaveParty(character.m_name, m_client.m_player.m_id.ToString());
+                    var character = m_client.m_player.m_state.Party.Members.Keys.ToList().First(x => x.m_id == int.Parse(_datas));
+                    m_client.m_player.m_state.Party.LeaveParty(character.m_name, m_client.m_player.m_id.ToString());
                 }
             }
             catch { }
@@ -1348,7 +1348,7 @@ namespace DofusOrigin.Network.Realm
             {
                 var add = (_datas.Substring(0, 1) == "+" ? true : false);
                 var charid = int.Parse(_datas.Substring(1, _datas.Length - 1));
-                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == charid);
+                var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == charid);
 
                 if (add)
                 {
@@ -1358,33 +1358,33 @@ namespace DofusOrigin.Network.Realm
                         return;
                     }
 
-                    if (character.m_state.myParty == null || !character.m_state.myParty.myMembers.ContainsKey(m_client.m_player)
-                        || character.m_state.followers.Contains(m_client.m_player))
+                    if (character.m_state.Party == null || !character.m_state.Party.Members.ContainsKey(m_client.m_player)
+                        || character.m_state.Followers.Contains(m_client.m_player))
                     {
                         m_client.Send("BN");
                         return;
                     }
 
-                    character.m_state.followers.Add(m_client.m_player);
+                    character.m_state.Followers.Add(m_client.m_player);
                     character.m_state.isFollow = true;
                     character.m_networkClient.Send(string.Format("Im052;{0}", m_client.m_player.m_name));
 
                     m_client.m_player.m_state.followingID = character.m_id;
                     m_client.m_player.m_state.isFollowing = true;
 
-                    m_client.Send(string.Format("IC{0}|{1}", character.GetMap().m_map.m_PosX, character.GetMap().m_map.m_PosY));
+                    m_client.Send(string.Format("IC{0}|{1}", character.GetMap().GetModel.m_PosX, character.GetMap().GetModel.m_PosY));
                     m_client.Send(string.Format("PF+{0}", character.m_id));
                 }
                 else
                 {
-                    if (character.m_state.myParty == null || !character.m_state.myParty.myMembers.ContainsKey(m_client.m_player)
-                        || !character.m_state.followers.Contains(m_client.m_player) || character.m_id != m_client.m_player.m_state.followingID)
+                    if (character.m_state.Party == null || !character.m_state.Party.Members.ContainsKey(m_client.m_player)
+                        || !character.m_state.Followers.Contains(m_client.m_player) || character.m_id != m_client.m_player.m_state.followingID)
                     {
                         m_client.Send("BN");
                         return;
                     }
 
-                    character.m_state.followers.Remove(m_client.m_player);
+                    character.m_state.Followers.Remove(m_client.m_player);
                     character.m_state.isFollow = false;
                     character.m_networkClient.Send(string.Format("Im053;{0}", m_client.m_player.m_name));
 
@@ -1404,28 +1404,28 @@ namespace DofusOrigin.Network.Realm
             {
                 var add = (_datas.Substring(0, 1) == "+" ? true : false);
                 var charid = int.Parse(_datas.Substring(1, _datas.Length - 1));
-                var character = DofusOrigin.Realm.Characters.CharactersManager.m_charactersList.First(x => x.m_id == charid);
+                var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.m_id == charid);
 
                 if (add)
                 {
-                    if (!character.isConnected || character.m_state.myParty == null || !character.m_state.myParty.myMembers.ContainsKey(m_client.m_player))
+                    if (!character.isConnected || character.m_state.Party == null || !character.m_state.Party.Members.ContainsKey(m_client.m_player))
                     {
                         m_client.Send("BN");
                         return;
                     }
 
-                    foreach (var charinparty in character.m_state.myParty.myMembers.Keys.Where(x => x != character))
+                    foreach (var charinparty in character.m_state.Party.Members.Keys.Where(x => x != character))
                     {
                         if (charinparty.m_state.isFollowing)
                             charinparty.m_networkClient.Send("PF-");
 
-                        character.m_state.followers.Add(m_client.m_player);
+                        character.m_state.Followers.Add(m_client.m_player);
                         character.m_networkClient.Send(string.Format("Im052;{0}", m_client.m_player.m_name));
 
                         charinparty.m_state.followingID = character.m_id;
                         charinparty.m_state.isFollowing = true;
 
-                        charinparty.m_networkClient.Send(string.Format("IC{0}|{1}", character.GetMap().m_map.m_PosX, character.GetMap().m_map.m_PosY));
+                        charinparty.m_networkClient.Send(string.Format("IC{0}|{1}", character.GetMap().GetModel.m_PosX, character.GetMap().GetModel.m_PosY));
                         charinparty.m_networkClient.Send(string.Format("PF+{0}", character.m_id));
                     }
 
@@ -1433,15 +1433,15 @@ namespace DofusOrigin.Network.Realm
                 }
                 else
                 {
-                    if (character.m_state.myParty == null || !character.m_state.myParty.myMembers.ContainsKey(m_client.m_player))
+                    if (character.m_state.Party == null || !character.m_state.Party.Members.ContainsKey(m_client.m_player))
                     {
                         m_client.Send("BN");
                         return;
                     }
 
-                    foreach (var charinparty in character.m_state.myParty.myMembers.Keys.Where(x => x != character))
+                    foreach (var charinparty in character.m_state.Party.Members.Keys.Where(x => x != character))
                     {
-                        character.m_state.followers.Remove(m_client.m_player);
+                        character.m_state.Followers.Remove(m_client.m_player);
                         character.m_networkClient.Send(string.Format("Im053;{0}", m_client.m_player.m_name));
 
                         charinparty.m_state.followingID = -1;
@@ -1467,13 +1467,13 @@ namespace DofusOrigin.Network.Realm
             {
                 var id = int.Parse(_datas);
 
-                if (!m_client.m_player.GetMap().m_npcs.Any(x => x.m_idOnMap == id) || m_client.m_player.m_state.Occuped)
+                if (!m_client.m_player.GetMap().Npcs.Any(x => x.m_idOnMap == id) || m_client.m_player.m_state.Occuped)
                 {
                     m_client.Send("BN");
                     return;
                 }
 
-                var npc = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == id);
+                var npc = m_client.m_player.GetMap().Npcs.First(x => x.m_idOnMap == id);
 
                 if (npc.m_model.m_question == null)
                 {
@@ -1511,13 +1511,13 @@ namespace DofusOrigin.Network.Realm
             {
                 var id = int.Parse(_datas.Split('|')[1]);
 
-                if (!m_client.m_player.GetMap().m_npcs.Any(x => x.m_idOnMap == m_client.m_player.m_state.onDialogingWith))
+                if (!m_client.m_player.GetMap().Npcs.Any(x => x.m_idOnMap == m_client.m_player.m_state.onDialogingWith))
                 {
                     m_client.Send("BN");
                     return;
                 }
 
-                var npc = m_client.m_player.GetMap().m_npcs.First(x => x.m_idOnMap == m_client.m_player.m_state.onDialogingWith);
+                var npc = m_client.m_player.GetMap().Npcs.First(x => x.m_idOnMap == m_client.m_player.m_state.onDialogingWith);
 
                 if(!npc.m_model.m_question.m_answers.Any(x => x.m_answerID == id))
                 {

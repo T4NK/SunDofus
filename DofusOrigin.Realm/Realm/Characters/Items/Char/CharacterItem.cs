@@ -41,15 +41,15 @@ namespace DofusOrigin.Realm.Characters.Items
 
         public void GetNewJet(Effects.EffectItem _effect, int _jet = 3)
         {
-            if (_effect.m_id == 91 | _effect.m_id == 92 | _effect.m_id == 93 | _effect.m_id == 94 | _effect.m_id == 95 | _effect.m_id == 96 | _effect.m_id == 97 | _effect.m_id == 98 | _effect.m_id == 99 | _effect.m_id == 100 | _effect.m_id == 101) { }
-            else if (_effect.m_id == 800)
+            if (_effect.ID == 91 | _effect.ID == 92 | _effect.ID == 93 | _effect.ID == 94 | _effect.ID == 95 | _effect.ID == 96 | _effect.ID == 97 | _effect.ID == 98 | _effect.ID == 99 | _effect.ID == 100 | _effect.ID == 101) { }
+            else if (_effect.ID == 800)
             {
-                _effect.m_value3 = 10; // PDV Des familiers !
+                _effect.Value3 = 10; // PDV Des familiers !
             }
             else
             {
-                _effect.m_value = Utilities.Basic.GetRandomJet(_effect.m_effect, _jet);
-                _effect.m_value2 = -1;
+                _effect.Value = Utilities.Basic.GetRandomJet(_effect.Effect, _jet);
+                _effect.Value2 = -1;
             }
         }
 

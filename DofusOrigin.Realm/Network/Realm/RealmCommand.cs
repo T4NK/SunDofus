@@ -64,7 +64,7 @@ namespace DofusOrigin.Network.Realm
                 m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
                 m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
 
-                Utilities.Loggers.m_errorsLogger.Write(string.Format("Cannot parse command from <{0}> because : {1}", m_client.myIp(), e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse command from <{0}> because : {1}", m_client.myIp(), e.ToString()));
             }
         }
 
@@ -206,8 +206,8 @@ namespace DofusOrigin.Network.Realm
 
                 else if (_datas.Length == 4)
                 {
-                    var myMap = Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_PosX == int.Parse(_datas[1]) && x.m_map.m_PosY == int.Parse(_datas[2]));
-                    m_client.m_player.TeleportNewMap(myMap.m_map.m_id, int.Parse(_datas[3]));
+                    var myMap = Database.Cache.MapsCache.m_mapsList.First(x => x.GetModel.m_PosX == int.Parse(_datas[1]) && x.GetModel.m_PosY == int.Parse(_datas[2]));
+                    m_client.m_player.TeleportNewMap(myMap.GetModel.m_id, int.Parse(_datas[3]));
                     m_client.SendConsoleMessage("Character Teleported !", 0);
                 }
 

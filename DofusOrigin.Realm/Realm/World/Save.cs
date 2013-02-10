@@ -16,16 +16,19 @@ namespace DofusOrigin.Realm.World
         {
             Network.ServersHandler.m_authLinks.Send("SSM");
 
-            foreach (var character in Characters.CharactersManager.m_charactersList)
+            lock (Characters.CharactersManager.CharactersList)
             {
-                if (character.isConnected)
-                    character.m_networkClient.Send("Im1164");
+                foreach (var character in Characters.CharactersManager.CharactersList)
+                {
+                    if (character.isConnected)
+                        character.m_networkClient.Send("Im1164");
 
-                Database.Cache.CharactersCache.SaveCharacter(character);
-                System.Threading.Thread.Sleep(100);
+                    Database.Cache.CharactersCache.SaveCharacter(character);
+                    System.Threading.Thread.Sleep(100);
 
-                if (character.isConnected)
-                    character.m_networkClient.Send("Im1165");
+                    if (character.isConnected)
+                        character.m_networkClient.Send("Im1165");
+                }
             }
 
             Network.ServersHandler.m_authLinks.Send("STM");

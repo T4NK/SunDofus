@@ -7,74 +7,90 @@ namespace DofusOrigin.Realm.Maps
 {
     class Map
     {
-        public List<Characters.Character> m_characters { get; set; }
-        public List<Database.Models.Maps.TriggerModel> m_triggers { get; set; }
-        public List<Characters.NPC.NPCMap> m_npcs { get; set; }
-        public List<Monsters.MonstersGroup> m_groups { get; set; }
-        public List<int> m_rushablesCells { get; set; }
+        public List<Characters.Character> Characters;
+        public List<Database.Models.Maps.TriggerModel> Triggers;
+        public List<Characters.NPC.NPCMap> Npcs;
+        public List<Monsters.MonstersGroup> MonstersGroups;
+        public List<int> RushablesCells;
 
-        public Database.Models.Maps.MapModel m_map { get; set; }
+        public Database.Models.Maps.MapModel _model;
 
-        public Map(Database.Models.Maps.MapModel _map)
+        public Database.Models.Maps.MapModel GetModel
         {
-            m_map = _map;
+            get
+            {
+                return _model;
+            }
+        }
 
-            m_rushablesCells = UncompressDatas();
+        public Map(Database.Models.Maps.MapModel map)
+        {
+            _model = map;
 
-            m_characters = new List<Characters.Character>();
-            m_triggers = new List<Database.Models.Maps.TriggerModel>();
-            m_npcs = new List<Characters.NPC.NPCMap>();
-            m_groups = new List<Monsters.MonstersGroup>();
+            RushablesCells = UncompressDatas();
 
-            if (m_map.m_monsters.Count != 0 && m_rushablesCells.Count != 0)
+            Characters = new List<Characters.Character>();
+            Triggers = new List<Database.Models.Maps.TriggerModel>();
+            Npcs = new List<Characters.NPC.NPCMap>();
+            MonstersGroups = new List<Monsters.MonstersGroup>();
+
+            if (GetModel.m_monsters.Count != 0 && RushablesCells.Count != 0)
                 RefreshAllMonsters();
         }
 
         private void RefreshAllMonsters()
         {
-            for (int i = 1; i <= m_map.maxMonstersGroup; i++)
+            for (int i = 1; i <= GetModel.maxMonstersGroup; i++)
                 AddMonstersGroup();
         }
 
         public void AddMonstersGroup()
         {
-            if (m_groups.Count >= m_map.maxMonstersGroup)
+            if (MonstersGroups.Count >= GetModel.maxMonstersGroup)
                 return;
 
-            m_groups.Add(new Monsters.MonstersGroup(m_map.m_monsters, this));
+            lock(MonstersGroups)
+                MonstersGroups.Add(new Monsters.MonstersGroup(GetModel.m_monsters, this));
         }
 
-        public void Send(string _message)
+        public void Send(string message)
         {
-            foreach (var character in m_characters)
-                character.m_networkClient.Send(_message);
+            lock (Characters)
+            {
+                foreach (var character in Characters)
+                    character.m_networkClient.Send(message);
+            }
         }
 
-        public void AddPlayer(Characters.Character _character)
+        public void AddPlayer(Characters.Character character)
         {
-            Send(string.Format("GM|+{0}", _character.PatternDisplayChar()));
-            m_characters.Add(_character);
+            Send(string.Format("GM|+{0}", character.PatternDisplayChar()));
 
-            _character.m_networkClient.Send(string.Format("GM{0}", CharactersPattern()));
+            lock (Characters)
+                Characters.Add(character);
 
-            if(m_npcs.Count > 0)
-                _character.m_networkClient.Send(string.Format("GM{0}", NPCsPattern()));
+            character.m_networkClient.Send(string.Format("GM{0}", CharactersPattern()));
 
-            if (m_groups.Count > 0)
-                _character.m_networkClient.Send(string.Format("GM{0}", MonstersGroupsPattern()));
+            if(Npcs.Count > 0)
+                character.m_networkClient.Send(string.Format("GM{0}", NPCsPattern()));
+
+            if (MonstersGroups.Count > 0)
+                character.m_networkClient.Send(string.Format("GM{0}", MonstersGroupsPattern()));
         }
 
-        public void DelPlayer(Characters.Character _character)
+        public void DelPlayer(Characters.Character character)
         {
-            Send(string.Format("GM|-{0}", _character.m_id));
-            m_characters.Remove(_character);
+            Send(string.Format("GM|-{0}", character.m_id));
+
+            lock(Characters)
+                Characters.Remove(character);
         }
 
         public int NextNpcID()
         {
             var i = -1;
 
-            while (m_npcs.Any(x => x.m_idOnMap == i) || m_groups.Any(x => x.m_id == i))
+            while (Npcs.Any(x => x.m_idOnMap == i) || MonstersGroups.Any(x => x.ID == i))
                 i -= 1;
 
             return i;
@@ -84,7 +100,8 @@ namespace DofusOrigin.Realm.Maps
         {
             var packet = "";
 
-            m_characters.ForEach(x => packet += string.Format("|+{0}", x.PatternDisplayChar()));
+            lock(Characters)
+                Characters.ForEach(x => packet += string.Format("|+{0}", x.PatternDisplayChar()));
 
             return packet;
         }
@@ -93,7 +110,8 @@ namespace DofusOrigin.Realm.Maps
         {
             var packet = "";
 
-            m_npcs.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
+            lock(Npcs)
+                Npcs.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
 
             return packet;
         }
@@ -102,7 +120,8 @@ namespace DofusOrigin.Realm.Maps
         {
             var packet = "";
 
-            m_groups.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
+            lock(MonstersGroups)
+                MonstersGroups.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
 
             return packet;
         }
@@ -110,13 +129,13 @@ namespace DofusOrigin.Realm.Maps
         private List<int> UncompressDatas()
         {
             List<int> newList = new List<int>();
-            var lengh = m_map.m_mapData.Length;
+            var lengh = GetModel.m_mapData.Length;
             var cells = 0;
             var id = 0;
 
             while (cells < lengh)
             {
-                if (isValidCell(m_map.m_mapData.Substring(cells, 10)))
+                if (isValidCell(GetModel.m_mapData.Substring(cells, 10)))
                     newList.Add(id);
 
                 cells += 10;

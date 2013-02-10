@@ -56,10 +56,10 @@ namespace DofusOrigin.Database.Cache
                         npc.m_dir = int.Parse(infosMap[2]);
                         npc.mustMove = bool.Parse(infosMap[3]);
 
-                        if (MapsCache.m_mapsList.Any(x => x.m_map.m_id == npc.m_mapid))
+                        if (MapsCache.m_mapsList.Any(x => x.GetModel.m_id == npc.m_mapid))
                         {
-                            npc.m_idOnMap = MapsCache.m_mapsList.First(x => x.m_map.m_id == npc.m_mapid).NextNpcID();
-                            MapsCache.m_mapsList.First(x => x.m_map.m_id == npc.m_mapid).m_npcs.Add(npc);
+                            npc.m_idOnMap = MapsCache.m_mapsList.First(x => x.GetModel.m_id == npc.m_mapid).NextNpcID();
+                            MapsCache.m_mapsList.First(x => x.GetModel.m_id == npc.m_mapid).Npcs.Add(npc);
 
                             npc.StartMove();
                         }
@@ -71,7 +71,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' npcs@ from the database !", m_npcList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcs@ from the database !", m_npcList.Count));
         }
 
         public static void LoadNPCsQuestions()
@@ -105,8 +105,8 @@ namespace DofusOrigin.Database.Cache
                         var condiInfos = condi.Split(';');
                         var condiObject = new Realm.World.Conditions.NPCConditions();
 
-                        condiObject.condiID = int.Parse(condiInfos[0]);
-                        condiObject.args = condiInfos[1];
+                        condiObject.CondiID = int.Parse(condiInfos[0]);
+                        condiObject.Args = condiInfos[1];
 
                         question.m_conditions.Add(condiObject);
                     }
@@ -121,7 +121,7 @@ namespace DofusOrigin.Database.Cache
             foreach (var question in m_questions.Where(x => x.m_rescueQuestionID != -1))
                 question.m_rescueQuestion = m_questions.First(x => x.m_questionID == question.m_rescueQuestionID);
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' npcsQuestions@ from the database !", m_questions.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcsQuestions@ from the database !", m_questions.Count));
         }
 
         public static void LoadNPCsAnswers()
@@ -148,8 +148,8 @@ namespace DofusOrigin.Database.Cache
                         var condiInfos = condi.Split(';');
                         var condiObject = new Realm.World.Conditions.NPCConditions();
 
-                        condiObject.condiID = int.Parse(condiInfos[0]);
-                        condiObject.args = condiInfos[1];
+                        condiObject.CondiID = int.Parse(condiInfos[0]);
+                        condiObject.Args = condiInfos[1];
 
                         answer.m_conditions.Add(condiObject);
                     }
@@ -160,7 +160,7 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.m_statusLogger.Write(string.Format("Loaded @'{0}' npcsAnswers@ from the database !", m_answers.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcsAnswers@ from the database !", m_answers.Count));
         }
     }
 }

@@ -7,13 +7,22 @@ namespace DofusOrigin.Realm.Maps.Monsters
 {
     class Monster
     {
-        public Database.Models.Monsters.MonsterModel m_model;
-        public int m_level;
+        public Database.Models.Monsters.MonsterModel Model;
+
+        private int _level;
+
+        public int Level
+        {
+            get
+            {
+                return _level;
+            }
+        }
 
         public Monster(Database.Models.Monsters.MonsterModel model, int grade)
         {
-            m_model = model;
-            m_level = grade;
+            Model = model;
+            _level = grade;
         }
     }
 }

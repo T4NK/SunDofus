@@ -119,12 +119,12 @@ namespace DofusOrigin.Realm.Characters
 
         public void RefreshTrade()
         {
-            m_quotaTrade = Environment.TickCount + Utilities.Config.m_config.GetLongElement("AntiSpamTrade");
+            m_quotaTrade = Environment.TickCount + Utilities.Config.GetConfig.GetLongElement("AntiSpamTrade");
         }
 
         public void RefreshRecruitment()
         {
-            m_quotaRecruitment = Environment.TickCount + Utilities.Config.m_config.GetLongElement("AntiSpamRecruitment");
+            m_quotaRecruitment = Environment.TickCount + Utilities.Config.GetConfig.GetLongElement("AntiSpamRecruitment");
         }
 
         #endregion
@@ -195,7 +195,7 @@ namespace DofusOrigin.Realm.Characters
             builder.Append(Utilities.Basic.DeciToHex(m_color2)).Append(";");
             builder.Append(Utilities.Basic.DeciToHex(m_color3)).Append(";");
             builder.Append(GetItemsPos()).Append(";");
-            builder.Append("0;").Append(Utilities.Config.m_config.GetIntElement("ServerId")).Append(";;;");
+            builder.Append("0;").Append(Utilities.Config.GetConfig.GetIntElement("ServerId")).Append(";;;");
 
             return builder.ToString();
         }
@@ -266,16 +266,16 @@ namespace DofusOrigin.Realm.Characters
 
         public void LoadMap()
         {
-            if (Database.Cache.MapsCache.m_mapsList.Any(x => x.m_map.m_id == this.m_mapID))
+            if (Database.Cache.MapsCache.m_mapsList.Any(x => x.GetModel.m_id == this.m_mapID))
             {
-                var map = Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_id == this.m_mapID);
+                var map = Database.Cache.MapsCache.m_mapsList.First(x => x.GetModel.m_id == this.m_mapID);
 
-                m_networkClient.Send(string.Format("GDM|{0}|0{1}|{2}", map.m_map.m_id, map.m_map.m_date, map.m_map.m_key));
+                m_networkClient.Send(string.Format("GDM|{0}|0{1}|{2}", map.GetModel.m_id, map.GetModel.m_date, map.GetModel.m_key));
 
                 if (this.m_state.isFollow)
                 {
-                    foreach (var character in this.m_state.followers)
-                        character.m_networkClient.Send(string.Format("IC{0}|{1}", GetMap().m_map.m_PosX, GetMap().m_map.m_PosY));
+                    foreach (var character in this.m_state.Followers)
+                        character.m_networkClient.Send(string.Format("IC{0}|{1}", GetMap().GetModel.m_PosX, GetMap().GetModel.m_PosY));
                 }
             }
         }
@@ -285,9 +285,9 @@ namespace DofusOrigin.Realm.Characters
             m_networkClient.Send(string.Format("GA;2;{0};", m_id));
 
             GetMap().DelPlayer(this);
-            var map = Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_id == _mapID);
+            var map = Database.Cache.MapsCache.m_mapsList.First(x => x.GetModel.m_id == _mapID);
 
-            m_mapID = map.m_map.m_id;
+            m_mapID = map.GetModel.m_id;
             m_mapCell = _cell;
 
             LoadMap();
@@ -295,7 +295,7 @@ namespace DofusOrigin.Realm.Characters
 
         public Maps.Map GetMap()
         {
-            return Database.Cache.MapsCache.m_mapsList.First(x => x.m_map.m_id == this.m_mapID);
+            return Database.Cache.MapsCache.m_mapsList.First(x => x.GetModel.m_id == this.m_mapID);
         }
 
         #endregion
