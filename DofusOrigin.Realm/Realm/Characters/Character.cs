@@ -359,9 +359,9 @@ namespace DofusOrigin.Realm.Characters
             if (this.Level == Database.Cache.LevelsCache.MaxLevel())
                 return;
 
-            if (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).m_character)
+            if (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
             {
-                while (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).m_character)
+                while (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
                 {
                     if (this.Level == Database.Cache.LevelsCache.MaxLevel())
                         break;
@@ -420,27 +420,27 @@ namespace DofusOrigin.Realm.Characters
             var packet = "";
 
             if (ItemsInventary.ItemsList.Any(x => x.Position == 1))
-                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 1).Model.m_id);
+                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 1).Model.ID);
 
             packet += ",";
 
             if (ItemsInventary.ItemsList.Any(x => x.Position == 6))
-                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 6).Model.m_id);
+                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 6).Model.ID);
 
             packet += ",";
 
             if (ItemsInventary.ItemsList.Any(x => x.Position == 7))
-                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 7).Model.m_id);
+                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 7).Model.ID);
 
             packet += ",";
 
             if (ItemsInventary.ItemsList.Any(x => x.Position == 8))
-                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 8).Model.m_id);
+                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 8).Model.ID);
 
             packet += ",";
 
             if (ItemsInventary.ItemsList.Any(x => x.Position == 15))
-                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 15).Model.m_id);
+                packet += Utilities.Basic.DeciToHex(ItemsInventary.ItemsList.First(x => x.Position == 15).Model.ID);
 
             return packet;
         }
@@ -546,16 +546,16 @@ namespace DofusOrigin.Realm.Characters
 
         public void LoadMap()
         {
-            if (Database.Cache.MapsCache.MapsList.Any(x => x.GetModel.m_id == this.MapID))
+            if (Database.Cache.MapsCache.MapsList.Any(x => x.GetModel.ID == this.MapID))
             {
-                var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.m_id == this.MapID);
+                var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == this.MapID);
 
-                NetworkClient.Send(string.Format("GDM|{0}|0{1}|{2}", map.GetModel.m_id, map.GetModel.m_date, map.GetModel.m_key));
+                NetworkClient.Send(string.Format("GDM|{0}|0{1}|{2}", map.GetModel.ID, map.GetModel.Date, map.GetModel.Key));
 
                 if (this.State.isFollow)
                 {
                     foreach (var character in this.State.Followers)
-                        character.NetworkClient.Send(string.Format("IC{0}|{1}", GetMap().GetModel.m_PosX, GetMap().GetModel.m_PosY));
+                        character.NetworkClient.Send(string.Format("IC{0}|{1}", GetMap().GetModel.PosX, GetMap().GetModel.PosY));
                 }
             }
         }
@@ -565,9 +565,9 @@ namespace DofusOrigin.Realm.Characters
             NetworkClient.Send(string.Format("GA;2;{0};", ID));
 
             GetMap().DelPlayer(this);
-            var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.m_id == _mapID);
+            var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == _mapID);
 
-            MapID = map.GetModel.m_id;
+            MapID = map.GetModel.ID;
             MapCell = _cell;
 
             LoadMap();
@@ -575,7 +575,7 @@ namespace DofusOrigin.Realm.Characters
 
         public Maps.Map GetMap()
         {
-            return Database.Cache.MapsCache.MapsList.First(x => x.GetModel.m_id == this.MapID);
+            return Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == this.MapID);
         }
 
         #endregion
@@ -924,8 +924,8 @@ namespace DofusOrigin.Realm.Characters
             StringBuilder builder = new StringBuilder();
             {
                 builder.Append(Exp).Append(",");
-                builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level).m_character).Append(",");
-                builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level + 1).m_character).Append("|");
+                builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level).Character).Append(",");
+                builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character).Append("|");
                 builder.Append(Kamas).Append("|");
                 builder.Append(CharactPoint).Append("|");
                 builder.Append(SpellPoint).Append("|");

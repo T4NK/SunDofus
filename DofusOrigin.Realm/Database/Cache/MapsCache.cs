@@ -23,16 +23,16 @@ namespace DofusOrigin.Database.Cache
                 {
                     var map = new Models.Maps.MapModel();
 
-                    map.m_id = sqlReader.GetInt32("id");
-                    map.m_date = sqlReader.GetInt32("date");
-                    map.m_width = sqlReader.GetInt16("width");
-                    map.m_height = sqlReader.GetInt16("heigth");
-                    map.m_capabilities = sqlReader.GetInt16("capabilities");
-                    map.m_mappos = sqlReader.GetString("mappos");
-                    map.m_mapData = sqlReader.GetString("mapData");
-                    map.m_key = sqlReader.GetString("key");
-                    map.maxMonstersGroup = sqlReader.GetInt16("maxgroups");
-                    map.maxGroupSize = sqlReader.GetInt16("groupsize");
+                    map.ID = sqlReader.GetInt32("id");
+                    map.Date = sqlReader.GetInt32("date");
+                    map.Width = sqlReader.GetInt16("width");
+                    map.Height = sqlReader.GetInt16("heigth");
+                    map.Capabilities = sqlReader.GetInt16("capabilities");
+                    map.Mappos = sqlReader.GetString("mappos");
+                    map.MapData = sqlReader.GetString("mapData");
+                    map.Key = sqlReader.GetString("key");
+                    map.MaxMonstersGroup = sqlReader.GetInt16("maxgroups");
+                    map.MaxGroupSize = sqlReader.GetInt16("groupsize");
 
                     foreach (var newMonster in sqlReader.GetString("monsters").Split('|'))
                     {
@@ -46,10 +46,14 @@ namespace DofusOrigin.Database.Cache
                         if (infos[1].Length < 1)
                             continue;
 
-                        if (!map.m_monsters.ContainsKey(int.Parse(infos[0])))
-                            map.m_monsters.Add(int.Parse(infos[0]), new List<int>());
+                        lock (map.Monsters)
+                        {
+                            if (!map.Monsters.ContainsKey(int.Parse(infos[0])))
+                                map.Monsters.Add(int.Parse(infos[0]), new List<int>());
+                        }
 
-                        map.m_monsters[int.Parse(infos[0])].Add(int.Parse(infos[1]));
+                        lock(map.Monsters[int.Parse(infos[0])])
+                            map.Monsters[int.Parse(infos[0])].Add(int.Parse(infos[1]));
                     }
 
                     map.ParsePos();

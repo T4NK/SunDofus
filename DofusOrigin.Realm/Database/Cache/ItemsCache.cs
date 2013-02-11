@@ -25,13 +25,13 @@ namespace DofusOrigin.Database.Cache
                 {
                     var item = new Models.Items.ItemModel();
 
-                    item.m_id = sqlReader.GetInt32("ID");
-                    item.m_pods = sqlReader.GetInt16("Weight");
-                    item.m_price = sqlReader.GetInt32("Price");
-                    item.m_type = sqlReader.GetInt16("Type");
-                    item.m_level = sqlReader.GetInt16("Level");
-                    item.m_jet = sqlReader.GetString("Stats");
-                    item.m_condistr = sqlReader.GetString("Conditions");
+                    item.ID = sqlReader.GetInt32("ID");
+                    item.Pods = sqlReader.GetInt16("Weight");
+                    item.Price = sqlReader.GetInt32("Price");
+                    item.Type = sqlReader.GetInt16("Type");
+                    item.Level = sqlReader.GetInt16("Level");
+                    item.Jet = sqlReader.GetString("Stats");
+                    item.Condistr = sqlReader.GetString("Conditions");
 
                     item.ParseWeaponInfos(sqlReader.GetString("WeaponInfo"));
 
@@ -60,7 +60,7 @@ namespace DofusOrigin.Database.Cache
                 {
                     var set = new Models.Items.SetModel();
 
-                    set.m_id = sqlReader.GetInt16("ID");
+                    set.ID = sqlReader.GetInt16("ID");
                     set.ParseBonus(sqlReader.GetString("bonus"));
                     set.ParseItems(sqlReader.GetString("items"));
 
@@ -87,13 +87,13 @@ namespace DofusOrigin.Database.Cache
                 {
                     var item = new Models.Items.ItemUsableModel();
 
-                    item.m_base = sqlReader.GetInt16("ID");
-                    item.m_args = sqlReader.GetString("Args");
+                    item.Base = sqlReader.GetInt16("ID");
+                    item.Args = sqlReader.GetString("Args");
 
                     if (sqlReader.GetInt16("MustDelete") == 1)
-                        item.m_mustDelete = true;
+                        item.MustDelete = true;
                     else
-                        item.m_mustDelete = false;
+                        item.MustDelete = false;
 
                     item.AttributeItem();
 

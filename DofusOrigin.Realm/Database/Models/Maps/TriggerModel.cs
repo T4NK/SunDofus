@@ -8,17 +8,17 @@ namespace DofusOrigin.Database.Models.Maps
 {
     class TriggerModel
     {
-        public int m_mapID { get; set; }
-        public int m_cellID { get; set; }
-        public int m_actionID { get; set; }
+        public int MapID;
+        public int CellID;
+        public int ActionID;
 
-        public string m_args { get; set; }
-        public string m_conditions { get; set; }
+        public string Args;
+        public string Conditions;
 
         public TriggerModel()
         {
-            m_conditions = "";
-            m_mapID = -1;
+            Conditions = "";
+            MapID = -1;
         }
     }
 }

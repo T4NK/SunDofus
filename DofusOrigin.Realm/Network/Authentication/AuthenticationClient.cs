@@ -35,7 +35,7 @@ namespace DofusOrigin.Network.Authentication
 
         public void Start()
         {
-            this.ConnectTo(Model.m_ip, Model.m_port);
+            this.ConnectTo(Model.IP, Model.Port);
         }
 
         public void Send(string message, bool force = false)

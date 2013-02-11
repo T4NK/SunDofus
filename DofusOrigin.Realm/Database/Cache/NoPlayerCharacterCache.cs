@@ -25,19 +25,19 @@ namespace DofusOrigin.Database.Cache
                 {
                     var npcModel = new Models.NPC.NoPlayerCharacterModel();
                     {
-                        npcModel.m_id = sqlReader.GetInt32("ID");
-                        npcModel.m_gfxid = sqlReader.GetInt32("Gfx");
-                        npcModel.m_size = sqlReader.GetInt32("Size");
-                        npcModel.m_sex = sqlReader.GetInt32("Sex");
-                        npcModel.m_color = sqlReader.GetInt32("Color1");
-                        npcModel.m_color2 = sqlReader.GetInt32("Color2");
-                        npcModel.m_color3 = sqlReader.GetInt32("Color3");
+                        npcModel.ID = sqlReader.GetInt32("ID");
+                        npcModel.GfxID = sqlReader.GetInt32("Gfx");
+                        npcModel.Size = sqlReader.GetInt32("Size");
+                        npcModel.Sex = sqlReader.GetInt32("Sex");
+                        npcModel.Color = sqlReader.GetInt32("Color1");
+                        npcModel.Color2 = sqlReader.GetInt32("Color2");
+                        npcModel.Color3 = sqlReader.GetInt32("Color3");
 
                         if(sqlReader.GetInt32("initQuestion") != -1)
-                            npcModel.m_question = QuestionsList.First(x => x.m_questionID == sqlReader.GetInt32("initQuestion"));
+                            npcModel.Question = QuestionsList.First(x => x.QuestionID == sqlReader.GetInt32("initQuestion"));
 
-                        npcModel.m_name = sqlReader.GetString("Name");
-                        npcModel.m_items = sqlReader.GetString("Items");
+                        npcModel.Name = sqlReader.GetString("Name");
+                        npcModel.Items = sqlReader.GetString("Items");
                     }
 
                     foreach (var itemToSell in sqlReader.GetString("SellingList").Split(','))
@@ -45,7 +45,8 @@ namespace DofusOrigin.Database.Cache
                         if (itemToSell == "")
                             continue;
 
-                        npcModel.m_sellingList.Add(int.Parse(itemToSell));
+                        lock(npcModel.SellingList)
+                            npcModel.SellingList.Add(int.Parse(itemToSell));
                     }
 
                     var npc = new Realm.Characters.NPC.NPCMap(npcModel);
@@ -56,10 +57,13 @@ namespace DofusOrigin.Database.Cache
                         npc.Dir = int.Parse(infosMap[2]);
                         npc.mustMove = bool.Parse(infosMap[3]);
 
-                        if (MapsCache.MapsList.Any(x => x.GetModel.m_id == npc.MapID))
+                        if (MapsCache.MapsList.Any(x => x.GetModel.ID == npc.MapID))
                         {
-                            npc.ID = MapsCache.MapsList.First(x => x.GetModel.m_id == npc.MapID).NextNpcID();
-                            MapsCache.MapsList.First(x => x.GetModel.m_id == npc.MapID).Npcs.Add(npc);
+                            var map = MapsCache.MapsList.First(x => x.GetModel.ID == npc.MapID);
+                            npc.ID = MapsCache.MapsList.First(x => x.GetModel.ID == npc.MapID).NextNpcID();
+
+                            lock(map.Npcs)
+                                map.Npcs.Add(npc);
 
                             npc.StartMove();
                         }
@@ -87,15 +91,16 @@ namespace DofusOrigin.Database.Cache
                 while (sqlReader.Read())
                 {
                     var question = new Models.NPC.NPCsQuestion();
-                    question.m_questionID = sqlReader.GetInt32("questionID");
-                    question.m_rescueQuestionID = sqlReader.GetInt32("rescueQuestion");
+                    question.QuestionID = sqlReader.GetInt32("questionID");
+                    question.RescueQuestionID = sqlReader.GetInt32("rescueQuestion");
 
                     foreach (var answer in sqlReader.GetString("answers").Split(';'))
                     {
                         if (answer == "")
                             continue;
 
-                        question.m_answers.Add(AnswersList.First(x => x.m_answerID == int.Parse(answer)));
+                        lock(question.Answers)
+                            question.Answers.Add(AnswersList.First(x => x.AnswerID == int.Parse(answer)));
                     }
 
                     foreach (var condi in sqlReader.GetString("conditions").Split('&'))
@@ -109,7 +114,8 @@ namespace DofusOrigin.Database.Cache
                         condiObject.CondiID = int.Parse(condiInfos[0]);
                         condiObject.Args = condiInfos[1];
 
-                        question.m_conditions.Add(condiObject);
+                        lock(question.Conditions)
+                            question.Conditions.Add(condiObject);
                     }
 
                     lock(QuestionsList)
@@ -119,8 +125,8 @@ namespace DofusOrigin.Database.Cache
                 sqlReader.Close();
             }
 
-            foreach (var question in QuestionsList.Where(x => x.m_rescueQuestionID != -1))
-                question.m_rescueQuestion = QuestionsList.First(x => x.m_questionID == question.m_rescueQuestionID);
+            foreach (var question in QuestionsList.Where(x => x.RescueQuestionID != -1))
+                question.RescueQuestion = QuestionsList.First(x => x.QuestionID == question.RescueQuestionID);
 
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcsQuestions@ from the database !", QuestionsList.Count));
         }
@@ -138,8 +144,8 @@ namespace DofusOrigin.Database.Cache
                 {
                     var answer = new Models.NPC.NPCsAnswer();
 
-                    answer.m_answerID = sqlReader.GetInt32("answerID");
-                    answer.m_effects = sqlReader.GetString("effects");
+                    answer.AnswerID = sqlReader.GetInt32("answerID");
+                    answer.Effects = sqlReader.GetString("effects");
 
                     foreach (var condi in sqlReader.GetString("conditions").Split('&'))
                     {
@@ -152,7 +158,8 @@ namespace DofusOrigin.Database.Cache
                         condiObject.CondiID = int.Parse(condiInfos[0]);
                         condiObject.Args = condiInfos[1];
 
-                        answer.m_conditions.Add(condiObject);
+                        lock(answer.Conditions)
+                            answer.Conditions.Add(condiObject);
                     }
 
                     lock(AnswersList)

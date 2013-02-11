@@ -29,12 +29,12 @@ namespace DofusOrigin.Realm.Characters.Spells
 
         public void LearnSpells()
         {
-            foreach (var spell in Database.Cache.SpellsCache.SpellsToLearnList.Where(x => x.m_race == Client.Class && x.m_level <= Client.Level))
+            foreach (var spell in Database.Cache.SpellsCache.SpellsToLearnList.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
             {
-                if (Spells.Any(x => x.ID == spell.m_spellID))
+                if (Spells.Any(x => x.ID == spell.SpellID))
                     continue;
 
-                AddSpells(spell.m_spellID, 1, spell.m_pos);
+                AddSpells(spell.SpellID, 1, spell.Pos);
             }
         }
 

@@ -69,9 +69,9 @@ namespace DofusOrigin.Realm.World
 
         public static void SendAdminMessage(Network.Realm.RealmClient client, string message)
         {
-            if (client.Infos.m_level > 0)
+            if (client.Infos.GMLevel > 0)
             {
-                foreach (var character in Network.ServersHandler.RealmServer.Clients.Where(x => x.isAuth == true && x.Infos.m_level > 0))
+                foreach (var character in Network.ServersHandler.RealmServer.Clients.Where(x => x.isAuth == true && x.Infos.GMLevel > 0))
                     character.Send(string.Format("cMK@|{0}|{1}|{2}", client.Player.ID, client.Player.Name, message));
             }
         }

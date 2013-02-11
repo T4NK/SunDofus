@@ -34,23 +34,23 @@ namespace DofusOrigin.Realm.Maps
             Npcs = new List<Characters.NPC.NPCMap>();
             MonstersGroups = new List<Monsters.MonstersGroup>();
 
-            if (GetModel.m_monsters.Count != 0 && RushablesCells.Count != 0)
+            if (GetModel.Monsters.Count != 0 && RushablesCells.Count != 0)
                 RefreshAllMonsters();
         }
 
         private void RefreshAllMonsters()
         {
-            for (int i = 1; i <= GetModel.maxMonstersGroup; i++)
+            for (int i = 1; i <= GetModel.MaxMonstersGroup; i++)
                 AddMonstersGroup();
         }
 
         public void AddMonstersGroup()
         {
-            if (MonstersGroups.Count >= GetModel.maxMonstersGroup)
+            if (MonstersGroups.Count >= GetModel.MaxMonstersGroup)
                 return;
 
             lock(MonstersGroups)
-                MonstersGroups.Add(new Monsters.MonstersGroup(GetModel.m_monsters, this));
+                MonstersGroups.Add(new Monsters.MonstersGroup(GetModel.Monsters, this));
         }
 
         public void Send(string message)
@@ -117,13 +117,13 @@ namespace DofusOrigin.Realm.Maps
         private List<int> UncompressDatas()
         {
             List<int> newList = new List<int>();
-            var lengh = GetModel.m_mapData.Length;
+            var lengh = GetModel.MapData.Length;
             var cells = 0;
             var id = 0;
 
             while (cells < lengh)
             {
-                if (isValidCell(GetModel.m_mapData.Substring(cells, 10)))
+                if (isValidCell(GetModel.MapData.Substring(cells, 10)))
                     newList.Add(id);
 
                 cells += 10;

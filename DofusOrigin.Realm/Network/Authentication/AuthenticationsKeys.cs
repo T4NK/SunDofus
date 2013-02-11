@@ -26,14 +26,14 @@ namespace DofusOrigin.Network.Authentication
             var _datas = packet.Split('|');
 
             _key = _datas[1];
-            Infos.m_id = int.Parse(_datas[2]);
-            Infos.m_pseudo = _datas[3];
-            Infos.m_question = _datas[4];
-            Infos.m_answer = _datas[5];
-            Infos.m_level = int.Parse(_datas[6]);
-            Infos.m_strcharacters = _datas[7];
-            Infos.m_subscription = long.Parse(_datas[8]);
-            Infos.m_strgifts = _datas[9];
+            Infos.ID = int.Parse(_datas[2]);
+            Infos.Pseudo = _datas[3];
+            Infos.Question = _datas[4];
+            Infos.Answer = _datas[5];
+            Infos.GMLevel = int.Parse(_datas[6]);
+            Infos.Strcharacters = _datas[7];
+            Infos.Subscription = long.Parse(_datas[8]);
+            Infos.Strgifts = _datas[9];
         }
     }
 }

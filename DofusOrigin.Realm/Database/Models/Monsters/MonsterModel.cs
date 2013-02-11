@@ -7,39 +7,39 @@ namespace DofusOrigin.Database.Models.Monsters
 {
     class MonsterModel
     {
-        public int m_id { get; set; }
-        public int m_gfx { get; set; }
-        public int m_align { get; set; }
-        public int m_color { get; set; }
-        public int m_color2 { get; set; }
-        public int m_color3 { get; set; }
-        public int m_ia { get; set; }
+        public int ID;
+        public int GfxID;
+        public int Align;
+        public int Color;
+        public int Color2;
+        public int Color3;
+        public int IA;
 
-        public int max_kamas { get; set; }
-        public int min_kamas { get; set; }
+        public int Max_kamas;
+        public int Min_kamas;
 
-        public string m_name { get; set; }
+        public string Name;
 
-        public List<MonsterLevelModel> m_levels { get; set; }
-        public List<MonsterItem> m_items { get; set; }
+        public List<MonsterLevelModel> Levels;
+        public List<MonsterItem> Items;
 
         public MonsterModel()
         {
-            m_levels = new List<MonsterLevelModel>();
-            m_items = new List<MonsterItem>();
+            Levels = new List<MonsterLevelModel>();
+            Items = new List<MonsterItem>();
         }
 
         public class MonsterItem
         {
-            public int m_id { get; set; }
-            public double m_chance { get; set; }
-            public int m_max { get; set; }
+            public int ID;
+            public double Chance;
+            public int Max;
 
             public MonsterItem(int newID, double newChance, int newMax)
             {
-                m_id = newID;
-                m_chance = newChance;
-                m_max = newMax;
+                ID = newID;
+                Chance = newChance;
+                Max = newMax;
             }
         }
     }

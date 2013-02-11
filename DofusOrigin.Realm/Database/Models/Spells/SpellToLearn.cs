@@ -7,17 +7,17 @@ namespace DofusOrigin.Database.Models.Spells
 {
     class SpellToLearnModel
     {
-        public int m_race  { get; set; }
-        public int m_level  { get; set; }
-        public int m_spellID  { get; set; }
-        public int m_pos { get; set; }
+        public int Race;
+        public int Level;
+        public int SpellID;
+        public int Pos;
 
         public SpellToLearnModel()
         {
-            m_race = 0;
-            m_level = 0;
-            m_spellID = 0;
-            m_pos = 0;
+            Race = 0;
+            Level = 0;
+            SpellID = 0;
+            Pos = 0;
         }
     }
 }

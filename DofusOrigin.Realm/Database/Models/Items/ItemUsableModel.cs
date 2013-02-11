@@ -9,31 +9,31 @@ namespace DofusOrigin.Database.Models.Items
 {
     class ItemUsableModel
     {
-        public int m_base { get; set; }
-        public string m_args { get; set; }
-        public bool m_mustDelete { get; set; }
+        public int Base;
+        public string Args;
+        public bool MustDelete;
 
         public ItemUsableModel()
         {
-            m_base = -1;
-            m_args = "";
-            m_mustDelete = true;
+            Base = -1;
+            Args = "";
+            MustDelete = true;
         }
 
         public void AttributeItem()
         {
-            if (Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == m_base))
-                Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == m_base).isUsable = true;
+            if (Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == Base))
+                Database.Cache.ItemsCache.ItemsList.First(x => x.ID == Base).isUsable = true;
         }
 
-        public void ParseEffect(Character _client)
+        public void ParseEffect(Character client)
         {
-            var datas = m_args.Split('|');
+            var datas = Args.Split('|');
 
             foreach (var effect in datas)
             {
                 var infos = effect.Split(';');
-                Realm.Effects.EffectAction.ParseEffect(_client, int.Parse(infos[0]), infos[1]);
+                Realm.Effects.EffectAction.ParseEffect(client, int.Parse(infos[0]), infos[1]);
             }
         }
     }

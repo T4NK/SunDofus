@@ -35,7 +35,7 @@ namespace DofusOrigin.Network.Authentication
         {
             foreach (var model in modelList)
             {
-                if (!Clients.Any(x => x.Model.m_id == model.m_id))
+                if (!Clients.Any(x => x.Model.ID == model.ID))
                 {
                     var client = new AuthenticationClient(model);
 

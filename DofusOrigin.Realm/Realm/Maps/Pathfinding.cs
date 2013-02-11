@@ -65,19 +65,19 @@ namespace DofusOrigin.Realm.Maps
                 case 'a':
                     return fight ? -1 : caseID + 1;
                 case 'b':
-                    return caseID + _map.GetModel.m_width;
+                    return caseID + _map.GetModel.Width;
                 case 'c':
-                    return fight ? -1 : caseID + (_map.GetModel.m_width * 2 - 1);
+                    return fight ? -1 : caseID + (_map.GetModel.Width * 2 - 1);
                 case 'd':
-                    return caseID + (_map.GetModel.m_width - 1);
+                    return caseID + (_map.GetModel.Width - 1);
                 case 'e':
                     return fight ? -1 : caseID - 1;
                 case 'f':
-                    return caseID - _map.GetModel.m_width;
+                    return caseID - _map.GetModel.Width;
                 case 'g':
-                    return fight ? -1 : caseID - (_map.GetModel.m_width * 2 - 1);
+                    return fight ? -1 : caseID - (_map.GetModel.Width * 2 - 1);
                 case 'h':
-                    return caseID - _map.GetModel.m_width + 1;
+                    return caseID - _map.GetModel.Width + 1;
             }
 
             return -1; 
@@ -135,25 +135,25 @@ namespace DofusOrigin.Realm.Maps
                     return cell + 1;
 
                 case 1:
-                    return cell + _map.GetModel.m_width;
+                    return cell + _map.GetModel.Width;
 
                 case 2:
-                    return cell + (_map.GetModel.m_width * 2) - 1;
+                    return cell + (_map.GetModel.Width * 2) - 1;
 
                 case 3:
-                    return cell + _map.GetModel.m_width - 1;
+                    return cell + _map.GetModel.Width - 1;
 
                 case 4:
                     return cell - 1;
 
                 case 5:
-                    return cell - _map.GetModel.m_width;
+                    return cell - _map.GetModel.Width;
 
                 case 6:
-                    return cell - (_map.GetModel.m_width * 2) + 1;
+                    return cell - (_map.GetModel.Width * 2) + 1;
 
                 case 7:
-                    return cell - _map.GetModel.m_width + 1;
+                    return cell - _map.GetModel.Width + 1;
 
             }
 
@@ -231,13 +231,13 @@ namespace DofusOrigin.Realm.Maps
 
         public int GetCellXCoord(int cellid)
         {
-            var width = _map.GetModel.m_width;
+            var width = _map.GetModel.Width;
             return ((cellid - (width - 1) * GetCellYCoord(cellid)) / width);
         }
 
         public int GetCellYCoord(int cellid)
         {
-            var width = _map.GetModel.m_width;
+            var width = _map.GetModel.Width;
             var loc5 = (int)(cellid / ((width * 2) - 1));
             var loc6 = cellid - loc5 * ((width * 2) - 1);
             var loc7 = loc6 % width;

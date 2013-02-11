@@ -23,22 +23,22 @@ namespace DofusOrigin.Realm.Characters.Items
         {
             if (offline == true)
             {
-                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == id))
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == id))
                     return;
 
-                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == id);
+                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == id);
                 var item = new CharacterItem(baseItem);
 
                 item.GeneratItem(jet);
 
                 lock (ItemsList)
                 {
-                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position))
                     {
-                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position);
 
                         item2.Quantity += item.Quantity;
-                        Client.Pods += (item.Model.m_pods * item.Quantity);
+                        Client.Pods += (item.Model.Pods * item.Quantity);
 
                         return;
                     }
@@ -47,27 +47,27 @@ namespace DofusOrigin.Realm.Characters.Items
 
                     ItemsList.Add(item);
 
-                    Client.Pods += item.Model.m_pods;
+                    Client.Pods += item.Model.Pods;
                 }
             }
             else if (offline == false)
             {
-                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == id))
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == id))
                     return;
 
-                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == id);
+                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == id);
                 var item = new CharacterItem(baseItem);
 
                 item.GeneratItem(jet);
 
                 lock (ItemsList)
                 {
-                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position))
                     {
-                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position);
 
                         item2.Quantity += item.Quantity;
-                        Client.Pods += (item.Model.m_pods * item.Quantity);
+                        Client.Pods += (item.Model.Pods * item.Quantity);
 
                         RefreshBonus();
                         Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item2.ID, item2.Quantity));
@@ -80,7 +80,7 @@ namespace DofusOrigin.Realm.Characters.Items
                     ItemsList.Add(item);
                 }
 
-                Client.Pods += item.Model.m_pods;
+                Client.Pods += item.Model.Pods;
                 RefreshBonus();
 
                 Client.NetworkClient.Send(string.Format("OAKO{0}", item.ToString()));
@@ -93,12 +93,12 @@ namespace DofusOrigin.Realm.Characters.Items
             {
                 if (offline == true)
                 {
-                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position))
                     {
-                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position);
 
                         item2.Quantity += item.Quantity;
-                        Client.Pods += (item.Model.m_pods * item.Quantity);
+                        Client.Pods += (item.Model.Pods * item.Quantity);
 
                         return;
                     }
@@ -106,16 +106,16 @@ namespace DofusOrigin.Realm.Characters.Items
                     item.ID = ItemsHandler.GetNewID();
 
                     ItemsList.Add(item);
-                    Client.Pods += item.Model.m_pods;
+                    Client.Pods += item.Model.Pods;
                 }
                 else if (offline == false)
                 {
-                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position))
                     {
-                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position);
 
                         item2.Quantity += item.Quantity;
-                        Client.Pods += (item.Model.m_pods * item.Quantity);
+                        Client.Pods += (item.Model.Pods * item.Quantity);
 
                         RefreshBonus();
                         Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item2.ID, item2.Quantity));
@@ -126,7 +126,7 @@ namespace DofusOrigin.Realm.Characters.Items
                     item.ID = ItemsHandler.GetNewID();
                     ItemsList.Add(item);
 
-                    Client.Pods += item.Model.m_pods;
+                    Client.Pods += item.Model.Pods;
                     RefreshBonus();
 
                     Client.NetworkClient.Send(string.Format("OAKO{0}", item.ToString()));
@@ -144,7 +144,7 @@ namespace DofusOrigin.Realm.Characters.Items
 
                     if (item.Quantity <= quantity)
                     {
-                        Client.Pods -= (item.Quantity * item.Model.m_pods);
+                        Client.Pods -= (item.Quantity * item.Model.Pods);
 
                         ItemsList.Remove(item);
                         Client.NetworkClient.Send(string.Format("OR{0}", item.ID));
@@ -153,7 +153,7 @@ namespace DofusOrigin.Realm.Characters.Items
                     }
                     else
                     {
-                        Client.Pods -= (quantity * item.Model.m_pods);
+                        Client.Pods -= (quantity * item.Model.Pods);
 
                         item.Quantity -= quantity;
                         Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item.ID, item.Quantity));
@@ -173,7 +173,7 @@ namespace DofusOrigin.Realm.Characters.Items
 
             var item = ItemsList.First(x => x.ID == id);
 
-            if (ItemsHandler.PositionAvaliable(item.Model.m_type, item.Model.isUsable, pos) == false
+            if (ItemsHandler.PositionAvaliable(item.Model.Type, item.Model.isUsable, pos) == false
                 || pos == 1 && item.Model.isTwoHands == true && isOccuptedPos(15) || pos == 15 && isOccuptedPos(1))
             {
                 Client.NetworkClient.Send("BN");
@@ -186,16 +186,16 @@ namespace DofusOrigin.Realm.Characters.Items
                 return;
             }
 
-            if (item.Model.m_type == 23 && pos != -1)
+            if (item.Model.Type == 23 && pos != -1)
             {
-                if (!ItemsList.Any(x => x.Model.m_id == item.Model.m_id && x.Position != -1 && x.Model.m_type == 23))
+                if (!ItemsList.Any(x => x.Model.ID == item.Model.ID && x.Position != -1 && x.Model.Type == 23))
                 {
                     Client.NetworkClient.Send("OAEA");
                     return;
                 }
             }
 
-            if (item.Model.m_level > Client.Level)
+            if (item.Model.Level > Client.Level)
             {
                 Client.NetworkClient.Send("OAEL");
                 return;
@@ -205,14 +205,14 @@ namespace DofusOrigin.Realm.Characters.Items
 
             if (item.Position == -1)
             {
-                if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position &&
+                if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position &&
                     x.ID != item.ID))
                 {
-                    var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position &&
+                    var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.ID == item.Model.ID && x.Position == item.Position &&
                     x.ID != item.ID);
 
                     item2.Quantity += item.Quantity;
-                    Client.Pods += (item.Model.m_pods * item.Quantity);
+                    Client.Pods += (item.Model.Pods * item.Quantity);
                     RefreshBonus();
 
                     Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item2.ID, item2.Quantity));
@@ -224,9 +224,9 @@ namespace DofusOrigin.Realm.Characters.Items
             {
                 if (item.Quantity > 1)
                 {
-                    if (item.Model.m_type == 12 || item.Model.m_type == 13 || item.Model.m_type == 14 || item.Model.m_type == 28 ||
-                        item.Model.m_type == 33 || item.Model.m_type == 37 || item.Model.m_type == 42 || item.Model.m_type == 49 ||
-                        item.Model.m_type == 69 || item.Model.m_type == 87)
+                    if (item.Model.Type == 12 || item.Model.Type == 13 || item.Model.Type == 14 || item.Model.Type == 28 ||
+                        item.Model.Type == 33 || item.Model.Type == 37 || item.Model.Type == 42 || item.Model.Type == 49 ||
+                        item.Model.Type == 69 || item.Model.Type == 87)
                     {
                         if (quantity <= 0)
                             return;
@@ -275,7 +275,7 @@ namespace DofusOrigin.Realm.Characters.Items
             foreach (var infos in splited)
             {
                 var allInfos = infos.Split('~');
-                var item = new CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == Convert.ToInt32(allInfos[0], 16)));
+                var item = new CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == Convert.ToInt32(allInfos[0], 16)));
                 item.EffectsList.Clear();
 
                 item.ID = ItemsHandler.GetNewID();
@@ -314,7 +314,7 @@ namespace DofusOrigin.Realm.Characters.Items
 
                 }
 
-                Client.Pods += (item.Model.m_pods * item.Quantity);
+                Client.Pods += (item.Model.Pods * item.Quantity);
 
                 lock(ItemsList)
                     ItemsList.Add(item);
@@ -333,18 +333,18 @@ namespace DofusOrigin.Realm.Characters.Items
                     foreach (var effect in item.EffectsList)
                         effect.ParseEffect(Client);
                 }
-                if (item.Model.m_set != -1 && item.Position != -1)
+                if (item.Model.Set != -1 && item.Position != -1)
                 {
-                    if (SetsList.ContainsKey(item.Model.m_set))
+                    if (SetsList.ContainsKey(item.Model.Set))
                     {
-                        if (!SetsList[item.Model.m_set].ItemsList.Contains(item.Model.m_id))
-                            SetsList[item.Model.m_set].ItemsList.Add(item.Model.m_id);
+                        if (!SetsList[item.Model.Set].ItemsList.Contains(item.Model.ID))
+                            SetsList[item.Model.Set].ItemsList.Add(item.Model.ID);
                     }
                     else
                     {
-                        SetsList.Add(item.Model.m_set, new CharacterSet(item.Model.m_set));
-                        SetsList[item.Model.m_set].ItemsList.Clear();
-                        SetsList[item.Model.m_set].ItemsList.Add(item.Model.m_id);
+                        SetsList.Add(item.Model.Set, new CharacterSet(item.Model.Set));
+                        SetsList[item.Model.Set].ItemsList.Clear();
+                        SetsList[item.Model.Set].ItemsList.Add(item.Model.ID);
                     }
                 }
             }
@@ -403,7 +403,7 @@ namespace DofusOrigin.Realm.Characters.Items
                 return;
             }
 
-            var usable = Database.Cache.ItemsCache.UsablesList.First(x => x.m_base == item.Model.m_id);
+            var usable = Database.Cache.ItemsCache.UsablesList.First(x => x.Base == item.Model.ID);
 
             var character = CharactersManager.CharactersList.First(x => x.ID == charID);
 
@@ -415,7 +415,7 @@ namespace DofusOrigin.Realm.Characters.Items
 
             usable.ParseEffect(character);
 
-            if (usable.m_mustDelete == true)
+            if (usable.MustDelete == true)
                 DeleteItem(item.ID, 1);
         }
     }

@@ -23,12 +23,12 @@ namespace DofusOrigin.Database.Cache
                 {
                     var level = new Models.Levels.LevelModel();
 
-                    level.m_id = sqlReader.GetInt16("Level");
-                    level.m_character = sqlReader.GetInt64("Character");
-                    level.m_job = sqlReader.GetInt64("Job");
-                    level.m_mount = sqlReader.GetInt64("Mount");
-                    level.m_alignment = sqlReader.GetInt64("Pvp");
-                    level.m_guild = sqlReader.GetInt64("Guild");
+                    level.ID = sqlReader.GetInt16("Level");
+                    level.Character = sqlReader.GetInt64("Character");
+                    level.Job = sqlReader.GetInt64("Job");
+                    level.Mount = sqlReader.GetInt64("Mount");
+                    level.Alignment = sqlReader.GetInt64("Pvp");
+                    level.Guild = sqlReader.GetInt64("Guild");
 
                     lock(LevelsList)
                         LevelsList.Add(level);
@@ -42,15 +42,15 @@ namespace DofusOrigin.Database.Cache
 
         public static Models.Levels.LevelModel ReturnLevel(int _level)
         {
-            if (LevelsList.Any(x => x.m_id == _level))
-                return LevelsList.First(x => x.m_id == _level);
+            if (LevelsList.Any(x => x.ID == _level))
+                return LevelsList.First(x => x.ID == _level);
             else
                 return new Models.Levels.LevelModel(long.MaxValue);
         }
 
         public static int MaxLevel()
         {
-            return LevelsList.First(x => x.m_id > 0 && LevelsList.Any(y => y.m_id > x.m_id) == false).m_id - 1;
+            return LevelsList.First(x => x.ID > 0 && LevelsList.Any(y => y.ID > x.ID) == false).ID - 1;
         }
     }
 }

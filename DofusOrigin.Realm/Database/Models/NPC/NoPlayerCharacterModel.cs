@@ -7,29 +7,29 @@ namespace DofusOrigin.Database.Models.NPC
 {
     class NoPlayerCharacterModel
     {
-        public int m_id { get; set; }
-        public int m_gfxid { get; set; }
-        public int m_size { get; set; }
-        public int m_sex { get; set; }
+        public int ID;
+        public int GfxID;
+        public int Size;
+        public int Sex;
 
-        public int m_color { get; set; }
-        public int m_color2 { get; set; }
-        public int m_color3 { get; set; }
+        public int Color;
+        public int Color2;
+        public int Color3;
 
-        public int m_artWork { get; set; }
-        public int m_bonus { get; set; }
+        //public int ArtWork;
+        //public int Bonus;
 
-        public NPCsQuestion m_question { get; set; }
+        public NPCsQuestion Question;
 
-        public string m_name { get; set; }
-        public string m_items { get; set; }
+        public string Name;
+        public string Items;
 
-        public List<int> m_sellingList { get; set; }
+        public List<int> SellingList;
 
         public NoPlayerCharacterModel()
         {
-            m_sellingList = new List<int>();
-            m_question = null;
+            SellingList = new List<int>();
+            Question = null;
         }
     }
 }

@@ -60,7 +60,7 @@ namespace DofusOrigin.Realm.Characters.Items
             EffectsList = new List<Effects.EffectItem>();
 
             lock(EffectsList)
-                Model.m_effectsList.ForEach(x => EffectsList.Add(new Effects.EffectItem(x)));
+                Model.EffectsList.ForEach(x => EffectsList.Add(new Effects.EffectItem(x)));
 
             _position = -1;
         }
@@ -109,13 +109,13 @@ namespace DofusOrigin.Realm.Characters.Items
 
         public string SaveString()
         {
-            return string.Format("{0}~{1}~{2}~{3}", Utilities.Basic.DeciToHex(Model.m_id), Utilities.Basic.DeciToHex(_quantity),
+            return string.Format("{0}~{1}~{2}~{3}", Utilities.Basic.DeciToHex(Model.ID), Utilities.Basic.DeciToHex(_quantity),
                 (_position == -1 ? "" : Utilities.Basic.DeciToHex(_position)), EffectsInfos());
         }
 
         public override string ToString()
         {
-            return string.Format("{0}~{1}~{2}~{3}~{4}",Utilities.Basic.DeciToHex(_ID), Utilities.Basic.DeciToHex(Model.m_id),
+            return string.Format("{0}~{1}~{2}~{3}~{4}",Utilities.Basic.DeciToHex(_ID), Utilities.Basic.DeciToHex(Model.ID),
                 Utilities.Basic.DeciToHex(_quantity), (_position == -1 ? "" : Utilities.Basic.DeciToHex(_position)), EffectsInfos());
         }
     }

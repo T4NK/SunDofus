@@ -24,7 +24,7 @@ namespace DofusOrigin.Realm.Characters.Items
 
         public static bool ConditionsAvaliable(ItemModel item, Character character)
         {
-            var condi = item.m_condistr;
+            var condi = item.Condistr;
             var avaliable = false;
 
             if (condi == "")

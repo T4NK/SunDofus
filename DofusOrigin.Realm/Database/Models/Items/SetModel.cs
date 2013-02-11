@@ -8,16 +8,16 @@ namespace DofusOrigin.Database.Models.Items
 {
     class SetModel
     {
-        public int m_id { get; set; }
+        public int ID;
 
-        public Dictionary<int, List<EffectItem>> m_bonusList { get; set; }
-        public List<int> m_itemsList { get; set; }
+        public Dictionary<int, List<EffectItem>> BonusList;
+        public List<int> ItemsList;
 
         public SetModel()
         {
-            m_id = -1;
-            m_itemsList = new List<int>();
-            m_bonusList = new Dictionary<int, List<EffectItem>>();
+            ID = -1;
+            ItemsList = new List<int>();
+            BonusList = new Dictionary<int, List<EffectItem>>();
         }
 
         public void ParseItems(string _datas)
@@ -29,10 +29,11 @@ namespace DofusOrigin.Database.Models.Items
             {
                 var id = int.Parse(infos.Trim());
 
-                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == id))
-                    Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == id).m_set = this.m_id;
+                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == id))
+                    Database.Cache.ItemsCache.ItemsList.First(x => x.ID == id).Set = this.ID;
 
-                m_itemsList.Add(m_id);
+                lock(ItemsList)
+                    ItemsList.Add(ID);
             }
         }
 
@@ -48,7 +49,8 @@ namespace DofusOrigin.Database.Models.Items
                 if (infos == "") 
                     continue;
 
-                m_bonusList.Add(++num, new List<Realm.Effects.EffectItem>());
+                lock(BonusList)
+                    BonusList.Add(++num, new List<Realm.Effects.EffectItem>());
 
                 foreach (var datas in infos.Split(','))
                 {
@@ -59,7 +61,8 @@ namespace DofusOrigin.Database.Models.Items
                     bonus.ID = int.Parse(datas.Split(':')[0]);
                     bonus.Value = int.Parse(datas.Split(':')[1]);
 
-                    m_bonusList[num].Add(bonus);
+                    lock(BonusList[num])
+                        BonusList[num].Add(bonus);
                 }
             }
         }

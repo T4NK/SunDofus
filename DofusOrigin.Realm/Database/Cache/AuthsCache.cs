@@ -27,13 +27,13 @@ namespace DofusOrigin.Database.Cache
                 {
                     var server = new Models.Clients.AuthClientModel();
 
-                    server.m_id = sqlReader.GetInt16("Id");
-                    server.m_ip = sqlReader.GetString("Ip");
-                    server.m_port = sqlReader.GetInt16("Port");
+                    server.ID = sqlReader.GetInt16("Id");
+                    server.IP = sqlReader.GetString("Ip");
+                    server.Port = sqlReader.GetInt16("Port");
 
                     lock (AuthsList)
                     {
-                        if (!AuthsList.Any(x => x.m_id == server.m_id))
+                        if (!AuthsList.Any(x => x.ID == server.ID))
                             AuthsList.Add(server);
                     }
                 }

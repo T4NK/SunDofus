@@ -92,11 +92,11 @@ namespace DofusOrigin.Realm.Characters.NPC
             {
                 builder.Append(MapCell).Append(";").Append(Dir).Append(";0;");
                 builder.Append(ID).Append(";");
-                builder.Append(Model.m_id).Append(";-4;");
-                builder.Append(Model.m_gfxid).Append("^").Append(Model.m_size).Append(";");
-                builder.Append(Model.m_sex).Append(";").Append(Utilities.Basic.DeciToHex(Model.m_color)).Append(";");
-                builder.Append(Utilities.Basic.DeciToHex(Model.m_color2)).Append(";").Append(Utilities.Basic.DeciToHex(Model.m_color3)).Append(";");
-                builder.Append(Model.m_items).Append(";;");
+                builder.Append(Model.ID).Append(";-4;");
+                builder.Append(Model.GfxID).Append("^").Append(Model.Size).Append(";");
+                builder.Append(Model.Sex).Append(";").Append(Utilities.Basic.DeciToHex(Model.Color)).Append(";");
+                builder.Append(Utilities.Basic.DeciToHex(Model.Color2)).Append(";").Append(Utilities.Basic.DeciToHex(Model.Color3)).Append(";");
+                builder.Append(Model.Items).Append(";;");
             }
 
             return builder.ToString();
@@ -108,7 +108,7 @@ namespace DofusOrigin.Realm.Characters.NPC
             {
                 _movements.Interval = Utilities.Basic.Rand(1000, 5000);
 
-                var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.m_id == MapID);
+                var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == MapID);
 
                 var path = new Realm.Maps.Pathfinding("", map, MapCell, Dir);
                 var newDir = Utilities.Basic.Rand(0, 3) * 2 + 1;

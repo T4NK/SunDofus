@@ -24,9 +24,9 @@ namespace DofusOrigin.Database.Cache
                 {
                     var spell = new Database.Models.Spells.SpellModel();
 
-                    spell.m_id = sqlReader.GetInt16("id");
-                    spell.m_sprite = sqlReader.GetInt16("sprite");
-                    spell.m_spriteInfos = sqlReader.GetString("spriteInfos");
+                    spell.ID = sqlReader.GetInt16("id");
+                    spell.Sprite = sqlReader.GetInt16("sprite");
+                    spell.SpriteInfos = sqlReader.GetString("spriteInfos");
 
                     for (int i = 1; i <= 6; i++)
                         spell.ParseLevel(sqlReader.GetString("lvl" + i));
@@ -54,10 +54,10 @@ namespace DofusOrigin.Database.Cache
                 {
                     var spell = new Database.Models.Spells.SpellToLearnModel();
 
-                    spell.m_race = sqlReader.GetInt16("Classe");
-                    spell.m_level = sqlReader.GetInt16("Level");
-                    spell.m_spellID = sqlReader.GetInt16("SpellId");
-                    spell.m_pos = sqlReader.GetInt16("Position");
+                    spell.Race = sqlReader.GetInt16("Classe");
+                    spell.Level = sqlReader.GetInt16("Level");
+                    spell.SpellID = sqlReader.GetInt16("SpellId");
+                    spell.Pos = sqlReader.GetInt16("Position");
 
                     lock(SpellsToLearnList)
                         SpellsToLearnList.Add(spell);

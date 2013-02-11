@@ -23,11 +23,11 @@ namespace DofusOrigin.Database.Cache
                 {
                     var trigger = new Database.Models.Maps.TriggerModel();
 
-                    trigger.m_mapID = sqlReader.GetInt16("MapID");
-                    trigger.m_cellID = sqlReader.GetInt16("CellID");
-                    trigger.m_actionID = sqlReader.GetInt16("ActionID");
-                    trigger.m_args = sqlReader.GetString("Args");
-                    trigger.m_conditions = sqlReader.GetString("Conditions");
+                    trigger.MapID = sqlReader.GetInt16("MapID");
+                    trigger.CellID = sqlReader.GetInt16("CellID");
+                    trigger.ActionID = sqlReader.GetInt16("ActionID");
+                    trigger.Args = sqlReader.GetString("Args");
+                    trigger.Conditions = sqlReader.GetString("Conditions");
                     
 
                     lock (TriggersList)
@@ -45,9 +45,9 @@ namespace DofusOrigin.Database.Cache
 
         public static bool ParseTrigger(Database.Models.Maps.TriggerModel trigger)
         {
-            if (MapsCache.MapsList.Any(x => x.GetModel.m_id == trigger.m_mapID))
+            if (MapsCache.MapsList.Any(x => x.GetModel.ID == trigger.MapID))
             {
-                MapsCache.MapsList.First(x => x.GetModel.m_id == trigger.m_mapID).Triggers.Add(trigger);
+                MapsCache.MapsList.First(x => x.GetModel.ID == trigger.MapID).Triggers.Add(trigger);
                 return true;
             }
             else

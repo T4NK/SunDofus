@@ -24,7 +24,7 @@ namespace DofusOrigin.Realm.Characters.Items
             _ID = id;
 
             ItemsList = new List<int>();
-            BonusList = Database.Cache.ItemsCache.SetsList.First(x => x.m_id == ID).m_bonusList;
+            BonusList = Database.Cache.ItemsCache.SetsList.First(x => x.ID == ID).BonusList;
             BonusList[1] = new List<Effects.EffectItem>();
         }
     }

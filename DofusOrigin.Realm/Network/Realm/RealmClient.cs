@@ -47,11 +47,11 @@ namespace DofusOrigin.Network.Realm
 
         public void ParseCharacters()
         {
-            foreach (var name in Infos.m_characters)
+            foreach (var name in Infos.Characters)
             {
                 if (!DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any(x => x.Name == name))
                 {
-                    Network.ServersHandler.AuthLinks.Send(string.Format("SDAC|{0}|{1}", Infos.m_id, name));
+                    Network.ServersHandler.AuthLinks.Send(string.Format("SDAC|{0}|{1}", Infos.ID, name));
                     continue;
                 }
 
@@ -64,19 +64,19 @@ namespace DofusOrigin.Network.Realm
         {
             Infos.ParseGifts();
 
-            foreach (var gift in Infos.m_gifts)
+            foreach (var gift in Infos.Gifts)
             {
-                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == gift.m_itemID) == false)
+                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == gift.ItemID) == false)
                     return;
 
-                var item = new DofusOrigin.Realm.Characters.Items.CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == gift.m_itemID));
+                var item = new DofusOrigin.Realm.Characters.Items.CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == gift.ItemID));
 
                 item.GeneratItem();
 
-                gift.m_item = item;
+                gift.Item = item;
 
-                this.Send(string.Format("Ag1|{0}|{1}|{2}|{3}|{4}~{5}~{6}~~{7};", gift.m_id, gift.m_title, gift.m_message, (gift.m_image != "" ? gift.m_image : "http://s2.e-monsite.com/2009/12/26/04/167wpr7.png"),
-                   Utilities.Basic.DeciToHex(item.Model.m_id), Utilities.Basic.DeciToHex(item.Model.m_id), Utilities.Basic.DeciToHex(item.Quantity), item.EffectsInfos()));
+                this.Send(string.Format("Ag1|{0}|{1}|{2}|{3}|{4}~{5}~{6}~~{7};", gift.ID, gift.Title, gift.Message, (gift.Image != "" ? gift.Image : "http://s2.e-monsite.com/2009/12/26/04/167wpr7.png"),
+                   Utilities.Basic.DeciToHex(item.Model.ID), Utilities.Basic.DeciToHex(item.Model.ID), Utilities.Basic.DeciToHex(item.Quantity), item.EffectsInfos()));
             }
         }
 
@@ -104,7 +104,7 @@ namespace DofusOrigin.Network.Realm
 
             if (isAuth == true)
             {
-                Network.ServersHandler.AuthLinks.Send(string.Format("SND|{0}", Infos.m_pseudo));
+                Network.ServersHandler.AuthLinks.Send(string.Format("SND|{0}", Infos.Pseudo));
 
                 if (Player != null)
                 {

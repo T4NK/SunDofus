@@ -7,21 +7,21 @@ namespace DofusOrigin.Database.Models.NPC
 {
     class NPCsAnswer
     {
-        public int m_answerID { get; set; }
-        public string m_effects { get; set; }
+        public int AnswerID;
+        public string Effects;
 
-        public List<Realm.World.Conditions.NPCConditions> m_conditions;
+        public List<Realm.World.Conditions.NPCConditions> Conditions;
 
         public NPCsAnswer()
         {
-            m_conditions = new List<Realm.World.Conditions.NPCConditions>();
+            Conditions = new List<Realm.World.Conditions.NPCConditions>();
         }
 
         public void ApplyEffects(Realm.Characters.Character character)
         {
             try
             {
-                foreach (var effect in m_effects.Split('|'))
+                foreach (var effect in Effects.Split('|'))
                 {
                     var infos = effect.Split(';');
                     Realm.Effects.EffectAction.ParseEffect(character, int.Parse(infos[0]), infos[1]);
@@ -32,7 +32,7 @@ namespace DofusOrigin.Database.Models.NPC
 
         public bool HasConditions(Realm.Characters.Character _character)
         {
-            foreach (var condi in m_conditions)
+            foreach (var condi in Conditions)
             {
                 if (condi.HasCondition(_character))
                     continue;

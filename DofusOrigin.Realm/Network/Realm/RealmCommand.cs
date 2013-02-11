@@ -20,7 +20,7 @@ namespace DofusOrigin.Network.Realm
             {
                 var datas = _args.Split(' ');
 
-                if (m_client.Infos.m_level > 0)
+                if (m_client.Infos.GMLevel > 0)
                 {
                     switch (datas[0])
                     {
@@ -143,7 +143,7 @@ namespace DofusOrigin.Network.Realm
         {
             try
             {
-                var item = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == int.Parse(_datas[1]));
+                var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == int.Parse(_datas[1]));
 
                 if (_datas.Length == 2)
                 {
@@ -206,8 +206,8 @@ namespace DofusOrigin.Network.Realm
 
                 else if (_datas.Length == 4)
                 {
-                    var myMap = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.m_PosX == int.Parse(_datas[1]) && x.GetModel.m_PosY == int.Parse(_datas[2]));
-                    m_client.Player.TeleportNewMap(myMap.GetModel.m_id, int.Parse(_datas[3]));
+                    var myMap = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.PosX == int.Parse(_datas[1]) && x.GetModel.PosY == int.Parse(_datas[2]));
+                    m_client.Player.TeleportNewMap(myMap.GetModel.ID, int.Parse(_datas[3]));
                     m_client.SendConsoleMessage("Character Teleported !", 0);
                 }
 

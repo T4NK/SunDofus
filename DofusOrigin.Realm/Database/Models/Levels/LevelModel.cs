@@ -7,21 +7,21 @@ namespace DofusOrigin.Database.Models.Levels
 {
     class LevelModel
     {
-        public int m_id { get; set; }
+        public int ID;
 
-        public long m_character { get; set; }
-        public long m_job { get; set; }
-        public long m_alignment { get; set; }
-        public long m_guild { get; set; }
-        public long m_mount { get; set; }
+        public long Character;
+        public long Job;
+        public long Alignment;
+        public long Guild;
+        public long Mount;
 
         public LevelModel(long _max = 0)
         {
-            m_character = _max;
-            m_job = _max;
-            m_mount = _max;
-            m_alignment = _max;
-            m_guild = _max;
+            Character = _max;
+            Job = _max;
+            Mount = _max;
+            Alignment = _max;
+            Guild = _max;
         }
     }
 }

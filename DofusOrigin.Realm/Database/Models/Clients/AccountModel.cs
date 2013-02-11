@@ -7,64 +7,68 @@ namespace DofusOrigin.Database.Models.Clients
 {
     class AccountModel
     {
-        public int m_id { get; set; }
-        public int m_level { get; set; }
-        public string m_pseudo { get; set; }
-        public string m_question { get; set; }
-        public string m_answer { get; set; }
-        public long m_subscription { get; set; }
-        public string m_strcharacters { get; set; }
-        public string m_strgifts { get; set; }
+        public int ID;
+        public int GMLevel;
+        public string Pseudo;
+        public string Question;
+        public string Answer;
+        public long Subscription;
+        public string Strcharacters;
+        public string Strgifts;
 
-        public List<string> m_characters { get; set; }
-        public List<GiftModel> m_gifts { get; set; }
+        public List<string> Characters;
+        public List<GiftModel> Gifts;
 
         public AccountModel()
         {
-            m_characters = new List<string>();
-            m_gifts = new List<GiftModel>();
+            Characters = new List<string>();
+            Gifts = new List<GiftModel>();
 
-            m_pseudo = "";
-            m_question = "";
-            m_answer = "";
-            m_id = -1;
-            m_level = -1;
-            m_strcharacters = "";
-            m_subscription = 0;
-            m_strgifts = "";
+            Pseudo = "";
+            Question = "";
+            Answer = "";
+            ID = -1;
+            GMLevel = -1;
+            Strcharacters = "";
+            Subscription = 0;
+            Strgifts = "";
         }
 
         public void ParseCharacters()
         {
-            if (m_strcharacters == "") 
+            if (Strcharacters == "") 
                 return;
 
-            foreach (var datas in m_strcharacters.Split(','))
+            foreach (var datas in Strcharacters.Split(','))
             {
-                if (!m_characters.Contains(datas))
-                    m_characters.Add(datas);
+                lock (Characters)
+                {
+                    if (!Characters.Contains(datas))
+                        Characters.Add(datas);
+                }
             }
         }
 
         public void ParseGifts()
         {
-            if (m_strgifts == "") 
+            if (Strgifts == "") 
                 return;
 
-            var infos = m_strgifts.Split('+');
+            var infos = Strgifts.Split('+');
 
             foreach (var datas in infos)
             {
                 var giftDatas = datas.Split('~');
                 var gift = new GiftModel();
 
-                gift.m_id = int.Parse(giftDatas[0]);
-                gift.m_title = giftDatas[1];
-                gift.m_message = giftDatas[2];
-                gift.m_itemID = int.Parse(giftDatas[3]);
-                gift.m_image = giftDatas[4];
+                gift.ID = int.Parse(giftDatas[0]);
+                gift.Title = giftDatas[1];
+                gift.Message = giftDatas[2];
+                gift.ItemID = int.Parse(giftDatas[3]);
+                gift.Image = giftDatas[4];
 
-                m_gifts.Add(gift);
+                lock(Gifts)
+                    Gifts.Add(gift);
             }
         }
     }

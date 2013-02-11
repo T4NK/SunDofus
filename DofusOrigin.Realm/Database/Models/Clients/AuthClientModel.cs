@@ -7,9 +7,9 @@ namespace DofusOrigin.Database.Models.Clients
 {
     class AuthClientModel
     {
-        public int m_id { get; set; }
-        public int m_port { get; set; }
+        public int ID;
+        public int Port;
 
-        public string m_ip { get; set; }
+        public string IP;
     }
 }

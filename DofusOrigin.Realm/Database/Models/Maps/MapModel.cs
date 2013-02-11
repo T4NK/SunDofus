@@ -7,39 +7,39 @@ namespace DofusOrigin.Database.Models.Maps
 {
     class MapModel
     {
-        public int m_id { get; set; }
-        public int m_date { get; set; }
-        public int m_width { get; set; }
-        public int m_height { get; set; }
-        public int m_capabilities { get; set; }
-        public int m_PosX { get; set; }
-        public int m_PosY { get; set; }
+        public int ID;
+        public int Date;
+        public int Width;
+        public int Height;
+        public int Capabilities;
+        public int PosX;
+        public int PosY;
 
-        public string m_mapData { get; set; }
-        public string m_key { get; set; }
-        public string m_mappos { get; set; }
+        public string MapData;
+        public string Key;
+        public string Mappos;
 
-        public int maxMonstersGroup { get; set; }
-        public int maxGroupSize { get; set; }
+        public int MaxMonstersGroup;
+        public int MaxGroupSize;
 
-        public Dictionary<int, List<int>> m_monsters { get; set; }
+        public Dictionary<int, List<int>> Monsters;
 
         public MapModel()
         {
-            m_mapData = "";
-            m_key = "";
-            m_mappos = "";
+            MapData = "";
+            Key = "";
+            Mappos = "";
 
-            m_monsters = new Dictionary<int, List<int>>();
+            Monsters = new Dictionary<int, List<int>>();
         }
 
         public void ParsePos()
         {
-            var datas = m_mappos.Split(',');
+            var datas = Mappos.Split(',');
             try
             {
-                m_PosX = int.Parse(datas[0]);
-                m_PosY = int.Parse(datas[1]);
+                PosX = int.Parse(datas[0]);
+                PosY = int.Parse(datas[1]);
             }
             catch { }
         }

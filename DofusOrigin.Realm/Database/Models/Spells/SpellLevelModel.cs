@@ -8,41 +8,41 @@ namespace DofusOrigin.Database.Models.Spells
 {
     class SpellLevelModel
     {
-        public List<Realm.Effects.EffectSpell> m_effects { get; set; }
-        public List<Realm.Effects.EffectSpell> m_criticalEffects { get; set; }
+        public List<Realm.Effects.EffectSpell> Effects;
+        public List<Realm.Effects.EffectSpell> CriticalEffects;
 
-        public int m_level { get; set; }
-        public int m_cost { get; set; }
-        public int m_minRP { get; set; }
-        public int m_maxRP { get; set; }
-        public int m_CC { get; set; }
-        public int m_EC { get; set; }
-        public int m_maxPerTurn { get; set; }
-        public int m_maxPerPlayer  { get; set; }
-        public int m_turnNumber { get; set; }
+        public int Level;
+        public int Cost;
+        public int MinRP;
+        public int MaxRP;
+        public int CC;
+        public int EC;
+        public int MaxPerTurn;
+        public int MaxPerPlayer;
+        public int TurnNumber;
 
-        public bool isOnlyViewLine { get; set; }
-        public bool isOnlyLine { get; set; }
-        public bool isAlterablePO { get; set; }
-        public bool isECEndTurn { get; set; }
-        public bool isEmptyCell { get; set; }
+        public bool isOnlyViewLine;
+        public bool isOnlyLine;
+        public bool isAlterablePO;
+        public bool isECEndTurn;
+        public bool isEmptyCell;
 
-        public string m_type { get; set; }
+        public string Type;
 
         public SpellLevelModel()
         {
-            m_criticalEffects = new List<Realm.Effects.EffectSpell>();
-            m_effects = new List<Realm.Effects.EffectSpell>();
+            CriticalEffects = new List<Realm.Effects.EffectSpell>();
+            Effects = new List<Realm.Effects.EffectSpell>();
 
-            m_level = -1;
-            m_CC = 0;
-            m_cost = 0;
-            m_minRP = -1;
-            m_maxRP = 1;
-            m_EC = 0;
-            m_maxPerPlayer = 0;
-            m_maxPerTurn = 0;
-            m_turnNumber = 0;
+            Level = -1;
+            CC = 0;
+            Cost = 0;
+            MinRP = -1;
+            MaxRP = 1;
+            EC = 0;
+            MaxPerPlayer = 0;
+            MaxPerTurn = 0;
+            TurnNumber = 0;
             isOnlyLine = false;
             isOnlyViewLine = false;
             isAlterablePO = false;
@@ -104,9 +104,15 @@ namespace DofusOrigin.Database.Models.Spells
                 }
 
                 if (_CC == true)
-                    m_criticalEffects.Add(effect);
+                {
+                    lock(CriticalEffects)
+                        CriticalEffects.Add(effect);
+                }
                 else
-                    m_effects.Add(effect);
+                {
+                    lock(Effects)
+                        Effects.Add(effect);
+                }
             }
         }
     }

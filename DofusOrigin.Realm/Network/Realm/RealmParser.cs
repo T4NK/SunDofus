@@ -107,8 +107,8 @@ namespace DofusOrigin.Network.Realm
 
                     Network.Authentication.AuthenticationsKeys.m_keys.Remove(key);
 
-                    Network.ServersHandler.AuthLinks.Send(string.Format("SNC|{0}", Client.Infos.m_pseudo));
-                    ServersHandler.RealmServer.PseudoClients.Add(Client.Infos.m_pseudo, Client.Infos.m_id);
+                    Network.ServersHandler.AuthLinks.Send(string.Format("SNC|{0}", Client.Infos.Pseudo));
+                    ServersHandler.RealmServer.PseudoClients.Add(Client.Infos.Pseudo, Client.Infos.ID);
 
                     Client.Send("ATK0");
                 }
@@ -133,9 +133,9 @@ namespace DofusOrigin.Network.Realm
 
         private void SendCharacterList(string datas)
         {
-            string packet = string.Format("ALK{0}|{1}", Client.Infos.m_subscription, Client.Infos.m_characters.Count);
+            string packet = string.Format("ALK{0}|{1}", Client.Infos.Subscription, Client.Infos.Characters.Count);
 
-            if (Client.Infos.m_characters.Count != 0)
+            if (Client.Infos.Characters.Count != 0)
             {
                 foreach (DofusOrigin.Realm.Characters.Character m_C in Client.Characters)
                     packet += string.Format("|{0}", m_C.PatternList());
@@ -231,7 +231,7 @@ namespace DofusOrigin.Network.Realm
 
                     character.CharactPoint = (character.Level - 1) * 5;
                     character.SpellPoint = (character.Level - 1);
-                    character.Exp = Database.Cache.LevelsCache.ReturnLevel(character.Level).m_character;
+                    character.Exp = Database.Cache.LevelsCache.ReturnLevel(character.Level).Character;
                     character.Kamas = (long)Utilities.Config.GetConfig.GetIntElement("StartKamas");
 
 
@@ -253,7 +253,7 @@ namespace DofusOrigin.Network.Realm
                     lock(Client.Characters)
                         Client.Characters.Add(character);
 
-                    Network.ServersHandler.AuthLinks.Send(string.Format("SNAC|{0}|{1}", Client.Infos.m_id, character.Name));
+                    Network.ServersHandler.AuthLinks.Send(string.Format("SNAC|{0}|{1}", Client.Infos.ID, character.Name));
 
                     Client.Send("TB");
                     Client.Send("AAK");
@@ -284,7 +284,7 @@ namespace DofusOrigin.Network.Realm
 
                 var character = CharactersManager.CharactersList.First(x => x.ID == id);
 
-                if (datas.Split('|')[1] != Client.Infos.m_answer && character.Level >= 20)
+                if (datas.Split('|')[1] != Client.Infos.Answer && character.Level >= 20)
                 {
                     Client.Send("ADE");
                     return;
@@ -295,7 +295,7 @@ namespace DofusOrigin.Network.Realm
                 lock(Client.Characters)
                     Client.Characters.Remove(character);
 
-                Network.ServersHandler.AuthLinks.Send(string.Format("SDAC|{0}|{1}", Client.Infos.m_id, character.Name));
+                Network.ServersHandler.AuthLinks.Send(string.Format("SDAC|{0}|{1}", Client.Infos.ID, character.Name));
                 Database.Cache.CharactersCache.DeleteCharacter(character.Name);
 
                 SendCharacterList("");
@@ -355,18 +355,18 @@ namespace DofusOrigin.Network.Realm
 
             if (Client.Characters.Any(x => x.ID == idChar))
             {
-                lock (Client.Infos.m_gifts)
+                lock (Client.Infos.Gifts)
                 {
-                    if (Client.Infos.m_gifts.Any(x => x.m_id == idGift))
+                    if (Client.Infos.Gifts.Any(x => x.ID == idGift))
                     {
-                        var myGift = Client.Infos.m_gifts.First(e => e.m_id == idGift);
-                        Client.Characters.First(x => x.ID == idChar).ItemsInventary.AddItem(myGift.m_item, true);
+                        var myGift = Client.Infos.Gifts.First(e => e.ID == idGift);
+                        Client.Characters.First(x => x.ID == idChar).ItemsInventary.AddItem(myGift.Item, true);
 
                         Client.Send("AG0");
-                        Network.ServersHandler.AuthLinks.Send(string.Format("SNDG|{0}|{1}", myGift.m_id, Client.Infos.m_id));
+                        Network.ServersHandler.AuthLinks.Send(string.Format("SNDG|{0}|{1}", myGift.ID, Client.Infos.ID));
 
-                        lock(Client.Infos.m_gifts)
-                            Client.Infos.m_gifts.Remove(myGift);
+                        lock(Client.Infos.Gifts)
+                            Client.Infos.Gifts.Remove(myGift);
 
                     }
                     else
@@ -549,12 +549,12 @@ namespace DofusOrigin.Network.Realm
                         Client.Player.State.moveToCell = -1;
                         Client.Send("BN");
 
-                        if (Client.Player.GetMap().Triggers.Any(x => x.m_cellID == Client.Player.MapCell))
+                        if (Client.Player.GetMap().Triggers.Any(x => x.CellID == Client.Player.MapCell))
                         {
-                            var trigger = Client.Player.GetMap().Triggers.First(x => x.m_cellID == Client.Player.MapCell);
+                            var trigger = Client.Player.GetMap().Triggers.First(x => x.CellID == Client.Player.MapCell);
 
-                            if (DofusOrigin.Realm.World.Conditions.TriggerCondition.HasConditions(Client.Player, trigger.m_conditions))
-                                DofusOrigin.Realm.Effects.EffectAction.ParseEffect(Client.Player,trigger.m_actionID, trigger.m_args);
+                            if (DofusOrigin.Realm.World.Conditions.TriggerCondition.HasConditions(Client.Player, trigger.Conditions))
+                                DofusOrigin.Realm.Effects.EffectAction.ParseEffect(Client.Player,trigger.ActionID, trigger.Args);
                             else
                                 Client.SendMessage("Vous ne possédez pas les conditions nécessaires pour cette action !");
                         }
@@ -971,7 +971,7 @@ namespace DofusOrigin.Network.Realm
 
                     var NPC = Client.Player.GetMap().Npcs.First(x => x.ID == receiverID);
 
-                    if (NPC.Model.m_sellingList.Count == 0)
+                    if (NPC.Model.SellingList.Count == 0)
                     {
                         Client.Send("BN");
                         return;
@@ -984,9 +984,9 @@ namespace DofusOrigin.Network.Realm
 
                     var newPacket = "EL";
 
-                    foreach (var i in NPC.Model.m_sellingList)
+                    foreach (var i in NPC.Model.SellingList)
                     {
-                        var item = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == i);
+                        var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == i);
                         newPacket += string.Format("{0};{1}|", i, item.EffectInfos());
                     }
 
@@ -1043,16 +1043,16 @@ namespace DofusOrigin.Network.Realm
             if (!int.TryParse(datas[0], out itemID) || int.TryParse(datas[1], out quantity))
                 return;
 
-            var item = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == itemID);
+            var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == itemID);
             var NPC = Client.Player.GetMap().Npcs.First(x => x.ID == Client.Player.State.actualNPC);
 
-            if (quantity <= 0 || !NPC.Model.m_sellingList.Contains(itemID))
+            if (quantity <= 0 || !NPC.Model.SellingList.Contains(itemID))
             {
                 Client.Send("OBE");
                 return;
             }
 
-            var price = item.m_price * quantity;
+            var price = item.Price * quantity;
 
             if (Client.Player.Kamas >= price)
             {
@@ -1096,7 +1096,7 @@ namespace DofusOrigin.Network.Realm
             if (item.Quantity < quantity)
                 quantity = item.Quantity;
 
-            var price = Math.Floor((double)item.Model.m_price / 10) * quantity;
+            var price = Math.Floor((double)item.Model.Price / 10) * quantity;
 
             if (price < 1)
                 price = 1;
@@ -1384,7 +1384,7 @@ namespace DofusOrigin.Network.Realm
                 Client.Player.State.followingID = character.ID;
                 Client.Player.State.isFollowing = true;
 
-                Client.Send(string.Format("IC{0}|{1}", character.GetMap().GetModel.m_PosX, character.GetMap().GetModel.m_PosY));
+                Client.Send(string.Format("IC{0}|{1}", character.GetMap().GetModel.PosX, character.GetMap().GetModel.PosY));
                 Client.Send(string.Format("PF+{0}", character.ID));
             }
             else
@@ -1441,7 +1441,7 @@ namespace DofusOrigin.Network.Realm
                     charinparty.State.followingID = character.ID;
                     charinparty.State.isFollowing = true;
 
-                    charinparty.NetworkClient.Send(string.Format("IC{0}|{1}", character.GetMap().GetModel.m_PosX, character.GetMap().GetModel.m_PosY));
+                    charinparty.NetworkClient.Send(string.Format("IC{0}|{1}", character.GetMap().GetModel.PosX, character.GetMap().GetModel.PosY));
                     charinparty.NetworkClient.Send(string.Format("PF+{0}", character.ID));
                 }
 
@@ -1492,7 +1492,7 @@ namespace DofusOrigin.Network.Realm
 
             var npc = Client.Player.GetMap().Npcs.First(x => x.ID == id);
 
-            if (npc.Model.m_question == null)
+            if (npc.Model.Question == null)
             {
                 Client.Send("BN");
                 Client.SendMessage("Dialogue inexistant !");
@@ -1504,16 +1504,16 @@ namespace DofusOrigin.Network.Realm
 
             Client.Send(string.Format("DCK{0}", npc.ID));
 
-            if (npc.Model.m_question.m_answers.Count(x => x.HasConditions(Client.Player)) == 0)
-                Client.Send(string.Format("DQ{0}", npc.Model.m_question.m_questionID));
+            if (npc.Model.Question.Answers.Count(x => x.HasConditions(Client.Player)) == 0)
+                Client.Send(string.Format("DQ{0}", npc.Model.Question.QuestionID));
             else
             {
-                var packet = string.Format("DQ{0}|", npc.Model.m_question.m_questionID);
+                var packet = string.Format("DQ{0}|", npc.Model.Question.QuestionID);
 
-                foreach (var answer in npc.Model.m_question.m_answers)
+                foreach (var answer in npc.Model.Question.Answers)
                 {
                     if (answer.HasConditions(Client.Player))
-                        packet += string.Format("{0};", answer.m_answerID);
+                        packet += string.Format("{0};", answer.AnswerID);
                 }
 
                 Client.Send(packet.Substring(0, packet.Length - 1));
@@ -1535,13 +1535,13 @@ namespace DofusOrigin.Network.Realm
 
             var npc = Client.Player.GetMap().Npcs.First(x => x.ID == Client.Player.State.onDialogingWith);
 
-            if (!npc.Model.m_question.m_answers.Any(x => x.m_answerID == id))
+            if (!npc.Model.Question.Answers.Any(x => x.AnswerID == id))
             {
                 Client.Send("BN");
                 return;
             }
 
-            var answer = npc.Model.m_question.m_answers.First(x => x.m_answerID == id);
+            var answer = npc.Model.Question.Answers.First(x => x.AnswerID == id);
 
             if (!answer.HasConditions(Client.Player))
             {

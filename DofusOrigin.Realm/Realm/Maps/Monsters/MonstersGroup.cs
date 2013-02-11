@@ -43,7 +43,7 @@ namespace DofusOrigin.Realm.Maps.Monsters
             _base = monsters;
 
             _map = map;
-            _maxSize = map.GetModel.maxGroupSize;
+            _maxSize = map.GetModel.MaxGroupSize;
 
             _id = map.NextNpcID();
 
@@ -110,10 +110,10 @@ namespace DofusOrigin.Realm.Maps.Monsters
             var key = _base.Keys.ToList()[Utilities.Basic.Rand(0, _base.Count - 1)];
             var value = _base[key][Utilities.Basic.Rand(0, _base[key].Count - 1)];
 
-            if (!Database.Cache.MonstersCache.MonstersList.Any(x => x.m_id == key))
+            if (!Database.Cache.MonstersCache.MonstersList.Any(x => x.ID == key))
                 return null;
 
-            return new Monster(Database.Cache.MonstersCache.MonstersList.First(x => x.m_id == key), value);
+            return new Monster(Database.Cache.MonstersCache.MonstersList.First(x => x.ID == key), value);
         }
 
         private void RefreshMappos()
@@ -146,12 +146,12 @@ namespace DofusOrigin.Realm.Maps.Monsters
                 }
 
                 var model = monster.Model;
-                ids += model.m_id;
-                skins += model.m_gfx + "^100";
+                ids += model.ID;
+                skins += model.GfxID + "^100";
                 lvls += monster.Level;
 
-                colors += string.Format("{0},{1},{2};0,0,0,0", Utilities.Basic.DeciToHex(model.m_color),
-                    Utilities.Basic.DeciToHex(model.m_color2), Utilities.Basic.DeciToHex(model.m_color3));
+                colors += string.Format("{0},{1},{2};0,0,0,0", Utilities.Basic.DeciToHex(model.Color),
+                    Utilities.Basic.DeciToHex(model.Color2), Utilities.Basic.DeciToHex(model.Color3));
             }
 
             packet += string.Format("{0};-3;{1};{2};{3}", ids, skins, lvls, colors);

@@ -73,7 +73,7 @@ namespace DofusOrigin.Realm.Exchanges
                                 item2.Quantity = item.Quantity;
 
                             player1.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, item2.Quantity));
-                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, item2.Quantity, item.Model.m_id, item.EffectsInfos()));
+                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, item2.Quantity, item.Model.ID, item.EffectsInfos()));
                         }
                         else
                         {
@@ -83,7 +83,7 @@ namespace DofusOrigin.Realm.Exchanges
                             _player1Items.Add(newItem);
 
                             player1.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, newItem.Quantity));
-                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, newItem.Quantity, item.Model.m_id, item.EffectsInfos()));
+                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, newItem.Quantity, item.Model.ID, item.EffectsInfos()));
                         }
                     }
                 }
@@ -104,7 +104,7 @@ namespace DofusOrigin.Realm.Exchanges
                         {
                             Item.Quantity -= quantity;
                             player1.NetworkClient.Send(string.Format("EMKO+{0}|{1}", Item.Item.ID, Item.Quantity));
-                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.ID, Item.Quantity, Item.Item.Model.m_id, Item.Item.EffectsInfos()));
+                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.ID, Item.Quantity, Item.Item.Model.ID, Item.Item.EffectsInfos()));
                         }
                     }
                 }
@@ -126,7 +126,7 @@ namespace DofusOrigin.Realm.Exchanges
                                 item2.Quantity = item.Quantity;
 
                             player2.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, item2.Quantity));
-                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, item2.Quantity, item.Model.m_id, item.EffectsInfos()));
+                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, item2.Quantity, item.Model.ID, item.EffectsInfos()));
                         }
                         else
                         {
@@ -136,7 +136,7 @@ namespace DofusOrigin.Realm.Exchanges
                             _player2Items.Add(newItem);
 
                             player2.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, newItem.Quantity));
-                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, newItem.Quantity, item.Model.m_id, item.EffectsInfos()));
+                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, newItem.Quantity, item.Model.ID, item.EffectsInfos()));
                         }
                     }
                 }
@@ -157,7 +157,7 @@ namespace DofusOrigin.Realm.Exchanges
                         {
                             Item.Quantity -= quantity;
                             player2.NetworkClient.Send(string.Format("EMKO+{0}|{1}", Item.Item.ID, Item.Quantity));
-                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.ID, Item.Quantity, Item.Item.Model.m_id, Item.Item.EffectsInfos()));
+                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.ID, Item.Quantity, Item.Item.Model.ID, Item.Item.EffectsInfos()));
                         }
                     }
                 }

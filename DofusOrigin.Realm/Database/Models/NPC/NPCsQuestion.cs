@@ -7,23 +7,23 @@ namespace DofusOrigin.Database.Models.NPC
 {
     class NPCsQuestion
     {
-        public int m_questionID { get; set; }
-        public int m_rescueQuestionID { get; set; }
+        public int QuestionID;
+        public int RescueQuestionID;
 
-        public NPCsQuestion m_rescueQuestion { get; set; }
+        public NPCsQuestion RescueQuestion;
+        public List<NPCsAnswer> Answers; 
 
-        public List<NPCsAnswer> m_answers;
-        public List<Realm.World.Conditions.NPCConditions> m_conditions;
+        public List<Realm.World.Conditions.NPCConditions> Conditions;
 
         public NPCsQuestion()
         {
-            m_answers = new List<NPCsAnswer>();
-            m_conditions = new List<Realm.World.Conditions.NPCConditions>();
+            Answers = new List<NPCsAnswer>();
+            Conditions = new List<Realm.World.Conditions.NPCConditions>();
         }
 
         public bool HasConditions(Realm.Characters.Character _character)
         {
-            foreach (var condi in m_conditions)
+            foreach (var condi in Conditions)
             {
                 if (condi.HasCondition(_character))
                     continue;
