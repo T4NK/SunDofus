@@ -52,6 +52,9 @@ namespace DofusOrigin.Database.Cache
 
                             var infos = newItem.Split(';');
 
+                            if (infos.Length < 2)
+                                continue;
+
                             lock (newMonsters.Items)
                             {
                                 newMonsters.Items.Add(new Models.Monsters.MonsterModel.MonsterItem(int.Parse(infos[0]),

@@ -167,22 +167,17 @@ namespace DofusOrigin.Network.Auth
             {
                 case 'F':
 
-                    lock (Database.Cache.ServersCache.Cache)
-                    {
                         if (Database.Cache.ServersCache.Cache.Any(x => x.GetClients.Contains(initialPacket.Substring(2))))
                         {
                             packet = string.Format("AF{0}", Database.Cache.ServersCache.Cache.First(x => x.GetClients.Contains(initialPacket.Substring(2))).ID);
                             Send(packet);
                         }
                         Send("AF");
-                    }
 
                     return;
 
                 case 'x':
 
-                    lock (Database.Cache.ServersCache.Cache)
-                    {
                         packet = string.Format("AxK{0}", Account.SubscriptionTime());
 
                         foreach (var server in Database.Cache.ServersCache.Cache)
@@ -194,14 +189,11 @@ namespace DofusOrigin.Network.Auth
                         }
 
                         Send(packet);
-                    }
 
                     return;
 
                 case 'X':
 
-                    lock (Database.Cache.ServersCache.Cache)
-                    {
                         var id = 0;
 
                         if (!int.TryParse(initialPacket.Substring(2), out id))
@@ -220,7 +212,6 @@ namespace DofusOrigin.Network.Auth
                         }
 
                         Send("BN");
-                    }
 
                     return;
             }
