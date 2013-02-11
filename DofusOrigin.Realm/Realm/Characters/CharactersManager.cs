@@ -11,7 +11,7 @@ namespace DofusOrigin.Realm.Characters
 
         public static bool ExistsName(string name)
         {
-            return CharactersList.Any(x => x.m_name == name);
+            return CharactersList.Any(x => x.Name == name);
         }
     }
 }

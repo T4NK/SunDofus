@@ -31,15 +31,17 @@ namespace DofusOrigin.Realm.Exchanges
 
         public CharacterItem GetNewItem()
         {
-            var item = new CharacterItem(Item.m_base);
+            var item = new CharacterItem(Item.Model);
 
-            item.m_effectsList.Clear();
-            Item.m_effectsList.ForEach(x => item.m_effectsList.Add(new Effects.EffectItem(x)));
+            item.EffectsList.Clear();
 
-            item.m_id = ItemsHandler.GetNewID();
-            item.m_position = Item.m_position;
+            lock(Item.EffectsList)
+                Item.EffectsList.ForEach(x => item.EffectsList.Add(new Effects.EffectItem(x)));
 
-            item.m_quantity = Quantity;
+            item.ID = ItemsHandler.GetNewID();
+            item.Position = Item.Position;
+
+            item.Quantity = Quantity;
 
             return item;
         }

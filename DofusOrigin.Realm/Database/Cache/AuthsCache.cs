@@ -9,18 +9,19 @@ namespace DofusOrigin.Database.Cache
 {
     class AuthsCache
     {
-        public static List<Models.Clients.AuthClientModel> m_auths = new List<Models.Clients.AuthClientModel>();
+        public static List<Models.Clients.AuthClientModel> AuthsList = new List<Models.Clients.AuthClientModel>();
 
-        static Timer m_timer { get; set; }
-        static bool is_started = false;
+        private static Timer Timer;
+        private static bool isStarted = false;
 
         public static void ReloadAuths(object sender = null, EventArgs e = null)
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
-                string sqlText = "SELECT * FROM dyn_auths";
-                MySqlCommand sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlText = "SELECT * FROM dyn_auths";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
@@ -30,22 +31,25 @@ namespace DofusOrigin.Database.Cache
                     server.m_ip = sqlReader.GetString("Ip");
                     server.m_port = sqlReader.GetInt16("Port");
 
-                    if (!m_auths.Any(x => x.m_id == server.m_id))
-                        m_auths.Add(server);
+                    lock (AuthsList)
+                    {
+                        if (!AuthsList.Any(x => x.m_id == server.m_id))
+                            AuthsList.Add(server);
+                    }
                 }
 
                 sqlReader.Close();
             }
 
-            if (!is_started)
+            if (!isStarted)
             {
-                m_timer = new Timer();
-                m_timer.Interval = Utilities.Config.GetConfig.GetIntElement("TimeReloadAuths");
-                m_timer.Enabled = true;
-                m_timer.Elapsed += new ElapsedEventHandler(ReloadAuths);
+                Timer = new Timer();
+                Timer.Interval = Utilities.Config.GetConfig.GetIntElement("TimeReloadAuths");
+                Timer.Enabled = true;
+                Timer.Elapsed += new ElapsedEventHandler(ReloadAuths);
             }
             else
-                Network.ServersHandler.m_authLinks.Update(m_auths);
+                Network.ServersHandler.AuthLinks.Update(AuthsList);
         }
     }
 }

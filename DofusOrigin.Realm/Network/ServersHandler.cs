@@ -7,16 +7,16 @@ namespace DofusOrigin.Network
 {
     class ServersHandler
     {
-        public static Realm.RealmServer m_realmServer;
-        public static Authentication.AuthenticationsLinks m_authLinks;
+        public static Realm.RealmServer RealmServer;
+        public static Authentication.AuthenticationsLinks AuthLinks;
 
         public static void InitialiseServers()
         {
-            m_realmServer = new Realm.RealmServer();
-            m_realmServer.Start();
+            RealmServer = new Realm.RealmServer();
+            RealmServer.Start();
 
-            m_authLinks = new Authentication.AuthenticationsLinks();
-            m_authLinks.Start();
+            AuthLinks = new Authentication.AuthenticationsLinks();
+            AuthLinks.Start();
         }
     }
 }

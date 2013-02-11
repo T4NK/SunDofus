@@ -7,270 +7,284 @@ namespace DofusOrigin.Realm.Characters.Items
 {
     class InventaryItems
     {
-        public Character m_client { get; set; }
-        public List<CharacterItem>  m_itemsList { get; set; }
-        public Dictionary<int, CharacterSet> m_setsList { get; set; }
+        public Character Client;
+        public List<CharacterItem> ItemsList;
+        public Dictionary<int, CharacterSet> SetsList;
 
-        public InventaryItems(Character _character)
+        public InventaryItems(Character character)
         {
-            m_client = _character;
+            Client = character;
 
-            m_itemsList = new List<CharacterItem>();
-            m_setsList = new Dictionary<int,CharacterSet>();
+            ItemsList = new List<CharacterItem>();
+            SetsList = new Dictionary<int,CharacterSet>();
         }
 
-        public void AddItem(int _id, bool _offline, int _jet = 4)
+        public void AddItem(int id, bool offline, int jet = 4)
         {
-            if (_offline == true)
+            if (offline == true)
             {
-                if (!Database.Cache.ItemsCache.m_itemsList.Any(x => x.m_id == _id)) 
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == id))
                     return;
 
-                var baseItem = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == _id);
+                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == id);
                 var item = new CharacterItem(baseItem);
 
-                item.GeneratItem(_jet);
+                item.GeneratItem(jet);
 
-                if (m_itemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position))
+                lock (ItemsList)
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position);
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    {
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
 
-                    item2.m_quantity += item.m_quantity;
-                    m_client.m_pods += (item.m_base.m_pods * item.m_quantity);
+                        item2.Quantity += item.Quantity;
+                        Client.Pods += (item.Model.m_pods * item.Quantity);
 
-                    return;
+                        return;
+                    }
+
+                    item.ID = ItemsHandler.GetNewID();
+
+                    ItemsList.Add(item);
+
+                    Client.Pods += item.Model.m_pods;
                 }
-
-                item.m_id = ItemsHandler.GetNewID();
-
-                m_itemsList.Add(item);
-                m_client.m_pods += item.m_base.m_pods;
             }
-            else if (_offline == false)
+            else if (offline == false)
             {
-                if (!Database.Cache.ItemsCache.m_itemsList.Any(x => x.m_id == _id))
+                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == id))
                     return;
 
-                var baseItem = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == _id);
+                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == id);
                 var item = new CharacterItem(baseItem);
 
-                item.GeneratItem(_jet);
+                item.GeneratItem(jet);
 
-                if (m_itemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position))
+                lock (ItemsList)
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position);
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    {
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
 
-                    item2.m_quantity += item.m_quantity;
-                    m_client.m_pods += (item.m_base.m_pods * item.m_quantity);
+                        item2.Quantity += item.Quantity;
+                        Client.Pods += (item.Model.m_pods * item.Quantity);
 
-                    RefreshBonus();
-                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item2.m_id, item2.m_quantity));
+                        RefreshBonus();
+                        Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item2.ID, item2.Quantity));
 
-                    return;
+                        return;
+                    }
+
+                    item.ID = ItemsHandler.GetNewID();
+
+                    ItemsList.Add(item);
                 }
 
-                item.m_id = ItemsHandler.GetNewID();
-                m_itemsList.Add(item);
-
-                m_client.m_pods += item.m_base.m_pods;
+                Client.Pods += item.Model.m_pods;
                 RefreshBonus();
 
-                m_client.m_networkClient.Send(string.Format("OAKO{0}", item.ToString()));
+                Client.NetworkClient.Send(string.Format("OAKO{0}", item.ToString()));
             }
         }
 
-        public void AddItem(CharacterItem _item, bool _offline)
+        public void AddItem(CharacterItem item, bool offline)
         {
-            if(_offline == true)
+            lock (ItemsList)
             {
-                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position))
+                if (offline == true)
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position);
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    {
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
 
-                    item2.m_quantity += _item.m_quantity;
-                    m_client.m_pods += (_item.m_base.m_pods * _item.m_quantity);
+                        item2.Quantity += item.Quantity;
+                        Client.Pods += (item.Model.m_pods * item.Quantity);
 
-                    return;
+                        return;
+                    }
+
+                    item.ID = ItemsHandler.GetNewID();
+
+                    ItemsList.Add(item);
+                    Client.Pods += item.Model.m_pods;
                 }
-
-                _item.m_id = ItemsHandler.GetNewID();
-
-                m_itemsList.Add(_item);
-                m_client.m_pods += _item.m_base.m_pods;
-            }
-            else if (_offline == false)
-            {
-                if (m_itemsList.Any(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position))
+                else if (offline == false)
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == _item.EffectsInfos() && x.m_base.m_id == _item.m_base.m_id && x.m_position == _item.m_position);
+                    if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position))
+                    {
+                        var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position);
 
-                    item2.m_quantity += _item.m_quantity;
-                    m_client.m_pods += (_item.m_base.m_pods * _item.m_quantity);
+                        item2.Quantity += item.Quantity;
+                        Client.Pods += (item.Model.m_pods * item.Quantity);
 
+                        RefreshBonus();
+                        Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item2.ID, item2.Quantity));
+
+                        return;
+                    }
+
+                    item.ID = ItemsHandler.GetNewID();
+                    ItemsList.Add(item);
+
+                    Client.Pods += item.Model.m_pods;
                     RefreshBonus();
-                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item2.m_id, item2.m_quantity));
 
-                    return;
+                    Client.NetworkClient.Send(string.Format("OAKO{0}", item.ToString()));
                 }
-
-                _item.m_id = ItemsHandler.GetNewID();
-                m_itemsList.Add(_item);
-
-                m_client.m_pods += _item.m_base.m_pods;
-                RefreshBonus();
-
-                m_client.m_networkClient.Send(string.Format("OAKO{0}", _item.ToString()));
             }
         }
 
-        public void DeleteItem(int _id, int _quantity)
+        public void DeleteItem(int id, int quantity)
         {
-            if (m_itemsList.Any(x => x.m_id == _id))
+            lock (ItemsList)
             {
-                var item = m_itemsList.First(x => x.m_id == _id);
-
-                if (item.m_quantity <= _quantity)
+                if (ItemsList.Any(x => x.ID == id))
                 {
-                    m_client.m_pods -= (item.m_quantity * item.m_base.m_pods);
+                    var item = ItemsList.First(x => x.ID == id);
 
-                    m_itemsList.Remove(item);
-                    m_client.m_networkClient.Send(string.Format("OR{0}", item.m_id));
+                    if (item.Quantity <= quantity)
+                    {
+                        Client.Pods -= (item.Quantity * item.Model.m_pods);
 
-                    RefreshBonus();
+                        ItemsList.Remove(item);
+                        Client.NetworkClient.Send(string.Format("OR{0}", item.ID));
+
+                        RefreshBonus();
+                    }
+                    else
+                    {
+                        Client.Pods -= (quantity * item.Model.m_pods);
+
+                        item.Quantity -= quantity;
+                        Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item.ID, item.Quantity));
+
+                        RefreshBonus();
+                    }
                 }
                 else
-                {
-                    m_client.m_pods -= (_quantity * item.m_base.m_pods);
-
-                    item.m_quantity -= _quantity;
-                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item.m_id, item.m_quantity));
-
-                    RefreshBonus();
-                }
+                    Client.NetworkClient.Send("BN");
             }
-            else
-                m_client.m_networkClient.Send("BN");
         }
 
-        public void MoveItem(int _id, int _pos, int _quantity)
+        public void MoveItem(int id, int pos, int quantity)
         {
-            if (!m_itemsList.Any(x => x.m_id == _id))
+            if (!ItemsList.Any(x => x.ID == id))
                 return;
 
-            var item = m_itemsList.First(x => x.m_id == _id);
+            var item = ItemsList.First(x => x.ID == id);
 
-            if (ItemsHandler.PositionAvaliable(item.m_base.m_type, item.m_base.isUsable, _pos) == false
-                || _pos == 1 && item.m_base.isTwoHands == true && isOccuptedPos(15) || _pos == 15 && isOccuptedPos(1))
+            if (ItemsHandler.PositionAvaliable(item.Model.m_type, item.Model.isUsable, pos) == false
+                || pos == 1 && item.Model.isTwoHands == true && isOccuptedPos(15) || pos == 15 && isOccuptedPos(1))
             {
-                m_client.m_networkClient.Send("BN");
-                return;
-            }
-
-            if (!ItemsHandler.ConditionsAvaliable(item.m_base, m_client))
-            {
-                m_client.m_networkClient.Send("Im119|44");
+                Client.NetworkClient.Send("BN");
                 return;
             }
 
-            if (item.m_base.m_type == 23 && _pos != -1)
+            if (!ItemsHandler.ConditionsAvaliable(item.Model, Client))
             {
-                if (!m_itemsList.Any(x => x.m_base.m_id == item.m_base.m_id && x.m_position != -1 && x.m_base.m_type == 23))
+                Client.NetworkClient.Send("Im119|44");
+                return;
+            }
+
+            if (item.Model.m_type == 23 && pos != -1)
+            {
+                if (!ItemsList.Any(x => x.Model.m_id == item.Model.m_id && x.Position != -1 && x.Model.m_type == 23))
                 {
-                    m_client.m_networkClient.Send("OAEA");
+                    Client.NetworkClient.Send("OAEA");
                     return;
                 }
             }
 
-            if (item.m_base.m_level > m_client.m_level)
+            if (item.Model.m_level > Client.Level)
             {
-                m_client.m_networkClient.Send("OAEL");
+                Client.NetworkClient.Send("OAEL");
                 return;
             }
 
-            item.m_position = _pos;
+            item.Position = pos;
 
-            if (item.m_position == -1)
+            if (item.Position == -1)
             {
-                if (m_itemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position &&
-                    x.m_id != item.m_id))
+                if (ItemsList.Any(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position &&
+                    x.ID != item.ID))
                 {
-                    var item2 = m_itemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.m_base.m_id == item.m_base.m_id && x.m_position == item.m_position &&
-                    x.m_id != item.m_id);
+                    var item2 = ItemsList.First(x => x.EffectsInfos() == item.EffectsInfos() && x.Model.m_id == item.Model.m_id && x.Position == item.Position &&
+                    x.ID != item.ID);
 
-                    item2.m_quantity += item.m_quantity;
-                    m_client.m_pods += (item.m_base.m_pods * item.m_quantity);
+                    item2.Quantity += item.Quantity;
+                    Client.Pods += (item.Model.m_pods * item.Quantity);
                     RefreshBonus();
 
-                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item2.m_id, item2.m_quantity));
-                    DeleteItem(item.m_id, item.m_quantity);
+                    Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item2.ID, item2.Quantity));
+                    DeleteItem(item.ID, item.Quantity);
                     return;
                 }
             }
             else
             {
-                if (item.m_quantity > 1)
+                if (item.Quantity > 1)
                 {
-                    if (item.m_base.m_type == 12 || item.m_base.m_type == 13 || item.m_base.m_type == 14 || item.m_base.m_type == 28 ||
-                        item.m_base.m_type == 33 || item.m_base.m_type == 37 || item.m_base.m_type == 42 || item.m_base.m_type == 49 ||
-                        item.m_base.m_type == 69 || item.m_base.m_type == 87)
+                    if (item.Model.m_type == 12 || item.Model.m_type == 13 || item.Model.m_type == 14 || item.Model.m_type == 28 ||
+                        item.Model.m_type == 33 || item.Model.m_type == 37 || item.Model.m_type == 42 || item.Model.m_type == 49 ||
+                        item.Model.m_type == 69 || item.Model.m_type == 87)
                     {
-                        if (_quantity <= 0)
+                        if (quantity <= 0)
                             return;
 
                         var Copy = item.Copy();
-                        Copy.m_quantity -= _quantity;
+                        Copy.Quantity -= quantity;
 
-                        if (item.m_quantity == _quantity)
-                            Copy.m_position = _pos;
+                        if (item.Quantity == quantity)
+                            Copy.Position = pos;
                         else
-                            Copy.m_position = -1;
+                            Copy.Position = -1;
 
-                        item.m_quantity = _quantity;
+                        item.Quantity = quantity;
                         AddItem(Copy, false);
                     }
                     else
                     {
                         var Copy = item.Copy();
 
-                        Copy.m_quantity -= 1;
-                        Copy.m_position = -1;
+                        Copy.Quantity -= 1;
+                        Copy.Position = -1;
 
-                        item.m_quantity = 1;
+                        item.Quantity = 1;
                         AddItem(Copy, false);
                     }
 
-                    m_client.m_networkClient.Send(string.Format("OQ{0}|{1}", item.m_id, item.m_quantity));
+                    Client.NetworkClient.Send(string.Format("OQ{0}|{1}", item.ID, item.Quantity));
                 }
             }
 
-            m_client.m_networkClient.Send(string.Format("OM{0}|{1}", item.m_id, (item.m_position != -1 ? item.m_position.ToString() : "")));
-            m_client.GetMap().Send(string.Format("Oa{0}|{1}", m_client.m_id, m_client.GetItemsPos()));
+            Client.NetworkClient.Send(string.Format("OM{0}|{1}", item.ID, (item.Position != -1 ? item.Position.ToString() : "")));
+            Client.GetMap().Send(string.Format("Oa{0}|{1}", Client.ID, Client.GetItemsPos()));
 
             RefreshBonus();
         }
 
-        public bool isOccuptedPos(int _pos)
+        public bool isOccuptedPos(int pos)
         {
-            return m_itemsList.Any(x => x.m_position == _pos);
+            return ItemsList.Any(x => x.Position == pos);
         }
 
-        public void ParseItems(string _datas)
+        public void ParseItems(string datas)
         {
-            var splited = _datas.Split(';');
+            var splited = datas.Split(';');
 
             foreach (var infos in splited)
             {
                 var allInfos = infos.Split('~');
-                var item = new CharacterItem(Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == Convert.ToInt32(allInfos[0], 16)));
-                item.m_effectsList.Clear();
+                var item = new CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == Convert.ToInt32(allInfos[0], 16)));
+                item.EffectsList.Clear();
 
-                item.m_id = ItemsHandler.GetNewID();
-                item.m_quantity = Convert.ToInt32(allInfos[1], 16);
+                item.ID = ItemsHandler.GetNewID();
+                item.Quantity = Convert.ToInt32(allInfos[1], 16);
 
                 if (allInfos[2] != "")
-                    item.m_position = Convert.ToInt32(allInfos[2], 16);
+                    item.Position = Convert.ToInt32(allInfos[2], 16);
                 else
-                    item.m_position = -1;
+                    item.Position = -1;
 
                 if (allInfos[3] != "")
                 {
@@ -294,77 +308,80 @@ namespace DofusOrigin.Realm.Characters.Items
 
                         NewEffect.Effect = EffectInfos[4];
 
-                        item.m_effectsList.Add(NewEffect);
+                        lock(item.EffectsList)
+                            item.EffectsList.Add(NewEffect);
                     }
 
                 }
 
-                m_client.m_pods += (item.m_base.m_pods * item.m_quantity);
-                m_itemsList.Add(item);
+                Client.Pods += (item.Model.m_pods * item.Quantity);
+
+                lock(ItemsList)
+                    ItemsList.Add(item);
             }
         }
 
         public void RefreshBonus()
         {
-            m_client.ResetItemsStats();
-            m_setsList.Clear();
+            Client.ResetItemsStats();
+            SetsList.Clear();
 
-            foreach (var item in m_itemsList)
+            foreach (var item in ItemsList)
             {
-                if (item.m_position != -1 && item.m_position < 23)
+                if (item.Position != -1 && item.Position < 23)
                 {
-                    foreach (var effect in item.m_effectsList)
-                        effect.ParseEffect(m_client);
+                    foreach (var effect in item.EffectsList)
+                        effect.ParseEffect(Client);
                 }
-                if (item.m_base.m_set != -1 && item.m_position != -1)
+                if (item.Model.m_set != -1 && item.Position != -1)
                 {
-                    if (m_setsList.ContainsKey(item.m_base.m_set))
+                    if (SetsList.ContainsKey(item.Model.m_set))
                     {
-                        if (!m_setsList[item.m_base.m_set].myItemsList.Contains(item.m_base.m_id))
-                            m_setsList[item.m_base.m_set].myItemsList.Add(item.m_base.m_id);
+                        if (!SetsList[item.Model.m_set].ItemsList.Contains(item.Model.m_id))
+                            SetsList[item.Model.m_set].ItemsList.Add(item.Model.m_id);
                     }
                     else
                     {
-                        m_setsList.Add(item.m_base.m_set, new CharacterSet(item.m_base.m_set));
-                        m_setsList[item.m_base.m_set].myItemsList.Clear();
-                        m_setsList[item.m_base.m_set].myItemsList.Add(item.m_base.m_id);
+                        SetsList.Add(item.Model.m_set, new CharacterSet(item.Model.m_set));
+                        SetsList[item.Model.m_set].ItemsList.Clear();
+                        SetsList[item.Model.m_set].ItemsList.Add(item.Model.m_id);
                     }
                 }
             }
 
-            foreach (var set in m_setsList.Values)
+            foreach (var set in SetsList.Values)
             {
-                var numberItems = set.myItemsList.Count;
-                var strItems = string.Join(";", set.myItemsList);
+                var numberItems = set.ItemsList.Count;
+                var strItems = string.Join(";", set.ItemsList);
                 var strEffects = "";
 
-                foreach (var effect in set.myBonusList[numberItems])
+                foreach (var effect in set.BonusList[numberItems])
                 {
                     strEffects += string.Format("{0},", effect.SetString());
-                    effect.ParseEffect(m_client);
+                    effect.ParseEffect(Client);
                 }
 
-                m_client.m_networkClient.Send(string.Format("OS+{0}|{1}|{2}", set.m_id, strItems,
+                Client.NetworkClient.Send(string.Format("OS+{0}|{1}|{2}", set.ID, strItems,
                     (strEffects == "" ? "" : strEffects.Substring(0, strEffects.Length - 1))));
             }
 
-            m_client.SendPods();
-            m_client.SendChararacterStats();
+            Client.SendPods();
+            Client.SendChararacterStats();
         }
 
-        public void UseItem(string _datas)
+        public void UseItem(string datas)
         {
-            if (m_client.m_state.onMove == true)
+            if (Client.State.onMove == true)
             {
-                m_client.m_networkClient.Send("BN");
+                Client.NetworkClient.Send("BN");
                 return;
             }
 
-            var allDatas = _datas.Split('|');
+            var allDatas = datas.Split('|');
 
             var itemID = int.Parse(allDatas[0]);
-            var charID = m_client.m_id;
-            var cellID = m_client.m_mapCell;
+            var charID = Client.ID;
+            var cellID = Client.MapCell;
 
             if (allDatas.Length > 2)
             {
@@ -372,33 +389,34 @@ namespace DofusOrigin.Realm.Characters.Items
                 cellID = int.Parse(allDatas[2]);
             }
 
-            if (!m_itemsList.Any(x => x.m_id == itemID))
+            if (!ItemsList.Any(x => x.ID == itemID))
             {
-                m_client.m_networkClient.Send("OUE");
+                Client.NetworkClient.Send("OUE");
                 return;
             }
 
-            var item = m_itemsList.First(x => x.m_id == itemID);
+            var item = ItemsList.First(x => x.ID == itemID);
 
-            if (item.m_base.isUsable == false)
+            if (item.Model.isUsable == false)
             {
-                m_client.m_networkClient.Send("BN");
+                Client.NetworkClient.Send("BN");
                 return;
             }
 
-            var usable = Database.Cache.ItemsCache.m_usablesList.First(x => x.m_base == item.m_base.m_id);
-            var character = CharactersManager.CharactersList.First(x => x.m_id == charID);
+            var usable = Database.Cache.ItemsCache.UsablesList.First(x => x.m_base == item.Model.m_id);
 
-            if (!ItemsHandler.ConditionsAvaliable(item.m_base, m_client))
+            var character = CharactersManager.CharactersList.First(x => x.ID == charID);
+
+            if (!ItemsHandler.ConditionsAvaliable(item.Model, Client))
             {
-                m_client.m_networkClient.Send("Im119|44");
+                Client.NetworkClient.Send("Im119|44");
                 return;
             }
 
             usable.ParseEffect(character);
 
-            if(usable.m_mustDelete == true)
-                DeleteItem(item.m_id, 1);
+            if (usable.m_mustDelete == true)
+                DeleteItem(item.ID, 1);
         }
     }
 }

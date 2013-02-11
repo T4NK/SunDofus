@@ -29,8 +29,8 @@ namespace DofusOrigin.Database.Models.Items
             {
                 var id = int.Parse(infos.Trim());
 
-                if (Database.Cache.ItemsCache.m_itemsList.Any(x => x.m_id == id))
-                    Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == id).m_set = this.m_id;
+                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == id))
+                    Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == id).m_set = this.m_id;
 
                 m_itemsList.Add(m_id);
             }

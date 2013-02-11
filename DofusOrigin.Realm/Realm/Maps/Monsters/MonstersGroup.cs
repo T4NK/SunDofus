@@ -107,64 +107,56 @@ namespace DofusOrigin.Realm.Maps.Monsters
 
         private Monster ReturnNewMonster()
         {
-            lock (Database.Cache.MonstersCache.m_monsters)
-            {
-                var key = _base.Keys.ToList()[Utilities.Basic.Rand(0, _base.Count - 1)];
-                var value = _base[key][Utilities.Basic.Rand(0, _base[key].Count - 1)];
+            var key = _base.Keys.ToList()[Utilities.Basic.Rand(0, _base.Count - 1)];
+            var value = _base[key][Utilities.Basic.Rand(0, _base[key].Count - 1)];
 
-                if (!Database.Cache.MonstersCache.m_monsters.Any(x => x.m_id == key))
-                    return null;
+            if (!Database.Cache.MonstersCache.MonstersList.Any(x => x.m_id == key))
+                return null;
 
-                return new Monster(Database.Cache.MonstersCache.m_monsters.First(x => x.m_id == key), value);
-            }
+            return new Monster(Database.Cache.MonstersCache.MonstersList.First(x => x.m_id == key), value);
         }
 
         private void RefreshMappos()
         {
             _dir = Utilities.Basic.Rand(0, 3) * 2 + 1;
-
-            lock(_map.RushablesCells)
-                _cell = _map.RushablesCells[Utilities.Basic.Rand(0, _map.RushablesCells.Count - 1)];
+            _cell = _map.RushablesCells[Utilities.Basic.Rand(0, _map.RushablesCells.Count - 1)];
         }
 
         public string PatternOnMap()
         {
-            lock (Monsters)
+            var packet = string.Format("|+{0};{1};0;{2};", _cell, _dir, ID);
+
+            var ids = "";
+            var skins = "";
+            var lvls = "";
+            var colors = "";
+
+            var first = true;
+            foreach (var monster in Monsters)
             {
-                var packet = string.Format("|+{0};{1};0;{2};", _cell, _dir, ID);
+                if (first)
+                    first = false;
 
-                var ids = "";
-                var skins = "";
-                var lvls = "";
-                var colors = "";
-
-                var first = true;
-                foreach (var monster in Monsters)
+                else
                 {
-                    if (first)
-                        first = false;
-
-                    else
-                    {
-                        ids += ",";
-                        skins += ",";
-                        lvls += ",";
-                        colors += ",";
-                    }
-
-                    var model = monster.Model;
-                    ids += model.m_id;
-                    skins += model.m_gfx + "^100";
-                    lvls += monster.Level;
-
-                    colors += string.Format("{0},{1},{2};0,0,0,0", Utilities.Basic.DeciToHex(model.m_color),
-                        Utilities.Basic.DeciToHex(model.m_color2), Utilities.Basic.DeciToHex(model.m_color3));
+                    ids += ",";
+                    skins += ",";
+                    lvls += ",";
+                    colors += ",";
                 }
 
-                packet += string.Format("{0};-3;{1};{2};{3}", ids, skins, lvls, colors);
+                var model = monster.Model;
+                ids += model.m_id;
+                skins += model.m_gfx + "^100";
+                lvls += monster.Level;
 
-                return packet;
+                colors += string.Format("{0},{1},{2};0,0,0,0", Utilities.Basic.DeciToHex(model.m_color),
+                    Utilities.Basic.DeciToHex(model.m_color2), Utilities.Basic.DeciToHex(model.m_color3));
             }
+
+            packet += string.Format("{0};-3;{1};{2};{3}", ids, skins, lvls, colors);
+
+            return packet;
         }
     }
 }

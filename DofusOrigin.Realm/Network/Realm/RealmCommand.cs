@@ -20,7 +20,7 @@ namespace DofusOrigin.Network.Realm
             {
                 var datas = _args.Split(' ');
 
-                if (m_client.m_infos.m_level > 0)
+                if (m_client.Infos.m_level > 0)
                 {
                     switch (datas[0])
                     {
@@ -70,13 +70,13 @@ namespace DofusOrigin.Network.Realm
 
         #region CommandInfos
 
-        void ParseCommandKamas(string[] _datas)
+        private void ParseCommandKamas(string[] _datas)
         {
             try
             {                
-                m_client.m_player.m_kamas += int.Parse(_datas[1]);
+                m_client.Player.Kamas += int.Parse(_datas[1]);
                 m_client.SendConsoleMessage("Kamas Added", 0);
-                m_client.m_player.SendChararacterStats();
+                m_client.Player.SendChararacterStats();
             }
             catch
             {
@@ -85,7 +85,7 @@ namespace DofusOrigin.Network.Realm
             }
         }
 
-        void ParseCommanSave(string[] _datas)
+        private void ParseCommanSave(string[] _datas)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace DofusOrigin.Network.Realm
             }
         }
 
-        void ParseMapCommand(string[] _datas)
+        private void ParseMapCommand(string[] _datas)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace DofusOrigin.Network.Realm
                 {
                     case "spawnmobs":
 
-                        m_client.m_player.GetMap().AddMonstersGroup();
+                        m_client.Player.GetMap().AddMonstersGroup();
                         break;
                 }
             }
@@ -139,18 +139,18 @@ namespace DofusOrigin.Network.Realm
             }
         }
 
-        void ParseCommandItem(string[] _datas)
+        private void ParseCommandItem(string[] _datas)
         {
             try
             {
-                var item = Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == int.Parse(_datas[1]));
+                var item = Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == int.Parse(_datas[1]));
 
                 if (_datas.Length == 2)
                 {
                     var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
                     newItem.GeneratItem();
 
-                    m_client.m_player.m_inventary.AddItem(newItem, false);
+                    m_client.Player.ItemsInventary.AddItem(newItem, false);
                     m_client.SendConsoleMessage("Item Added !", 0);
                 }
 
@@ -159,7 +159,7 @@ namespace DofusOrigin.Network.Realm
                     var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
                     newItem.GeneratItem(int.Parse(_datas[2]));
 
-                    m_client.m_player.m_inventary.AddItem(newItem, false);
+                    m_client.Player.ItemsInventary.AddItem(newItem, false);
                     m_client.SendConsoleMessage("Item Added !", 0);
                 }
 
@@ -173,13 +173,13 @@ namespace DofusOrigin.Network.Realm
             }
         }
 
-        void ParseCommandExp(string[] _datas)
+        private void ParseCommandExp(string[] _datas)
         {
             try
             {
                 if (_datas.Length == 2)
                 {
-                    m_client.m_player.AddExp(long.Parse(_datas[1]));
+                    m_client.Player.AddExp(long.Parse(_datas[1]));
                     m_client.SendConsoleMessage("Exp Added !", 0);
                 }
 
@@ -194,20 +194,20 @@ namespace DofusOrigin.Network.Realm
         
         }
 
-        void ParseCommandTeleport(string[] _datas)
+        private void ParseCommandTeleport(string[] _datas)
         {
             try
             {
                 if (_datas.Length == 3)
                 {
-                    m_client.m_player.TeleportNewMap(int.Parse(_datas[1]), int.Parse(_datas[2]));
+                    m_client.Player.TeleportNewMap(int.Parse(_datas[1]), int.Parse(_datas[2]));
                     m_client.SendConsoleMessage("Character Teleported !", 0);
                 }
 
                 else if (_datas.Length == 4)
                 {
-                    var myMap = Database.Cache.MapsCache.m_mapsList.First(x => x.GetModel.m_PosX == int.Parse(_datas[1]) && x.GetModel.m_PosY == int.Parse(_datas[2]));
-                    m_client.m_player.TeleportNewMap(myMap.GetModel.m_id, int.Parse(_datas[3]));
+                    var myMap = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.m_PosX == int.Parse(_datas[1]) && x.GetModel.m_PosY == int.Parse(_datas[2]));
+                    m_client.Player.TeleportNewMap(myMap.GetModel.m_id, int.Parse(_datas[3]));
                     m_client.SendConsoleMessage("Character Teleported !", 0);
                 }
 
@@ -222,13 +222,13 @@ namespace DofusOrigin.Network.Realm
             }
         }
 
-        void ParseCommandVita(string[] _datas)
+        private void ParseCommandVita(string[] _datas)
         {
             try
             {
                 if (_datas.Length == 2)
                 {
-                    m_client.m_player.ResetVita(_datas[1]);
+                    m_client.Player.ResetVita(_datas[1]);
                     m_client.SendConsoleMessage("Vita Updated !", 0);
                 }
 

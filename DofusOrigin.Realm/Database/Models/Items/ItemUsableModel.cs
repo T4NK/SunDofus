@@ -22,8 +22,8 @@ namespace DofusOrigin.Database.Models.Items
 
         public void AttributeItem()
         {
-            if (Database.Cache.ItemsCache.m_itemsList.Any(x => x.m_id == m_base))
-                Database.Cache.ItemsCache.m_itemsList.First(x => x.m_id == m_base).isUsable = true;
+            if (Database.Cache.ItemsCache.ItemsList.Any(x => x.m_id == m_base))
+                Database.Cache.ItemsCache.ItemsList.First(x => x.m_id == m_base).isUsable = true;
         }
 
         public void ParseEffect(Character _client)

@@ -8,16 +8,16 @@ namespace DofusOrigin.Database.Cache
 {
     class MapsCache
     {
-        public static List<Realm.Maps.Map> m_mapsList = new List<Realm.Maps.Map>();
+        public static List<Realm.Maps.Map> MapsList = new List<Realm.Maps.Map>();
 
         public static void LoadMaps()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_maps";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
@@ -54,13 +54,14 @@ namespace DofusOrigin.Database.Cache
 
                     map.ParsePos();
 
-                    m_mapsList.Add(new Realm.Maps.Map(map));
+                    lock(MapsList)
+                        MapsList.Add(new Realm.Maps.Map(map));
                 }
 
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' maps@ from the database !", m_mapsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' maps@ from the database !", MapsList.Count));
         }
     }
 }

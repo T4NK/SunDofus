@@ -25,13 +25,13 @@ namespace DofusOrigin.Realm.Exchanges
 
         public void Reset()
         {
-            player1.m_state.onExchangeAccepted = false;
-            player2.m_state.onExchangeAccepted = false;
+            player1.State.onExchangeAccepted = false;
+            player2.State.onExchangeAccepted = false;
 
-            player1.m_networkClient.Send(string.Format("EK0{0}", player1.m_id));
-            player1.m_networkClient.Send(string.Format("EK0{0}", player2.m_id));
-            player2.m_networkClient.Send(string.Format("EK0{0}", player2.m_id));
-            player2.m_networkClient.Send(string.Format("EK0{0}", player1.m_id));
+            player1.NetworkClient.Send(string.Format("EK0{0}", player1.ID));
+            player1.NetworkClient.Send(string.Format("EK0{0}", player2.ID));
+            player2.NetworkClient.Send(string.Format("EK0{0}", player2.ID));
+            player2.NetworkClient.Send(string.Format("EK0{0}", player1.ID));
         }
 
         public void MoveGold(Characters.Character character, long kamas)
@@ -41,16 +41,16 @@ namespace DofusOrigin.Realm.Exchanges
                 Reset();
                 _player1Gold = kamas;
 
-                player1.m_networkClient.Send(string.Format("EMKG{0}", kamas));
-                player2.m_networkClient.Send(string.Format("EmKG{0}", kamas));
+                player1.NetworkClient.Send(string.Format("EMKG{0}", kamas));
+                player2.NetworkClient.Send(string.Format("EmKG{0}", kamas));
             }
             else if (player2 == character)
             {
                 Reset();
                 _player2Gold = kamas;
 
-                player2.m_networkClient.Send(string.Format("EMKG{0}", kamas));
-                player1.m_networkClient.Send(string.Format("EmKG{0}", kamas));
+                player2.NetworkClient.Send(string.Format("EMKG{0}", kamas));
+                player1.NetworkClient.Send(string.Format("EmKG{0}", kamas));
             }
         }
 
@@ -69,11 +69,11 @@ namespace DofusOrigin.Realm.Exchanges
                             var item2 = _player1Items.First(x => x.Item == item);
                             item2.Quantity += quantity;
 
-                            if (item2.Quantity > item.m_quantity)
-                                item2.Quantity = item.m_quantity;
+                            if (item2.Quantity > item.Quantity)
+                                item2.Quantity = item.Quantity;
 
-                            player1.m_networkClient.Send(string.Format("EMKO+{0}|{1}", item.m_id, item2.Quantity));
-                            player2.m_networkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.m_id, item2.Quantity, item.m_base.m_id, item.EffectsInfos()));
+                            player1.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, item2.Quantity));
+                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, item2.Quantity, item.Model.m_id, item.EffectsInfos()));
                         }
                         else
                         {
@@ -82,8 +82,8 @@ namespace DofusOrigin.Realm.Exchanges
 
                             _player1Items.Add(newItem);
 
-                            player1.m_networkClient.Send(string.Format("EMKO+{0}|{1}", item.m_id, newItem.Quantity));
-                            player2.m_networkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.m_id, newItem.Quantity, item.m_base.m_id, item.EffectsInfos()));
+                            player1.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, newItem.Quantity));
+                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, newItem.Quantity, item.Model.m_id, item.EffectsInfos()));
                         }
                     }
                 }
@@ -96,15 +96,15 @@ namespace DofusOrigin.Realm.Exchanges
                         var Item = _player1Items.First(x => x.Item == item);
                         if (Item.Quantity <= quantity)
                         {
-                            player1.m_networkClient.Send(string.Format("EMKO-{0}", Item.Item.m_id));
-                            player2.m_networkClient.Send(string.Format("EmKO-{0}", Item.Item.m_id));
+                            player1.NetworkClient.Send(string.Format("EMKO-{0}", Item.Item.ID));
+                            player2.NetworkClient.Send(string.Format("EmKO-{0}", Item.Item.ID));
                             _player1Items.Remove(Item);
                         }
                         else
                         {
                             Item.Quantity -= quantity;
-                            player1.m_networkClient.Send(string.Format("EMKO+{0}|{1}", Item.Item.m_id, Item.Quantity));
-                            player2.m_networkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.m_id, Item.Quantity, Item.Item.m_base.m_id, Item.Item.EffectsInfos()));
+                            player1.NetworkClient.Send(string.Format("EMKO+{0}|{1}", Item.Item.ID, Item.Quantity));
+                            player2.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.ID, Item.Quantity, Item.Item.Model.m_id, Item.Item.EffectsInfos()));
                         }
                     }
                 }
@@ -122,11 +122,11 @@ namespace DofusOrigin.Realm.Exchanges
                             var item2 = _player2Items.First(x => x.Item == item);
                             item2.Quantity += quantity;
 
-                            if (item2.Quantity > item.m_quantity)
-                                item2.Quantity = item.m_quantity;
+                            if (item2.Quantity > item.Quantity)
+                                item2.Quantity = item.Quantity;
 
-                            player2.m_networkClient.Send(string.Format("EMKO+{0}|{1}", item.m_id, item2.Quantity));
-                            player1.m_networkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.m_id, item2.Quantity, item.m_base.m_id, item.EffectsInfos()));
+                            player2.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, item2.Quantity));
+                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, item2.Quantity, item.Model.m_id, item.EffectsInfos()));
                         }
                         else
                         {
@@ -135,8 +135,8 @@ namespace DofusOrigin.Realm.Exchanges
 
                             _player2Items.Add(newItem);
 
-                            player2.m_networkClient.Send(string.Format("EMKO+{0}|{1}", item.m_id, newItem.Quantity));
-                            player1.m_networkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.m_id, newItem.Quantity, item.m_base.m_id, item.EffectsInfos()));
+                            player2.NetworkClient.Send(string.Format("EMKO+{0}|{1}", item.ID, newItem.Quantity));
+                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", item.ID, newItem.Quantity, item.Model.m_id, item.EffectsInfos()));
                         }
                     }
                 }
@@ -149,15 +149,15 @@ namespace DofusOrigin.Realm.Exchanges
                         var Item = _player2Items.First(x => x.Item == item);
                         if (Item.Quantity <= quantity)
                         {
-                            player2.m_networkClient.Send(string.Format("EMKO-{0}", Item.Item.m_id));
-                            player1.m_networkClient.Send(string.Format("EmKO-{0}", Item.Item.m_id));
+                            player2.NetworkClient.Send(string.Format("EMKO-{0}", Item.Item.ID));
+                            player1.NetworkClient.Send(string.Format("EmKO-{0}", Item.Item.ID));
                             _player2Items.Remove(Item);
                         }
                         else
                         {
                             Item.Quantity -= quantity;
-                            player2.m_networkClient.Send(string.Format("EMKO+{0}|{1}", Item.Item.m_id, Item.Quantity));
-                            player1.m_networkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.m_id, Item.Quantity, Item.Item.m_base.m_id, Item.Item.EffectsInfos()));
+                            player2.NetworkClient.Send(string.Format("EMKO+{0}|{1}", Item.Item.ID, Item.Quantity));
+                            player1.NetworkClient.Send(string.Format("EmKO+{0}|{1}|{2}|{3}", Item.Item.ID, Item.Quantity, Item.Item.Model.m_id, Item.Item.EffectsInfos()));
                         }
                     }
                 }
@@ -166,36 +166,30 @@ namespace DofusOrigin.Realm.Exchanges
 
         public void ValideExchange()
         {
-            player1.m_kamas = player1.m_kamas - _player1Gold + _player2Gold;
-            player2.m_kamas = player2.m_kamas - _player2Gold + _player1Gold;
+            player1.Kamas = player1.Kamas - _player1Gold + _player2Gold;
+            player2.Kamas = player2.Kamas - _player2Gold + _player1Gold;
 
-            lock (_player1Items)
+            foreach (var item in _player1Items)
             {
-                foreach (var item in _player1Items)
-                {
-                    var charItem = item.GetNewItem();
-                    player2.m_inventary.AddItem(charItem, false);
+                var charItem = item.GetNewItem();
+                player2.ItemsInventary.AddItem(charItem, false);
 
-                    player1.m_inventary.DeleteItem(item.Item.m_id, item.Quantity);
-                }
+                player1.ItemsInventary.DeleteItem(item.Item.ID, item.Quantity);
             }
 
-            lock (_player2Items)
+            foreach (var item in _player2Items)
             {
-                foreach (var item in _player2Items)
-                {
-                    var charItem = item.GetNewItem();
-                    player1.m_inventary.AddItem(charItem, false);
+                var charItem = item.GetNewItem();
+                player1.ItemsInventary.AddItem(charItem, false);
 
-                    player2.m_inventary.DeleteItem(item.Item.m_id, item.Quantity);
-                }
+                player2.ItemsInventary.DeleteItem(item.Item.ID, item.Quantity);
             }
 
             player1.SendChararacterStats();
             player2.SendChararacterStats();
 
-            player1.m_networkClient.Send("EVa");
-            player2.m_networkClient.Send("EVa");
+            player1.NetworkClient.Send("EVa");
+            player2.NetworkClient.Send("EVa");
 
             ExchangesManager.LeaveExchange(player1, false);
         }

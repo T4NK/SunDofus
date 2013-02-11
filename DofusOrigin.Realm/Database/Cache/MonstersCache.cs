@@ -8,14 +8,15 @@ namespace DofusOrigin.Database.Cache
 {
     class MonstersCache
     {
-        public static List<Models.Monsters.MonsterModel> m_monsters = new List<Models.Monsters.MonsterModel>();
+        public static List<Models.Monsters.MonsterModel> MonstersList = new List<Models.Monsters.MonsterModel>();
 
         public static void LoadMonsters()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_creatures";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
                 var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
@@ -56,21 +57,23 @@ namespace DofusOrigin.Database.Cache
                         }
                     }
 
-                    m_monsters.Add(newMonsters);
+                    lock(MonstersList)
+                        MonstersList.Add(newMonsters);
                 }
 
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' monsters@ from the database !", m_monsters.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' monsters@ from the database !", MonstersList.Count));
         }
 
         public static void LoadMonstersLevels()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_creatures_levels";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
                 var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
@@ -114,8 +117,13 @@ namespace DofusOrigin.Database.Cache
                         }
                     }
 
-                    if (m_monsters.Any(x => x.m_id == newLevel.m_creature))
-                        m_monsters.First(x => x.m_id == newLevel.m_creature).m_levels.Add(newLevel);
+                    if (MonstersList.Any(x => x.m_id == newLevel.m_creature))
+                    {
+                        var monster = MonstersList.First(x => x.m_id == newLevel.m_creature);
+
+                        lock(monster.m_levels)           
+                            monster.m_levels.Add(newLevel);
+                    }
                 }
 
                 sqlReader.Close();

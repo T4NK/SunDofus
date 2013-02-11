@@ -7,18 +7,18 @@ namespace DofusOrigin.Realm.Characters.Spells
 {
     class InventarySpells
     {
-        public List<CharacterSpell> m_spells { get; set; }
-        public Character m_client { get; set; }
+        public List<CharacterSpell> Spells;
+        public Character Client;
 
-        public InventarySpells(Character _client)
+        public InventarySpells(Character client)
         {
-            m_spells = new List<CharacterSpell>();
-            m_client = _client;
+            Spells = new List<CharacterSpell>();
+            Client = client;
         }
 
-        public void ParseSpells(string _datas)
+        public void ParseSpells(string datas)
         {
-            var spells = _datas.Split('|');
+            var spells = datas.Split('|');
 
             foreach (var spell in spells)
             {
@@ -29,41 +29,43 @@ namespace DofusOrigin.Realm.Characters.Spells
 
         public void LearnSpells()
         {
-            foreach (var spell in Database.Cache.SpellsCache.m_spellsToLearn.Where(x => x.m_race == m_client.m_class && x.m_level <= m_client.m_level))
+            foreach (var spell in Database.Cache.SpellsCache.SpellsToLearnList.Where(x => x.m_race == Client.Class && x.m_level <= Client.Level))
             {
-                if (m_spells.Any(x => x.m_id == spell.m_spellID)) 
+                if (Spells.Any(x => x.ID == spell.m_spellID))
                     continue;
 
                 AddSpells(spell.m_spellID, 1, spell.m_pos);
             }
         }
 
-        public void AddSpells(int _id, int _level, int _pos)
+        public void AddSpells(int id, int level, int pos)
         {
-            if (m_spells.Any(x => x.m_id == _id)) return;
+            if (Spells.Any(x => x.ID == id)) 
+                return;
 
-            if (_level < 1) _level = 1;
-            if (_level > 6) _level = 6;
+            if (level < 1) level = 1;
+            if (level > 6) level = 6;
 
-            if (_pos > 25) _pos = 25;
-            if (_pos < 1) _pos = 25;
+            if (pos > 25) pos = 25;
+            if (pos < 1) pos = 25;
 
-            m_spells.Add(new CharacterSpell(_id, _level, _pos));
+            lock(Spells)
+                Spells.Add(new CharacterSpell(id, level, pos));
         }
 
         public void SendAllSpells()
         {
             var packet = "";
 
-            foreach (var spell in m_spells)
-                packet += string.Format("{0}~{1}~{2};", spell.m_id, spell.m_level, Maps.Pathfinding.GetDirChar(spell.m_position));
+            foreach (var spell in Spells)
+                packet += string.Format("{0}~{1}~{2};", spell.ID, spell.Level, Maps.Pathfinding.GetDirChar(spell.Position));
 
-            m_client.m_networkClient.Send(string.Format("SL{0}", packet));
+            Client.NetworkClient.Send(string.Format("SL{0}", packet));
         }
 
         public string SaveSpells()
         {
-            return string.Join("|", m_spells);
+            return string.Join("|", Spells);
         }
     }
 }

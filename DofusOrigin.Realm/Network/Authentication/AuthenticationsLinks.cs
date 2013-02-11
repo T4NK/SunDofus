@@ -9,36 +9,39 @@ namespace DofusOrigin.Network.Authentication
 {
     class AuthenticationsLinks
     {
-        List<AuthenticationClient> m_clients;
+        private List<AuthenticationClient> Clients;
 
         public AuthenticationsLinks()
         {
-            m_clients = new List<AuthenticationClient>();
+            Clients = new List<AuthenticationClient>();
         }
 
-        public void Send(string _message)
+        public void Send(string message)
         {
-            foreach (var client in m_clients)
-                client.Send(_message);
+            foreach (var client in Clients)
+                client.Send(message);
         }
 
         public void Start()
         {
-            foreach (var client in Database.Cache.AuthsCache.m_auths)
-                m_clients.Add(new AuthenticationClient(client));
+            foreach (var client in Database.Cache.AuthsCache.AuthsList)
+                Clients.Add(new AuthenticationClient(client));
 
-            foreach (var client in m_clients)
+            foreach (var client in Clients)
                 client.Start();
         }
 
-        public void Update(List<Database.Models.Clients.AuthClientModel> _modelList)
+        public void Update(List<Database.Models.Clients.AuthClientModel> modelList)
         {
-            foreach (var model in _modelList)
+            foreach (var model in modelList)
             {
-                if (!m_clients.Any(x => x.m_model.m_id == model.m_id))
+                if (!Clients.Any(x => x.Model.m_id == model.m_id))
                 {
                     var client = new AuthenticationClient(model);
-                    m_clients.Add(client);
+
+                    lock(Clients)
+                        Clients.Add(client);
+
                     client.Start();
                 }
             }

@@ -8,18 +8,18 @@ namespace DofusOrigin.Database.Cache
 {
     class NoPlayerCharacterCache
     {
-        public static List<Realm.Characters.NPC.NPCMap> m_npcList = new List<Realm.Characters.NPC.NPCMap>();
-        public static List<Models.NPC.NPCsQuestion> m_questions = new List<Models.NPC.NPCsQuestion>();
-        public static List<Models.NPC.NPCsAnswer> m_answers = new List<Models.NPC.NPCsAnswer>();
+        public static List<Realm.Characters.NPC.NPCMap> NpcsList = new List<Realm.Characters.NPC.NPCMap>();
+        public static List<Models.NPC.NPCsQuestion> QuestionsList = new List<Models.NPC.NPCsQuestion>();
+        public static List<Models.NPC.NPCsAnswer> AnswersList = new List<Models.NPC.NPCsAnswer>();
 
         public static void LoadNPCs()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_npcs";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
@@ -34,7 +34,7 @@ namespace DofusOrigin.Database.Cache
                         npcModel.m_color3 = sqlReader.GetInt32("Color3");
 
                         if(sqlReader.GetInt32("initQuestion") != -1)
-                            npcModel.m_question = m_questions.First(x => x.m_questionID == sqlReader.GetInt32("initQuestion"));
+                            npcModel.m_question = QuestionsList.First(x => x.m_questionID == sqlReader.GetInt32("initQuestion"));
 
                         npcModel.m_name = sqlReader.GetString("Name");
                         npcModel.m_items = sqlReader.GetString("Items");
@@ -51,37 +51,38 @@ namespace DofusOrigin.Database.Cache
                     var npc = new Realm.Characters.NPC.NPCMap(npcModel);
                     {
                         var infosMap = sqlReader.GetString("Mapinfos").Split(';');
-                        npc.m_mapid = int.Parse(infosMap[0]);
-                        npc.m_cellid = int.Parse(infosMap[1]);
-                        npc.m_dir = int.Parse(infosMap[2]);
+                        npc.MapID = int.Parse(infosMap[0]);
+                        npc.MapCell = int.Parse(infosMap[1]);
+                        npc.Dir = int.Parse(infosMap[2]);
                         npc.mustMove = bool.Parse(infosMap[3]);
 
-                        if (MapsCache.m_mapsList.Any(x => x.GetModel.m_id == npc.m_mapid))
+                        if (MapsCache.MapsList.Any(x => x.GetModel.m_id == npc.MapID))
                         {
-                            npc.m_idOnMap = MapsCache.m_mapsList.First(x => x.GetModel.m_id == npc.m_mapid).NextNpcID();
-                            MapsCache.m_mapsList.First(x => x.GetModel.m_id == npc.m_mapid).Npcs.Add(npc);
+                            npc.ID = MapsCache.MapsList.First(x => x.GetModel.m_id == npc.MapID).NextNpcID();
+                            MapsCache.MapsList.First(x => x.GetModel.m_id == npc.MapID).Npcs.Add(npc);
 
                             npc.StartMove();
                         }
                     }
 
-                    m_npcList.Add(npc);
+                    lock(NpcsList)
+                        NpcsList.Add(npc);
                 }
 
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcs@ from the database !", m_npcList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcs@ from the database !", NpcsList.Count));
         }
 
         public static void LoadNPCsQuestions()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_npcs_questions";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
@@ -94,7 +95,7 @@ namespace DofusOrigin.Database.Cache
                         if (answer == "")
                             continue;
 
-                        question.m_answers.Add(m_answers.First(x => x.m_answerID == int.Parse(answer)));
+                        question.m_answers.Add(AnswersList.First(x => x.m_answerID == int.Parse(answer)));
                     }
 
                     foreach (var condi in sqlReader.GetString("conditions").Split('&'))
@@ -111,27 +112,27 @@ namespace DofusOrigin.Database.Cache
                         question.m_conditions.Add(condiObject);
                     }
 
-                    m_questions.Add(question);
-
+                    lock(QuestionsList)
+                        QuestionsList.Add(question);
                 }
 
                 sqlReader.Close();
             }
 
-            foreach (var question in m_questions.Where(x => x.m_rescueQuestionID != -1))
-                question.m_rescueQuestion = m_questions.First(x => x.m_questionID == question.m_rescueQuestionID);
+            foreach (var question in QuestionsList.Where(x => x.m_rescueQuestionID != -1))
+                question.m_rescueQuestion = QuestionsList.First(x => x.m_questionID == question.m_rescueQuestionID);
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcsQuestions@ from the database !", m_questions.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcsQuestions@ from the database !", QuestionsList.Count));
         }
 
         public static void LoadNPCsAnswers()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_npcs_answers";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
@@ -154,13 +155,14 @@ namespace DofusOrigin.Database.Cache
                         answer.m_conditions.Add(condiObject);
                     }
 
-                    m_answers.Add(answer);
+                    lock(AnswersList)
+                        AnswersList.Add(answer);
                 }
 
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcsAnswers@ from the database !", m_answers.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' npcsAnswers@ from the database !", AnswersList.Count));
         }
     }
 }

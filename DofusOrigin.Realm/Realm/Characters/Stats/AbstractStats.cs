@@ -7,32 +7,83 @@ namespace DofusOrigin.Realm.Characters.Stats
 {
     class AbstractStats
     {
-        public int m_bases { get; set; }
-        public int m_items { get; set; }
-        public int m_dons { get; set; }
-        public int m_boosts { get; set; }
+        public int _bases;
+
+        public int Bases
+        {
+            get
+            {
+                return _bases;
+            }
+            set                
+            {
+                _bases = value;
+            }
+        }
+
+        public int _items;
+
+        public int Items
+        {
+            get
+            {
+                return _items;
+            }
+            set
+            {
+                _items = value;
+            }
+        }
+
+        public int _dons;
+
+        public int Dons
+        {
+            get
+            {
+                return _dons;
+            }
+            set
+            {
+                _dons = value;
+            }
+        }
+
+        public int _boosts;
+
+        public int Boosts
+        {
+            get
+            {
+                return _boosts;
+            }
+            set
+            {
+                _boosts = value;
+            }
+        }
 
         public AbstractStats()
         {
-            m_bases = 0;
-            m_items = 0;
-            m_dons = 0;
-            m_boosts = 0;
+            Bases = 0;
+            Items = 0;
+            Dons = 0;
+            Boosts = 0;
         }
 
         public int Total()
         {
-            return (m_bases + m_items + m_dons + m_boosts);
+            return (Bases + Items + Dons + Boosts);
         }
 
         public int Base()
         {
-            return m_bases;
+            return Bases;
         }
 
         public override string ToString()
         {
-            return string.Format("{0},{1},{2},{3}", m_bases, m_items, m_dons, m_boosts);
+            return string.Format("{0},{1},{2},{3}", Bases, Items, Dons, Boosts);
         }
     }
 }

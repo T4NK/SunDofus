@@ -8,23 +8,23 @@ namespace DofusOrigin.Realm.Characters.Items
 {
     class ItemsHandler
     {
-        public static int m_lastID = 0;
+        private static int _lastID = 0;
 
         public static int GetNewID()
         {
-            return ++m_lastID;
+            return ++_lastID;
         }
 
-        public static bool PositionAvaliable(int _itemType, bool _usable, int _position)
+        public static bool PositionAvaliable(int itemType, bool usable, int position)
         {
 
             return true;
 
         }
 
-        public static bool ConditionsAvaliable(ItemModel _item, Character _character)
+        public static bool ConditionsAvaliable(ItemModel item, Character character)
         {
-            var condi = _item.m_condistr;
+            var condi = item.m_condistr;
             var avaliable = false;
 
             if (condi == "")
@@ -43,51 +43,51 @@ namespace DofusOrigin.Realm.Characters.Items
                         switch(cond.Substring(1,1))
                         {
                             case "a":
-                                value = _character.m_stats.agility.m_bases;
+                                value = character.Stats.agility.Bases;
                                 break;
 
                             case "i":
-                                value = _character.m_stats.intelligence.m_bases;
+                                value = character.Stats.intelligence.Bases;
                                 break;
 
                             case "c":
-                                value = _character.m_stats.luck.m_bases;
+                                value = character.Stats.luck.Bases;
                                 break;
 
                             case "s":
-                                value = _character.m_stats.strenght.m_bases;
+                                value = character.Stats.strenght.Bases;
                                 break;
 
                             case "v":
-                                value = _character.m_stats.life.m_bases;
+                                value = character.Stats.life.Bases;
                                 break;
 
                             case "w":
-                                value = _character.m_stats.wisdom.m_bases;
+                                value = character.Stats.wisdom.Bases;
                                 break;
 
                             case "A":
-                                value = _character.m_stats.agility.Total();
+                                value = character.Stats.agility.Total();
                                 break;
 
                             case "I":
-                                value = _character.m_stats.intelligence.Total();
+                                value = character.Stats.intelligence.Total();
                                 break;
 
                             case "C":
-                                value = _character.m_stats.luck.Total();
+                                value = character.Stats.luck.Total();
                                 break;
 
                             case "S":
-                                value = _character.m_stats.strenght.Total();
+                                value = character.Stats.strenght.Total();
                                 break;
 
                             case "V":
-                                value = _character.m_stats.life.Total();
+                                value = character.Stats.life.Total();
                                 break;
 
                             case "W":
-                                value = _character.m_stats.wisdom.Total();
+                                value = character.Stats.wisdom.Total();
                                 break;
 
                             default:
@@ -102,15 +102,15 @@ namespace DofusOrigin.Realm.Characters.Items
                         switch(cond.Substring(1,1))
                         {
                             case "G":
-                                value = _character.m_class;
+                                value = character.Class;
                                 break;
 
                             case "L":
-                                value = _character.m_level;
+                                value = character.Level;
                                 break;
 
                             case "K":
-                                value = _character.m_kamas;
+                                value = character.Kamas;
                                 break;
 
                             default:

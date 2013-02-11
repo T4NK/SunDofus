@@ -14,24 +14,21 @@ namespace DofusOrigin.Realm.World
 
         public static void SaveChararacters()
         {
-            Network.ServersHandler.m_authLinks.Send("SSM");
+            Network.ServersHandler.AuthLinks.Send("SSM");
 
-            lock (Characters.CharactersManager.CharactersList)
+            foreach (var character in Characters.CharactersManager.CharactersList)
             {
-                foreach (var character in Characters.CharactersManager.CharactersList)
-                {
-                    if (character.isConnected)
-                        character.m_networkClient.Send("Im1164");
+                if (character.isConnected)
+                    character.NetworkClient.Send("Im1164");
 
-                    Database.Cache.CharactersCache.SaveCharacter(character);
-                    System.Threading.Thread.Sleep(100);
+                Database.Cache.CharactersCache.SaveCharacter(character);
+                System.Threading.Thread.Sleep(100);
 
-                    if (character.isConnected)
-                        character.m_networkClient.Send("Im1165");
-                }
+                if (character.isConnected)
+                    character.NetworkClient.Send("Im1165");
             }
 
-            Network.ServersHandler.m_authLinks.Send("STM");
+            Network.ServersHandler.AuthLinks.Send("STM");
         }
     }
 }

@@ -4,74 +4,79 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 using System.Timers;
+using DofusOrigin.Database.Models.Clients;
 
 namespace DofusOrigin.Network.Authentication
 {
     class AuthenticationClient : DofusOrigin.Network.TCPClient
     {
-        public AuthenticationClient(Database.Models.Clients.AuthClientModel _model)
+        public AuthClientModel Model;
+
+        private Timer _timer;
+        private bool isLogged;
+        private object _packetLocker;
+
+        public AuthenticationClient(AuthClientModel model)
             : base(new SilverSocket())
         {
             this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
             this.ReceivedDatas += new ReceiveDatasHandler(this.DatasArrival);
             this.ConnectFailed += new ConnectFailedHandler(this.FailedToConnect);
 
-            m_timer = new Timer();
-            m_timer.Interval = 1000;
-            m_timer.Enabled = true;
-            m_timer.Elapsed += new ElapsedEventHandler(this.TimeElapsed);
+            _timer = new Timer();
+            _timer.Interval = 1000;
+            _timer.Enabled = true;
+            _timer.Elapsed += new ElapsedEventHandler(this.TimeElapsed);
 
-            m_packetLocker = new object();
-            m_model = _model;
+            _packetLocker = new object();
+            isLogged = false;
+            Model = model;
         }
-
-        public Database.Models.Clients.AuthClientModel m_model { get; set; }
-        Timer m_timer { get; set; }
-        bool  isLogged = false;
-        object m_packetLocker { get; set; }
 
         public void Start()
         {
-            this.ConnectTo(m_model.m_ip, m_model.m_port);
+            this.ConnectTo(Model.m_ip, Model.m_port);
         }
 
-        public void Send(string _message, bool _force = false)
+        public void Send(string message, bool force = false)
         {
-            if (isLogged == false && _force == false)
+            if (isLogged == false && force == false)
                 return;
 
-            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), _message));
-            this.SendDatas(_message);
+            Utilities.Loggers.InfosLogger.Write(string.Format("Sent to {0} : {1}", myIp(), message));
+
+            lock(_packetLocker)
+                this.SendDatas(message);
         }
 
-        void TimeElapsed(object sender, EventArgs e)
+        private void TimeElapsed(object sender, EventArgs e)
         {
             if (this.isConnected == false)
                 Start();
             else
-                m_timer.Stop();
+                _timer.Stop();
         }
 
-        void FailedToConnect(Exception _exception)
+        private void FailedToConnect(Exception exception)
         {
-            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot connect to @AuthServer@ because {0}", _exception.ToString()));
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot connect to @AuthServer@ because {0}", exception.ToString()));
         }
 
-        void DatasArrival(string _datas)
+        private void DatasArrival(string datas)
         {
-            lock (m_packetLocker)
-                ParsePacket(_datas);
+            lock (_packetLocker)
+                ParsePacket(datas);
         }
 
-        void Disconnected()
+        private void Disconnected()
         {
             Utilities.Loggers.StatusLogger.Write("Connection with the @AuthServer@ closed !");
-            m_timer.Start();
+            _timer.Start();
         }
 
-        void ParsePacket(string _datas)
+        private void ParsePacket(string datas)
         {
-            var infos = _datas.Split('|');
+            var infos = datas.Split('|');
 
             try
             {
@@ -79,7 +84,7 @@ namespace DofusOrigin.Network.Authentication
                 {
                     case "ANTS":
 
-                        AuthenticationsKeys.m_keys.Add(new AuthenticationsKeys(_datas));
+                        AuthenticationsKeys.m_keys.Add(new AuthenticationsKeys(datas));
                         break;
 
                     case "HCS":
@@ -94,15 +99,15 @@ namespace DofusOrigin.Network.Authentication
                         isLogged = true;
                         Utilities.Loggers.InfosLogger.Write("Connected with the @AuthenticationServer@ !");
 
-                        if (ServersHandler.m_realmServer.m_pseudoClients.Count > 0)
-                            Send(string.Format("SNLC|{0}", string.Join("|", ServersHandler.m_realmServer.m_pseudoClients.Values)));
+                        if (ServersHandler.RealmServer.PseudoClients.Count > 0)
+                            Send(string.Format("SNLC|{0}", string.Join("|", ServersHandler.RealmServer.PseudoClients.Values)));
 
                         break;
                 }
             }
             catch (Exception e)
             {
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse @AuthServer's packet@ ({0}) because : {1}", _datas, e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse @AuthServer's packet@ ({0}) because : {1}", datas, e.ToString()));
             }
         }
     }

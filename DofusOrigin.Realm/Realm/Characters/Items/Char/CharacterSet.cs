@@ -7,17 +7,25 @@ namespace DofusOrigin.Realm.Characters.Items
 {
     class CharacterSet
     {
-        public int m_id { get; set; }
-        public List<int> myItemsList { get; set; }
-        public Dictionary<int, List<Effects.EffectItem>> myBonusList { get; set; }
+        private int _ID;
 
-        public CharacterSet(int _id)
+        public int ID
         {
-            m_id = _id;
+            get
+            {
+                return _ID;
+            }
+        }
+        public List<int> ItemsList;
+        public Dictionary<int, List<Effects.EffectItem>> BonusList;
 
-            myItemsList = new List<int>();
-            myBonusList = Database.Cache.ItemsCache.m_setsList.First(x => x.m_id == m_id).m_bonusList;
-            myBonusList[1] = new List<Effects.EffectItem>();
+        public CharacterSet(int id)
+        {
+            _ID = id;
+
+            ItemsList = new List<int>();
+            BonusList = Database.Cache.ItemsCache.SetsList.First(x => x.m_id == ID).m_bonusList;
+            BonusList[1] = new List<Effects.EffectItem>();
         }
     }
 }

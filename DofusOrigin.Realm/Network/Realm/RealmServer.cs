@@ -9,37 +9,39 @@ namespace DofusOrigin.Network.Realm
 {
     class RealmServer : TCPServer
     {
-        public List<RealmClient> m_clients;
-        public Dictionary<string, int> m_pseudoClients;
+        public List<RealmClient> Clients;
+        public Dictionary<string, int> PseudoClients;
 
         public RealmServer()
             : base(Utilities.Config.GetConfig.GetStringElement("ServerIp"), Utilities.Config.GetConfig.GetIntElement("ServerPort"))
         {
-            m_clients = new List<RealmClient>();
-            m_pseudoClients = new Dictionary<string,int>();
+            Clients = new List<RealmClient>();
+            PseudoClients = new Dictionary<string,int>();
 
             this.SocketClientAccepted += new AcceptSocketHandler(this.OnAcceptedClient);
             this.ListeningServer += new ListeningServerHandler(this.OnListeningServer);
             this.ListeningServerFailed += new ListeningServerFailedHandler(this.OnListeningFailedServer);
         }
 
-        public void OnAcceptedClient(SilverSocket _socket)
+        public void OnAcceptedClient(SilverSocket socket)
         {
-            if (_socket == null) 
+            if (socket == null) 
                 return;
 
             Utilities.Loggers.InfosLogger.Write("New inputted @client@ connection !");
-            m_clients.Add(new RealmClient(_socket));
+
+            lock(Clients)
+                Clients.Add(new RealmClient(socket));
         }
 
-        public void OnListeningServer(string _remote)
+        public void OnListeningServer(string remote)
         {
-            Utilities.Loggers.StatusLogger.Write(string.Format("@RealmServer@ started on <{0}> !", _remote));
+            Utilities.Loggers.StatusLogger.Write(string.Format("@RealmServer@ started on <{0}> !", remote));
         }
 
-        public void OnListeningFailedServer(Exception _exception)
+        public void OnListeningFailedServer(Exception exception)
         {
-            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot start the @RealmServer@ because : {0}", _exception.ToString()));
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot start the @RealmServer@ because : {0}", exception.ToString()));
         }
     }
 }

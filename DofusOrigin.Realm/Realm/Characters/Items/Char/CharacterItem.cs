@@ -8,75 +8,115 @@ namespace DofusOrigin.Realm.Characters.Items
 {
     class CharacterItem
     {
-        public int m_id { get; set; }
-        public int m_position { get; set; }
-        public int m_quantity { get; set; }
+        private int _ID;
 
-        public ItemModel m_base { get; set; }
-        public List<Effects.EffectItem> m_effectsList { get; set; }
-
-        public CharacterItem(ItemModel _base)
+        public int ID 
         {
-            m_base = _base;
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                _ID = value;
+            }
+        }
 
-            m_effectsList = new List<Effects.EffectItem>();
-            m_base.m_effectsList.ForEach(x => m_effectsList.Add(new Effects.EffectItem(x)));
+        private int _position;
 
-            m_position = -1;
+        public int Position
+        {
+            get
+            {
+                return _position;
+            }
+            set
+            {
+                _position = value;
+            }
+        }
+
+        private int _quantity;
+
+        public int Quantity
+        {
+            get
+            {
+                return _quantity;
+            }
+            set
+            {
+                _quantity = value;
+            }
+        }
+
+        public ItemModel Model;
+        public List<Effects.EffectItem> EffectsList;
+
+        public CharacterItem(ItemModel model)
+        {
+            Model = model;
+
+            EffectsList = new List<Effects.EffectItem>();
+
+            lock(EffectsList)
+                Model.m_effectsList.ForEach(x => EffectsList.Add(new Effects.EffectItem(x)));
+
+            _position = -1;
         }
 
         public string EffectsInfos()
         {
-            return string.Join(",", m_effectsList);
+            return string.Join(",", EffectsList);
         }
 
-        public void GeneratItem(int _jet = 4)
+        public void GeneratItem(int jet = 4)
         {
-            this.m_quantity = 1;
-            this.m_position = -1;
+            this.Quantity = 1;
+            this.Position = -1;
 
-            foreach (var Effect in m_effectsList)
-                GetNewJet(Effect, _jet);
+            EffectsList.ForEach(x => GetNewJet(x, jet));
         }
 
-        public void GetNewJet(Effects.EffectItem _effect, int _jet = 3)
+        public void GetNewJet(Effects.EffectItem effect, int jet = 3)
         {
-            if (_effect.ID == 91 | _effect.ID == 92 | _effect.ID == 93 | _effect.ID == 94 | _effect.ID == 95 | _effect.ID == 96 | _effect.ID == 97 | _effect.ID == 98 | _effect.ID == 99 | _effect.ID == 100 | _effect.ID == 101) { }
-            else if (_effect.ID == 800)
+            if (effect.ID == 91 | effect.ID == 92 | effect.ID == 93 | effect.ID == 94 | effect.ID == 95 | effect.ID == 96 | effect.ID == 97 | effect.ID == 98 | effect.ID == 99 | effect.ID == 100 | effect.ID == 101) { }
+            else if (effect.ID == 800)
             {
-                _effect.Value3 = 10; // PDV Des familiers !
+                effect.Value3 = 10; // PDV Des familiers !
             }
             else
             {
-                _effect.Value = Utilities.Basic.GetRandomJet(_effect.Effect, _jet);
-                _effect.Value2 = -1;
+                effect.Value = Utilities.Basic.GetRandomJet(effect.Effect, jet);
+                effect.Value2 = -1;
             }
         }
 
         public CharacterItem Copy()
         {
-            var newItem = new CharacterItem(m_base);
-            newItem.m_effectsList.Clear();
+            var item = new CharacterItem(Model);
+            item.EffectsList.Clear();
 
-            m_effectsList.ForEach(x => newItem.m_effectsList.Add(new Effects.EffectItem(x)));
+            lock(item.EffectsList)
+                EffectsList.ForEach(x => item.EffectsList.Add(new Effects.EffectItem(x)));
 
-            newItem.m_id = ItemsHandler.GetNewID();
-            newItem.m_position = m_position;
-            newItem.m_quantity = m_quantity;
+            item.ID = ItemsHandler.GetNewID();
+            item.Position = Position;
+            item.Quantity = Quantity;
 
-            return newItem;
+            return item;
         }
 
         public string SaveString()
         {
-            return string.Format("{0}~{1}~{2}~{3}", Utilities.Basic.DeciToHex(m_base.m_id), Utilities.Basic.DeciToHex(m_quantity),
-                (m_position == -1 ? "" : Utilities.Basic.DeciToHex(m_position)), EffectsInfos());
+            return string.Format("{0}~{1}~{2}~{3}", Utilities.Basic.DeciToHex(Model.m_id), Utilities.Basic.DeciToHex(_quantity),
+                (_position == -1 ? "" : Utilities.Basic.DeciToHex(_position)), EffectsInfos());
         }
 
         public override string ToString()
         {
-            return string.Format("{0}~{1}~{2}~{3}~{4}",Utilities.Basic.DeciToHex(m_id), Utilities.Basic.DeciToHex(m_base.m_id),
-                Utilities.Basic.DeciToHex(m_quantity), (m_position == -1 ? "" : Utilities.Basic.DeciToHex(m_position)), EffectsInfos());
+            return string.Format("{0}~{1}~{2}~{3}~{4}",Utilities.Basic.DeciToHex(_ID), Utilities.Basic.DeciToHex(Model.m_id),
+                Utilities.Basic.DeciToHex(_quantity), (_position == -1 ? "" : Utilities.Basic.DeciToHex(_position)), EffectsInfos());
         }
     }
 }

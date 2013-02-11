@@ -8,17 +8,17 @@ namespace DofusOrigin.Database.Cache
 {
     class SpellsCache
     {
-        public static List<Database.Models.Spells.SpellModel> m_spellsList = new List<Database.Models.Spells.SpellModel>();
-        public static List<Database.Models.Spells.SpellToLearnModel> m_spellsToLearn = new List<Database.Models.Spells.SpellToLearnModel>();
+        public static List<Database.Models.Spells.SpellModel> SpellsList = new List<Database.Models.Spells.SpellModel>();
+        public static List<Database.Models.Spells.SpellToLearnModel> SpellsToLearnList = new List<Database.Models.Spells.SpellToLearnModel>();
 
         public static void LoadSpells()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_spells";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
@@ -31,23 +31,24 @@ namespace DofusOrigin.Database.Cache
                     for (int i = 1; i <= 6; i++)
                         spell.ParseLevel(sqlReader.GetString("lvl" + i));
 
-                    m_spellsList.Add(spell);
+                    lock(SpellsList)
+                        SpellsList.Add(spell);
                 }
 
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells@ from the database !", m_spellsList.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells@ from the database !", SpellsList.Count));
         }
 
         public static void LoadSpellsToLearn()
         {
-            lock (DatabaseHandler.m_locker)
+            lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "SELECT * FROM datas_spells_learn";
-                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.m_connection);
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
                 {
@@ -58,13 +59,14 @@ namespace DofusOrigin.Database.Cache
                     spell.m_spellID = sqlReader.GetInt16("SpellId");
                     spell.m_pos = sqlReader.GetInt16("Position");
 
-                    m_spellsToLearn.Add(spell);
+                    lock(SpellsToLearnList)
+                        SpellsToLearnList.Add(spell);
                 }
 
                 sqlReader.Close();
             }
 
-            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells to learn@ from the database !", m_spellsToLearn.Count));
+            Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' spells to learn@ from the database !", SpellsToLearnList.Count));
         }
     }
 }

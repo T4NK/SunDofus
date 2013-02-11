@@ -9,25 +9,31 @@ namespace DofusOrigin.Network.Authentication
     {
         public static List<AuthenticationsKeys> m_keys = new List<AuthenticationsKeys>();
 
-        public string m_key;
-        public Database.Models.Clients.AccountModel m_infos;
+        private string _key;
 
-        public AuthenticationsKeys(string _packet)
+        public string Key
         {
-            m_key = "";
-            m_infos = new Database.Models.Clients.AccountModel();
+            get
+            {
+                return _key;
+            }
+        }
+        public Database.Models.Clients.AccountModel Infos;
 
-            var _datas = _packet.Split('|');
+        public AuthenticationsKeys(string packet)
+        {
+            Infos = new Database.Models.Clients.AccountModel();
+            var _datas = packet.Split('|');
 
-            m_key = _datas[1];
-            m_infos.m_id = int.Parse(_datas[2]);
-            m_infos.m_pseudo = _datas[3];
-            m_infos.m_question = _datas[4];
-            m_infos.m_answer = _datas[5];
-            m_infos.m_level = int.Parse(_datas[6]);
-            m_infos.m_strcharacters = _datas[7];
-            m_infos.m_subscription = long.Parse(_datas[8]);
-            m_infos.m_strgifts = _datas[9];
+            _key = _datas[1];
+            Infos.m_id = int.Parse(_datas[2]);
+            Infos.m_pseudo = _datas[3];
+            Infos.m_question = _datas[4];
+            Infos.m_answer = _datas[5];
+            Infos.m_level = int.Parse(_datas[6]);
+            Infos.m_strcharacters = _datas[7];
+            Infos.m_subscription = long.Parse(_datas[8]);
+            Infos.m_strgifts = _datas[9];
         }
     }
 }

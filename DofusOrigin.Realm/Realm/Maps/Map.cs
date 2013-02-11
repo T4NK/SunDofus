@@ -55,11 +55,8 @@ namespace DofusOrigin.Realm.Maps
 
         public void Send(string message)
         {
-            lock (Characters)
-            {
-                foreach (var character in Characters)
-                    character.m_networkClient.Send(message);
-            }
+            foreach (var character in Characters)
+                character.NetworkClient.Send(message);
         }
 
         public void AddPlayer(Characters.Character character)
@@ -69,18 +66,18 @@ namespace DofusOrigin.Realm.Maps
             lock (Characters)
                 Characters.Add(character);
 
-            character.m_networkClient.Send(string.Format("GM{0}", CharactersPattern()));
+            character.NetworkClient.Send(string.Format("GM{0}", CharactersPattern()));
 
             if(Npcs.Count > 0)
-                character.m_networkClient.Send(string.Format("GM{0}", NPCsPattern()));
+                character.NetworkClient.Send(string.Format("GM{0}", NPCsPattern()));
 
             if (MonstersGroups.Count > 0)
-                character.m_networkClient.Send(string.Format("GM{0}", MonstersGroupsPattern()));
+                character.NetworkClient.Send(string.Format("GM{0}", MonstersGroupsPattern()));
         }
 
         public void DelPlayer(Characters.Character character)
         {
-            Send(string.Format("GM|-{0}", character.m_id));
+            Send(string.Format("GM|-{0}", character.ID));
 
             lock(Characters)
                 Characters.Remove(character);
@@ -90,7 +87,7 @@ namespace DofusOrigin.Realm.Maps
         {
             var i = -1;
 
-            while (Npcs.Any(x => x.m_idOnMap == i) || MonstersGroups.Any(x => x.ID == i))
+            while (Npcs.Any(x => x.ID == i) || MonstersGroups.Any(x => x.ID == i))
                 i -= 1;
 
             return i;
@@ -99,30 +96,21 @@ namespace DofusOrigin.Realm.Maps
         private string CharactersPattern()
         {
             var packet = "";
-
-            lock(Characters)
-                Characters.ForEach(x => packet += string.Format("|+{0}", x.PatternDisplayChar()));
-
+            Characters.ForEach(x => packet += string.Format("|+{0}", x.PatternDisplayChar()));
             return packet;
         }
 
         private string NPCsPattern()
         {
             var packet = "";
-
-            lock(Npcs)
-                Npcs.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
-
+            Npcs.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
             return packet;
         }
 
         private string MonstersGroupsPattern()
         {
             var packet = "";
-
-            lock(MonstersGroups)
-                MonstersGroups.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
-
+            MonstersGroups.ForEach(x => packet += string.Format("|+{0}", x.PatternOnMap()));
             return packet;
         }
 
