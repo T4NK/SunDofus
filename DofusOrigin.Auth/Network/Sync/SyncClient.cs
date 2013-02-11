@@ -41,9 +41,7 @@ namespace DofusOrigin.Network.Sync
                 Builder.Append(client.Account.Level).Append("|");
                 Builder.Append(string.Join(",", client.Account.Characters[Server.ID].ToArray())).Append("|");
                 Builder.Append(client.Account.SubscriptionTime()).Append("|");
-
-                lock(Database.Cache.GiftsCache.Cache)
-                    Builder.Append(string.Join("+", Database.Cache.GiftsCache.Cache.Where(x => x.Target == client.Account.ID)));
+                Builder.Append(string.Join("+", Database.Cache.GiftsCache.Cache.Where(x => x.Target == client.Account.ID)));
             }
 
             Send(Builder.ToString());
@@ -106,13 +104,12 @@ namespace DofusOrigin.Network.Sync
 
                         if (_state == State.OnConnected)
                         {
-                            lock (Server.GetClients)
+                            if (!Server.GetClients.Contains(packet[1]))
                             {
-                                if (!Server.GetClients.Contains(packet[1]))
-                                {
+                                lock(Server.GetClients)
                                     Server.GetClients.Add(packet[1]);
-                                    SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(packet[1]), true);
-                                }
+
+                                SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(packet[1]), true);
                             }
                         }
 
@@ -122,13 +119,12 @@ namespace DofusOrigin.Network.Sync
 
                         if (_state == State.OnConnected)
                         {
-                            lock (Server.GetClients)
+                            if (Server.GetClients.Contains(packet[1]))
                             {
-                                if (Server.GetClients.Contains(packet[1]))
-                                {
+                                lock(Server.GetClients)
                                     Server.GetClients.Remove(packet[1]);
-                                    SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(packet[1]), false);
-                                }
+
+                                SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(packet[1]), false);
                             }
                         }
 
@@ -171,28 +167,25 @@ namespace DofusOrigin.Network.Sync
 
         private void Authentication(int serverId, string serverIp, int serverPort)
         {
-            lock (Database.Cache.ServersCache.Cache)
+            if (Database.Cache.ServersCache.Cache.Any(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0))
             {
-                if (Database.Cache.ServersCache.Cache.Any(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0))
+                var requieredServer = Database.Cache.ServersCache.Cache.First(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0);
+
+                if (!myIp().Contains(serverIp))
                 {
-                    var requieredServer = Database.Cache.ServersCache.Cache.First(x => x.ID == serverId && x.IP == serverIp && x.Port == serverPort && x.State == 0);
-
-                    if (!myIp().Contains(serverIp))
-                    {
-                        Disconnect();
-                        return;
-                    }
-
-                    Server = requieredServer;
-
-                    Send("HCSS");
-                    ChangeState(SyncClient.State.OnConnected);
-
-                    Utilities.Loggers.InfosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
-                }
-                else
                     Disconnect();
+                    return;
+                }
+
+                Server = requieredServer;
+
+                Send("HCSS");
+                ChangeState(SyncClient.State.OnConnected);
+
+                Utilities.Loggers.InfosLogger.Write(string.Format("Sync @<{0}>@ authentified !", this.myIp()));
             }
+            else
+                Disconnect();
         }
 
         private void ChangeState(State state)
@@ -221,23 +214,21 @@ namespace DofusOrigin.Network.Sync
                     break;
             }
 
-            lock(ServersHandler.AuthServer.GetClients)
-                ServersHandler.AuthServer.GetClients.ForEach(x => x.RefreshHosts());
+            ServersHandler.AuthServer.GetClients.ForEach(x => x.RefreshHosts());
         }
 
         private void ParseListConnected(string _datas)
         {
-            lock (Server.GetClients)
-            {
-                var packet = _datas.Substring(5).Split('|');
+            var packet = _datas.Substring(5).Split('|');
 
-                foreach (var pseudo in packet)
+            foreach (var pseudo in packet)
+            {
+                if (!Server.GetClients.Contains(pseudo))
                 {
-                    if (!Server.GetClients.Contains(pseudo))
-                    {
+                    lock(Server.GetClients)
                         Server.GetClients.Add(pseudo);
-                        SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(pseudo), true);
-                    }
+
+                    SyncAction.UpdateConnectedValue(Database.Cache.AccountsCache.GetAccountID(pseudo), true);
                 }
             }
         }

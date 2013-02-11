@@ -27,7 +27,9 @@ namespace DofusOrigin.Settings
                     continue;
 
                 var lineInfos = Line.Substring(1).Split(' ');
-                _elements.Add(lineInfos[0], lineInfos[1].Substring(0, lineInfos[1].Length - 1));
+
+                lock(_elements)
+                    _elements.Add(lineInfos[0], lineInfos[1].Substring(0, lineInfos[1].Length - 1));
             }
 
             reader.Close();
@@ -35,8 +37,11 @@ namespace DofusOrigin.Settings
 
         public void InsertElement(string _key, string _value)
         {
-            if(!_elements.ContainsKey(_key))
-                _elements.Add(_key, _value);
+            lock (_elements)
+            {
+                if (!_elements.ContainsKey(_key))
+                    _elements.Add(_key, _value);
+            }
         }
 
         public string GetStringElement(string _element)

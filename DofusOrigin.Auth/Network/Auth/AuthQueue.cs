@@ -41,40 +41,40 @@ namespace DofusOrigin.Network.Auth
         {
             Utilities.Loggers.InfosLogger.Write(string.Format("Add @{0}@ in queue !", client.myIp()));
 
-            lock (GetClients)
-            {
+            lock(_clients)
                 _clients.Add(client, _clients.Count + 1);
-                client.WaitPosition = (_clients.Count > 1 ? _clients.Count + 1 : 2);
-            }
+
+            client.WaitPosition = (_clients.Count > 1 ? _clients.Count + 1 : 2);
         }
 
         private static void RefreshQueue(object sender, EventArgs e)
         {
-            lock (GetClients)
+            if (_clients.Count <= 0)
+                return;
+
+            var count = 0;
+
+            foreach (var client in _clients.Keys.OrderBy(x => x.WaitPosition))
             {
-                if (_clients.Count <= 0)
-                    return;
-
-                var count = 0;
-
-                foreach (var client in _clients.Keys.OrderBy(x => x.WaitPosition))
+                if (count < Utilities.Config.GetConfig.GetIntElement("Client_Per_QueueRefresh"))
                 {
-                    if (count < Utilities.Config.GetConfig.GetIntElement("Client_Per_QueueRefresh"))
-                    {
-                        count++;
+                    count++;
 
-                        client.CheckAccount();
+                    client.CheckAccount();
+
+                    lock(MustDelete)
                         MustDelete.Add(client);
-                    }
                 }
+            }
 
+            lock(_clients)
                 MustDelete.ForEach(x => _clients.Remove(x));
+
+            lock(MustDelete)
                 MustDelete.Clear();
 
-                foreach (var client in _clients.Keys)
-                    client.WaitPosition = (_clients.Count > 1 ? _clients.Count + 1 : 2);
-
-            }
+            foreach (var client in _clients.Keys)
+                client.WaitPosition = (_clients.Count > 1 ? _clients.Count + 1 : 2);
 
             Utilities.Loggers.InfosLogger.Write("@Queue@ refreshed !");
         }

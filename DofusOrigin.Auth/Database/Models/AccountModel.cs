@@ -150,7 +150,8 @@ namespace DofusOrigin.Database.Models
                 dico[int.Parse(characterdatas[1])].Add(characterdatas[0]);
             }
 
-            Characters = dico;
+            lock(Characters)
+                Characters = dico;
         }
 
         public long SubscriptionTime()

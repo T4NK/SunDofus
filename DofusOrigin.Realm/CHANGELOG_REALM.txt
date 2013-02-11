@@ -35,3 +35,5 @@
 [03.02.2013] Seules les réponses avec les conditions atteintes sont désormais affichées
 [03.02.2013] Mise en place d'une question de secours lorsque le client n'atteind pas les conditions demandées
 [09.02.2013] Ajout de la possibilité de changé l'image lors de l'affichage des cadeaux
+[11.02.2013] Réecriture d'une grosse partie du code (normalisation, gaint de performance, ...)
+[11.02.2013] Rectification de failles critiques pour la suppression et selection de personnage

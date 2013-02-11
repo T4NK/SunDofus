@@ -8,12 +8,12 @@ namespace DofusOrigin.Interface
 {
     public class Logger
     {
-        ConsoleColor _color;
-        StreamWriter _writer;
+        private ConsoleColor _color;
+        private StreamWriter _writer;
 
-        bool _inConsole = false, _inFile = false;
-        string _name = "";
-        object _locker;
+        private bool _inConsole = false, _inFile = false;
+        private string _name = "";
+        private object _locker;
 
         public Logger(string name,object locker, ConsoleColor color = ConsoleColor.Gray)
         {

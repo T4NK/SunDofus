@@ -61,13 +61,10 @@ namespace DofusOrigin.Network.Auth
 
         public void RefreshHosts()
         {
-            lock (Database.Cache.ServersCache.Cache)
-            {
-                var packet = string.Format("AH{0}",
+            var packet = string.Format("AH{0}",
                     string.Join("|", Database.Cache.ServersCache.Cache));
 
-                Send(packet);
-            }
+            Send(packet);
         }
 
         public void CheckAccount()
@@ -147,8 +144,7 @@ namespace DofusOrigin.Network.Auth
 
                 case AccountState.OnCheckingQueue:
 
-                    lock(AuthQueue.GetClients)
-                        Send(string.Format("Af{0}|{1}|0|2", (WaitPosition), (AuthQueue.GetClients.Count > 2 ? AuthQueue.GetClients.Count : 3)));
+                    Send(string.Format("Af{0}|{1}|0|2", (WaitPosition), (AuthQueue.GetClients.Count > 2 ? AuthQueue.GetClients.Count : 3)));
 
                     return;
 
@@ -207,11 +203,9 @@ namespace DofusOrigin.Network.Auth
                     lock (Database.Cache.ServersCache.Cache)
                     {
                         var id = 0;
-                        try
-                        {
-                            id = int.Parse(initialPacket.Substring(2));
-                        }
-                        catch { return; }
+
+                        if (!int.TryParse(initialPacket.Substring(2), out id))
+                            return;
 
                         if (ServersHandler.SyncServer.GetClients.Any(x => x.Server.ID == id))
                         {

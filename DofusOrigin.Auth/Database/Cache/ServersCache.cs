@@ -30,6 +30,7 @@ namespace DofusOrigin.Database.Cache
             {
                 var sqlText = "SELECT * FROM dyn_realms";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
                 var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())

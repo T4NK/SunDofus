@@ -34,6 +34,7 @@ namespace DofusOrigin.Database.Cache
             {
                 var sqlText = "SELECT * FROM dyn_gifts";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
                 var sqlReader = sqlCommand.ExecuteReader();
 
                 while (sqlReader.Read())
@@ -48,7 +49,7 @@ namespace DofusOrigin.Database.Cache
                         gifts.Image = sqlReader.GetString("Image");
                     }
 
-                    lock (Cache)
+                    lock (_gifts)
                     {
                         if (!_gifts.Any(x => x.ID == gifts.ID))
                             _gifts.Add(gifts);

@@ -17,9 +17,10 @@ namespace DofusOrigin.Database.Cache
 
                 var sqlText = "SELECT * FROM dyn_accounts WHERE username=@username";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
                 sqlCommand.Parameters.Add(new MySqlParameter("@username", username));
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 if (sqlReader.Read())
                 {
@@ -54,7 +55,7 @@ namespace DofusOrigin.Database.Cache
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
                 sqlCommand.Parameters.Add(new MySqlParameter("@id", accountID));
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 if (sqlReader.Read())
                 {
@@ -87,9 +88,10 @@ namespace DofusOrigin.Database.Cache
 
                 var sqlText = "SELECT id FROM dyn_accounts WHERE pseudo=@pseudo";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
                 sqlCommand.Parameters.Add(new MySqlParameter("@pseudo", pseudo));
 
-                MySqlDataReader sqlReader = sqlCommand.ExecuteReader();
+                var sqlReader = sqlCommand.ExecuteReader();
 
                 if (sqlReader.Read())
                     accountID = sqlReader.GetInt32("id");
