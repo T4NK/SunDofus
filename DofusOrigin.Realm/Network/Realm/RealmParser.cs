@@ -99,6 +99,9 @@ namespace DofusOrigin.Network.Realm
                 {
                     var key = Network.Authentication.AuthenticationsKeys.m_keys.First(x => x.Key == datas);
 
+                    if (ServersHandler.RealmServer.Clients.Any(x => x.isAuth == true && x.Infos.Pseudo == key.Infos.Pseudo))
+                        ServersHandler.RealmServer.Clients.First(x => x.isAuth == true && x.Infos.Pseudo == key.Infos.Pseudo).Disconnect();
+
                     Client.Infos = key.Infos;
                     Client.Infos.ParseCharacters();
                     Client.ParseCharacters();
@@ -108,7 +111,12 @@ namespace DofusOrigin.Network.Realm
                     Network.Authentication.AuthenticationsKeys.m_keys.Remove(key);
 
                     Network.ServersHandler.AuthLinks.Send(string.Format("SNC|{0}", Client.Infos.Pseudo));
-                    ServersHandler.RealmServer.PseudoClients.Add(Client.Infos.Pseudo, Client.Infos.ID);
+
+                    lock (ServersHandler.RealmServer.PseudoClients)
+                    {
+                        if (!ServersHandler.RealmServer.PseudoClients.ContainsKey(Client.Infos.Pseudo))
+                            ServersHandler.RealmServer.PseudoClients.Add(Client.Infos.Pseudo, Client.Infos.ID);
+                    }
 
                     Client.Send("ATK0");
                 }
