@@ -9,3 +9,4 @@
 [09.02.2013] Ajout du refresh lors de la connexion de quelqu'un sur le Realm dans la table "Connected"
 [09.02.2013] Ajout du parsage de la liste des connectés sur le Realm dans la table "Connected"
 [09.02.2013] Reset automatiquement de la liste lors du démarage de l'émulateur pour éviter le mauvais affichage des connectés
+[12.02.2013] Ajout de tous les paramètres en configuration

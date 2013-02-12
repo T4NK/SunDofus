@@ -37,3 +37,9 @@
 [09.02.2013] Ajout de la possibilité de changé l'image lors de l'affichage des cadeaux
 [11.02.2013] Réecriture d'une grosse partie du code (normalisation, gaint de performance, ...)
 [11.02.2013] Rectification de failles critiques pour la suppression et selection de personnage
+[12.02.2013] Ajout de tous les paramètres en configuration
+[12.02.2013] Ajout des demandes en défis
+[12.02.2013] Ajout de l'acceptation d'une demande
+[12.02.2013] Ajout du refus d'une demande de défis
+[12.02.2013] Annulation automatique de la demande lors d'une déconnexion d'un des deux facteurs
+[12.02.2013] Déconnexion automatique lors d'une deuxième connexion sur un même compte
