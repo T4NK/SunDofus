@@ -116,10 +116,12 @@ namespace DofusOrigin.Network.Realm
 
                     if (Player.State.onWaitingParty)
                     {
-                        try
+                        if (Player.State.receiverInviteParty != -1 || Player.State.senderInviteParty != -1)
                         {
-                            if (Player.State.receiverInviteParty != -1 || Player.State.senderInviteParty != -1)
+                            if (DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any
+                                (x => x.ID == (Player.State.receiverInviteParty != -1 ? Player.State.receiverInviteParty : Player.State.senderInviteParty)))
                             {
+
                                 var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First
                                     (x => x.ID == (Player.State.receiverInviteParty != -1 ? Player.State.receiverInviteParty : Player.State.senderInviteParty));
                                 if (character.isConnected)
@@ -135,7 +137,6 @@ namespace DofusOrigin.Network.Realm
                                 Player.State.onWaitingParty = false;
                             }
                         }
-                        catch { }
                     }
 
                     if (Player.State.Party != null)
@@ -151,6 +152,38 @@ namespace DofusOrigin.Network.Realm
                     {
                         Player.State.Followers.Clear();
                         Player.State.isFollow = false;
+                    }
+
+                    if (Player.State.isChallengeAsked)
+                    {
+                        if (DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.ChallengeAsked == Player.ID))
+                        {
+                            var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.State.ChallengeAsked == Player.ID);
+
+                            Player.State.ChallengeAsker = -1;
+                            Player.State.isChallengeAsked = false;
+
+                            character.State.ChallengeAsked = -1;
+                            character.State.isChallengeAsker = false;
+
+                            character.NetworkClient.Send(string.Format("GA;902;{0};{1}", character.ID, Player.ID));
+                        }
+                    }
+
+                    if (Player.State.isChallengeAsker)
+                    {
+                        if (DofusOrigin.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.ChallengeAsker == Player.ID))
+                        {
+                            var character = DofusOrigin.Realm.Characters.CharactersManager.CharactersList.First(x => x.State.ChallengeAsker == Player.ID);
+
+                            Player.State.ChallengeAsked = -1;
+                            Player.State.isChallengeAsker = false;
+
+                            character.State.ChallengeAsker = -1;
+                            character.State.isChallengeAsked = false;
+
+                            character.NetworkClient.Send(string.Format("GA;902;{0};{1}", character.ID, Player.ID));
+                        }
                     }
                 }
             }

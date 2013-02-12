@@ -11,9 +11,10 @@ namespace DofusOrigin.Realm.Maps
         public List<Database.Models.Maps.TriggerModel> Triggers;
         public List<Characters.NPC.NPCMap> Npcs;
         public List<Monsters.MonstersGroup> MonstersGroups;
+        public List<Fights.Fight> Fights;
         public List<int> RushablesCells;
 
-        public Database.Models.Maps.MapModel _model;
+        private Database.Models.Maps.MapModel _model;
 
         public Database.Models.Maps.MapModel GetModel
         {
@@ -33,6 +34,7 @@ namespace DofusOrigin.Realm.Maps
             Triggers = new List<Database.Models.Maps.TriggerModel>();
             Npcs = new List<Characters.NPC.NPCMap>();
             MonstersGroups = new List<Monsters.MonstersGroup>();
+            Fights = new List<Fights.Fight>();
 
             if (GetModel.Monsters.Count != 0 && RushablesCells.Count != 0)
                 RefreshAllMonsters();
@@ -62,6 +64,8 @@ namespace DofusOrigin.Realm.Maps
         public void AddPlayer(Characters.Character character)
         {
             Send(string.Format("GM|+{0}", character.PatternDisplayChar()));
+
+            character.NetworkClient.Send(string.Format("fC{0}", Fights.Count)); //Fight
 
             lock (Characters)
                 Characters.Add(character);

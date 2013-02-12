@@ -36,6 +36,8 @@ namespace DofusOrigin.Database.Cache
                     character.MapID = int.Parse(sqlResult.GetString("mappos").Split(',')[0]);
                     character.Dir = int.Parse(sqlResult.GetString("mappos").Split(',')[2]);
 
+                    character.Exp = sqlResult.GetInt64("experience");
+
                     character.ParseStats(sqlResult.GetString("stats"));
 
                     if (sqlResult.GetString("items") != "") 
@@ -60,7 +62,7 @@ namespace DofusOrigin.Database.Cache
         {
             lock (DatabaseHandler.ConnectionLocker)
             {
-                var sqlText = "INSERT INTO dyn_characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items, @spells)";
+                var sqlText = "INSERT INTO dyn_characters VALUES(@id, @name, @level, @class, @sex, @color, @color2, @color3, @mapinfos, @stats, @items, @spells, @exp)";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
                 var P = sqlCommand.Parameters;
@@ -77,6 +79,7 @@ namespace DofusOrigin.Database.Cache
                 P.Add(new MySqlParameter("@stats", character.SqlStats()));
                 P.Add(new MySqlParameter("@items", ""));
                 P.Add(new MySqlParameter("@spells", ""));
+                P.Add(new MySqlParameter("@exp", 0));
 
                 sqlCommand.ExecuteNonQuery();
 
@@ -89,7 +92,7 @@ namespace DofusOrigin.Database.Cache
             lock (DatabaseHandler.ConnectionLocker)
             {
                 var sqlText = "UPDATE dyn_characters SET id=@id, name=@name, level=@level, class=@class, sex=@sex," +
-                    " color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats, items=@items, spells=@spells WHERE id=@id";
+                    " color=@color, color2=@color2, color3=@color3, mappos=@mapinfos, stats=@stats, items=@items, spells=@spells, experience=@exp WHERE id=@id";
                 var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
 
                 var P = sqlCommand.Parameters;
@@ -105,6 +108,7 @@ namespace DofusOrigin.Database.Cache
                 P.Add(new MySqlParameter("@stats", character.SqlStats()));
                 P.Add(new MySqlParameter("@items", character.GetItemsToSave()));
                 P.Add(new MySqlParameter("@spells", character.SpellsInventary.SaveSpells()));
+                P.Add(new MySqlParameter("@exp", character.Exp));
 
                 sqlCommand.ExecuteNonQuery();
             }

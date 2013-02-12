@@ -42,6 +42,11 @@ namespace DofusOrigin.Realm.Characters
         public bool onDialoging = false;
         public int onDialogingWith = -1;
 
+        public bool isChallengeAsked = false;
+        public bool isChallengeAsker = false;
+        public int ChallengeAsked = -1;
+        public int ChallengeAsker = -1;
+
         public CharacterParty Party;
         public List<Character> Followers;
 
@@ -49,7 +54,7 @@ namespace DofusOrigin.Realm.Characters
         {
             get
             {
-                return onMove || onExchange || onWaitingParty || onDialoging;
+                return (onMove || onExchange || onWaitingParty || onDialoging || isChallengeAsked || isChallengeAsker);
             }
         }
     }

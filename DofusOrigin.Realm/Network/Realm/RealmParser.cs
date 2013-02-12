@@ -490,7 +490,6 @@ namespace DofusOrigin.Network.Realm
         {
             Client.Player.GetMap().AddPlayer(Client.Player);
             Client.Send("GDK");
-            Client.Send("fC0"); //Fight
         }
 
         private void GameAction(string datas)
@@ -502,8 +501,20 @@ namespace DofusOrigin.Network.Realm
 
             switch (packet)
             {
-                case 1:
+                case 1://GameMove
                     GameMove(datas);
+                    return;
+
+                case 900://AskChallenge
+                    AskChallenge(datas);
+                    return;
+
+                case 901://AcceptChallenge
+                    AcceptChallenge(datas);
+                    return;
+
+                case 902://RefuseChallenge
+                    RefuseChallenge(datas);
                     return;
             }
         }
@@ -534,6 +545,77 @@ namespace DofusOrigin.Network.Realm
             Client.Player.State.onMove = true;
 
             Client.Player.GetMap().Send(string.Format("GA0;1;{0};{1}", Client.Player.ID, newPath));
+        }
+
+        private void AskChallenge(string datas)
+        {
+            var charid = 0;
+
+            if(!int.TryParse(datas.Substring(3), out charid))
+                return;
+
+            if (CharactersManager.CharactersList.Any(x => x.ID == charid))
+            {
+                var character = CharactersManager.CharactersList.First(x => x.ID == charid);
+
+                if (Client.Player.State.Occuped || character.State.Occuped || Client.Player.GetMap().GetModel.ID != character.GetMap().GetModel.ID)
+                {
+                    Client.SendMessage("Personnage actuellement occupé ou indisponible !");
+                    return;
+                }
+
+                Client.Player.State.ChallengeAsked = character.ID;
+                character.State.ChallengeAsker = Client.Player.ID;
+
+                Client.Player.GetMap().Send(string.Format("GA;900;{0};{1}", Client.Player.ID, character.ID));
+            }
+        }
+
+        private void AcceptChallenge(string datas)
+        {
+            var charid = 0;
+
+            if (!int.TryParse(datas.Substring(3), out charid))
+                return;
+
+            if (CharactersManager.CharactersList.Any(x => x.ID == charid) && Client.Player.State.ChallengeAsker == charid)
+            {
+                var character = CharactersManager.CharactersList.First(x => x.ID == charid);
+
+                Client.Player.State.ChallengeAsked = -1;
+                Client.Player.State.isChallengeAsker = false;
+
+                character.State.ChallengeAsker = -1;
+                character.State.isChallengeAsked = false;
+
+                Client.Send(string.Format("GA;901;{0};{1}", Client.Player.ID, character.ID));
+                character.NetworkClient.Send(string.Format("GA;901;{0};{1}", character.ID, Client.Player.ID));
+
+                Client.Player.GetMap().Fights.Add(new DofusOrigin.Realm.Maps.Fights.Fight
+                    (Client.Player, character, DofusOrigin.Realm.Maps.Fights.Fight.FightType.Challenge));
+            }
+        }
+
+        private void RefuseChallenge(string datas)
+        {
+            var charid = 0;
+
+            if (!int.TryParse(datas.Substring(3), out charid))
+                return;
+
+            if (CharactersManager.CharactersList.Any(x => x.ID == charid) && Client.Player.State.ChallengeAsker == charid)
+            {
+                var character = CharactersManager.CharactersList.First(x => x.ID == charid);
+
+                Client.Player.State.ChallengeAsked = -1;
+                Client.Player.State.isChallengeAsker = false;
+
+                character.State.ChallengeAsker = -1;
+                character.State.isChallengeAsked = false;
+
+                Client.Send(string.Format("GA;902;{0};{1}", Client.Player.ID, character.ID));
+                character.NetworkClient.Send(string.Format("GA;902;{0};{1}", character.ID, Client.Player.ID));
+            }
         }
 
         private void EndAction(string datas)
@@ -1560,6 +1642,12 @@ namespace DofusOrigin.Network.Realm
             Client.Player.State.onDialogingWith = -1;
             Client.Player.State.onDialoging = false;
         }
+
+        #endregion
+
+        #region Fights
+
+
 
         #endregion
 
