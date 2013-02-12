@@ -565,7 +565,10 @@ namespace DofusOrigin.Network.Realm
                 }
 
                 Client.Player.State.ChallengeAsked = character.ID;
+                Client.Player.State.isChallengeAsker = true;
+
                 character.State.ChallengeAsker = Client.Player.ID;
+                character.State.isChallengeAsked = true;
 
                 Client.Player.GetMap().Send(string.Format("GA;900;{0};{1}", Client.Player.ID, character.ID));
             }

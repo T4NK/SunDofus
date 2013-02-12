@@ -190,6 +190,12 @@ namespace DofusOrigin.Network.Realm
 
             lock(Network.ServersHandler.RealmServer.Clients)
                 Network.ServersHandler.RealmServer.Clients.Remove(this);
+
+            if (isAuth)
+            {
+                lock (ServersHandler.RealmServer.PseudoClients)
+                    ServersHandler.RealmServer.PseudoClients.Remove(Infos.Pseudo);
+            }
         }
     }
 }
