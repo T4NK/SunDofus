@@ -96,6 +96,15 @@ namespace DofusOrigin.Network.Realm
 
                     case "trigger":
 
+                        var t = new Database.Models.Maps.TriggerModel();
+                        t.ActionID = 0;
+                        t.CellID = Client.Player.MapCell;
+                        t.MapID = Client.Player.MapID;
+                        t.Conditions = "";
+                        t.Args = string.Format("{0},{1}", value, int.Parse(datas[3]));
+
+                        Client.Player.GetMap().Triggers.Add(t);
+                        Client.SendConsoleMessage("Trigger Added !", 0);
                         break;
 
                     case "cellfight":
