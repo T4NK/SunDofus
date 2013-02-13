@@ -47,12 +47,12 @@ namespace DofusOrigin.Network.Auth
 
         private void OnListeningServer(string remote)
         {
-            Utilities.Loggers.StatusLogger.Write(string.Format("@RealmServer@ starded on <{0}> !", remote));
+            Utilities.Loggers.StatusLogger.Write(string.Format("@AuthServer@ starded on <{0}> !", remote));
         }
 
         private void OnListeningFailedServer(Exception exception)
         {
-            Utilities.Loggers.ErrorsLogger.Write(string.Format("@RealmServer@ can't start : {0}", exception.ToString()));
+            Utilities.Loggers.ErrorsLogger.Write(string.Format("@AuthServer@ can't start : {0}", exception.ToString()));
         }
     }
 }

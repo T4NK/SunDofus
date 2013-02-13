@@ -514,15 +514,15 @@ namespace DofusOrigin.Network.Realm
                     return;
 
                 case 900://AskChallenge
-                    AskChallenge(datas);
+                    //AskChallenge(datas);
                     return;
 
                 case 901://AcceptChallenge
-                    AcceptChallenge(datas);
+                    //AcceptChallenge(datas);
                     return;
 
                 case 902://RefuseChallenge
-                    RefuseChallenge(datas);
+                    //RefuseChallenge(datas);
                     return;
             }
         }

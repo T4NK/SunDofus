@@ -55,7 +55,7 @@ namespace DofusOrigin.Database.Cache
             if (!_started == true)
             {
                 _started = true;
-                _cache.Interval = Utilities.Config.GetConfig.GetIntElement("Time_Accounts_Reload");
+                _cache.Interval = Utilities.Config.GetConfig.GetIntElement("Time_Servers_Reload");
                 _cache.Enabled = true;
                 _cache.Elapsed += new ElapsedEventHandler(ReloadCache);
             }

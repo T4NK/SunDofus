@@ -11,6 +11,7 @@ namespace DofusOrigin.Utilities
         public static Logger StatusLogger;
         public static Logger InfosLogger;
         public static Logger ErrorsLogger;
+        public static Logger CommandsLogger;
 
         public static void InitialiseLoggers()
         {
@@ -38,6 +39,15 @@ namespace DofusOrigin.Utilities
 
                 if (Config.GetConfig.GetBoolElement("Errors_inConsole") == true)
                     ErrorsLogger.StartConsoleLogger();
+            }
+
+            CommandsLogger = new Logger("Commands", Basic.ConsoleLocker, ConsoleColor.Cyan);
+            {
+                if (Config.GetConfig.GetBoolElement("Commands_inFile") == true)
+                    CommandsLogger.StartFileLogger();
+
+                if (Config.GetConfig.GetBoolElement("Commands_inConsole") == true)
+                    CommandsLogger.StartConsoleLogger();
             }
 
             StatusLogger.Write("@Loggers@ loaded and started !");

@@ -7,20 +7,22 @@ namespace DofusOrigin.Network.Realm
 {
     class RealmCommand
     {
-        public RealmClient m_client;
+        public RealmClient Client;
 
-        public RealmCommand(RealmClient _client)
+        public RealmCommand(RealmClient client)
         {
-            m_client = _client;
+            Client = client;
         }
 
-        public void ParseCommand(string _args)
+        public void ParseCommand(string args)
         {
             try
             {
-                var datas = _args.Split(' ');
+                Utilities.Loggers.CommandsLogger.Write(string.Format("Command [{0}] by [{1}]", args, Client.Infos.Pseudo));
 
-                if (m_client.Infos.GMLevel > 0)
+                var datas = args.Split(' ');
+
+                if (Client.Infos.GMLevel > 0)
                 {
                     switch (datas[0])
                     {
@@ -53,192 +55,192 @@ namespace DofusOrigin.Network.Realm
                             break;
 
                         default:
-                            m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                            m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                            Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                            Client.SendConsoleMessage("Use the command 'Help' for more informations !");
                             break;
                     }
                 }
             }
             catch(Exception e)
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
 
-                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse command from <{0}> because : {1}", m_client.myIp(), e.ToString()));
+                Utilities.Loggers.ErrorsLogger.Write(string.Format("Cannot parse command from <{0}> because : {1}", Client.myIp(), e.ToString()));
             }
         }
 
         #region CommandInfos
 
-        private void ParseCommandKamas(string[] _datas)
+        private void ParseCommandKamas(string[] datas)
         {
             try
             {                
-                m_client.Player.Kamas += int.Parse(_datas[1]);
-                m_client.SendConsoleMessage("Kamas Added", 0);
-                m_client.Player.SendChararacterStats();
+                Client.Player.Kamas += int.Parse(datas[1]);
+                Client.SendConsoleMessage("Kamas Added", 0);
+                Client.Player.SendChararacterStats();
             }
             catch
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
         }
 
-        private void ParseCommanSave(string[] _datas)
+        private void ParseCommanSave(string[] datas)
         {
             try
             {
-                if (_datas.Length <= 1)
+                if (datas.Length <= 1)
                 {
                     DofusOrigin.Realm.World.Save.SaveWorld();
                     return;
                 }
 
-                switch (_datas[1])
+                switch (datas[1])
                 {
                     case "all":
                         DofusOrigin.Realm.World.Save.SaveWorld();
-                        m_client.SendConsoleMessage("World saved !", 0);
+                        Client.SendConsoleMessage("World saved !", 0);
                         break;
 
                     case "char":
                         DofusOrigin.Realm.World.Save.SaveChararacters();
-                        m_client.SendConsoleMessage("Characters saved !", 0);
+                        Client.SendConsoleMessage("Characters saved !", 0);
                         break;
 
                     default:
                         DofusOrigin.Realm.World.Save.SaveWorld();
-                        m_client.SendConsoleMessage("World saved !", 0);
+                        Client.SendConsoleMessage("World saved !", 0);
                         break;
                 }
             }
             catch
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
         }
 
-        private void ParseMapCommand(string[] _datas)
+        private void ParseMapCommand(string[] datas)
         {
             try
             {
-                switch (_datas[1])
+                switch (datas[1])
                 {
                     case "spawnmobs":
 
-                        m_client.Player.GetMap().AddMonstersGroup();
+                        Client.Player.GetMap().AddMonstersGroup();
                         break;
                 }
             }
             catch
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
         }
 
-        private void ParseCommandItem(string[] _datas)
+        private void ParseCommandItem(string[] datas)
         {
             try
             {
-                var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == int.Parse(_datas[1]));
+                var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == int.Parse(datas[1]));
 
-                if (_datas.Length == 2)
+                if (datas.Length == 2)
                 {
                     var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
                     newItem.GeneratItem();
 
-                    m_client.Player.ItemsInventary.AddItem(newItem, false);
-                    m_client.SendConsoleMessage("Item Added !", 0);
+                    Client.Player.ItemsInventary.AddItem(newItem, false);
+                    Client.SendConsoleMessage("Item Added !", 0);
                 }
 
-                else if (_datas.Length == 3)
+                else if (datas.Length == 3)
                 {
                     var newItem = new DofusOrigin.Realm.Characters.Items.CharacterItem(item);
-                    newItem.GeneratItem(int.Parse(_datas[2]));
+                    newItem.GeneratItem(int.Parse(datas[2]));
 
-                    m_client.Player.ItemsInventary.AddItem(newItem, false);
-                    m_client.SendConsoleMessage("Item Added !", 0);
+                    Client.Player.ItemsInventary.AddItem(newItem, false);
+                    Client.SendConsoleMessage("Item Added !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !");
+                    Client.SendConsoleMessage("Invalid Syntax !");
             }
             catch
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
         }
 
-        private void ParseCommandExp(string[] _datas)
+        private void ParseCommandExp(string[] datas)
         {
             try
             {
-                if (_datas.Length == 2)
+                if (datas.Length == 2)
                 {
-                    m_client.Player.AddExp(long.Parse(_datas[1]));
-                    m_client.SendConsoleMessage("Exp Added !", 0);
+                    Client.Player.AddExp(long.Parse(datas[1]));
+                    Client.SendConsoleMessage("Exp Added !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !");
+                    Client.SendConsoleMessage("Invalid Syntax !");
             }
             catch
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
         
         }
 
-        private void ParseCommandTeleport(string[] _datas)
+        private void ParseCommandTeleport(string[] datas)
         {
             try
             {
-                if (_datas.Length == 3)
+                if (datas.Length == 3)
                 {
-                    m_client.Player.TeleportNewMap(int.Parse(_datas[1]), int.Parse(_datas[2]));
-                    m_client.SendConsoleMessage("Character Teleported !", 0);
+                    Client.Player.TeleportNewMap(int.Parse(datas[1]), int.Parse(datas[2]));
+                    Client.SendConsoleMessage("Character Teleported !", 0);
                 }
 
-                else if (_datas.Length == 4)
+                else if (datas.Length == 4)
                 {
-                    var myMap = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.PosX == int.Parse(_datas[1]) && x.GetModel.PosY == int.Parse(_datas[2]));
-                    m_client.Player.TeleportNewMap(myMap.GetModel.ID, int.Parse(_datas[3]));
-                    m_client.SendConsoleMessage("Character Teleported !", 0);
+                    var myMap = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.PosX == int.Parse(datas[1]) && x.GetModel.PosY == int.Parse(datas[2]));
+                    Client.Player.TeleportNewMap(myMap.GetModel.ID, int.Parse(datas[3]));
+                    Client.SendConsoleMessage("Character Teleported !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !");
+                    Client.SendConsoleMessage("Invalid Syntax !");
             }
             catch(Exception e)
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
-                m_client.SendConsoleMessage(e.ToString());
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage(e.ToString());
             }
         }
 
-        private void ParseCommandVita(string[] _datas)
+        private void ParseCommandVita(string[] datas)
         {
             try
             {
-                if (_datas.Length == 2)
+                if (datas.Length == 2)
                 {
-                    m_client.Player.ResetVita(_datas[1]);
-                    m_client.SendConsoleMessage("Vita Updated !", 0);
+                    Client.Player.ResetVita(datas[1]);
+                    Client.SendConsoleMessage("Vita Updated !", 0);
                 }
 
                 else
-                    m_client.SendConsoleMessage("Invalid Syntax !");
+                    Client.SendConsoleMessage("Invalid Syntax !");
             }
             catch
             {
-                m_client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                m_client.SendConsoleMessage("Use the command 'Help' for more informations !");
+                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
         }
 
