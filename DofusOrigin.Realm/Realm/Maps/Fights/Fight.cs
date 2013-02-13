@@ -9,7 +9,7 @@ namespace DofusOrigin.Realm.Maps.Fights
     {
         private FightType _type;
 
-        private Characters.Character _actualPlayer;
+        //private Characters.Character _actualPlayer;
         private List<Characters.Character> _players;
 
         public Fight(Characters.Character player1, Characters.Character player2, FightType type)

@@ -26,8 +26,16 @@ namespace DofusOrigin.Network.Realm
                 {
                     switch (datas[0])
                     {
+                        case "add":
+                            ParseCommandAdd(datas);
+                            break;
+
+                        case "bug":
+
+                            break;
+
                         case "save":
-                            ParseCommanSave(datas);
+                            ParseCommandSave(datas);
                             break;
 
                         case "vita":
@@ -38,20 +46,8 @@ namespace DofusOrigin.Network.Realm
                             ParseCommandItem(datas);
                             break;
 
-                        case "kamas":
-                            ParseCommandKamas(datas);
-                            break;
-
                         case "teleport":
                             ParseCommandTeleport(datas);
-                            break;
-
-                        case "exp":
-                            ParseCommandExp(datas);
-                            break;
-
-                        case "map":
-                            ParseMapCommand(datas);
                             break;
 
                         default:
@@ -72,22 +68,48 @@ namespace DofusOrigin.Network.Realm
 
         #region CommandInfos
 
-        private void ParseCommandKamas(string[] datas)
+        private void ParseCommandAdd(string[] datas)
         {
             try
-            {                
-                Client.Player.Kamas += int.Parse(datas[1]);
-                Client.SendConsoleMessage("Kamas Added", 0);
-                Client.Player.SendChararacterStats();
+            {
+                var value = (long)0;
+                if (!long.TryParse(datas[2], out value))
+                {
+                    Client.SendConsoleMessage("Cannot parse your AdminCommand !");
+                    return;
+                }
+
+                switch (datas[1])
+                {
+                    case "kamas":
+
+                        Client.Player.Kamas += value;
+                        Client.SendConsoleMessage("Kamas Added", 0);
+                        Client.Player.SendChararacterStats();
+                        break;
+
+                    case "exp":
+
+                        Client.Player.AddExp(value);
+                        Client.SendConsoleMessage("Exp Added !", 0);
+                        break;
+
+                    case "trigger":
+
+                        break;
+
+                    case "cellfight":
+
+                        break;
+                }
             }
             catch
             {
                 Client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
         }
 
-        private void ParseCommanSave(string[] datas)
+        private void ParseCommandSave(string[] datas)
         {
             try
             {
@@ -112,25 +134,6 @@ namespace DofusOrigin.Network.Realm
                     default:
                         DofusOrigin.Realm.World.Save.SaveWorld();
                         Client.SendConsoleMessage("World saved !", 0);
-                        break;
-                }
-            }
-            catch
-            {
-                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
-            }
-        }
-
-        private void ParseMapCommand(string[] datas)
-        {
-            try
-            {
-                switch (datas[1])
-                {
-                    case "spawnmobs":
-
-                        Client.Player.GetMap().AddMonstersGroup();
                         break;
                 }
             }
@@ -173,27 +176,6 @@ namespace DofusOrigin.Network.Realm
                 Client.SendConsoleMessage("Cannot parse your AdminCommand !");
                 Client.SendConsoleMessage("Use the command 'Help' for more informations !");
             }
-        }
-
-        private void ParseCommandExp(string[] datas)
-        {
-            try
-            {
-                if (datas.Length == 2)
-                {
-                    Client.Player.AddExp(long.Parse(datas[1]));
-                    Client.SendConsoleMessage("Exp Added !", 0);
-                }
-
-                else
-                    Client.SendConsoleMessage("Invalid Syntax !");
-            }
-            catch
-            {
-                Client.SendConsoleMessage("Cannot parse your AdminCommand !");
-                Client.SendConsoleMessage("Use the command 'Help' for more informations !");
-            }
-        
         }
 
         private void ParseCommandTeleport(string[] datas)
