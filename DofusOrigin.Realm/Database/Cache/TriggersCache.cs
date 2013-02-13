@@ -43,6 +43,25 @@ namespace DofusOrigin.Database.Cache
             Utilities.Loggers.StatusLogger.Write(string.Format("Loaded @'{0}' triggers@ from the database !", TriggersList.Count));
         }
 
+        public static void InsertTrigger(Models.Maps.TriggerModel trigger)
+        {
+            lock (DatabaseHandler.ConnectionLocker)
+            {
+                var sqlText = "INSERT INTO datas_triggers VALUES(@mapid, @cellid, @action, @args, @condi)";
+                var sqlCommand = new MySqlCommand(sqlText, DatabaseHandler.Connection);
+
+                var P = sqlCommand.Parameters;
+
+                P.Add(new MySqlParameter("@mapid", trigger.MapID));
+                P.Add(new MySqlParameter("@cellid", trigger.CellID));
+                P.Add(new MySqlParameter("@action", trigger.ActionID));
+                P.Add(new MySqlParameter("@args", trigger.Args));
+                P.Add(new MySqlParameter("@condi", trigger.Conditions));
+
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+
         public static bool ParseTrigger(Database.Models.Maps.TriggerModel trigger)
         {
             if (MapsCache.MapsList.Any(x => x.GetModel.ID == trigger.MapID))

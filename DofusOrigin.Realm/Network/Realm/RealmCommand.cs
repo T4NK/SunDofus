@@ -104,6 +104,8 @@ namespace DofusOrigin.Network.Realm
                         t.Args = string.Format("{0},{1}", value, int.Parse(datas[3]));
 
                         Client.Player.GetMap().Triggers.Add(t);
+                        Database.Cache.TriggersCache.InsertTrigger(t);
+
                         Client.SendConsoleMessage("Trigger Added !", 0);
                         break;
 
