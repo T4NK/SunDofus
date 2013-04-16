@@ -14,6 +14,8 @@ namespace SunDofus.Network
         {
             RealmServer = new Realm.RealmServer();
             RealmServer.Start();
+            
+            RealmServer.Reload()Network.Chanel();
 
             AuthLinks = new Authentication.AuthenticationsLinks();
             AuthLinks.Start();
