@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 
-namespace SunDofus.Network.Sync
+namespace SunDofus.Auth.Network.Sync
 {
     class SyncServer : Master.TCPServer
     {

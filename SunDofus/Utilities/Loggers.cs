@@ -17,7 +17,7 @@ namespace SunDofus.Utilities
             InfosLogger = new Logger("Infos", Basic.ConsoleLocker, ConsoleColor.Magenta, Config.GetBoolElement("DEBUG"));
             ErrorsLogger = new Logger("Errors", Basic.ConsoleLocker, ConsoleColor.Yellow);
 
-            StatusLogger.Write(string.Format("Loggers loaded and started ! [MODE DEBUG = {0}]", Config.GetBoolElement("DEBUG").ToString().ToUpper()));
+            StatusLogger.Write(string.Format("Loggers loaded and started : MODE DEBUG = {0}", Config.GetBoolElement("DEBUG").ToString().ToUpper()));
         }
 
         public class Logger
@@ -45,7 +45,7 @@ namespace SunDofus.Utilities
                     Console.ForegroundColor = _color;
                     Console.Write(string.Format("{0} > {1} > ", DateTime.Now.ToString(), _name));
                     Console.ResetColor();
-                    Console.Write(text + (line ? Environment.NewLine : ""));
+                    Console.Write(text.Replace("@", "") + (line ? Environment.NewLine : ""));
                 }
             }
         }

@@ -5,7 +5,7 @@ using System.Text;
 using MySql.Data.MySqlClient;
 using System.Timers;
 
-namespace SunDofus.Entities
+namespace SunDofus.Auth.Entities
 {
     class DatabaseProvider
     {
@@ -29,10 +29,10 @@ namespace SunDofus.Entities
             _isConnected = false;
 
             Connection = new MySqlConnection(string.Format("server={0};uid={1};pwd='{2}';database={3}",
-                    Utilities.Config.GetStringElement("Database_Server"),
-                    Utilities.Config.GetStringElement("Database_User"),
-                    Utilities.Config.GetStringElement("Database_Pass"),
-                    Utilities.Config.GetStringElement("Database_Name")));
+                    Utilities.Config.GetStringElement("Realm_Database_Server"),
+                    Utilities.Config.GetStringElement("Realm_Database_User"),
+                    Utilities.Config.GetStringElement("Realm_Database_Pass"),
+                    Utilities.Config.GetStringElement("Realm_Database_Name")));
 
             ConnectionLocker = new object();
 
@@ -42,10 +42,10 @@ namespace SunDofus.Entities
             _isConnected = true;
             _lastAction = Environment.TickCount;
 
-            Utilities.Loggers.StatusLogger.Write("Connected to the database !");
+            Utilities.Loggers.StatusLogger.Write("Connected to the Realm_Database !");
 
             _timer = new Timer();
-            _timer.Interval = 10000;
+            _timer.Interval = 20000;
             _timer.Elapsed += new ElapsedEventHandler(UpdateConnection);
             _timer.Start();
 
@@ -69,12 +69,12 @@ namespace SunDofus.Entities
             _isConnected = true;
             _timer.Start();
 
-            Utilities.Loggers.StatusLogger.Write("Connected to the database !");
+            Utilities.Loggers.StatusLogger.Write("Connected to the Realm_Database !");
         }
 
         private static void UpdateConnection(object sender, EventArgs e)
         {
-            if (_getLastActionTime >= 9000)
+            if (_getLastActionTime >= 5000)
             {
                 _isConnected = false;
                 _timer.Stop();
@@ -82,7 +82,7 @@ namespace SunDofus.Entities
                 lock(ConnectionLocker)
                     Connection.Close();
 
-                Utilities.Loggers.StatusLogger.Write("Disconnected from the database !");
+                Utilities.Loggers.StatusLogger.Write("Disconnected from the Realm_Database !");
             }
         }
     }

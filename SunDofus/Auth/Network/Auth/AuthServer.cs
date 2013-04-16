@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 
-namespace SunDofus.Network.Auth
+namespace SunDofus.Auth.Network.Auth
 {
     class AuthServer : Master.TCPServer
     {

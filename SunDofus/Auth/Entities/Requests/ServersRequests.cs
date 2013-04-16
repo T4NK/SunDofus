@@ -5,7 +5,7 @@ using System.Text;
 using System.Timers;
 using MySql.Data.MySqlClient;
 
-namespace SunDofus.Entities.Requests
+namespace SunDofus.Auth.Entities.Requests
 {
     class ServersRequests
     {

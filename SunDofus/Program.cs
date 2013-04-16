@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SunDofus.Utilities;
-using SunDofus.Entities;
-using SunDofus.Entities.Requests;
+using SunDofus.Auth.Entities;
+using SunDofus.Auth.Entities.Requests;
 using SunDofus.Network;
 
 namespace SunDofus
@@ -14,7 +14,7 @@ namespace SunDofus
         static void Main(string[] args)
         {
             Basic.Uptime = Environment.TickCount;
-            Console.Title = "SunDofus ";
+            Console.Title = "SunDofus";
 
             Config.LoadConfiguration();
             Loggers.InitializeLoggers();
@@ -24,7 +24,7 @@ namespace SunDofus
                 try
                 {
                     ServersHandler.InitialiseServers();
-                    DatabaseProvider.InitializeConnection();
+                    Auth.Entities.DatabaseProvider.InitializeConnection();
 
                 }
                 catch (Exception error)
@@ -37,6 +37,7 @@ namespace SunDofus
             {
                 try
                 {
+                    Console.Title = string.Format("{0} | Server '{1}'", Console.Title, Config.GetIntElement("ServerID"));
                 }
                 catch (Exception error)
                 {

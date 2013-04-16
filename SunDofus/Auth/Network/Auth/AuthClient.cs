@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SilverSock;
-using SunDofus.Entities.Models;
+using SunDofus.Auth.Entities.Models;
 
-namespace SunDofus.Network.Auth
+namespace SunDofus.Auth.Network.Auth
 {
     class AuthClient : Master.TCPClient
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Entities.Models
+namespace SunDofus.Auth.Entities.Models
 {
     class GiftsModel
     {

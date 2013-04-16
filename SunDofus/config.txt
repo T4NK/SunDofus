@@ -9,10 +9,10 @@ $Sync_Port 486;
 
 $Login_Version 1.29.1;
 
-$Database_Server localhost;
-$Database_User root;
-$Database_Pass ;
-$Database_Name sundofus;
+$Realm_Database_Server localhost;
+$Realm_Database_User root;
+$Realm_Database_Pass ;
+$Realm_Database_Name sundofus;
 
 $Max_Clients_inQueue 50;
 $Time_PerClient 500;

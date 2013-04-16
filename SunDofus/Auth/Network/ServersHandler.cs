@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SunDofus.Network.Auth;
-using SunDofus.Network.Sync;
+using SunDofus.Auth.Network.Auth;
+using SunDofus.Auth.Network.Sync;
 
-namespace SunDofus.Network
+namespace SunDofus.Auth.Network
 {
     class ServersHandler
     {
