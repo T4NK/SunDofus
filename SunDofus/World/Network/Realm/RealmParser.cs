@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SunDofus.Realm.Characters;
-using SunDofus.Realm.Maps;
-using SunDofus.Realm.Characters.Stats;
-using SunDofus.Realm;
-using SunDofus.Realm.World;
+using SunDofus.World.Realm.Characters;
+using SunDofus.World.Realm.Maps;
+using SunDofus.World.Realm.Characters.Stats;
+using SunDofus.World.Realm;
+using SunDofus.World.Realm.World;
 
-namespace SunDofus.Network.Realm
+namespace SunDofus.World.Network.Realm
 {
     class RealmParser
     {
@@ -136,7 +136,7 @@ namespace SunDofus.Network.Realm
 
         private void SendCommunauty(string datas)
         {
-            Client.Send(string.Format("AV{0}", Utilities.Config.GetConfig.GetIntElement("ServerCom")));
+            Client.Send(string.Format("AV{0}", Utilities.Config.GetIntElement("ServerCom")));
         }
 
         private void SendCharacterList(string datas)
@@ -145,7 +145,7 @@ namespace SunDofus.Network.Realm
 
             if (Client.Infos.Characters.Count != 0)
             {
-                foreach (SunDofus.Realm.Characters.Character m_C in Client.Characters)
+                foreach (SunDofus.World.Realm.Characters.Character m_C in Client.Characters)
                     packet += string.Format("|{0}", m_C.PatternList());
             }
 
@@ -162,9 +162,9 @@ namespace SunDofus.Network.Realm
                 {
                     var character = new Character();
 
-                    character.ID = Database.Cache.CharactersCache.GetNewID();
+                    character.ID = Entities.Cache.CharactersCache.GetNewID();
                     character.Name = characterDatas[0];
-                    character.Level = Utilities.Config.GetConfig.GetIntElement("StartLevel");
+                    character.Level = Utilities.Config.GetIntElement("StartLevel");
                     character.Class = int.Parse(characterDatas[1]);
                     character.Sex = int.Parse(characterDatas[2]);
                     character.Skin = int.Parse(character.Class + "" + character.Sex);
@@ -176,71 +176,71 @@ namespace SunDofus.Network.Realm
                     switch (character.Class)
                     {
                         case 1:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Feca");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Feca");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Feca");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Feca");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Feca");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Feca");
                             return;
                         case 2:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Osa");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Osa");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Osa");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Osa");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Osa");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Osa");
                             return;
                         case 3:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Enu");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Enu");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Enu");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Enu");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Enu");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Enu");
                             return;
                         case 4:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Sram");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Sram");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Sram");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Sram");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Sram");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Sram");
                             return;
                         case 5:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Xel");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Xel");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Xel");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Xel");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Xel");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Xel");
                             return;
                         case 6:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Eca");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Eca");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Eca");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Eca");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Eca");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Eca");
                             return;
                         case 7:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Eni");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Eni");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Eni");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Eni");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Eni");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Eni");
                             return;
                         case 8:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Iop");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Iop");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Iop");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Iop");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Iop");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Iop");
                             return;
                         case 9:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Cra");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Cra");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Cra");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Cra");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Cra");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Cra");
                             return;
                         case 10:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Sadi");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Sadi");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Sadi");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Sadi");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Sadi");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Sadi");
                             return;
                         case 11:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Sacri");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Sacri");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Sacri");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Sacri");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Sacri");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Sacri");
                             return;
                         case 12:
-                            character.MapID = Utilities.Config.GetConfig.GetIntElement("StartMap_Panda");
-                            character.MapCell = Utilities.Config.GetConfig.GetIntElement("StartCell_Panda");
-                            character.Dir = Utilities.Config.GetConfig.GetIntElement("StartDir_Panda");
+                            character.MapID = Utilities.Config.GetIntElement("StartMap_Panda");
+                            character.MapCell = Utilities.Config.GetIntElement("StartCell_Panda");
+                            character.Dir = Utilities.Config.GetIntElement("StartDir_Panda");
                             return;
                     }
 
                     character.CharactPoint = (character.Level - 1) * 5;
                     character.SpellPoint = (character.Level - 1);
-                    character.Exp = Database.Cache.LevelsCache.ReturnLevel(character.Level).Character;
-                    character.Kamas = (long)Utilities.Config.GetConfig.GetIntElement("StartKamas");
+                    character.Exp = Entities.Cache.LevelsCache.ReturnLevel(character.Level).Character;
+                    character.Kamas = (long)Utilities.Config.GetIntElement("StartKamas");
 
 
                     character.isNewCharacter = true;
@@ -253,7 +253,7 @@ namespace SunDofus.Network.Realm
 
                     character.SpellsInventary.LearnSpells();
 
-                    Database.Cache.CharactersCache.CreateCharacter(character);
+                    Entities.Cache.CharactersCache.CreateCharacter(character);
 
                     lock(CharactersManager.CharactersList)
                         CharactersManager.CharactersList.Add(character);
@@ -304,7 +304,7 @@ namespace SunDofus.Network.Realm
                     Client.Characters.Remove(character);
 
                 Network.ServersHandler.AuthLinks.Send(string.Format("SDAC|{0}|{1}", Client.Infos.ID, character.Name));
-                Database.Cache.CharactersCache.DeleteCharacter(character.Name);
+                Entities.Cache.CharactersCache.DeleteCharacter(character.Name);
 
                 SendCharacterList("");
             }
@@ -602,8 +602,8 @@ namespace SunDofus.Network.Realm
                 Client.Send(string.Format("GA;901;{0};{1}", Client.Player.ID, character.ID));
                 character.NetworkClient.Send(string.Format("GA;901;{0};{1}", character.ID, Client.Player.ID));
 
-                Client.Player.GetMap().AddFight(new SunDofus.Realm.Maps.Fights.Fight
-                    (Client.Player, character, SunDofus.Realm.Maps.Fights.Fight.FightType.Challenge, Client.Player.GetMap()));
+                Client.Player.GetMap().AddFight(new SunDofus.World.Realm.Maps.Fights.Fight
+                    (Client.Player, character, SunDofus.World.Realm.Maps.Fights.Fight.FightType.Challenge, Client.Player.GetMap()));
             }
         }
 
@@ -646,8 +646,8 @@ namespace SunDofus.Network.Realm
                         {
                             var trigger = Client.Player.GetMap().Triggers.First(x => x.CellID == Client.Player.MapCell);
 
-                            if (SunDofus.Realm.World.Conditions.TriggerCondition.HasConditions(Client.Player, trigger.Conditions))
-                                SunDofus.Realm.Effects.EffectAction.ParseEffect(Client.Player,trigger.ActionID, trigger.Args);
+                            if (SunDofus.World.Realm.World.Conditions.TriggerCondition.HasConditions(Client.Player, trigger.Conditions))
+                                SunDofus.World.Realm.Effects.EffectAction.ParseEffect(Client.Player, trigger.ActionID, trigger.Args);
                             else
                                 Client.SendMessage("Vous ne possédez pas les conditions nécessaires pour cette action !");
                         }
@@ -1079,7 +1079,7 @@ namespace SunDofus.Network.Realm
 
                     foreach (var i in NPC.Model.SellingList)
                     {
-                        var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == i);
+                        var item = Entities.Cache.ItemsCache.ItemsList.First(x => x.ID == i);
                         newPacket += string.Format("{0};{1}|", i, item.EffectInfos());
                     }
 
@@ -1089,9 +1089,9 @@ namespace SunDofus.Network.Realm
 
                 case 1://Player
 
-                    if (SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.ID == receiverID))
+                    if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.ID == receiverID))
                     {
-                        var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == receiverID);
+                        var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == receiverID);
 
                         if (!character.isConnected == true && !character.State.Occuped)
                         {
@@ -1118,7 +1118,7 @@ namespace SunDofus.Network.Realm
             Client.Send("EV");
 
             if (Client.Player.State.onExchange)
-                SunDofus.Realm.Exchanges.ExchangesManager.LeaveExchange(Client.Player);
+                SunDofus.World.Realm.Exchanges.ExchangesManager.LeaveExchange(Client.Player);
         }
 
         private void ExchangeBuy(string packet)
@@ -1136,7 +1136,7 @@ namespace SunDofus.Network.Realm
             if (!int.TryParse(datas[0], out itemID) || int.TryParse(datas[1], out quantity))
                 return;
 
-            var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == itemID);
+            var item = Entities.Cache.ItemsCache.ItemsList.First(x => x.ID == itemID);
             var NPC = Client.Player.GetMap().Npcs.First(x => x.ID == Client.Player.State.actualNPC);
 
             if (quantity <= 0 || !NPC.Model.SellingList.Contains(itemID))
@@ -1149,7 +1149,7 @@ namespace SunDofus.Network.Realm
 
             if (Client.Player.Kamas >= price)
             {
-                var newItem = new SunDofus.Realm.Characters.Items.CharacterItem(item);
+                var newItem = new SunDofus.World.Realm.Characters.Items.CharacterItem(item);
                 newItem.GeneratItem(4);
                 newItem.Quantity = quantity;
 
@@ -1205,7 +1205,7 @@ namespace SunDofus.Network.Realm
             {
                 case 'G': //kamas
 
-                    var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualPlayerExchange);
+                    var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualPlayerExchange);
 
                     if (!Client.Player.State.onExchangePanel || !character.State.onExchangePanel || character.State.actualPlayerExchange != Client.Player.ID)
                     {
@@ -1213,7 +1213,7 @@ namespace SunDofus.Network.Realm
                         return;
                     }
 
-                    var actualExchange = SunDofus.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.ID == Client.Player.ID &&
+                    var actualExchange = SunDofus.World.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.ID == Client.Player.ID &&
                         x.player2.ID == character.ID) || (x.player2.ID == Client.Player.ID && x.player1.ID == character.ID));
 
                     var kamas = (long)0;
@@ -1232,7 +1232,7 @@ namespace SunDofus.Network.Realm
 
                 case 'O': //Items
 
-                    var character2 = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualPlayerExchange);
+                    var character2 = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualPlayerExchange);
 
                     if (!Client.Player.State.onExchangePanel || !character2.State.onExchangePanel || character2.State.actualPlayerExchange != Client.Player.ID)
                     {
@@ -1240,7 +1240,7 @@ namespace SunDofus.Network.Realm
                         return;
                     }
 
-                    var actualExchange2 = SunDofus.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.ID == Client.Player.ID &&
+                    var actualExchange2 = SunDofus.World.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.ID == Client.Player.ID &&
                         x.player2.ID == character2.ID) || (x.player2.ID == Client.Player.ID && x.player1.ID == character2.ID));
 
                     var add = (datas.Substring(1, 1) == "+" ? true : false);
@@ -1268,10 +1268,10 @@ namespace SunDofus.Network.Realm
         {
             if (Client.Player.State.onExchange && Client.Player.State.actualTraider != -1)
             {
-                var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualTraider);
+                var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualTraider);
                 if (character.State.actualTraided == Client.Player.ID)
                 {
-                    SunDofus.Realm.Exchanges.ExchangesManager.AddExchange(character, Client.Player);
+                    SunDofus.World.Realm.Exchanges.ExchangesManager.AddExchange(character, Client.Player);
                     return;
                 }
             }
@@ -1288,7 +1288,7 @@ namespace SunDofus.Network.Realm
 
             Client.Player.State.onExchangeAccepted = true;
 
-            var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualPlayerExchange);
+            var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.actualPlayerExchange);
 
             if (!Client.Player.State.onExchangePanel || !character.State.onExchangePanel || character.State.actualPlayerExchange != Client.Player.ID)
             {
@@ -1296,7 +1296,7 @@ namespace SunDofus.Network.Realm
                 return;
             }
 
-            var actualExchange = SunDofus.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.ID == Client.Player.ID &&
+            var actualExchange = SunDofus.World.Realm.Exchanges.ExchangesManager.Exchanges.First(x => (x.player1.ID == Client.Player.ID &&
                 x.player2.ID == character.ID) || (x.player2.ID == Client.Player.ID && x.player1.ID == character.ID));
 
             Client.Send(string.Format("EK1{0}", Client.Player.ID));
@@ -1312,9 +1312,9 @@ namespace SunDofus.Network.Realm
 
         private void PartyInvite(string datas)
         {
-            if (SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.Name == datas && x.isConnected))
+            if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.Name == datas && x.isConnected))
             {
-                var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.Name == datas);
+                var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.Name == datas);
                 if (character.State.Party != null || character.State.Occuped)
                 {
                     Client.Send(string.Format("PIEa{0}", datas));
@@ -1362,7 +1362,7 @@ namespace SunDofus.Network.Realm
                 return;
             }
 
-            var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First
+            var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First
                 (x => x.ID == Client.Player.State.senderInviteParty);
 
             if (character.isConnected == false || character.State.receiverInviteParty != Client.Player.ID)
@@ -1384,7 +1384,7 @@ namespace SunDofus.Network.Realm
         {
             if (Client.Player.State.senderInviteParty != -1 && Client.Player.State.onWaitingParty)
             {
-                var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.senderInviteParty);
+                var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Client.Player.State.senderInviteParty);
 
                 if (character.isConnected == false || character.State.receiverInviteParty != Client.Player.ID)
                 {
@@ -1451,7 +1451,7 @@ namespace SunDofus.Network.Realm
             if (!int.TryParse(datas.Substring(1, datas.Length - 1), out charid))
                 return;
 
-            var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == charid);
+            var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == charid);
 
             if (add)
             {
@@ -1511,7 +1511,7 @@ namespace SunDofus.Network.Realm
             if (!int.TryParse(datas.Substring(1, datas.Length - 1), out charid))
                 return;
 
-            var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == charid);
+            var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == charid);
 
             if (add)
             {

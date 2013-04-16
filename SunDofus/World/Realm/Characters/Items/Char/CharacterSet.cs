@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Characters.Items
+namespace SunDofus.World.Realm.Characters.Items
 {
     class CharacterSet
     {
@@ -24,7 +24,7 @@ namespace SunDofus.Realm.Characters.Items
             _ID = id;
 
             ItemsList = new List<int>();
-            BonusList = Database.Cache.ItemsCache.SetsList.First(x => x.ID == ID).BonusList;
+            BonusList = Entities.Cache.ItemsCache.SetsList.First(x => x.ID == ID).BonusList;
             BonusList[1] = new List<Effects.EffectItem>();
         }
     }

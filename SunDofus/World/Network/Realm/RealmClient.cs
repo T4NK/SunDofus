@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SilverSock;
-using SunDofus.Realm.Characters;
-using SunDofus.Database.Models.Clients;
+using SunDofus.World.Realm.Characters;
+using SunDofus.World.Entities.Models.Clients;
 
-namespace SunDofus.Network.Realm
+namespace SunDofus.World.Network.Realm
 {
-    class RealmClient : SunDofus.Network.TCPClient
+    class RealmClient : Master.TCPClient
     {
         public bool isAuth;
 
@@ -27,7 +27,7 @@ namespace SunDofus.Network.Realm
             this.DisconnectedSocket += new DisconnectedSocketHandler(this.Disconnected);
             this.ReceivedDatas += new ReceiveDatasHandler(this.ReceivedPackets);
 
-            Characters = new List<SunDofus.Realm.Characters.Character>();
+            Characters = new List<SunDofus.World.Realm.Characters.Character>();
             Commander = new RealmCommand(this);
             _parser = new RealmParser(this);
 
@@ -49,13 +49,13 @@ namespace SunDofus.Network.Realm
         {
             foreach (var name in Infos.Characters)
             {
-                if (!SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.Name == name))
+                if (!SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.Name == name))
                 {
                     Network.ServersHandler.AuthLinks.Send(string.Format("SDAC|{0}|{1}", Infos.ID, name));
                     continue;
                 }
 
-                var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.Name == name);
+                var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.Name == name);
                 Characters.Add(character);
             }
         }
@@ -66,10 +66,10 @@ namespace SunDofus.Network.Realm
 
             foreach (var gift in Infos.Gifts)
             {
-                if (Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == gift.ItemID) == false)
+                if (Entities.Cache.ItemsCache.ItemsList.Any(x => x.ID == gift.ItemID) == false)
                     return;
 
-                var item = new SunDofus.Realm.Characters.Items.CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == gift.ItemID));
+                var item = new SunDofus.World.Realm.Characters.Items.CharacterItem(Entities.Cache.ItemsCache.ItemsList.First(x => x.ID == gift.ItemID));
 
                 item.GeneratItem();
 
@@ -112,17 +112,17 @@ namespace SunDofus.Network.Realm
                     Player.isConnected = false;
 
                     if (Player.State.onExchange)
-                        SunDofus.Realm.Exchanges.ExchangesManager.LeaveExchange(Player);
+                        SunDofus.World.Realm.Exchanges.ExchangesManager.LeaveExchange(Player);
 
                     if (Player.State.onWaitingParty)
                     {
                         if (Player.State.receiverInviteParty != -1 || Player.State.senderInviteParty != -1)
                         {
-                            if (SunDofus.Realm.Characters.CharactersManager.CharactersList.Any
+                            if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any
                                 (x => x.ID == (Player.State.receiverInviteParty != -1 ? Player.State.receiverInviteParty : Player.State.senderInviteParty)))
                             {
 
-                                var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First
+                                var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First
                                     (x => x.ID == (Player.State.receiverInviteParty != -1 ? Player.State.receiverInviteParty : Player.State.senderInviteParty));
                                 if (character.isConnected)
                                 {
@@ -144,8 +144,8 @@ namespace SunDofus.Network.Realm
 
                     if (Player.State.isFollowing)
                     {
-                        if(SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.Followers.Contains(Player) && x.ID == Player.State.followingID))
-                            SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Player.State.followingID).State.Followers.Remove(Player);
+                        if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.Followers.Contains(Player) && x.ID == Player.State.followingID))
+                            SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == Player.State.followingID).State.Followers.Remove(Player);
                     }
 
                     if (Player.State.isFollow)
@@ -156,9 +156,9 @@ namespace SunDofus.Network.Realm
 
                     if (Player.State.isChallengeAsked)
                     {
-                        if (SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.ChallengeAsked == Player.ID))
+                        if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.ChallengeAsked == Player.ID))
                         {
-                            var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.State.ChallengeAsked == Player.ID);
+                            var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.State.ChallengeAsked == Player.ID);
 
                             Player.State.ChallengeAsker = -1;
                             Player.State.isChallengeAsked = false;
@@ -172,9 +172,9 @@ namespace SunDofus.Network.Realm
 
                     if (Player.State.isChallengeAsker)
                     {
-                        if (SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.ChallengeAsker == Player.ID))
+                        if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.State.ChallengeAsker == Player.ID))
                         {
-                            var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.State.ChallengeAsker == Player.ID);
+                            var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.State.ChallengeAsker == Player.ID);
 
                             Player.State.ChallengeAsked = -1;
                             Player.State.isChallengeAsker = false;

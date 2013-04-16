@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Characters.Items
+namespace SunDofus.World.Realm.Characters.Items
 {
     class InventaryItems
     {
@@ -23,10 +23,10 @@ namespace SunDofus.Realm.Characters.Items
         {
             if (offline == true)
             {
-                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == id))
+                if (!Entities.Cache.ItemsCache.ItemsList.Any(x => x.ID == id))
                     return;
 
-                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == id);
+                var baseItem = Entities.Cache.ItemsCache.ItemsList.First(x => x.ID == id);
                 var item = new CharacterItem(baseItem);
 
                 item.GeneratItem(jet);
@@ -52,10 +52,10 @@ namespace SunDofus.Realm.Characters.Items
             }
             else if (offline == false)
             {
-                if (!Database.Cache.ItemsCache.ItemsList.Any(x => x.ID == id))
+                if (!Entities.Cache.ItemsCache.ItemsList.Any(x => x.ID == id))
                     return;
 
-                var baseItem = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == id);
+                var baseItem = Entities.Cache.ItemsCache.ItemsList.First(x => x.ID == id);
                 var item = new CharacterItem(baseItem);
 
                 item.GeneratItem(jet);
@@ -275,7 +275,7 @@ namespace SunDofus.Realm.Characters.Items
             foreach (var infos in splited)
             {
                 var allInfos = infos.Split('~');
-                var item = new CharacterItem(Database.Cache.ItemsCache.ItemsList.First(x => x.ID == Convert.ToInt32(allInfos[0], 16)));
+                var item = new CharacterItem(Entities.Cache.ItemsCache.ItemsList.First(x => x.ID == Convert.ToInt32(allInfos[0], 16)));
                 item.EffectsList.Clear();
 
                 item.ID = ItemsHandler.GetNewID();
@@ -403,7 +403,7 @@ namespace SunDofus.Realm.Characters.Items
                 return;
             }
 
-            var usable = Database.Cache.ItemsCache.UsablesList.First(x => x.Base == item.Model.ID);
+            var usable = Entities.Cache.ItemsCache.UsablesList.First(x => x.Base == item.Model.ID);
 
             var character = CharactersManager.CharactersList.First(x => x.ID == charID);
 

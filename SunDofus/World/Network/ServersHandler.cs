@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Network
+namespace SunDofus.World.Network
 {
     class ServersHandler
     {

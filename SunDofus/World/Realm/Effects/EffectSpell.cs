@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SunDofus.Realm.Characters.Spells;
-namespace SunDofus.Realm.Effects
+using SunDofus.World.Realm.Characters.Spells;
+namespace SunDofus.World.Realm.Effects
 {
     class EffectSpell
     {

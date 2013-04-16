@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Exchanges
+namespace SunDofus.World.Realm.Exchanges
 {
     class ExchangesManager
     {
@@ -34,9 +34,9 @@ namespace SunDofus.Realm.Exchanges
 
             if (canceler.State.actualTraided != -1)
             {
-                if (SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.ID == canceler.State.actualTraided))
+                if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.ID == canceler.State.actualTraided))
                 {
-                    var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == canceler.State.actualTraided);
+                    var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == canceler.State.actualTraided);
 
                     if (character.isConnected == true && must)
                         character.NetworkClient.Send("EV");
@@ -63,9 +63,9 @@ namespace SunDofus.Realm.Exchanges
 
             if (canceler.State.actualTraider != -1)
             {
-                if (SunDofus.Realm.Characters.CharactersManager.CharactersList.Any(x => x.ID == canceler.State.actualTraider))
+                if (SunDofus.World.Realm.Characters.CharactersManager.CharactersList.Any(x => x.ID == canceler.State.actualTraider))
                 {
-                    var character = SunDofus.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == canceler.State.actualTraider);
+                    var character = SunDofus.World.Realm.Characters.CharactersManager.CharactersList.First(x => x.ID == canceler.State.actualTraider);
 
                     if (character.isConnected == true && must)
                         character.NetworkClient.Send("EV");

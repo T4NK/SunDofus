@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Maps
+namespace SunDofus.World.Realm.Maps
 {
     class Map
     {
         public List<Characters.Character> Characters;
-        public List<Database.Models.Maps.TriggerModel> Triggers;
+        public List<Entities.Models.Maps.TriggerModel> Triggers;
         public List<Characters.NPC.NPCMap> Npcs;
         public List<Monsters.MonstersGroup> MonstersGroups;
         public List<Fights.Fight> Fights;
         public List<int> RushablesCells;
 
-        private Database.Models.Maps.MapModel _model;
+        private Entities.Models.Maps.MapModel _model;
 
-        public Database.Models.Maps.MapModel GetModel
+        public Entities.Models.Maps.MapModel GetModel
         {
             get
             {
@@ -24,14 +24,14 @@ namespace SunDofus.Realm.Maps
             }
         }
 
-        public Map(Database.Models.Maps.MapModel map)
+        public Map(Entities.Models.Maps.MapModel map)
         {
             _model = map;
 
             RushablesCells = UncompressDatas();
 
             Characters = new List<Characters.Character>();
-            Triggers = new List<Database.Models.Maps.TriggerModel>();
+            Triggers = new List<Entities.Models.Maps.TriggerModel>();
             Npcs = new List<Characters.NPC.NPCMap>();
             MonstersGroups = new List<Monsters.MonstersGroup>();
             Fights = new List<Fights.Fight>();

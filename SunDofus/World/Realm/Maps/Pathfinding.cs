@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Maps
+namespace SunDofus.World.Realm.Maps
 {
     class Pathfinding
     {

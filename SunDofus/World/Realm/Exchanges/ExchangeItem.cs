@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SunDofus.Realm.Characters.Items;
+using SunDofus.World.Realm.Characters.Items;
 
-namespace SunDofus.Realm.Exchanges
+namespace SunDofus.World.Realm.Exchanges
 {
     class ExchangeItem
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.World
+namespace SunDofus.World.Realm.World
 {
     class Save
     {        
@@ -21,7 +21,7 @@ namespace SunDofus.Realm.World
                 if (character.isConnected)
                     character.NetworkClient.Send("Im1164");
 
-                Database.Cache.CharactersCache.SaveCharacter(character);
+                Entities.Cache.CharactersCache.SaveCharacter(character);
                 System.Threading.Thread.Sleep(100);
 
                 if (character.isConnected)

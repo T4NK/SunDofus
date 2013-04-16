@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Network.Authentication
+namespace SunDofus.World.Network.Authentication
 {
     class AuthenticationsKeys
     {
@@ -18,11 +18,11 @@ namespace SunDofus.Network.Authentication
                 return _key;
             }
         }
-        public Database.Models.Clients.AccountModel Infos;
+        public Entities.Models.Clients.AccountModel Infos;
 
         public AuthenticationsKeys(string packet)
         {
-            Infos = new Database.Models.Clients.AccountModel();
+            Infos = new Entities.Models.Clients.AccountModel();
             var _datas = packet.Split('|');
 
             _key = _datas[1];

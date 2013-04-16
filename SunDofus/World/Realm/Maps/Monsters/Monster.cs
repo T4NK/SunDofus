@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Maps.Monsters
+namespace SunDofus.World.Realm.Maps.Monsters
 {
     class Monster
     {
-        public Database.Models.Monsters.MonsterModel Model;
+        public SunDofus.World.Entities.Models.Monsters.MonsterModel Model;
 
         private int _level;
 
@@ -19,7 +19,7 @@ namespace SunDofus.Realm.Maps.Monsters
             }
         }
 
-        public Monster(Database.Models.Monsters.MonsterModel model, int grade)
+        public Monster(Entities.Models.Monsters.MonsterModel model, int grade)
         {
             Model = model;
             _level = grade;

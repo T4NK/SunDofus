@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Timers;
-using SunDofus.Database.Models.NPC;
+using SunDofus.World.Entities.Models.NPC;
 
-namespace SunDofus.Realm.Characters.NPC
+namespace SunDofus.World.Realm.Characters.NPC
 {
     class NPCMap
     {
@@ -77,7 +77,7 @@ namespace SunDofus.Realm.Characters.NPC
 
         public void StartMove()
         {
-            if (mustMove == false || !Utilities.Config.GetConfig.GetBoolElement("MustNPCsMove"))
+            if (mustMove == false || !Utilities.Config.GetBoolElement("MustNPCsMove"))
                 return;
 
             _movements = new Timer();
@@ -104,11 +104,11 @@ namespace SunDofus.Realm.Characters.NPC
 
         private void Move(object e, EventArgs e2)
         {
-            lock (Database.Cache.MapsCache.MapsList)
+            lock (Entities.Cache.MapsCache.MapsList)
             {
                 _movements.Interval = Utilities.Basic.Rand(1000, 5000);
 
-                var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == MapID);
+                var map = Entities.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == MapID);
 
                 var path = new Realm.Maps.Pathfinding("", map, MapCell, Dir);
                 var newDir = Utilities.Basic.Rand(0, 3) * 2 + 1;

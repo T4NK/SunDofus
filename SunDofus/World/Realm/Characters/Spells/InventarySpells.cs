@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Characters.Spells
+namespace SunDofus.World.Realm.Characters.Spells
 {
     class InventarySpells
     {
@@ -29,7 +29,7 @@ namespace SunDofus.Realm.Characters.Spells
 
         public void LearnSpells()
         {
-            foreach (var spell in Database.Cache.SpellsCache.SpellsToLearnList.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
+            foreach (var spell in Entities.Cache.SpellsCache.SpellsToLearnList.Where(x => x.Race == Client.Class && x.Level <= Client.Level))
             {
                 if (Spells.Any(x => x.ID == spell.SpellID))
                     continue;

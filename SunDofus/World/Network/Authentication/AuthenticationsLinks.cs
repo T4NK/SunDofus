@@ -5,7 +5,7 @@ using System.Text;
 using SilverSock;
 using System.Timers;
 
-namespace SunDofus.Network.Authentication
+namespace SunDofus.World.Network.Authentication
 {
     class AuthenticationsLinks
     {
@@ -24,14 +24,14 @@ namespace SunDofus.Network.Authentication
 
         public void Start()
         {
-            foreach (var client in Database.Cache.AuthsCache.AuthsList)
+            foreach (var client in Entities.Cache.AuthsCache.AuthsList)
                 Clients.Add(new AuthenticationClient(client));
 
             foreach (var client in Clients)
                 client.Start();
         }
 
-        public void Update(List<Database.Models.Clients.AuthClientModel> modelList)
+        public void Update(List<Entities.Models.Clients.AuthClientModel> modelList)
         {
             foreach (var model in modelList)
             {

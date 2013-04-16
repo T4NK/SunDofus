@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SunDofus.Database.Models.Items;
+using SunDofus.World.Entities.Models.Items;
 
-namespace SunDofus.Realm.Characters.Items
+namespace SunDofus.World.Realm.Characters.Items
 {
     class CharacterItem
     {

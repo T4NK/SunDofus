@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SilverSock;
-using SunDofus.Network;
+using SunDofus.World.Network;
 
-namespace SunDofus.Network.Realm
+namespace SunDofus.World.Network.Realm
 {
-    class RealmServer : TCPServer
+    class RealmServer : Master.TCPServer
     {
         public List<RealmClient> Clients;
         public Dictionary<string, int> PseudoClients;
 
         public RealmServer()
-            : base(Utilities.Config.GetConfig.GetStringElement("ServerIp"), Utilities.Config.GetConfig.GetIntElement("ServerPort"))
+            : base(Utilities.Config.GetStringElement("ServerIp"), Utilities.Config.GetIntElement("ServerPort"))
         {
             Clients = new List<RealmClient>();
             PseudoClients = new Dictionary<string,int>();

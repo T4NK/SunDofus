@@ -5,7 +5,7 @@ using System.Text;
 using SunDofus.Utilities;
 using SunDofus.Auth.Entities;
 using SunDofus.Auth.Entities.Requests;
-using SunDofus.Network;
+using SunDofus.World.Network;
 
 namespace SunDofus
 {
@@ -23,7 +23,7 @@ namespace SunDofus
             {
                 try
                 {
-                    ServersHandler.InitialiseServers();
+                    Auth.Network.ServersHandler.InitialiseServers();
                     Auth.Entities.DatabaseProvider.InitializeConnection();
 
                 }
@@ -38,6 +38,33 @@ namespace SunDofus
                 try
                 {
                     Console.Title = string.Format("{0} | Server '{1}'", Console.Title, Config.GetIntElement("ServerID"));
+
+                    World.Entities.DatabaseHandler.InitialiseConnection();
+
+                    World.Entities.Cache.LevelsCache.LoadLevels();
+
+                    World.Entities.Cache.ItemsCache.LoadItems();
+                    World.Entities.Cache.ItemsCache.LoadItemsSets();
+                    World.Entities.Cache.ItemsCache.LoadUsablesItems();
+
+                    World.Entities.Cache.SpellsCache.LoadSpells();
+                    World.Entities.Cache.SpellsCache.LoadSpellsToLearn();
+
+                    World.Entities.Cache.MonstersCache.LoadMonsters();
+                    World.Entities.Cache.MonstersCache.LoadMonstersLevels();
+
+                    World.Entities.Cache.MapsCache.LoadMaps();
+                    World.Entities.Cache.TriggersCache.LoadTriggers();
+
+                    World.Entities.Cache.NoPlayerCharacterCache.LoadNPCsAnswers();
+                    World.Entities.Cache.NoPlayerCharacterCache.LoadNPCsQuestions();
+                    World.Entities.Cache.NoPlayerCharacterCache.LoadNPCs();
+
+                    World.Entities.Cache.CharactersCache.LoadCharacters();
+
+                    World.Entities.Cache.AuthsCache.ReloadAuths();
+
+                    World.Network.ServersHandler.InitialiseServers();
                 }
                 catch (Exception error)
                 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Exchanges
+namespace SunDofus.World.Realm.Exchanges
 {
     class Exchange
     {

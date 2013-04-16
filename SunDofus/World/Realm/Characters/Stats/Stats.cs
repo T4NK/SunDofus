@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Realm.Characters.Stats
+namespace SunDofus.World.Realm.Characters.Stats
 {
     class Stats
     {

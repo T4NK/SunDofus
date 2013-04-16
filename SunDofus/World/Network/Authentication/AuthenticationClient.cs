@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using SilverSock;
 using System.Timers;
-using SunDofus.Database.Models.Clients;
+using SunDofus.World.Entities.Models.Clients;
 
-namespace SunDofus.Network.Authentication
+namespace SunDofus.World.Network.Authentication
 {
-    class AuthenticationClient : SunDofus.Network.TCPClient
+    class AuthenticationClient : Master.TCPClient
     {
         public AuthClientModel Model;
 
@@ -51,7 +51,7 @@ namespace SunDofus.Network.Authentication
 
         private void TimeElapsed(object sender, EventArgs e)
         {
-            if (this.isConnected == false)
+            if (this.Connected == false)
                 Start();
             else
                 _timer.Stop();
@@ -89,9 +89,9 @@ namespace SunDofus.Network.Authentication
 
                     case "HCS":
 
-                        Send(string.Format("SAI|{0}|{1}|{2}", Utilities.Config.GetConfig.GetIntElement("ServerId"),
-                            Utilities.Config.GetConfig.GetStringElement("ServerIp"),
-                            Utilities.Config.GetConfig.GetIntElement("ServerPort")), true);
+                        Send(string.Format("SAI|{0}|{1}|{2}", Utilities.Config.GetIntElement("ServerId"),
+                            Utilities.Config.GetStringElement("ServerIp"),
+                            Utilities.Config.GetIntElement("ServerPort")), true);
                         break;
 
                     case "HCSS":

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SunDofus.Network.Realm
+namespace SunDofus.World.Network.Realm
 {
     class RealmCommand
     {
@@ -18,8 +18,6 @@ namespace SunDofus.Network.Realm
         {
             try
             {
-                Utilities.Loggers.CommandsLogger.Write(string.Format("Command [{0}] by [{1}]", args, Client.Infos.Pseudo));
-
                 var datas = args.Split(' ');
 
                 if (Client.Infos.GMLevel > 0)
@@ -122,7 +120,7 @@ namespace SunDofus.Network.Realm
 
                     case "trigger":
 
-                        var t = new Database.Models.Maps.TriggerModel();
+                        var t = new Entities.Models.Maps.TriggerModel();
                         t.ActionID = 0;
                         t.CellID = Client.Player.MapCell;
                         t.MapID = Client.Player.MapID;
@@ -130,7 +128,7 @@ namespace SunDofus.Network.Realm
                         t.Args = string.Format("{0},{1}", value, int.Parse(datas[3]));
 
                         Client.Player.GetMap().Triggers.Add(t);
-                        Database.Cache.TriggersCache.InsertTrigger(t);
+                        Entities.Cache.TriggersCache.InsertTrigger(t);
 
                         Client.SendConsoleMessage("Trigger Added !", 0);
                         break;
@@ -152,24 +150,24 @@ namespace SunDofus.Network.Realm
             {
                 if (datas.Length <= 1)
                 {
-                    SunDofus.Realm.World.Save.SaveWorld();
+                    SunDofus.World.Realm.World.Save.SaveWorld();
                     return;
                 }
 
                 switch (datas[1])
                 {
                     case "all":
-                        SunDofus.Realm.World.Save.SaveWorld();
+                        SunDofus.World.Realm.World.Save.SaveWorld();
                         Client.SendConsoleMessage("World saved !", 0);
                         break;
 
                     case "char":
-                        SunDofus.Realm.World.Save.SaveChararacters();
+                        SunDofus.World.Realm.World.Save.SaveChararacters();
                         Client.SendConsoleMessage("Characters saved !", 0);
                         break;
 
                     default:
-                        SunDofus.Realm.World.Save.SaveWorld();
+                        SunDofus.World.Realm.World.Save.SaveWorld();
                         Client.SendConsoleMessage("World saved !", 0);
                         break;
                 }
@@ -185,11 +183,11 @@ namespace SunDofus.Network.Realm
         {
             try
             {
-                var item = Database.Cache.ItemsCache.ItemsList.First(x => x.ID == int.Parse(datas[1]));
+                var item = Entities.Cache.ItemsCache.ItemsList.First(x => x.ID == int.Parse(datas[1]));
 
                 if (datas.Length == 2)
                 {
-                    var newItem = new SunDofus.Realm.Characters.Items.CharacterItem(item);
+                    var newItem = new SunDofus.World.Realm.Characters.Items.CharacterItem(item);
                     newItem.GeneratItem();
 
                     Client.Player.ItemsInventary.AddItem(newItem, false);
@@ -198,7 +196,7 @@ namespace SunDofus.Network.Realm
 
                 else if (datas.Length == 3)
                 {
-                    var newItem = new SunDofus.Realm.Characters.Items.CharacterItem(item);
+                    var newItem = new SunDofus.World.Realm.Characters.Items.CharacterItem(item);
                     newItem.GeneratItem(int.Parse(datas[2]));
 
                     Client.Player.ItemsInventary.AddItem(newItem, false);
@@ -227,7 +225,7 @@ namespace SunDofus.Network.Realm
 
                 else if (datas.Length == 4)
                 {
-                    var myMap = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.PosX == int.Parse(datas[1]) && x.GetModel.PosY == int.Parse(datas[2]));
+                    var myMap = Entities.Cache.MapsCache.MapsList.First(x => x.GetModel.PosX == int.Parse(datas[1]) && x.GetModel.PosY == int.Parse(datas[2]));
                     Client.Player.TeleportNewMap(myMap.GetModel.ID, int.Parse(datas[3]));
                     Client.SendConsoleMessage("Character Teleported !", 0);
                 }

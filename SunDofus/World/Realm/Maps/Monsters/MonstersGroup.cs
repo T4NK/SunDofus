@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Timers;
-namespace SunDofus.Realm.Maps.Monsters
+
+namespace SunDofus.World.Realm.Maps.Monsters
 {
     class MonstersGroup
     {
@@ -50,7 +51,7 @@ namespace SunDofus.Realm.Maps.Monsters
             RefreshMappos();
             RefreshMonsters();
 
-            if (Utilities.Config.GetConfig.GetBoolElement("MustMonstersMove"))
+            if (Utilities.Config.GetBoolElement("MustMonstersMove"))
             {
                 _movements = new Timer();
                 _movements.Enabled = true;
@@ -110,10 +111,10 @@ namespace SunDofus.Realm.Maps.Monsters
             var key = _base.Keys.ToList()[Utilities.Basic.Rand(0, _base.Count - 1)];
             var value = _base[key][Utilities.Basic.Rand(0, _base[key].Count - 1)];
 
-            if (!Database.Cache.MonstersCache.MonstersList.Any(x => x.ID == key))
+            if (!Entities.Cache.MonstersCache.MonstersList.Any(x => x.ID == key))
                 return null;
 
-            return new Monster(Database.Cache.MonstersCache.MonstersList.First(x => x.ID == key), value);
+            return new Monster(Entities.Cache.MonstersCache.MonstersList.First(x => x.ID == key), value);
         }
 
         private void RefreshMappos()

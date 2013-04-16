@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SunDofus;
-using SunDofus.Realm.Characters.Stats;
-using SunDofus.Realm.Characters.Spells;
-using SunDofus.Realm.Characters.Items;
-using SunDofus.Network.Realm;
+using SunDofus.World.Realm.Characters.Stats;
+using SunDofus.World.Realm.Characters.Spells;
+using SunDofus.World.Realm.Characters.Items;
+using SunDofus.World.Network.Realm;
 
-namespace SunDofus.Realm.Characters
+namespace SunDofus.World.Realm.Characters
 {
     class Character
     {
@@ -365,14 +365,14 @@ namespace SunDofus.Realm.Characters
 
         private void LevelUp()
         {
-            if (this.Level == Database.Cache.LevelsCache.MaxLevel())
+            if (this.Level == Entities.Cache.LevelsCache.MaxLevel())
                 return;
 
-            if (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
+            if (Exp >= Entities.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
             {
-                while (Exp >= Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
+                while (Exp >= Entities.Cache.LevelsCache.ReturnLevel(Level + 1).Character)
                 {
-                    if (this.Level == Database.Cache.LevelsCache.MaxLevel())
+                    if (this.Level == Entities.Cache.LevelsCache.MaxLevel())
                         break;
 
                     Level++;
@@ -412,12 +412,12 @@ namespace SunDofus.Realm.Characters
 
         public void RefreshTrade()
         {
-            QuotaTrade = Environment.TickCount + Utilities.Config.GetConfig.GetLongElement("AntiSpamTrade");
+            QuotaTrade = Environment.TickCount + Utilities.Config.GetLongElement("AntiSpamTrade");
         }
 
         public void RefreshRecruitment()
         {
-            QuotaRecruitment = Environment.TickCount + Utilities.Config.GetConfig.GetLongElement("AntiSpamRecruitment");
+            QuotaRecruitment = Environment.TickCount + Utilities.Config.GetLongElement("AntiSpamRecruitment");
         }
 
         #endregion
@@ -480,7 +480,7 @@ namespace SunDofus.Realm.Characters
                 builder.Append(Utilities.Basic.DeciToHex(Color2)).Append(";");
                 builder.Append(Utilities.Basic.DeciToHex(Color3)).Append(";");
                 builder.Append(GetItemsPos()).Append(";");
-                builder.Append("0;").Append(Utilities.Config.GetConfig.GetIntElement("ServerId")).Append(";;;");
+                builder.Append("0;").Append(Utilities.Config.GetIntElement("ServerId")).Append(";;;");
             }
 
             return builder.ToString();
@@ -555,9 +555,9 @@ namespace SunDofus.Realm.Characters
 
         public void LoadMap()
         {
-            if (Database.Cache.MapsCache.MapsList.Any(x => x.GetModel.ID == this.MapID))
+            if (Entities.Cache.MapsCache.MapsList.Any(x => x.GetModel.ID == this.MapID))
             {
-                var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == this.MapID);
+                var map = Entities.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == this.MapID);
 
                 NetworkClient.Send(string.Format("GDM|{0}|0{1}|{2}", map.GetModel.ID, map.GetModel.Date, map.GetModel.Key));
 
@@ -574,7 +574,7 @@ namespace SunDofus.Realm.Characters
             NetworkClient.Send(string.Format("GA;2;{0};", ID));
 
             GetMap().DelPlayer(this);
-            var map = Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == _mapID);
+            var map = Entities.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == _mapID);
 
             MapID = map.GetModel.ID;
             MapCell = _cell;
@@ -584,7 +584,7 @@ namespace SunDofus.Realm.Characters
 
         public Maps.Map GetMap()
         {
-            return Database.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == this.MapID);
+            return Entities.Cache.MapsCache.MapsList.First(x => x.GetModel.ID == this.MapID);
         }
 
         #endregion
@@ -933,8 +933,8 @@ namespace SunDofus.Realm.Characters
             StringBuilder builder = new StringBuilder();
             {
                 builder.Append(Exp).Append(",");
-                builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level).Character).Append(",");
-                builder.Append(Database.Cache.LevelsCache.ReturnLevel(Level + 1).Character).Append("|");
+                builder.Append(Entities.Cache.LevelsCache.ReturnLevel(Level).Character).Append(",");
+                builder.Append(Entities.Cache.LevelsCache.ReturnLevel(Level + 1).Character).Append("|");
                 builder.Append(Kamas).Append("|");
                 builder.Append(CharactPoint).Append("|");
                 builder.Append(SpellPoint).Append("|");
