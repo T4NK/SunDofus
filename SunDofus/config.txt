@@ -1,0 +1,21 @@
+﻿$Debug true;
+$Realm true;
+$World true;
+
+$Auth_Ip 127.0.0.1;
+$Auth_Port 485;
+$Sync_Ip 127.0.0.1;
+$Sync_Port 486;
+
+$Login_Version 1.29.1;
+
+$Database_Server localhost;
+$Database_User root;
+$Database_Pass ;
+$Database_Name sundofus;
+
+$Max_Clients_inQueue 50;
+$Time_PerClient 500;
+
+$Max_Subscription_Time 31536000000;
+$Subscription_Time true;
